@@ -27,6 +27,7 @@ patholog_file="/home/felipe/portal_gdc_cancer_gov/pathology_detail.txt"         
 clinical_data<-read.table(file = clinical_file, sep = '\t', header = TRUE,fill=TRUE)                                #
 exposure_data<-read.table(file = exposure_file, sep = '\t', header = TRUE,fill=TRUE)                                #
 famhisto_data<-read.table(file = famhisto_file, sep = '\t', header = TRUE,fill=TRUE)                                #
+followup_data<-read.table(file = patholog_file, sep = '\t', header = TRUE,fill=TRUE)                                #
 #####################################################################################################################
 
 

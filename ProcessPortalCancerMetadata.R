@@ -33,6 +33,8 @@ famhisto_file="/home/felipe/portal_gdc_cancer_gov/family_history.txt"           
 followup_file="/home/felipe/portal_gdc_cancer_gov/follow_up.txt"                                                    #
 patholog_file="/home/felipe/portal_gdc_cancer_gov/pathology_detail.txt"                                             #
 #####################################################################################################################
+output_dir="/home/felipe/portal_gdc_cancer_gov/output/"                                                             #
+#####################################################################################################################
 # Read all metadata files                                                                                           #
 clinical_data<-read.table(file = clinical_file, sep = '\t', header = TRUE,fill=TRUE)                                #
 exposure_data<-read.table(file = exposure_file, sep = '\t', header = TRUE,fill=TRUE)                                #
@@ -112,7 +114,10 @@ for (diagnosis in colnames(df_primary_diagnosis))                               
   df_diagnosis_experiment_cancerType=rbind(data.frame(diagnosis=diagnosis,Experiment=df_primary_diagnosis[,diagnosis],Cancer_type=rownames(df_primary_diagnosis)),df_diagnosis_experiment_cancerType)    #
 }                                                                                                                                                                                                        #
 ##########################################################################################################################################################################################################
-pheatmap(df_primary_diagnosis)
+# FindClusters_resolution
+png(filename=paste(output_dir,"Heatmap_primary_diagnosis.png",sep=""), width = 24, height = 48, res=600, units = "cm")
+	pheatmap(df_primary_diagnosis)
+dev.off()
 
 
 

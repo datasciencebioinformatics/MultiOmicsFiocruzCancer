@@ -79,6 +79,10 @@ for (case_id in case_ids)                                                       
   df_cases_type_count[case_id,data_types_per_case]<-1                                                                  #
 }                                                                                                                      #
 ########################################################################################################################
+primary_diagnosis<-unique(clinical_data$primary_diagnosis)[unique(clinical_data$primary_diagnosis)!="-"]               #
+primary_diagnosis<-primary_diagnosis[primary_diagnosis!=""]                                                            #
+
+
 
 
 

@@ -30,7 +30,7 @@ famhisto_data<-read.table(file = famhisto_file, sep = '\t', header = TRUE,fill=T
 followup_data<-read.table(file = famhisto_file, sep = '\t', header = TRUE,fill=TRUE)                                #
 patholog_data<-read.table(file = patholog_file, sep = '\t', header = TRUE,fill=TRUE)                                #
 ####################################################################################################################################################################################################
-# Merge files without ducplicating collumns                                                                                                                                                        #
+# Merge files without ducplicating collumns                                                                                                                                                        #                                                                                                                                                                                                 #
 merge_clinical_exposure                 <- merge(clinical_data, exposure_data, by = "case_id", suffixes = c(".clincal",".exposure"), all = TRUE, no.dups=TRUE)                                     #
 merge_clinical_exposure_fam             <- merge(merge_clinical_exposure, famhisto_data, by = "case_id", suffixes = c(".merge_1","famhisto"), all = TRUE, no.dups=TRUE)                            #
 merge_clinical_exposure_fam_followup    <- merge(merge_clinical_exposure_fam, followup_data, by = "case_id", suffixes = c(".merge_2","famhisto"), all = TRUE, no.dups=TRUE)                        #

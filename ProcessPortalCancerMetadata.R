@@ -49,7 +49,23 @@ experiments_descripton<-unique(read.table(file = experiment_description_file, se
 # Rename colnames                                                                                                      #
 colnames(experiments_descripton)<-c("data_type","case_id","project")                                                   #
 ########################################################################################################################
-# Table : Rows = 
+# Table : Rows = cases_id vs. Cols = data_type                                                                         #
+# Clean data_types by removing entries in this collumn that do not belong to data_types.                               #
+data_types<-unique(experiments_descripton$data_type)[unique(experiments_descripton$data_type)!="CGCI-BLGSP"]           #
+                                                                                                                       #
+# Store case_ids                                                                                                       #
+case_ids<-unique(experiments_descripton$case_id)                                                                       #
+                                                                                                                       #
+# Create a matrix                                                                                                      #
+df_cases_type <- data.frame(matrix(0, nrow = length(case_ids), ncol = length(data_types)))                             #
+                                                                                                                       #
+# Set rownames                                                                                                         #
+rownames(df_cases_type)<-case_ids                                                                                      #
+                                                                                                                       #
+# Set colnames                                                                                                         #
+colnames(df_cases_type)<-data_types                                                                                    #
+########################################################################################################################
+
 
 
 

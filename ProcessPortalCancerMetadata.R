@@ -16,7 +16,12 @@
 #     clinical.tsv file was modified to include data_type field from files.2024-01-30.csv                           #
 #####################################################################################################################
 # Set up iput files                                                                                                 #
-experiment_description_file="/home/felipe/portal_gdc_cancer_gov/files.2024-01-30.csv"                               #
+# The experiment description file orginally downloaded from the Cancer Portal plattaform was filterd as follow      #
+# Only entries with number of columns less or equal to five was kept                                                #
+# This was done because for some cases, more than one sample was attibuted to the experiment (case_id)              #
+# mostly common in the case of Biospecimen and Clinical entries.                                                    #
+# The orginal file cotains 986114 entries while the filtered file contains 985223.                                  #
+experiment_description_file="/home/felipe/portal_gdc_cancer_gov/files.2024-01-30.filtered.csv"                      #
                                                                                                                     #
 # tsv files  are saved as txt and null character '-- replace by -                                                   #
 clinical_file="/home/felipe/portal_gdc_cancer_gov/clinical.txt"                                                     #
@@ -38,9 +43,12 @@ merge_clinical_exposure_fam             <- merge(merge_clinical_exposure, famhis
 merge_clinical_exposure_fam_followup    <- merge(merge_clinical_exposure_fam, followup_data, by = "case_id", suffixes = c(".merge_2","famhisto"), all = TRUE, no.dups=TRUE)                        #
 merge_all                               <- merge(merge_clinical_exposure_fam_followup, patholog_data, by = "case_id", suffixes = c(".merge_3","patholog"), all = TRUE, no.dups=TRUE)               #
 ####################################################################################################################################################################################################
-# Table for the description of the data and experiments                                                       #
-experiments_descripton<-read.table(file = experiment_description_file, sep = '\t', header = TRUE,fill=TRUE)   #
-###############################################################################################################
+# Table for the description of the data and experiments                                                                #
+experiments_descripton<-unique(read.table(file = experiment_description_file, sep = '\t', header = FALSE,fill=TRUE))   #
+                                                                                                                       #
+# Rename colnames                                                                                                      #
+colnames(experiments_descripton)<-c("data_type","case_id","project")                                                   #
+########################################################################################################################
 
 
 

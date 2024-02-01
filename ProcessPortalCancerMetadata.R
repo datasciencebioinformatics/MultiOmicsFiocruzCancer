@@ -78,12 +78,27 @@ for (case_id in case_ids)                                                       
   # Set df_cases_type_count to 1                                                                                       #
   df_cases_type_count[case_id,data_types_per_case]<-1                                                                  #
 }                                                                                                                      #
-########################################################################################################################
-primary_diagnosis<-unique(clinical_data$primary_diagnosis)[unique(clinical_data$primary_diagnosis)!="-"]               #
-primary_diagnosis<-primary_diagnosis[primary_diagnosis!=""]                                                            #
-
-
-
+########################################################################################################################################################################################################## 
+primary_diagnosis<-unique(clinical_data$primary_diagnosis)[unique(clinical_data$primary_diagnosis)!="-"]                                                                                                 #
+primary_diagnosis<-primary_diagnosis[primary_diagnosis!=""]                                                                                                                                              #
+                                                                                                                                                                                                         #
+# Create a matrix                                                                                                                                                                                        #
+df_primary_diagnosis <- data.frame(matrix(0, nrow = length(primary_diagnosis), ncol = length(data_types)))                                                                                               #
+                                                                                                                                                                                                         #
+# Set rownames                                                                                                                                                                                           #
+rownames(df_primary_diagnosis)<-primary_diagnosis                                                                                                                                                        #
+                                                                                                                                                                                                         #
+# Set colnames                                                                                                                                                                                           #
+colnames(df_primary_diagnosis)<-data_types                                                                                                                                                               #
+                                                                                                                                                                                                         #
+# Fill in the table                                                                                                                                                                                      #
+# for each case_ids                                                                                                                                                                                      #
+for (diagnosis in primary_diagnosis)                                                                                                                                                                     #
+{                                                                                                                                                                                                        #
+  # Set df_cases_type_count to 1                                                                                                                                                                         #
+  df_primary_diagnosis[diagnosis,as.vector(unique(experiments_descripton[experiments_descripton$case_id %in% clinical_data$case_id[which(clinical_data$primary_diagnosis==diagnosis)],"data_type"]))]<-1 #
+}                                                                                                                                                                                                        #
+##########################################################################################################################################################################################################
 
 
 

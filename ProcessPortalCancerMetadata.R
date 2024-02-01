@@ -57,13 +57,27 @@ data_types<-unique(experiments_descripton$data_type)[unique(experiments_descript
 case_ids<-unique(experiments_descripton$case_id)                                                                       #
                                                                                                                        #
 # Create a matrix                                                                                                      #
-df_cases_type <- data.frame(matrix(0, nrow = length(case_ids), ncol = length(data_types)))                             #
+df_cases_type_count <- data.frame(matrix(0, nrow = length(case_ids), ncol = length(data_types)))                       #
                                                                                                                        #
 # Set rownames                                                                                                         #
-rownames(df_cases_type)<-case_ids                                                                                      #
+rownames(df_cases_type_count)<-case_ids                                                                                #
                                                                                                                        #
 # Set colnames                                                                                                         #
-colnames(df_cases_type)<-data_types                                                                                    #
+colnames(df_cases_type_count)<-data_types                                                                              #
+                                                                                                                       #
+# Fill in the table                                                                                                    #
+# for each case_ids                                                                                                    #
+for (case_id in case_ids)                                                                                              #
+{                                                                                                                      #
+  # Store data_types_per_case                                                                                          #
+  data_types_per_case<-unique(experiments_descripton[experiments_descripton$case_id==case_id,"data_type"])             #
+                                                                                                                       #
+  # Clean data_types_per_case by removing entries in this collumn that do not belong to data_types.                    #
+  data_types_per_case<-data_types_per_case[data_types_per_case!="CGCI-BLGSP"]                                          #
+                                                                                                                       #
+  # Set df_cases_type_count to 1                                                                                       #
+  df_cases_type_count[case_id,data_types_per_case]<-1                                                                  #
+}                                                                                                                      #
 ########################################################################################################################
 
 

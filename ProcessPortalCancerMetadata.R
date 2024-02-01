@@ -1,4 +1,6 @@
 #####################################################################################################################
+library(ggplot2)                                                                                                    #
+#####################################################################################################################
 # A script to compile the table descriptive os the cases from the cancer database (https://portal.gdc.cancer.gov/)  #
 # Entries:                                                                                                          #
 # A) tar.gz file with Cases (n=44.451).                                                                             #
@@ -99,6 +101,13 @@ for (diagnosis in primary_diagnosis)                                            
   df_primary_diagnosis[diagnosis,as.vector(unique(experiments_descripton[experiments_descripton$case_id %in% clinical_data$case_id[which(clinical_data$primary_diagnosis==diagnosis)],"data_type"]))]<-1 #
 }                                                                                                                                                                                                        #
 ##########################################################################################################################################################################################################
+# Data frame to store data frame
+df_diagnosis_experiment_cancerType=data.frame(diagnosis=c(),Experiment=c(),Cancer_type=c())
+
+for (diagnosis in colnames(df_primary_diagnosis))
+{
+  df_diagnosis_experiment_cancerType=rbind(data.frame(diagnosis=diagnosis,Experiment=df_primary_diagnosis[,diagnosis],Cancer_type=rownames(df_primary_diagnosis)),df_diagnosis_experiment_cancerType)
+}
 
 
 

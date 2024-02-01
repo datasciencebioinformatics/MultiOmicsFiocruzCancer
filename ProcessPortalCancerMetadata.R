@@ -1,5 +1,5 @@
 #####################################################################################################################
-# A script to compile the table descriptive os the cases from the cancer database (https://portal.gdc.cancer.gov/). #
+# A script to compile the table descriptive os the cases from the cancer database (https://portal.gdc.cancer.gov/)  #
 # Entries:                                                                                                          #
 # A) tar.gz file with Cases (n=44.451).                                                                             #
 #	/home/felipe/portal_gdc_cancer_gov/                                                                               #
@@ -23,12 +23,21 @@ famhisto_file="/home/felipe/portal_gdc_cancer_gov/family_history.txt"           
 followup_file="/home/felipe/portal_gdc_cancer_gov/follow_up.txt"                                                    #
 patholog_file="/home/felipe/portal_gdc_cancer_gov/pathology_detail.txt"                                             #
 #####################################################################################################################
-# First, read metadata files                                                                                        #
+# Read all metadata files                                                                                           #
 clinical_data<-read.table(file = clinical_file, sep = '\t', header = TRUE,fill=TRUE)                                #
 exposure_data<-read.table(file = exposure_file, sep = '\t', header = TRUE,fill=TRUE)                                #
 famhisto_data<-read.table(file = famhisto_file, sep = '\t', header = TRUE,fill=TRUE)                                #
-followup_data<-read.table(file = patholog_file, sep = '\t', header = TRUE,fill=TRUE)                                #
-#####################################################################################################################
+followup_data<-read.table(file = famhisto_file, sep = '\t', header = TRUE,fill=TRUE)                                #
+patholog_data<-read.table(file = patholog_file, sep = '\t', header = TRUE,fill=TRUE)                                #
+####################################################################################################################################################################################################
+# Merge files without ducplicating collumns                                                                                                                                                        #
+merge_clinical_exposure                 <- merge(clinical_data, exposure_data, by = "case_id", suffixes = c(".clincal",".exposure"), all = TRUE, no.dups=TRUE)                                     #
+merge_clinical_exposure_fam             <- merge(merge_clinical_exposure, famhisto_data, by = "case_id", suffixes = c(".merge_1","famhisto"), all = TRUE, no.dups=TRUE)                            #
+merge_clinical_exposure_fam_followup    <- merge(merge_clinical_exposure_fam, followup_data, by = "case_id", suffixes = c(".merge_2","famhisto"), all = TRUE, no.dups=TRUE)                        #
+merge_all                               <- merge(merge_clinical_exposure_fam_followup, patholog_data, by = "case_id", suffixes = c(".merge_3","patholog"), all = TRUE, no.dups=TRUE)               #
+####################################################################################################################################################################################################
+
+
 
 
 

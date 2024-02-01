@@ -16,6 +16,8 @@
 #     clinical.tsv file was modified to include data_type field from files.2024-01-30.csv                           #
 #####################################################################################################################
 # Set up iput files                                                                                                 #
+experiment_description_file="/home/felipe/portal_gdc_cancer_gov/files.2024-01-30.csv"                               #
+                                                                                                                    #
 # tsv files  are saved as txt and null character '-- replace by -                                                   #
 clinical_file="/home/felipe/portal_gdc_cancer_gov/clinical.txt"                                                     #
 exposure_file="/home/felipe/portal_gdc_cancer_gov/exposure.txt"                                                     #
@@ -36,6 +38,10 @@ merge_clinical_exposure_fam             <- merge(merge_clinical_exposure, famhis
 merge_clinical_exposure_fam_followup    <- merge(merge_clinical_exposure_fam, followup_data, by = "case_id", suffixes = c(".merge_2","famhisto"), all = TRUE, no.dups=TRUE)                        #
 merge_all                               <- merge(merge_clinical_exposure_fam_followup, patholog_data, by = "case_id", suffixes = c(".merge_3","patholog"), all = TRUE, no.dups=TRUE)               #
 ####################################################################################################################################################################################################
+# Table for the description of the data and experiments                                                       #
+experiments_descripton<-read.table(file = experiment_description_file, sep = '\t', header = TRUE,fill=TRUE)   #
+###############################################################################################################
+
 
 
 

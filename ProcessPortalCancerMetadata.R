@@ -115,7 +115,7 @@ for (diagnosis in colnames(df_primary_diagnosis))                               
 }                                                                                                                                                                                                        #
 ##########################################################################################################################################################################################################
 # FindClusters_resolution
-png(filename=paste(output_dir,"Heatmap_primary_diagnosis.png",sep=""), width = 24, height = 34, res=600, units = "cm")
+png(filename=paste(output_dir,"Heatmap_primary_diagnosis.png",sep=""), width = 48, height = 64, res=600, units = "cm")
 	pheatmap(df_primary_diagnosis)
 dev.off()
 ##########################################################################################################################################################################################################

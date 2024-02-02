@@ -141,6 +141,19 @@ for (diagnosis in rownames(df_cases_variables))                                 
 	# Selected clinical cases
 	selected_clinical_cases<-clinical_data[which(clinical_data$case_id %in% selected_cases),]
 
+	# For each primary_diagnosis
+	for (covariable in colnames(df_cases_variables))
+	{
+		# Store the name of selected clinical cases
+		selected_clinical_cases_names<-selected_clinical_cases[-which(selected_clinical_cases[,covariable]=="-"),covariable]
+		
+		df_cases_variables[,covariable]
+
+		rownames(df_cases_variables) %in% selected_clinical_cases_names
+		
+	}
+	
+
 	
   df_cases_variables[diagnosis,as.vector(unique(experiments_descripton[experiments_descripton$case_id %in% clinical_data$case_id[which(clinical_data$primary_diagnosis==diagnosis)],"case_id"]))]<-1 #
 }                                                                                                                                                                                                        #

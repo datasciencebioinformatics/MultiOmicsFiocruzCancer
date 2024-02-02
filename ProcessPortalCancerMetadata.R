@@ -133,7 +133,7 @@ png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_1",sep=""),
 dev.off()
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_2",sep=""), width = 24, height = 36, res=600, units = "cm")
+png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_2",sep=""), width = 36, height = 36, res=600, units = "cm")
 	pheatmap_primary_diagnosis_subset2
 dev.off()
 

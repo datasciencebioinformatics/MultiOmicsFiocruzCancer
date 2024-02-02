@@ -119,6 +119,36 @@ png(filename=paste(output_dir,"Heatmap_primary_diagnosis.png",sep=""), width = 2
 	pheatmap(df_primary_diagnosis)
 dev.off()
 ##########################################################################################################################################
+# A vector to save case vector
+cases_covariables<-unique(colnames(clinical_data))
+                                                                                                                                                                                                         #
+# Create a matrix                                                                                                                                                                                        #
+df_cases_variables <- data.frame(matrix(0, nrow = length(primary_diagnosis), ncol = length(cases_covariables)))                                                                                               #
+                                                                                                                                                                                                         #
+# Set rownames                                                                                                                                                                                           #
+rownames(df_cases_variables)<-primary_diagnosis                                                                                                                                                        #
+                                                                                                                                                                                                         #
+# Set colnames                                                                                                                                                                                           #
+colnames(df_cases_variables)<-cases_covariables                                                                                                                                                               #
+                                                                                                                                                                                                         #
+# Fill in the table                                                                                                                                                                                      #
+# for each case_ids                                                                                                                                                                                      #
+for (diagnosis in rownames(df_cases_variables))                                                                                                                                                        #
+{                                                                                                                                                                                                        #
+	# Set df_cases_type_count to 1                                                                                                                                                                         #
+	selected_cases<- as.vector(unique(experiments_descripton[experiments_descripton$case_id %in% clinical_data$case_id[which(clinical_data$primary_diagnosis==diagnosis)],"case_id"]))
+
+	# Selected clinical cases
+	selected_clinical_cases<-clinical_data[which(clinical_data$case_id %in% selected_cases),]
+
+	
+  df_cases_variables[diagnosis,as.vector(unique(experiments_descripton[experiments_descripton$case_id %in% clinical_data$case_id[which(clinical_data$primary_diagnosis==diagnosis)],"case_id"]))]<-1 #
+}                                                                                                                                                                                                        #
+##########################################################################################################################################################################################################
+
+
+
+
 # Percentage of complete data per co-variable and per cancer type
 complete_data_per_variable<-data.frame(Biomarker=c(),completeness=c())
 

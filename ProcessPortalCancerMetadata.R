@@ -118,6 +118,21 @@ for (diagnosis in colnames(df_primary_diagnosis))                               
 png(filename=paste(output_dir,"Heatmap_primary_diagnosis.png",sep=""), width = 24, height = 34, res=600, units = "cm")
 	pheatmap(df_primary_diagnosis)
 dev.off()
+##########################################################################################################################################
+# Percentage of complete data per co-variable and per cancer type
+complete_data_per_variable<-data.frame(Biomarker=c(),completeness=c())
+
+# For each column, convert to numeric
+for (col_bio in colnames(CAD_Biomarkers))
+{		
+	# Percentage of complete data
+	complete_data_per_variable<-rbind(complete_data_per_variable,data.frame(Biomarker=c(col_bio),completeness=c(sum(!is.na(CAD_Biomarkers[,col_bio]))/length(CAD_Biomarkers[,col_bio])*100)))
+}
+rownames(complete_data_per_variable)<-complete_data_per_variable$Biomarker	
+
+# Sort completness table
+complete_data_per_variable<-complete_data_per_variable[order(complete_data_per_variable$completeness),]
+##########################################################################################################################################
 
 
 

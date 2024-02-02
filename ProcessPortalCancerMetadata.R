@@ -122,9 +122,15 @@ df_primary_diagnosis_subset2<-df_primary_diagnosis[round(dim(df_primary_diagnosi
 df_primary_diagnosis_subset3<-df_primary_diagnosis[(2*round(dim(df_primary_diagnosis)[1]/3)):(3*round(dim(df_primary_diagnosis)[1]/3))-1,]
 
 # FindClusters_resolution
+pheatmap_primary_diagnosis<-pheatmap(df_primary_diagnosis)
 pheatmap_primary_diagnosis_subset1<-pheatmap(df_primary_diagnosis_subset1)
 pheatmap_primary_diagnosis_subset2<-pheatmap(df_primary_diagnosis_subset2)
 pheatmap_primary_diagnosis_subset3<-pheatmap(df_primary_diagnosis_subset3)
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis",sep=""), width = 24, height = 36, res=600, units = "cm")
+	pheatmap_primary_diagnosis
+dev.off()
 
 
 # FindClusters_resolution

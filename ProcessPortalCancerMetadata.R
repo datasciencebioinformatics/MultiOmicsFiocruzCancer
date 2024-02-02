@@ -127,5 +127,18 @@ pheatmap_primary_diagnosis_subset2<-pheatmap(df_primary_diagnosis_subset2)
 pheatmap_primary_diagnosis_subset3<-pheatmap(df_primary_diagnosis_subset3)
 
 
+# FindClusters_resolution
+png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_1",sep=""), width = 24, height = 36, res=600, units = "cm")
+	pheatmap_primary_diagnosis_subset1
+dev.off()
 
+# FindClusters_resolution
+png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_2",sep=""), width = 24, height = 36, res=600, units = "cm")
+	pheatmap_primary_diagnosis_subset2
+dev.off()
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_3",sep=""), width = 24, height = 36, res=600, units = "cm")
+	pheatmap_primary_diagnosis_subset3
+dev.off()
 ##########################################################################################################################################################################################################

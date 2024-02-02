@@ -1,6 +1,7 @@
 #####################################################################################################################
 library(ggplot2)                                                                                                    #
 library(pheatmap)                                                                                                   #
+library("dendextend")                                                                                               #
 #####################################################################################################################
 # A script to compile the table descriptive os the cases from the cancer database (https://portal.gdc.cancer.gov/)  #
 # Entries:                                                                                                          #
@@ -114,8 +115,16 @@ for (diagnosis in colnames(df_primary_diagnosis))                               
   df_diagnosis_experiment_cancerType=rbind(data.frame(diagnosis=diagnosis,Experiment=df_primary_diagnosis[,diagnosis],Cancer_type=rownames(df_primary_diagnosis)),df_diagnosis_experiment_cancerType)    #
 }                                                                                                                                                                                                        #
 ##########################################################################################################################################################################################################
+my_hclust_gene <- hclust(dist(df_primary_diagnosis), method = "complete")
+df_primary_diagnosis<-df_primary_diagnosis[order.hclust(my_hclust_gene),]
+df_primary_diagnosis_subset1<-df_primary_diagnosis[1:round(dim(df_primary_diagnosis)[1]/3)-1,]
+df_primary_diagnosis_subset2<-df_primary_diagnosis[round(dim(df_primary_diagnosis)[1]/3):(2*round(dim(df_primary_diagnosis)[1]/3)),]
+df_primary_diagnosis_subset3<-df_primary_diagnosis[(2*round(dim(df_primary_diagnosis)[1]/3)):(3*round(dim(df_primary_diagnosis)[1]/3))-1,]
+
 # FindClusters_resolution
-png(filename=paste(output_dir,"Heatmap_primary_diagnosis.png",sep=""), width = 48, height = 64, res=600, units = "cm")
-	pheatmap(df_primary_diagnosis)
-dev.off()
+pheatmap_primary_diagnosis_subset1<-pheatmap(df_primary_diagnosis_subset1)
+pheatmap_primary_diagnosis_subset2<-pheatmap(df_primary_diagnosis_subset2)
+pheatmap_primary_diagnosis_subset3<-pheatmap(df_primary_diagnosis_subset3)
+
+
 ##########################################################################################################################################################################################################

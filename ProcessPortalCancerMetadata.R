@@ -128,23 +128,27 @@ pheatmap_primary_diagnosis_subset2<-pheatmap(df_primary_diagnosis_subset2)
 pheatmap_primary_diagnosis_subset3<-pheatmap(df_primary_diagnosis_subset3)
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis",sep=""), width = 24, height = 36, res=600, units = "cm")
+png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis.png",sep=""), width = 24, height = 36, res=600, units = "cm")
 	pheatmap_primary_diagnosis
 dev.off()
 
-
 # FindClusters_resolution
-png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_1",sep=""), width = 24, height = 36, res=600, units = "cm")
+png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_1.png",sep=""), width = 24, height = 36, res=600, units = "cm")
 	pheatmap_primary_diagnosis_subset1
 dev.off()
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_2",sep=""), width = 36, height = 36, res=600, units = "cm")
+png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_2.png",sep=""), width = 36, height = 36, res=600, units = "cm")
 	pheatmap_primary_diagnosis_subset2
 dev.off()
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_3",sep=""), width = 24, height = 36, res=600, units = "cm")
+png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_3.png",sep=""), width = 24, height = 36, res=600, units = "cm")
 	pheatmap_primary_diagnosis_subset3
 dev.off()
 ##########################################################################################################################################################################################################
+# To DO 03-Febrtuary-2023:
+# 	- A subset of pathologies that contains at least Transcription Profiling, DNA Methylation and Proteome Profilling
+#	- A subset of pathologies within Fiocruz interest.
+##########################################################################################################################################################################################################
+

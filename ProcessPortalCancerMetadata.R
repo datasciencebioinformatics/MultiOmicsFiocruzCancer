@@ -148,9 +148,10 @@ png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_3.png",sep=
 dev.off()
 ##########################################################################################################################################################################################################
 # To DO 03-Febrtuary-2023:
-# 	- A subset of pathologies that contains at least Transcription Profiling, DNA Methylation and Proteome Profilling
+#       - Filter up by:
+# 	- subsets that contains Transcription Profiling, DNA Methylation and Proteome Profilling
 #	- A subset of pathologies within Fiocruz interest.
-#		e.g. Lung, liver, stomach, kidney, breast, prostate, thyroid
+#		stomach, lung, liver, kidney, breast, thyreroid, prostate
 #		https://www.frontiersin.org/articles/10.3389/fgene.2019.00930/full
 ##########################################################################################################################################################################################################
 

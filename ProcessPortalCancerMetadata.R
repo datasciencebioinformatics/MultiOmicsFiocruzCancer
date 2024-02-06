@@ -215,3 +215,46 @@ png(filename=paste(output_dir,"/Pheatmap_number_of_samples.png",sep=""), width =
 dev.off()
 ##########################################################################################################################################################################################################
 # A table relating all the covriables per cancer type. It will be represented the completeness of the co-variable. Depending on the visualization, data can be filtered (only co-variables with >75% completeness cn be used). Ideally, use only samples with 100% completeness.
+# Take the name of all variables
+all_variables<-colnames(merge_all)
+
+# Take the name of all pathologies
+all_pathologies<-rownames(df_tissue_or_organ_of_origin_filtered)
+
+# Create a matrix                                                                                                                                                                                        #
+df_tissue_or_organ_of_origin_clone <- data.frame(matrix(0, ncol = length(all_pathologies), nrow = length(all_variables)))                                                                                               #
+
+# Set rownames                                                                                                         #
+colnames(df_tissue_or_organ_of_origin_clone)<-all_pathologies                                                                                #
+                                                                                                                       #
+# Set colnames                                                                                                         #
+rownames(df_tissue_or_organ_of_origin_clone)<-all_variables 
+
+# For each tissue
+for (tissue in all_pathologies)
+{			
+	# For each experiment
+	for (variable in all_variables)
+	{
+		# Take the cases and the experiments for thoses cases
+		cases<-clinical_data[clinical_data$case_id==tissue,"case_id"]
+
+		# Take the cases and the experiments for thoses cases
+		cases<-clinical_data[clinical_data$tissue_or_organ_of_origin==tissue,"case_id"]
+
+		# Take all variables
+		variables_completeness<-as.vector(merge_all[merge_all$case_id %in% cases,variable])
+
+		# Replace empty by NA
+		variables_completeness[grepl("-",variables_completeness)]<-NA
+
+		# Count how many are different than NA
+		count_variables<-sum(!is.na(variables_completeness))
+		
+		# Assert counts in the table
+		df_tissue_or_organ_of_origin_clone[variable,tissue]<-count_variables			
+
+	}
+}	
+
+ 

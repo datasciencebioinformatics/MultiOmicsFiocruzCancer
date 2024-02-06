@@ -161,5 +161,7 @@ dev.off()
 #               rownames(df_tissue_or_organ_of_origin)[which(grepl("thyroid",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]
 #               rownames(df_tissue_or_organ_of_origin)[which(grepl("prostate",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]
 # I have downloaded the all cancer types listed data in the cancer portal. The cancer names listed in the paper Conforte et al.2019  have a different nomeclature. I have used the word describing the "tissue or organ of origin" to match names from both portal and paper.
+# My initial interest in this dataset comes from identififying variables that explain linear and non-linear associations between the differentially expressed molecules, the co-variables and the diagnosis parameters.
+# Take intestine cancer, for example and diet. Consider some cultures are not willing to trade the economical profit of popular diets.
 ##########################################################################################################################################################################################################
 

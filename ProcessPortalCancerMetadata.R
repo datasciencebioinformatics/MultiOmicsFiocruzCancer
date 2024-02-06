@@ -160,23 +160,18 @@ dev.off()
 #               rownames(df_tissue_or_organ_of_origin)[which(grepl("breast",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]
 #               rownames(df_tissue_or_organ_of_origin)[which(grepl("thyroid",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]
 #               rownames(df_tissue_or_organ_of_origin)[which(grepl("prostate",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]
+#               rownames(df_tissue_or_organ_of_origin)[which(grepl("stomach",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]
 # I have downloaded the all cancer types listed data in the cancer portal. The cancer names listed in the paper Conforte et al.2019  have a different nomeclature. I have used the word describing the "tissue or organ of origin" to match names from both portal and paper.
 # My initial interest in this dataset comes from identififying variables that explain linear and non-linear associations between the differentially expressed molecules, the co-variables and the diagnosis parameters.
 # Take intestine cancer, for example and diet. Consider some cultures are not willing to trade the economical profit of popular diets.
 ##########################################################################################################################################################################################################
 # A figure containing subset of pathologies from cancer portal, after filtering for pathologies in the cancer portal listed also in Conforte et al.2019.
-cancer_types<-unique(c(rownames(df_tissue_or_organ_of_origin)[which(grepl("lung",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],rownames(df_tissue_or_organ_of_origin)[which(grepl("liver",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],rownames(df_tissue_or_organ_of_origin)[which(grepl("kidney",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],rownames(df_tissue_or_organ_of_origin)[which(grepl("breast",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],rownames(df_tissue_or_organ_of_origin)[which(grepl("breast",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],rownames(df_tissue_or_organ_of_origin)[which(grepl("thyroid",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],rownames(df_tissue_or_organ_of_origin)[which(grepl("prostate",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]))
+cancer_types<-unique(c(rownames(df_tissue_or_organ_of_origin)[which(grepl("lung",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],rownames(df_tissue_or_organ_of_origin)[which(grepl("liver",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],rownames(df_tissue_or_organ_of_origin)[which(grepl("kidney",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],rownames(df_tissue_or_organ_of_origin)[which(grepl("breast",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],rownames(df_tissue_or_organ_of_origin)[which(grepl("breast",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],rownames(df_tissue_or_organ_of_origin)[which(grepl("thyroid",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],rownames(df_tissue_or_organ_of_origin)[which(grepl("prostate",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],rownames(df_tissue_or_organ_of_origin)[which(grepl("stomach",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]))
 
 # Filter datasets
 df_tissue_or_organ_of_origin_filtered<-df_tissue_or_organ_of_origin[rownames(df_tissue_or_organ_of_origin) %in% cancer_types,]
 
-# Create phetmap
-pheatmap_df_tissue_or_organ_of_origin_filtered<-pheatmap(df_tissue_or_organ_of_origin_filtered)
 
-# FindClusters_resolution
-png(filename=paste(output_dir,"/Pheatmap_df_tissue_or_organ_of_origin_filtered.png",sep=""), width = 24, height = 24, res=600, units = "cm")
-	pheatmap_df_tissue_or_organ_of_origin_filtered
-dev.off()
 ##########################################################################################################################################################################################################
 # I will now compute the number of samples per tissue+experiment·
 # Create table to adjust the indexes of the pheatmap
@@ -185,6 +180,7 @@ rownames(df_tissue_or_organ_of_origin)[which(grepl("liver",tolower(rownames(df_t
 rownames(df_tissue_or_organ_of_origin)[which(grepl("kidney",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],
 rownames(df_tissue_or_organ_of_origin)[which(grepl("breast",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],
 rownames(df_tissue_or_organ_of_origin)[which(grepl("thyroid",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],
+rownames(df_tissue_or_organ_of_origin)[which(grepl("stomach",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],
 rownames(df_tissue_or_organ_of_origin)[which(grepl("prostate",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]),index=0)
 
 # Set indexes
@@ -217,3 +213,5 @@ pheatmap_df_tissue_or_organ_of_origin_filtered<-pheatmap(df_tissue_or_organ_of_o
 png(filename=paste(output_dir,"/Pheatmap_number_of_samples.png",sep=""), width = 16, height = 16, res=600, units = "cm")
 	pheatmap_df_tissue_or_organ_of_origin_filtered
 dev.off()
+##########################################################################################################################################################################################################
+# A table relating all the covriables per cancer type. It will be represented the completeness of the co-variable. Depending on the visualization, data can be filtered (only co-variables with >75% completeness cn be used). Ideally, use only samples with 100% completeness.

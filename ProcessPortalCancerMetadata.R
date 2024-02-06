@@ -170,7 +170,10 @@ cancer_types<-unique(c(rownames(df_tissue_or_organ_of_origin)[which(grepl("lung"
 # Filter datasets
 df_tissue_or_organ_of_origin_filtered<-df_tissue_or_organ_of_origin[rownames(df_tissue_or_organ_of_origin) %in% cancer_types,]
 
+# Create phetmap
+pheatmap_df_tissue_or_organ_of_origin_filtered<-pheatmap(df_tissue_or_organ_of_origin_filtered)
+
 # FindClusters_resolution
-png(filename=paste(output_dir,"/Pheatmap_df_tissue_or_organ_of_origin_filtered.png",sep=""), width = 24, height = 36, res=600, units = "cm")
-	df_tissue_or_organ_of_origin_filtered
+png(filename=paste(output_dir,"/Pheatmap_df_tissue_or_organ_of_origin_filtered.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+	pheatmap_df_tissue_or_organ_of_origin_filtered
 dev.off()

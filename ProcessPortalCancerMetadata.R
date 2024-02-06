@@ -85,73 +85,80 @@ for (case_id in case_ids)                                                       
   df_cases_type_count[case_id,data_types_per_case]<-1                                                                  #
 }                                                                                                                      #
 ########################################################################################################################################################################################################## 
-primary_diagnosis<-unique(clinical_data$primary_diagnosis)[unique(clinical_data$primary_diagnosis)!="-"]                                                                                                 #
-primary_diagnosis<-primary_diagnosis[primary_diagnosis!=""]                                                                                                                                              #
+tissue_or_organ_of_origin<-unique(clinical_data$tissue_or_organ_of_origin)[unique(clinical_data$tissue_or_organ_of_origin)!="-"]                                                                                                 #
+tissue_or_organ_of_origin<-tissue_or_organ_of_origin[tissue_or_organ_of_origin!=""]                                                                                                                                              #
                                                                                                                                                                                                          #
 # Create a matrix                                                                                                                                                                                        #
-df_primary_diagnosis <- data.frame(matrix(0, nrow = length(primary_diagnosis), ncol = length(data_types)))                                                                                               #
+df_tissue_or_organ_of_origin <- data.frame(matrix(0, nrow = length(tissue_or_organ_of_origin), ncol = length(data_types)))                                                                                               #
                                                                                                                                                                                                          #
-# Set rownames                                                                                                                                                                                           #
-rownames(df_primary_diagnosis)<-primary_diagnosis                                                                                                                                                        #
+# Set rownames                                                                                                                                                                                                                                                                                                                                                   #
+rownames(df_tissue_or_organ_of_origin)<-tissue_or_organ_of_origin
                                                                                                                                                                                                          #
 # Set colnames                                                                                                                                                                                           #
-colnames(df_primary_diagnosis)<-data_types                                                                                                                                                               #
+colnames(df_tissue_or_organ_of_origin)<-data_types                                                                                                                                                               #
                                                                                                                                                                                                          #
 # Fill in the table                                                                                                                                                                                      #
 # for each case_ids                                                                                                                                                                                      #
-for (diagnosis in primary_diagnosis)                                                                                                                                                                     #
+for (diagnosis in tissue_or_organ_of_origin)                                                                                                                                                                     #
 {                                                                                                                                                                                                        #
   # Set df_cases_type_count to 1                                                                                                                                                                         #
-  df_primary_diagnosis[diagnosis,as.vector(unique(experiments_descripton[experiments_descripton$case_id %in% clinical_data$case_id[which(clinical_data$primary_diagnosis==diagnosis)],"data_type"]))]<-1 #
+  df_tissue_or_organ_of_origin[diagnosis,as.vector(unique(experiments_descripton[experiments_descripton$case_id %in% clinical_data$case_id[which(clinical_data$tissue_or_organ_of_origin==diagnosis)],"data_type"]))]<-1 #
 }                                                                                                                                                                                                        #
 ##########################################################################################################################################################################################################
 # Data frame to store data frame                                                                                                                                                                         #
 df_diagnosis_experiment_cancerType=data.frame(diagnosis=c(),Experiment=c(),Cancer_type=c())                                                                                                              #
                                                                                                                                                                                                          #
 # For each diagnosis                                                                                                                                                                                     #
-for (diagnosis in colnames(df_primary_diagnosis))                                                                                                                                                        #
+for (diagnosis in colnames(df_tissue_or_organ_of_origin))                                                                                                                                                        #
 {                                                                                                                                                                                                        #
   # Fill in the table                                                                                                                                                                                    #
-  df_diagnosis_experiment_cancerType=rbind(data.frame(diagnosis=diagnosis,Experiment=df_primary_diagnosis[,diagnosis],Cancer_type=rownames(df_primary_diagnosis)),df_diagnosis_experiment_cancerType)    #
+  df_diagnosis_experiment_cancerType=rbind(data.frame(diagnosis=diagnosis,Experiment=df_tissue_or_organ_of_origin[,diagnosis],Cancer_type=rownames(df_tissue_or_organ_of_origin)),df_diagnosis_experiment_cancerType)    #
 }                                                                                                                                                                                                        #
 ##########################################################################################################################################################################################################
-my_hclust_gene <- hclust(dist(df_primary_diagnosis), method = "complete")
-df_primary_diagnosis<-df_primary_diagnosis[order.hclust(my_hclust_gene),]
-df_primary_diagnosis_subset1<-df_primary_diagnosis[1:round(dim(df_primary_diagnosis)[1]/3)-1,]
-df_primary_diagnosis_subset2<-df_primary_diagnosis[round(dim(df_primary_diagnosis)[1]/3):(2*round(dim(df_primary_diagnosis)[1]/3)),]
-df_primary_diagnosis_subset3<-df_primary_diagnosis[(2*round(dim(df_primary_diagnosis)[1]/3)):(3*round(dim(df_primary_diagnosis)[1]/3))-1,]
+my_hclust_gene <- hclust(dist(df_tissue_or_organ_of_origin), method = "complete")
+df_tissue_or_organ_of_origin<-df_tissue_or_organ_of_origin[order.hclust(my_hclust_gene),]
+df_tissue_or_organ_of_origin_subset1<-df_tissue_or_organ_of_origin[1:round(dim(df_tissue_or_organ_of_origin)[1]/3)-1,]
+df_tissue_or_organ_of_origin_subset2<-df_tissue_or_organ_of_origin[round(dim(df_tissue_or_organ_of_origin)[1]/3):(2*round(dim(df_tissue_or_organ_of_origin)[1]/3)),]
+df_tissue_or_organ_of_origin_subset3<-df_tissue_or_organ_of_origin[(2*round(dim(df_tissue_or_organ_of_origin)[1]/3)):(3*round(dim(df_tissue_or_organ_of_origin)[1]/3))-1,]
 
 # FindClusters_resolution
-pheatmap_primary_diagnosis<-pheatmap(df_primary_diagnosis)
-pheatmap_primary_diagnosis_subset1<-pheatmap(df_primary_diagnosis_subset1)
-pheatmap_primary_diagnosis_subset2<-pheatmap(df_primary_diagnosis_subset2)
-pheatmap_primary_diagnosis_subset3<-pheatmap(df_primary_diagnosis_subset3)
+pheatmap_tissue_or_organ_of_origin<-pheatmap(df_tissue_or_organ_of_origin)
+pheatmap_tissue_or_organ_of_origin_subset1<-pheatmap(df_tissue_or_organ_of_origin_subset1)
+pheatmap_tissue_or_organ_of_origin_subset2<-pheatmap(df_tissue_or_organ_of_origin_subset2)
+pheatmap_tissue_or_organ_of_origin_subset3<-pheatmap(df_tissue_or_organ_of_origin_subset3)
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis.png",sep=""), width = 24, height = 36, res=600, units = "cm")
-	pheatmap_primary_diagnosis
+png(filename=paste(output_dir,"/Pheatmap_df_tissue_or_organ_of_origin.png",sep=""), width = 24, height = 36, res=600, units = "cm")
+	pheatmap_tissue_or_organ_of_origin
 dev.off()
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_1.png",sep=""), width = 24, height = 36, res=600, units = "cm")
-	pheatmap_primary_diagnosis_subset1
+png(filename=paste(output_dir,"/Pheatmap_df_tissue_or_organ_of_origin_subset_1.png",sep=""), width = 24, height = 36, res=600, units = "cm")
+	pheatmap_tissue_or_organ_of_origin_subset1
 dev.off()
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_2.png",sep=""), width = 36, height = 36, res=600, units = "cm")
-	pheatmap_primary_diagnosis_subset2
+png(filename=paste(output_dir,"/Pheatmap_df_tissue_or_organ_of_origin_subset_2.png",sep=""), width = 36, height = 36, res=600, units = "cm")
+	pheatmap_tissue_or_organ_of_origin_subset2
 dev.off()
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"/Pheatmap_df_primary_diagnosis_subset_3.png",sep=""), width = 24, height = 36, res=600, units = "cm")
-	pheatmap_primary_diagnosis_subset3
+png(filename=paste(output_dir,"/Pheatmap_df_tissue_or_organ_of_origin_subset_3.png",sep=""), width = 24, height = 36, res=600, units = "cm")
+	pheatmap_tissue_or_organ_of_origin_subset3
 dev.off()
 ##########################################################################################################################################################################################################
 # To DO 03-Febrtuary-2023:
 #       - Filter up by:
 # 	- subsets that contains Transcription Profiling, DNA Methylation and Proteome Profilling
 #	- A subset of pathologies within Fiocruz interest.
-#		stomach, lung, liver, kidney, breast, thyreroid, prostate
+#		stomach, lung, liver, kidney, breast, Thyroid, prostate
 #		https://www.frontiersin.org/articles/10.3389/fgene.2019.00930/full
+#               grepl("lung",rownames(df_tissue_or_organ_of_origin) )
+#               rownames(df_tissue_or_organ_of_origin)[which(grepl("lung",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]
+#               rownames(df_tissue_or_organ_of_origin)[which(grepl("liver",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]
+#               rownames(df_tissue_or_organ_of_origin)[which(grepl("kidney",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]
+#               rownames(df_tissue_or_organ_of_origin)[which(grepl("breast",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]
+#               rownames(df_tissue_or_organ_of_origin)[which(grepl("thyroid",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]
+#               rownames(df_tissue_or_organ_of_origin)[which(grepl("prostate",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]
 ##########################################################################################################################################################################################################
 

@@ -164,4 +164,4 @@ dev.off()
 # My initial interest in this dataset comes from identififying variables that explain linear and non-linear associations between the differentially expressed molecules, the co-variables and the diagnosis parameters.
 # Take intestine cancer, for example and diet. Consider some cultures are not willing to trade the economical profit of popular diets.
 ##########################################################################################################################################################################################################
-
+# A figure containing subset of pathologies from cancer portal, after filtering for pathologies in the cancer portal listed also in Conforte et al.2019.

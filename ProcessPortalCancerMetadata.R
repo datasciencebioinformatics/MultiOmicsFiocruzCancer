@@ -177,3 +177,35 @@ pheatmap_df_tissue_or_organ_of_origin_filtered<-pheatmap(df_tissue_or_organ_of_o
 png(filename=paste(output_dir,"/Pheatmap_df_tissue_or_organ_of_origin_filtered.png",sep=""), width = 24, height = 24, res=600, units = "cm")
 	pheatmap_df_tissue_or_organ_of_origin_filtered
 dev.off()
+##########################################################################################################################################################################################################
+# I will now compute the number of samples per tissue+experiment·
+# For each tissue
+for (tissue in rownames(df_tissue_or_organ_of_origin_filtered))
+{			
+	# For each experiment
+	for (experiment in colnames(df_tissue_or_organ_of_origin_filtered))
+	{
+		# Take the cases and the experiments for thoses cases
+		cases<-clinical_data[clinical_data$tissue_or_organ_of_origin==tissue,"case_id"]
+		experiments_table<-experiments_descripton[experiments_descripton$case_id %in% cases,"data_type"]
+		experiments<-names(table(experiments_table))
+		experiments_count<-as.vector(table(experiments_table)[experiments])
+
+		# Assert counts in the table
+		df_tissue_or_organ_of_origin_filtered[tissue,experiments]<-experiments_count			
+	}	
+}
+# Create table to adjust the indexes of the pheatmap
+df_tissue_or_organ_of_origin_indexes<-data.frame(cancer_type=c(rownames(df_tissue_or_organ_of_origin)[which(grepl("lung",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],
+rownames(df_tissue_or_organ_of_origin)[which(grepl("liver",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],
+rownames(df_tissue_or_organ_of_origin)[which(grepl("kidney",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],
+rownames(df_tissue_or_organ_of_origin)[which(grepl("breast",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],
+rownames(df_tissue_or_organ_of_origin)[which(grepl("thyroid",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],
+rownames(df_tissue_or_organ_of_origin)[which(grepl("prostate",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]),index=0)
+
+# Set indexes
+df_tissue_or_organ_of_origin_indexes$index<-1:length(df_tissue_or_organ_of_origin_indexes$index)
+
+
+# FindClusters_resolution
+pheatmap_df_tissue_or_organ_of_origin_filtered<-pheatmap(df_tissue_or_organ_of_origin_filtered,cluster_rows = FALSE,number_format = "%.0f",display_numbers=TRUE)

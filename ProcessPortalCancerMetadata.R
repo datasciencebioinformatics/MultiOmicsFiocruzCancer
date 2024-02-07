@@ -367,7 +367,19 @@ dev.off()
 # this. I will try to find statistical testes that are simple enought to be compared with data science vizualization.
 ##########################################################################################################################################################################################################
 chisq.test(x=merge_all[,-which(colnames(merge_all)=="primary_diagnosis")], y = merge_all$primary_diagnosis, correct = TRUE, p = rep(1/length(x), length(x)), rescale.p = FALSE, simulate.p.value = FALSE, B = 2000)
+#########################################################################################################################################################################################################
+# Create a data frame from the main data set.
+stu_data = data.frame(age_at_index=as.numeric(merge_all[,4]),primary_diagnosis=merge_all$primary_diagnosis)
 
+# Remove NA
+stu_data<-na.omit(stu_data)
+ 
+# Create a contingency table with the needed variables.           
+stu_data = table(stu_data$age_at_index,stu_data$primary_diagnosis) 
+
+# applying chisq.test() function
+print(chisq.test(stu_data))
+#########################################################################################################################################################################################################
 
 
 

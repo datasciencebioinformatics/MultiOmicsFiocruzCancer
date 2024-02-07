@@ -366,9 +366,10 @@ dev.off()
 # some are numerico. The outcome is also categorial. This way, I need to find a teste that asseses categorial predictors ~ categorial outcome. Chi-square tests, regression and data cience can be used to answer 
 # this. I will try to find statistical testes that are simple enought to be compared with data science vizualization.
 ##########################################################################################################################################################################################################
-chisq.test(x, y = merge_all$primary_diagnosis, correct = TRUE, p = rep(1/length(x), length(x)), rescale.p = FALSE, simulate.p.value = FALSE, B = 2000)
+chisq.test(x=merge_all[,-which(colnames(merge_all)=="primary_diagnosis")], y = merge_all$primary_diagnosis, correct = TRUE, p = rep(1/length(x), length(x)), rescale.p = FALSE, simulate.p.value = FALSE, B = 2000)
 
-merge_all[,-which(colnames(merge_all)=="primary_diagnosis")]
+
+
 
 
 

@@ -261,10 +261,10 @@ df_tissue_or_organ_of_origin_clone<-df_tissue_or_organ_of_origin_clone[which(row
 fifty_samples_least_variable<-rownames(df_tissue_or_organ_of_origin_clone)
 
 # Remove 
-df_tissue_or_organ_of_origin_clone<-df_tissue_or_organ_of_origin_norm[-which(rownames(df_tissue_or_organ_of_origin_clone)=="case_submitter_id.clincal"),]# FindClusters_resolution
+df_tissue_or_organ_of_origin_clone<-df_tissue_or_organ_of_origin_clone[-which(rownames(df_tissue_or_organ_of_origin_clone)=="case_submitter_id.clincal"),]# FindClusters_resolution
 
 # FindClusters_resolution
-pheatmap_df_tissue_or_organ_of_origin_filtered<-pheatmap(df_tissue_or_organ_of_origin_clone,cluster_rows = FALSE,number_format = "%.0f",display_numbers=TRUE)
+pheatmap_df_tissue_or_organ_of_origin_filtered<-pheatmap(df_tissue_or_organ_of_origin_clone,cluster_rows = FALSE,number_format = "%.0f",display_numbers=TRUE, main = "raw number of cases per cancer type")
 
 ########################################################################################################################################################################################################### 
 # To answer? Which samples to use from selected pathologies?
@@ -340,16 +340,16 @@ for (tissue in colnames(df_tissue_or_organ_of_origin_norm))                     
 # Remove 
 df_tissue_or_organ_of_origin_norm<-df_tissue_or_organ_of_origin_norm[-which(rownames(df_tissue_or_organ_of_origin_norm)=="case_submitter_id.clincal"),]# FindClusters_resolution
 
-pheatmap_df_tissue_or_organ_of_origin_norm<-pheatmap(df_tissue_or_organ_of_origin_norm,cluster_rows = FALSE,display_numbers=TRUE)
+pheatmap_df_tissue_or_organ_of_origin_norm<-pheatmap(df_tissue_or_organ_of_origin_norm,cluster_rows = FALSE,display_numbers=TRUE, main = "normalized number of cases per cancer type")
 ##########################################################################################################################################################################################################
 # Deliverable : a) normalized number of cases per cancer type (variables that can be used accorss pathologies)
 #               b) raw number of cases per cancer type (variables that can be used per pathologies)
 # a) normalized number of cases per cancer type (variables that can be used accorss pathologies)
-png(filename=paste(output_dir,"/Pheatmap_number_of_cases_per_cancer_type_norm.png",sep=""), width = 24, height = 24, res=600, units = "cm")
-	pheatmap_df_tissue_or_organ_of_origin_filtered
+png(filename=paste(output_dir,"/Pheatmap_number_of_cases_per_cancer_type_norm.png",sep=""), width = 32, height = 32, res=600, units = "cm")
+	pheatmap_df_tissue_or_organ_of_origin_norm
 dev.off()
-b) raw number of cases per cancer type (variables that can be used per pathologies)
-png(filename=paste(output_dir,"/Pheatmap_raw Pheatmap_number_of_cases_per_cancer_type_raw",sep=""), width = 24, height = 24, res=600, units = "cm")
+#b) raw number of cases per cancer type (variables that can be used per pathologies)
+png(filename=paste(output_dir,"/Pheatmap_raw Pheatmap_number_of_cases_per_cancer_type_raw.png",sep=""), width = 32, height = 32, res=600, units = "cm")
 	pheatmap_df_tissue_or_organ_of_origin_filtered
 dev.off()
 # Questions : we will focus on the co-variables (use co-variables that can be used consistently accross pathologies?
@@ -357,3 +357,13 @@ dev.off()
 # Take a look at the co-variables as groups
 # Treatment variables
 ##########################################################################################################################################################################################################
+# Goal : which samples can be used for a given pathology?
+# Criterias :
+# 1) Samples that have all selected co-variables different than null.
+# Question : how to select covariables to be used in the experiment?
+# Answer   : Data has 294 cancer types and 44451 cases and 258 covariables.
+
+
+
+
+

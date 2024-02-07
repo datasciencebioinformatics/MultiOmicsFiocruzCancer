@@ -274,13 +274,19 @@ pheatmap_df_tissue_or_organ_of_origin_filtered<-pheatmap(df_tissue_or_organ_of_o
 # Deliverable : a) normalized number of cases per cancer type (variables that can be used accorss pathologies)
 #               b) raw number of cases per cancer type (variables that can be used per pathologies)
 ##########################################################################################################################################################################################################
-# Filter up with the following criteria : at least 50 samples per co-variable.
-df_tissue_or_organ_of_origin_norm<-df_tissue_or_organ_of_origin_clone[which(rowSums(df_tissue_or_organ_of_origin_clone)>50),]*0
-
+# Create a matrix                                                                                                                                                                                        #
+df_tissue_or_organ_of_origin_norm <- data.frame(matrix(0, ncol = length(all_pathologies), nrow = length(all_variables)))                                                                                 #
+                                                                                                                                                                                                         #
+# Set rownames                                                                                                                                                                                           #
+colnames(df_tissue_or_organ_of_origin_norm)<-all_pathologies                                                                                                                                             #
+                                                                                                                                                                                                         #
+# Set colnames                                                                                                                                                                                           #
+rownames(df_tissue_or_organ_of_origin_norm)<-all_variables                                                                                                                                               #
+                                                                                                                                                                                                         #
 # Normalize the number for each co-variables per cancer type.
 # The total number patients of each cance type is stored.  
 # For each tissue
-for (tissue in rownames(df_tissue_or_organ_of_origin_filtered))
+for (tissue in rownames(df_tissue_or_organ_of_origin_norm))
 {                       
 	# Take the cases
         cases<-merge_all[merge_all$tissue_or_organ_of_origin==tissue,"case_id"]
@@ -304,7 +310,7 @@ for (tissue in rownames(df_tissue_or_organ_of_origin_filtered))
 		merge_subset.first <- merge_subset[match(unique(merge_subset$case_id), merge_subset$case_id),]
 
 		# Take all variables
-                variables_completeness<-as.vector(merge_subset.first[merge_subset.first$case_id %in% unique_cases,"case_id"])
+                variables_completeness<-as.vector(merge_subset.first[merge_subset.first$case_id %in% unique_cases,covariables])
 
                 # Replace empty by NA
                 variables_completeness[grepl("-",variables_completeness)]<-NA
@@ -323,6 +329,13 @@ for (tissue in rownames(df_tissue_or_organ_of_origin_filtered))
                 }                       
         }
 } 
+# Filter up variables with more than 50 samples per pathology
+
+
+# FindClusters_resolution
+pheatmap_df_tissue_or_organ_of_origin_norm<-pheatmap(df_tissue_or_organ_of_origin_norm,cluster_rows = FALSE,number_format = "%.0f",display_numbers=TRUE)
+
+
 ##########################################################################################################################################################################################################
 # Take a look at the co-variables as groups
 # Treatment variables

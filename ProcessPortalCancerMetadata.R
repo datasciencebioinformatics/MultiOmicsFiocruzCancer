@@ -301,7 +301,7 @@ for (tissue in rownames(df_tissue_or_organ_of_origin_filtered))
 		# Some of the cases are duplicate in the table because of some co-variables have multiple entries. 
 		# For example, I understood that when the treatment changes over time the patient data will be duplicated with the new information for the treatment.
 		# In a first moment, I will not split the data per variables with multiple entries per patient, instead I will use the firtst occurance of that patient.
-		merge_all[merge_all$case_id %in% unique_cases,]
+		merge_all<-merge_all[merge_all$case_id %in% unique_cases,]
 
                 # Replace empty by NA
                 variables_completeness[grepl("-",variables_completeness)]<-NA
@@ -320,3 +320,7 @@ for (tissue in rownames(df_tissue_or_organ_of_origin_filtered))
                 }                       
         }
 } 
+##########################################################################################################################################################################################################
+# Take a look at the co-variables as groups
+# Treatment variables
+##########################################################################################################################################################################################################

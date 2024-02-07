@@ -362,7 +362,10 @@ dev.off()
 # 1) Samples that have all selected co-variables different than null.
 # Question : how to select covariables to be used in the experiment?
 # Answer   : Data has 294 cancer types and 44451 cases and 258 covariables.
-
+# I need to find a test to assess association between the covariables and the primary diagnosis. The goal is to use the model to find co-variables to be further analysed. Most of the co-variables are categorial, 
+# some are numerico. The outcome is also categorial. This way, I need to find a teste that asseses categorial predictors ~ categorial outcome. Chi-square tests, regression and data cience can be used to answer 
+# this. I will try to find statistical testes that are simple enought to be compared with data science vizualization.
+##########################################################################################################################################################################################################
 
 
 

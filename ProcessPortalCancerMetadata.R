@@ -295,13 +295,16 @@ for (tissue in rownames(df_tissue_or_organ_of_origin_filtered))
         # For each tissue
         for (covariables in colnames(clinical_data))
         {       
-                # Take all variables
-                variables_completeness<-as.vector(merge_all[merge_all$case_id %in% unique_cases,"case_id"])
-
 		# Some of the cases are duplicate in the table because of some co-variables have multiple entries. 
 		# For example, I understood that when the treatment changes over time the patient data will be duplicated with the new information for the treatment.
 		# In a first moment, I will not split the data per variables with multiple entries per patient, instead I will use the firtst occurance of that patient.
-		merge_all<-merge_all[merge_all$case_id %in% unique_cases,]
+		merge_subset<-merge_all[merge_all$case_id %in% unique_cases,]
+
+		# For each case_id	
+		merge_subset.first <- merge_subset[match(unique(merge_subset$case_id), merge_subset$case_id),]
+
+		# Take all variables
+                variables_completeness<-as.vector(merge_subset.first[merge_subset.first$case_id %in% unique_cases,"case_id"])
 
                 # Replace empty by NA
                 variables_completeness[grepl("-",variables_completeness)]<-NA

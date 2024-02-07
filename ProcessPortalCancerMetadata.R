@@ -380,6 +380,28 @@ stu_data = table(stu_data$age_at_index,stu_data$primary_diagnosis)
 print(chisq.test(stu_data))
 #########################################################################################################################################################################################################
 # Test chi-square categorical data
+stu_data = data.frame(race=merge_all$race,primary_diagnosis=merge_all$primary_diagnosis)
+
+# Remove NA
+stu_data<-na.omit(stu_data)
+
+# Remove "-"
+stu_data<-stu_data[stu_data$race!="-",]
+
+# Create a contingency table with the needed variables.           
+stu_data = table(stu_data$race,stu_data$primary_diagnosis) 
+
+# applying chisq.test() function
+print(chisq.test(stu_data))
+
+# applying chisq.test() function
+print(chisq.test(stu_data))
+#########################################################################################################################################################################################################
+# To Do :
+# Perform test for all co-vararibles
+# Execute tests other than chi-square
+#########################################################################################################################################################################################################
+
 
 
 

@@ -400,6 +400,8 @@ print(chisq.test(stu_data))
 # To Do :
 # Perform test for all co-vararibles
 # Execute tests other than chi-square
+# Categorical variables with more than two levels
+# Anova
 #########################################################################################################################################################################################################
 
 

@@ -257,6 +257,12 @@ for (tissue in all_pathologies)
 # Filter up with the following criteria : at least 50 samples per co-variable.
 df_tissue_or_organ_of_origin_clone<-df_tissue_or_organ_of_origin_clone[which(rowSums(df_tissue_or_organ_of_origin_clone)>50),]
 
+# Store co-variables with more than 50 samples per covariable
+fifty_samples_least_variable<-rownames(df_tissue_or_organ_of_origin_clone)
+
+# Remove 
+df_tissue_or_organ_of_origin_clone<-df_tissue_or_organ_of_origin_norm[-which(rownames(df_tissue_or_organ_of_origin_clone)=="case_submitter_id.clincal"),]# FindClusters_resolution
+
 # FindClusters_resolution
 pheatmap_df_tissue_or_organ_of_origin_filtered<-pheatmap(df_tissue_or_organ_of_origin_clone,cluster_rows = FALSE,number_format = "%.0f",display_numbers=TRUE)
 
@@ -283,35 +289,37 @@ colnames(df_tissue_or_organ_of_origin_norm)<-all_pathologies                    
 # Set colnames                                                                                                                                                                                           #
 rownames(df_tissue_or_organ_of_origin_norm)<-all_variables                                                                                                                                               #
                                                                                                                                                                                                          #
-# Normalize the number for each co-variables per cancer type.
-# The total number patients of each cance type is stored.  
-# For each tissue
-for (tissue in rownames(df_tissue_or_organ_of_origin_norm))
-{                       
-	# Take the cases
-        cases<-merge_all[merge_all$tissue_or_organ_of_origin==tissue,"case_id"]
-        
-        # Subsetlect unique cases for this tissue
-        unique_cases<-unique(merge_all[merge_all$case_id %in% cases,"case_id"])
-
-        # Take the total number of samples 
-        total_cases_pathology<-length(unique_cases)
-
-
-        # For each tissue
-        for (covariables in colnames(clinical_data))
-        {       
-		# Some of the cases are duplicate in the table because of some co-variables have multiple entries. 
-		# For example, I understood that when the treatment changes over time the patient data will be duplicated with the new information for the treatment.
-		# In a first moment, I will not split the data per variables with multiple entries per patient, instead I will use the firtst occurance of that patient.
-		merge_subset<-merge_all[merge_all$case_id %in% unique_cases,]
-
-		# For each case_id	
-		merge_subset.first <- merge_subset[match(unique(merge_subset$case_id), merge_subset$case_id),]
-
-		# Take all variables
-                variables_completeness<-as.vector(merge_subset.first[merge_subset.first$case_id %in% unique_cases,covariables])
-
+# Filter up variables with more than 50 samples per pathology                                                                                                                                            #
+df_tissue_or_organ_of_origin_norm<-df_tissue_or_organ_of_origin_norm[fifty_samples_least_variable,]                                                                                                      #
+                                                                                                                                                                                                         #                                                                                                                                                                                                         #
+# Normalize the number for each co-variables per cancer type.                                                                                                                                            #
+# The total number patients of each cance type is stored.                                                                                                                                                #
+# For each tissue                                                                                                                                                                                        #
+for (tissue in colnames(df_tissue_or_organ_of_origin_norm))                                                                                                                                              #
+{                                                                                                                                                                                                        #
+	# Take the cases                                                                                                                                                                                 #
+        cases<-merge_all[merge_all$tissue_or_organ_of_origin==tissue,"case_id"]                                                                                                                          #
+                                                                                                                                                                                                         #
+        # Subsetlect unique cases for this tissue                                                                                                                                                        #
+        unique_cases<-unique(merge_all[merge_all$case_id %in% cases,"case_id"])                                                                                                                          #                                                                                                                                                                                                         #
+	                                                                                                                                                                                                 #
+        # Take the total number of samples                                                                                                                                                               #
+        total_cases_pathology<-length(unique_cases)                                                                                                                                                      #
+                                                                                                                                                                                                         #
+        # For each tissue                                                                                                                                                                                #
+        for (covariables in rownames(df_tissue_or_organ_of_origin_norm))                                                                                                                                                     #
+        {                                                                                                                                                                                                #
+		# Some of the cases are duplicate in the table because of some co-variables have multiple entries.                                                                                       #
+		# For example, I understood that when the treatment changes over time the patient data will be duplicated with the new information for the treatment.                                    #
+		# In a first moment, I will not split the data per variables with multiple entries per patient, instead I will use the firtst occurance of that patient.                                 #
+		merge_subset<-merge_all[merge_all$case_id %in% unique_cases,]                                                                                                                            #
+                                                                                                                                                                                                         #
+		# For each case_id	                                                                                                                                                                 #
+		merge_subset.first <- merge_subset[match(unique(merge_subset$case_id), merge_subset$case_id),]                                                                                           #
+                                                                                                                                                                                                         #
+		# Take all variables                                                                                                                                                                     #
+                variables_completeness<-as.vector(merge_subset.first[merge_subset.first$case_id %in% unique_cases,covariables])                                                                          #
+                  #
                 # Replace empty by NA
                 variables_completeness[grepl("-",variables_completeness)]<-NA
 
@@ -329,13 +337,22 @@ for (tissue in rownames(df_tissue_or_organ_of_origin_norm))
                 }                       
         }
 } 
-# Filter up variables with more than 50 samples per pathology
+# Remove 
+df_tissue_or_organ_of_origin_norm<-df_tissue_or_organ_of_origin_norm[-which(rownames(df_tissue_or_organ_of_origin_norm)=="case_submitter_id.clincal"),]# FindClusters_resolution
 
-
-# FindClusters_resolution
-pheatmap_df_tissue_or_organ_of_origin_norm<-pheatmap(df_tissue_or_organ_of_origin_norm,cluster_rows = FALSE,number_format = "%.0f",display_numbers=TRUE)
-
-
+pheatmap_df_tissue_or_organ_of_origin_norm<-pheatmap(df_tissue_or_organ_of_origin_norm,cluster_rows = FALSE,display_numbers=TRUE)
+##########################################################################################################################################################################################################
+# Deliverable : a) normalized number of cases per cancer type (variables that can be used accorss pathologies)
+#               b) raw number of cases per cancer type (variables that can be used per pathologies)
+# a) normalized number of cases per cancer type (variables that can be used accorss pathologies)
+png(filename=paste(output_dir,"/Pheatmap_number_of_cases_per_cancer_type_norm.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+	pheatmap_df_tissue_or_organ_of_origin_filtered
+dev.off()
+b) raw number of cases per cancer type (variables that can be used per pathologies)
+png(filename=paste(output_dir,"/Pheatmap_raw Pheatmap_number_of_cases_per_cancer_type_raw",sep=""), width = 24, height = 24, res=600, units = "cm")
+	pheatmap_df_tissue_or_organ_of_origin_filtered
+dev.off()
+# Questions : we will focus on the co-variables (use co-variables that can be used consistently accross pathologies?
 ##########################################################################################################################################################################################################
 # Take a look at the co-variables as groups
 # Treatment variables

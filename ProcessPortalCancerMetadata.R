@@ -260,8 +260,59 @@ df_tissue_or_organ_of_origin_clone<-df_tissue_or_organ_of_origin_clone[which(row
 # FindClusters_resolution
 pheatmap_df_tissue_or_organ_of_origin_filtered<-pheatmap(df_tissue_or_organ_of_origin_clone,cluster_rows = FALSE,number_format = "%.0f",display_numbers=TRUE)
 
-
-##########################################################################################################################################################################################################
+########################################################################################################################################################################################################### 
 # To answer? Which samples to use from selected pathologies?
-# I have 
+# I have interest in the slection of covaribles and also in the selection of specific cases. For the selection of cases I have no other criteria than select cases that have complete record for the variables
+# of interest. For the selection of the variables of interst, I can start with all of them. However, most are incomplete. I aim at checking the completedness of the co-variables are complete for patholgies or 
+# if the compledteness if overall the same for all groups. I have computed the number of cases per co-variable but the number of patiets in each cancer type is very diverse. For this I can normalize the numbers 
+# per covariables taking into account the number of cases per pathology.
+# I have an interest on variables that I from  my background can have insights. Read molecular biology and systems biology. And I think too is valuable for the purpose of getting insight on the specific dataset, 
+# given that this dataset too is not the whole universe of data we could have for the patholgy. Read data heterogenity. But I have share with interest this with Nicolas and my post-doc ṕeer if I read something about
+# cance and this variables.
+# Homeworok   : read about the co-variables and cancer data type. 
+# Rember      : computer science, molecular biolgy, system biology.
+# Deliverable : a) normalized number of cases per cancer type (variables that can be used accorss pathologies)
+#               b) raw number of cases per cancer type (variables that can be used per pathologies)
+##########################################################################################################################################################################################################
+# Filter up with the following criteria : at least 50 samples per co-variable.
+df_tissue_or_organ_of_origin_norm<-df_tissue_or_organ_of_origin_clone[which(rowSums(df_tissue_or_organ_of_origin_clone)>50),]*0
+
+# Normalize the number for each co-variables per cancer type.
+# The total number patients of each cance type is stored.  
+# For each tissue
+for (tissue in rownames(df_tissue_or_organ_of_origin_filtered))
+{				
+	# Take the cases of the pathologies
+	cases<-merge_all[merge_all$tissue_or_organ_of_origin==tissue,"case_id"]
+	
+	# Subsetlect unique cases for this tissue
+	unique_cases<-unique(merge_all[merge_all$case_id %in% cases,"case_id"])
+
+	# Take the total number of samples 
+	total_cases_pathology<-length(unique_cases)
+
+	# For each tissue
+	for (covariables in colnames(clinical_data))
+	{			
+		# Take all variables
+		variables_completeness<-as.vector(merge_all[merge_all$case_id %in% unique_cases,covariables])
+		
+		
+		# Replace empty by NA
+		variables_completeness[grepl("-",variables_completeness)]<-NA
+
+		# Count how many are different than NA
+		count_variables<-sum(!is.na(variables_completeness))
+
+		# Compute percentage
+		if(total_cases_pathology!=0)
+		{
+			# Calculate total percentage
+			percentage_count<-(count_variables/total_cases_pathology)*100
+
+			# Update table
+			df_tissue_or_organ_of_origin_norm[covariables,tissue]<-percentage_count
+		}			
+	}
+}	
 ##########################################################################################################################################################################################################

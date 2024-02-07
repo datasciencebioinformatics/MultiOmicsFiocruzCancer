@@ -170,8 +170,6 @@ cancer_types<-unique(c(rownames(df_tissue_or_organ_of_origin)[which(grepl("lung"
 
 # Filter datasets
 df_tissue_or_organ_of_origin_filtered<-df_tissue_or_organ_of_origin[rownames(df_tissue_or_organ_of_origin) %in% cancer_types,]
-
-
 ##########################################################################################################################################################################################################
 # I will now compute the number of samples per tissue+experiment·
 # Create table to adjust the indexes of the pheatmap
@@ -256,5 +254,14 @@ for (tissue in all_pathologies)
 
 	}
 }	
+# Filter up with the following criteria : at least 50 samples per co-variable.
+df_tissue_or_organ_of_origin_clone<-df_tissue_or_organ_of_origin_clone[which(rowSums(df_tissue_or_organ_of_origin_clone)>50),]
 
- 
+# FindClusters_resolution
+pheatmap_df_tissue_or_organ_of_origin_filtered<-pheatmap(df_tissue_or_organ_of_origin_clone,cluster_rows = FALSE,number_format = "%.0f",display_numbers=TRUE)
+
+
+##########################################################################################################################################################################################################
+# To answer? Which samples to use from selected pathologies?
+# I have 
+##########################################################################################################################################################################################################

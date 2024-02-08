@@ -367,7 +367,23 @@ dev.off()
 # this. I will try to find statistical testes that are simple enought to be compared with data science vizualization.
 ##########################################################################################################################################################################################################
 # Set co-variables
-covariables <- rownames(df_tissue_or_organ_of_origin_norm)
+covariables <- rownames(df_tissue_or_organ_of_origin)
+
+# Create a matrix                                                                                                                                                                                        #
+df_tissue_or_organ_of_origin_pvalues <- data.frame(matrix(0, ncol = length(c("p-value","x-squared","df")), nrow = length(covariables)))                                                                                 #
+df_tissue_or_organ_of_origin_xsquared <- data.frame(matrix(0, ncol = length(c("p-value","x-squared","df")), nrow = length(covariables)))                                                                                 #
+df_tissue_or_organ_of_origin_df <- data.frame(matrix(0, ncol = length(c("p-value","x-squared","df")), nrow = length(covariables)))                                                                                 #
+
+                                                                                                                                                                                                         #
+# Set rownames                                                                                                                                                                                           #
+colnames(df_tissue_or_organ_of_origin_pvalues)<-c("p-value","x-squared","df")                                                                                                                                             #
+colnames(df_tissue_or_organ_of_origin_xsquared)<-c("p-value","x-squared","df")                                                                                                                                             #
+colnames(df_tissue_or_organ_of_origin_df)<-c("p-value","x-squared","df")                                                                                                                                             #
+                                                                                                                                                                                                         #
+# Set colnames                                                                                                                                                                                           #
+rownames(df_tissue_or_organ_of_origin_pvalues)<-covariables
+rownames(df_tissue_or_organ_of_origin_xsquared)<-covariables
+rownames(df_tissue_or_organ_of_origin_df)<-covariables
 
 # To do : create three tables: 
 # A table for all covariables vs. all the tests, to store p-values.

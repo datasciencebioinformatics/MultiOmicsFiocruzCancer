@@ -408,7 +408,7 @@ for (covariable in covariables)
 	stu_data<-na.omit(stu_data)
 
 	# If there is at least one non-na entry
-	if(dim(stu_data)[1]>2)
+	if(dim(stu_data)[1]>2 && dim(stu_data)[2]>2)
 	{			
 		# Create a contingency table with the needed variables.           
 		stu_data = table(stu_data$covariable,stu_data$primary_diagnosis) 

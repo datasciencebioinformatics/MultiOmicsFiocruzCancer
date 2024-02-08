@@ -411,18 +411,20 @@ for (covariable in covariables)
 	{			
 		# Create a contingency table with the needed variables.           
 		stu_data = table(stu_data$covariable,stu_data$primary_diagnosis) 
-	
+		
 		# applying chisq.test() function
 		pvalue   <-chisq.test(stu_data)$p.value
 		parameter<-chisq.test(stu_data)$parameter["df"]
 		xsquared <-chisq.test(stu_data)$statistic
-
+		
 		# Applying GoodmanKruskalGamma 
 		goodmanKruskalGamma<-GoodmanKruskalGamma(stu_data$covariable, y = stu_data$primary_diagnosis, conf.level = NA)
-
+		
 		# Sotre results
+		print(pvalue)
+		print(goodmanKruskalGamma)
 		df_tissue_or_organ_of_origin_pvalues[covariable,"chisq"]<-pvalue
-		df_tissue_or_organ_of_origin_pvalues[covariable,"goodmanKruskalGamma"]<-pvalue
+		df_tissue_or_organ_of_origin_pvalues[covariable,"goodmanKruskalGamma"]<-goodmanKruskalGamma
 	}	
 }
 # To do : create three tables: 

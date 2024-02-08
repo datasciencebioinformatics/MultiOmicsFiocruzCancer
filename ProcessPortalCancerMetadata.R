@@ -366,26 +366,25 @@ dev.off()
 # some are numerico. The outcome is also categorial. This way, I need to find a teste that asseses categorial predictors ~ categorial outcome. Chi-square tests, regression and data cience can be used to answer 
 # this. I will try to find statistical testes that are simple enought to be compared with data science vizualization.
 ##########################################################################################################################################################################################################
+library("DescTools")
+
 # Recreate merge all table
 merge_all <- merge(merge_clinical_exposure_fam_followup, patholog_data, by = "case_id", suffixes = c(".merge_3","patholog"), all = TRUE, no.dups=TRUE)   
 
 # Set co-variables
 covariables <- as.vector(tolower(colnames(merge_all)))
 
-# Create a matrix                                                                                                                                                                                        #
-df_tissue_or_organ_of_origin_pvalues <- data.frame(matrix(Inf, ncol = length(c("chisq","anova") ), nrow = length(covariables)))                                                                                 #
-df_tissue_or_organ_of_origin_xsquared <- data.frame(matrix(Inf, ncol = length(c("chisq","anova") ), nrow = length(covariables)))                                                                                 #
-df_tissue_or_organ_of_origin_df <- data.frame(matrix(Inf, ncol = length(c("chisq","anova") ), nrow = length(covariables)))                                                                                 #
+# Set co-variables
+covariables<-covariables[-which(covariables=="primary_diagnosis")]
 
-                                                                                                                                                                                                         ## Set rownames                                                                                                                                                                                           #
-colnames(df_tissue_or_organ_of_origin_pvalues)<-c("chisq","anova")                                                                                                                                             #
-colnames(df_tissue_or_organ_of_origin_xsquared)<-c("chisq","anova")                                                                                                                                             #
-colnames(df_tissue_or_organ_of_origin_df)<-c("chisq","anova")                                                                                                                                             #
+# Create a matrix                                                                                                                                                                                        #
+df_tissue_or_organ_of_origin_pvalues <- data.frame(matrix(Inf, ncol = length(c("chisq","goodmanKruskalGamma") ), nrow = length(covariables)))                                                                                 #
+
+## Set colnames                                                                                                                                                                                           #
+colnames(df_tissue_or_organ_of_origin_pvalues)<-c("chisq","goodmanKruskalGamma")                                                                                                                                             #
                                                                                                                                                                                                          #
-# Set colnames                                                                                                                                                                                           #
+# Set rownames                                                                                                                                                                                           #
 rownames(df_tissue_or_organ_of_origin_pvalues)<-covariables
-rownames(df_tissue_or_organ_of_origin_xsquared)<-covariables
-rownames(df_tissue_or_organ_of_origin_df)<-covariables
 
 # For each co-variable
 for (covariable in covariables)
@@ -405,7 +404,7 @@ for (covariable in covariables)
 	stu_data<-stu_data[stu_data$covariable!="-",]
 
 	# set rownames
-	stu_data<-na.omit(stu_data)
+	stu_data<-na.omit(stu_data)	
 
 	# If there is at least one non-na entry
 	if(dim(stu_data)[1]>2 && dim(stu_data)[2]>2)
@@ -418,10 +417,12 @@ for (covariable in covariables)
 		parameter<-chisq.test(stu_data)$parameter["df"]
 		xsquared <-chisq.test(stu_data)$statistic
 
+		# Applying GoodmanKruskalGamma 
+		goodmanKruskalGamma<-GoodmanKruskalGamma(stu_data$covariable, y = stu_data$primary_diagnosis, conf.level = NA)
+
 		# Sotre results
 		df_tissue_or_organ_of_origin_pvalues[covariable,"chisq"]<-pvalue
-		df_tissue_or_organ_of_origin_xsquared[covariable,"chisq"]<-parameter
-		df_tissue_or_organ_of_origin_df[covariable,"chisq"]<-xsquared	
+		df_tissue_or_organ_of_origin_pvalues[covariable,"goodmanKruskalGamma"]<-pvalue
 	}	
 }
 # To do : create three tables: 

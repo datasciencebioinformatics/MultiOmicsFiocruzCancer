@@ -366,10 +366,15 @@ dev.off()
 # some are numerico. The outcome is also categorial. This way, I need to find a teste that asseses categorial predictors ~ categorial outcome. Chi-square tests, regression and data cience can be used to answer 
 # this. I will try to find statistical testes that are simple enought to be compared with data science vizualization.
 ##########################################################################################################################################################################################################
+# Set co-variables
+covariables <- rownames(df_tissue_or_organ_of_origin_norm)
+
 # To do : create three tables: 
 # A table for all covariables vs. all the tests, to store p-values.
 # A table for all covariables vs. all the tests, to store X-squared.
 # A table for all covariables vs. all the tests, to store df.
+
+
 
 # To do :
 # Differential categorial from numerical predictors.

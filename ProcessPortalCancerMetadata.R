@@ -367,23 +367,60 @@ dev.off()
 # this. I will try to find statistical testes that are simple enought to be compared with data science vizualization.
 ##########################################################################################################################################################################################################
 # Set co-variables
-covariables <- rownames(df_tissue_or_organ_of_origin)
+covariables <- as.vector(tolower(colnames(merge_all)))
 
 # Create a matrix                                                                                                                                                                                        #
-df_tissue_or_organ_of_origin_pvalues <- data.frame(matrix(0, ncol = length(c("p-value","x-squared","df")), nrow = length(covariables)))                                                                                 #
-df_tissue_or_organ_of_origin_xsquared <- data.frame(matrix(0, ncol = length(c("p-value","x-squared","df")), nrow = length(covariables)))                                                                                 #
-df_tissue_or_organ_of_origin_df <- data.frame(matrix(0, ncol = length(c("p-value","x-squared","df")), nrow = length(covariables)))                                                                                 #
+df_tissue_or_organ_of_origin_pvalues <- data.frame(matrix(Inf, ncol = length(c("chisq","anova") ), nrow = length(covariables)))                                                                                 #
+df_tissue_or_organ_of_origin_xsquared <- data.frame(matrix(Inf, ncol = length(c("chisq","anova") ), nrow = length(covariables)))                                                                                 #
+df_tissue_or_organ_of_origin_df <- data.frame(matrix(Inf, ncol = length(c("chisq","anova") ), nrow = length(covariables)))                                                                                 #
 
-                                                                                                                                                                                                         #
-# Set rownames                                                                                                                                                                                           #
-colnames(df_tissue_or_organ_of_origin_pvalues)<-c("p-value","x-squared","df")                                                                                                                                             #
-colnames(df_tissue_or_organ_of_origin_xsquared)<-c("p-value","x-squared","df")                                                                                                                                             #
-colnames(df_tissue_or_organ_of_origin_df)<-c("p-value","x-squared","df")                                                                                                                                             #
+                                                                                                                                                                                                         ## Set rownames                                                                                                                                                                                           #
+colnames(df_tissue_or_organ_of_origin_pvalues)<-c("chisq","anova")                                                                                                                                             #
+colnames(df_tissue_or_organ_of_origin_xsquared)<-c("chisq","anova")                                                                                                                                             #
+colnames(df_tissue_or_organ_of_origin_df)<-c("chisq","anova")                                                                                                                                             #
                                                                                                                                                                                                          #
 # Set colnames                                                                                                                                                                                           #
 rownames(df_tissue_or_organ_of_origin_pvalues)<-covariables
 rownames(df_tissue_or_organ_of_origin_xsquared)<-covariables
 rownames(df_tissue_or_organ_of_origin_df)<-covariables
+
+# For each co-variable
+for (covariable in covariables)
+{
+	print(covariable)	
+
+	# Recreate merge all table
+	merge_all <- merge(merge_clinical_exposure_fam_followup, patholog_data, by = "case_id", suffixes = c(".merge_3","patholog"), all = TRUE, no.dups=TRUE)               #
+
+	# Raname column for selected variable
+	colnames(merge_all)[which(colnames(merge_all)==covariable)]<-"covariable"
+
+	# A tabel with data for analysis
+	stu_data = data.frame(covariable=merge_all$covariable,primary_diagnosis=merge_all$primary_diagnosis)
+
+	# Remove "-"
+	stu_data<-stu_data[stu_data$covariable!="-",]
+
+	# set rownames
+	stu_data<-na.omit(stu_data)
+
+	# If there is at least one non-na entry
+	if(dim(stu_data)[1]>0)
+	{			
+		# Create a contingency table with the needed variables.           
+		stu_data = table(stu_data$covariable,stu_data$primary_diagnosis) 
+	
+		# applying chisq.test() function
+		pvalue   <-chisq.test(stu_data)$p.value
+		parameter<-chisq.test(stu_data)$parameter["df"]
+		xsquared <-chisq.test(stu_data)$statistic
+
+		df_tissue_or_organ_of_origin_pvalues[covariable,"chisq"]<-pvalue
+		
+	}	
+
+}
+	
 
 # To do : create three tables: 
 # A table for all covariables vs. all the tests, to store p-values.
@@ -399,9 +436,6 @@ rownames(df_tissue_or_organ_of_origin_df)<-covariables
 # chi-square
 # anova
 ##########################################################################################################################################################################################################
-# Test chi-square numerical data
-# Create a data frame from the main data set.
-stu_data = data.frame(age_at_index=as.numeric(merge_all[,4]),primary_diagnosis=merge_all$primary_diagnosis)
 
 # Remove NA
 stu_data<-na.omit(stu_data)

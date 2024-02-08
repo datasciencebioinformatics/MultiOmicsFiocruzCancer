@@ -366,6 +366,9 @@ dev.off()
 # some are numerico. The outcome is also categorial. This way, I need to find a teste that asseses categorial predictors ~ categorial outcome. Chi-square tests, regression and data cience can be used to answer 
 # this. I will try to find statistical testes that are simple enought to be compared with data science vizualization.
 ##########################################################################################################################################################################################################
+# Recreate merge all table
+merge_all <- merge(merge_clinical_exposure_fam_followup, patholog_data, by = "case_id", suffixes = c(".merge_3","patholog"), all = TRUE, no.dups=TRUE)   
+
 # Set co-variables
 covariables <- as.vector(tolower(colnames(merge_all)))
 
@@ -405,7 +408,7 @@ for (covariable in covariables)
 	stu_data<-na.omit(stu_data)
 
 	# If there is at least one non-na entry
-	if(dim(stu_data)[1]>0)
+	if(dim(stu_data)[1]>2)
 	{			
 		# Create a contingency table with the needed variables.           
 		stu_data = table(stu_data$covariable,stu_data$primary_diagnosis) 
@@ -415,13 +418,12 @@ for (covariable in covariables)
 		parameter<-chisq.test(stu_data)$parameter["df"]
 		xsquared <-chisq.test(stu_data)$statistic
 
+		# Sotre results
 		df_tissue_or_organ_of_origin_pvalues[covariable,"chisq"]<-pvalue
-		
+		df_tissue_or_organ_of_origin_xsquared[covariable,"chisq"]<-parameter
+		df_tissue_or_organ_of_origin_df[covariable,"chisq"]<-xsquared	
 	}	
-
 }
-	
-
 # To do : create three tables: 
 # A table for all covariables vs. all the tests, to store p-values.
 # A table for all covariables vs. all the tests, to store X-squared.
@@ -436,31 +438,3 @@ for (covariable in covariables)
 # chi-square
 # anova
 ##########################################################################################################################################################################################################
-
-# Remove NA
-stu_data<-na.omit(stu_data)
- 
-# Create a contingency table with the needed variables.           
-stu_data = table(stu_data$age_at_index,stu_data$primary_diagnosis) 
-
-# applying chisq.test() function
-print(chisq.test(stu_data))
-#########################################################################################################################################################################################################
-# Test chi-square categorical data
-stu_data = data.frame(race=merge_all$race,primary_diagnosis=merge_all$primary_diagnosis)
-
-# Remove NA
-stu_data<-na.omit(stu_data)
-
-# Remove "-"
-stu_data<-stu_data[stu_data$race!="-",]
-
-# Create a contingency table with the needed variables.           
-stu_data = table(stu_data$race,stu_data$primary_diagnosis) 
-
-# applying chisq.test() function
-print(chisq.test(stu_data))
-
-# applying chisq.test() function
-print(chisq.test(stu_data))
-#########################################################################################################################################################################################################

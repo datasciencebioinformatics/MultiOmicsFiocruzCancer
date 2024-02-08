@@ -366,6 +366,18 @@ dev.off()
 # some are numerico. The outcome is also categorial. This way, I need to find a teste that asseses categorial predictors ~ categorial outcome. Chi-square tests, regression and data cience can be used to answer 
 # this. I will try to find statistical testes that are simple enought to be compared with data science vizualization.
 ##########################################################################################################################################################################################################
+# To do : create three tables: 
+# A table for all covariables vs. all the tests, to store p-values.
+# A table for all covariables vs. all the tests, to store X-squared.
+# A table for all covariables vs. all the tests, to store df.
+
+# To do :
+# Differential categorial from numerical predictors.
+
+# To do :
+# chi-square
+# anova
+##########################################################################################################################################################################################################
 # Test chi-square numerical data
 # Create a data frame from the main data set.
 stu_data = data.frame(age_at_index=as.numeric(merge_all[,4]),primary_diagnosis=merge_all$primary_diagnosis)

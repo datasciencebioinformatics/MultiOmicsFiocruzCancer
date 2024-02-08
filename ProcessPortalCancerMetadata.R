@@ -429,8 +429,6 @@ for (covariable in covariables)
 # A table for all covariables vs. all the tests, to store X-squared.
 # A table for all covariables vs. all the tests, to store df.
 
-
-
 # To do :
 # Differential categorial from numerical predictors.
 

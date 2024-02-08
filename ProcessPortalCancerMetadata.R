@@ -409,17 +409,3 @@ print(chisq.test(stu_data))
 # applying chisq.test() function
 print(chisq.test(stu_data))
 #########################################################################################################################################################################################################
-# To Do :
-# Perform test for all co-vararibles :
-# 1- Execute tests other than chi-square    
-# 2- Categorical variables with more than two levels
-# 3- Example 4. Regression with one categorical and one continuous predictors (ANCOVA)
-#    Anova
-#########################################################################################################################################################################################################
-
-
-
-
-
-
-

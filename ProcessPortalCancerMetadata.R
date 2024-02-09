@@ -516,3 +516,7 @@ for (covariable in covariables)                                                 
 # chi-square
 # anova
 ##########################################################################################################################################################################################################
+# Commentary : judicious choice of cancer type is expected according to goal. 
+#            : primary inspection of database can helo selecting cancer types.
+#            : number and structure of samples too can give insights into cancer types.
+##########################################################################################################################################################################################################

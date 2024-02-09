@@ -494,16 +494,18 @@ for (covariable in covariables)                                                 
 				colnames(df_results_2)[2]<-covariable
 
 				# Merge by names
-				df_names_Pr_gt_t<-merge(df_names_Pr_gt_t,df_results_2,by="Pr_gt_t")
+				df_names_Pr_gt_t<-merge(df_names_Pr_gt_t,df_results_2,by="Pr_gt_t",all.x = TRUE)
 				
 				# Caterogical variable
 				print(paste(covariable," : Numeric")	)				
-				write.table(df_names_Pr_gt_t, paste(output_dir,"df_tissue_or_organ_of_origin_numeric_pvalues",".csv",sep=""), append = T)
+				write.table(df_names_Pr_gt_t, paste(output_dir,"df_tissue_or_organ_of_origin_numeric_pvalues",".csv",sep=""), append = F)
 
 			}
 		}
 	}	
 }
+# Set rownames
+rownames(df_names_Pr_gt_t)<-df_names_Pr_gt_t$Pr_gt_t
 # To do : create three tables: 
 # A table for all covariables vs. all the tests, to store p-values.
 # A table for all covariables vs. all the tests, to store X-squared.
@@ -521,8 +523,8 @@ for (covariable in covariables)                                                 
 #            : number and structure of samples too can give insights into cancer types.                                                                                                                  #
 ##########################################################################################################################################################################################################
 # Copy initial pavalues tabe
-df_tissue_or_organ_of_origin_categorical_pvalues_clone<-df_tissue_or_organ_of_origin_categorical_pvalues*0
-df_tissue_or_organ_of_origin_numerical_pvalues_clone  <-df_tissue_or_organ_of_origin_categorical_pvalues*0
+df_tissue_or_organ_of_origin_categorical_pvalues_clone<-df_tissue_or_organ_of_origin_categorical_pvalues
+df_tissue_or_organ_of_origin_numerical_pvalues_clone  <-df_names_Pr_gt_t
 
 # Set a threshold for the p-values
 pvalue_threshold<-000.1
@@ -530,13 +532,30 @@ pvalue_threshold<-000.1
 #replace all values in data frame equal to 30 with 0
 df_tissue_or_organ_of_origin_categorical_pvalues_clone[df_tissue_or_organ_of_origin_categorical_pvalues_clone < pvalue_threshold]     <- 0
 df_tissue_or_organ_of_origin_categorical_pvalues_clone[df_tissue_or_organ_of_origin_categorical_pvalues_clone >= pvalue_threshold]    <- 1
-
+df_tissue_or_organ_of_origin_categorical_pvalues_clone[is.na(df_tissue_or_organ_of_origin_categorical_pvalues_clone)]                 <- 0.5
 
 #replace all values in data frame equal to 30 with 0
 df_tissue_or_organ_of_origin_numerical_pvalues_clone[df_tissue_or_organ_of_origin_numerical_pvalues_clone < pvalue_threshold]     <- 0
 df_tissue_or_organ_of_origin_numerical_pvalues_clone[df_tissue_or_organ_of_origin_numerical_pvalues_clone >= pvalue_threshold]    <- 1
+df_tissue_or_organ_of_origin_numerical_pvalues_clone[is.na(df_tissue_or_organ_of_origin_numerical_pvalues_clone)]                 <- 0.5
 
-# Set all values smaller than threshold to zero
+##########################################################################################################################################################################################################
+df_tissue_or_organ_of_origin_numerical_pvalues_clone_2 = as.data.frame(sapply(df_tissue_or_organ_of_origin_numerical_pvalues_clone, as.numeric))
+rownames(df_tissue_or_organ_of_origin_numerical_pvalues_clone_2) <- rownames(df_tissue_or_organ_of_origin_numerical_pvalues_clone)
 
-# Set all values smaller than threshold to one
+# Pvalues
+pheatmap_tissue_or_organ_of_origin_categorical_pvalues_clone<-pheatmap(df_tissue_or_organ_of_origin_categorical_pvalues_clone,cluster_rows = TRUE,display_numbers=FALSE, main = "P-values of categorical values chi.test(covariable ~ primary_diagnosis)")
+pheatmap_tissue_or_organ_of_origin_numerical_pvalues_clone<-pheatmap(df_tissue_or_organ_of_origin_numerical_pvalues_clone_2,cluster_rows = TRUE,display_numbers=FALSE, main = "P-values of numeric variables lm(covariable ~ primary_diagnosis) ")
+##########################################################################################################################################################################################################
+# Deliverable : a) normalized number of cases per cancer type (variables that can be used accorss pathologies)
+#               b) raw number of cases per cancer type (variables that can be used per pathologies)
+# a) normalized number of cases per cancer type (variables that can be used accorss pathologies)
+png(filename=paste(output_dir,"/pheatmap_tissue_or_organ_of_origin_categorical_pvalues_clone.png",sep=""), width = 24, height = 32, res=600, units = "cm")
+	pheatmap_tissue_or_organ_of_origin_categorical_pvalues_clone
+dev.off()
+#b) raw number of cases per cancer type (variables that can be used per pathologies)
+png(filename=paste(output_dir,"/pheatmap_tissue_or_organ_of_origin_numerical_pvalues_clone.png",sep=""), width = 32, height = 50, res=600, units = "cm")
+	pheatmap_tissue_or_organ_of_origin_numerical_pvalues_clone
+dev.off()
+# Questions : we will focus on the co-variables (use co-variables that can be used consistently accross pathologies?
 ##########################################################################################################################################################################################################

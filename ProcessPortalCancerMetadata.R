@@ -498,7 +498,7 @@ for (covariable in covariables)                                                 
 				
 				# Caterogical variable
 				print(paste(covariable," : Numeric")	)				
-				write.table(df_names_Pr_gt_t, paste(output_dir,"df_tissue_or_organ_of_origin_numeric_pvalues",".csv",sep=""), append = F)
+				write.table(df_names_Pr_gt_t, paste(output_dir,"df_tissue_or_organ_of_origin_numeric_pvalues",".csv",sep=""), append = T)
 
 			}
 		}
@@ -519,4 +519,24 @@ for (covariable in covariables)                                                 
 # Commentary : judicious choice of cancer type is expected according to goal.                                                                                                                            #
 #            : primary inspection of database can helo selecting cancer types.                                                                                                                           #
 #            : number and structure of samples too can give insights into cancer types.                                                                                                                  #
+##########################################################################################################################################################################################################
+# Copy initial pavalues tabe
+df_tissue_or_organ_of_origin_categorical_pvalues_clone<-df_tissue_or_organ_of_origin_categorical_pvalues*0
+df_tissue_or_organ_of_origin_numerical_pvalues_clone  <-df_tissue_or_organ_of_origin_categorical_pvalues*0
+
+# Set a threshold for the p-values
+pvalue_threshold<-000.1
+
+#replace all values in data frame equal to 30 with 0
+df_tissue_or_organ_of_origin_categorical_pvalues_clone[df_tissue_or_organ_of_origin_categorical_pvalues_clone < pvalue_threshold]     <- 0
+df_tissue_or_organ_of_origin_categorical_pvalues_clone[df_tissue_or_organ_of_origin_categorical_pvalues_clone >= pvalue_threshold]    <- 1
+
+
+#replace all values in data frame equal to 30 with 0
+df_tissue_or_organ_of_origin_numerical_pvalues_clone[df_tissue_or_organ_of_origin_numerical_pvalues_clone < pvalue_threshold]     <- 0
+df_tissue_or_organ_of_origin_numerical_pvalues_clone[df_tissue_or_organ_of_origin_numerical_pvalues_clone >= pvalue_threshold]    <- 1
+
+# Set all values smaller than threshold to zero
+
+# Set all values smaller than threshold to one
 ##########################################################################################################################################################################################################

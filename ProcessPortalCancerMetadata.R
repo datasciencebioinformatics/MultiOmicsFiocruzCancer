@@ -406,6 +406,8 @@ covariables<-covariables[-which(covariables=="case_submitter_id.clincal")]
 covariables<-covariables[-which(covariables=="project_id.clincal")]
 covariables<-covariables[-which(covariables=="case_submitter_id.exposure")]
 covariables<-covariables[-which(covariables=="case_submitter_id.merge_2")]
+covariables<-covariables[-which(covariables=="case_submitter_id")]
+
 
 # Create a matrix for categorical results                                                                                                #
 df_tissue_or_organ_of_origin_categorical_pvalues <- data.frame(matrix(Inf, ncol = length(c("chisq","goodmanKruskalGamma") ), nrow = 0))  #
@@ -422,8 +424,6 @@ colnames(df_tissue_or_organ_of_origin_numeric_pvalues)<-unique(merge_all$primary
 # For each co-variable                                                                                                                   #
 for (covariable in covariables)                                                                                                          #
 {
-	print(covariable)	
-
 	# Recreate merge all table
 	merge_all <- merge(merge_clinical_exposure_fam_followup, patholog_data, by = "case_id", suffixes = c(".merge_3","patholog"), all = TRUE, no.dups=TRUE)               #
 
@@ -469,6 +469,9 @@ for (covariable in covariables)                                                 
 	
 				# Add results to data frame
 				df_tissue_or_organ_of_origin_categorical_pvalues<-rbind(df_tissue_or_organ_of_origin_categorical_pvalues,df_results)			
+
+				print(paste(covariable," : Categorial")	)
+
 			}	
 		}
 		else
@@ -486,9 +489,13 @@ for (covariable in covariables)                                                 
 				# "Pr(>|t|)" Pr_gt_t		
 				names_Pr_gt_t<-data.frame(Pr_gt_t=gsub("primary_diagnosis","",  names(lm_test$coefficients[,4]), ignore.case = FALSE, perl = FALSE,  fixed = FALSE, useBytes = FALSE))
 				Pr_gt_t<-data.frame(Pr_gt_t=lm_test$coefficients[,4], ignore.case = FALSE, perl = FALSE,  fixed = FALSE, useBytes = FALSE)
-	
-				# Add collumns
-				df_names_Pr_gt_t<-cbind(df_names_Pr_gt_t[names_Pr_gt_t$Pr_gt_t,],Pr_gt_t$Pr_gt_t)
+				df_results<-data.frame(Pr_gt_t=names_Pr_gt_t,value=Pr_gt_t$Pr_gt_t)
+				colnames(df_results)[2]<-covariable
+
+				# Merge by names
+				df_names_Pr_gt_t<-merge(df_names_Pr_gt_t,df_results,by="Pr_gt_t")
+
+				print(paste(covariable," : Numeric")	)
 			}
 		}
 	}	

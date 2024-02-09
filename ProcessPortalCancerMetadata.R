@@ -470,8 +470,9 @@ for (covariable in covariables)                                                 
 				# Add results to data frame
 				df_tissue_or_organ_of_origin_categorical_pvalues<-rbind(df_tissue_or_organ_of_origin_categorical_pvalues,df_results)			
 
-				print(paste(covariable," : Categorial")	)
-
+				# Caterogical variable
+				print(paste(covariable," : Categorial")	)				
+				write.table(df_tissue_or_organ_of_origin_categorical_pvalues, paste(output_dir,"df_tissue_or_organ_of_origin_categorical_pvalues",".csv",sep=""), append = F)
 			}	
 		}
 		else
@@ -489,13 +490,16 @@ for (covariable in covariables)                                                 
 				# "Pr(>|t|)" Pr_gt_t		
 				names_Pr_gt_t<-data.frame(Pr_gt_t=gsub("primary_diagnosis","",  names(lm_test$coefficients[,4]), ignore.case = FALSE, perl = FALSE,  fixed = FALSE, useBytes = FALSE))
 				Pr_gt_t<-data.frame(Pr_gt_t=lm_test$coefficients[,4], ignore.case = FALSE, perl = FALSE,  fixed = FALSE, useBytes = FALSE)
-				df_results<-data.frame(Pr_gt_t=names_Pr_gt_t,value=Pr_gt_t$Pr_gt_t)
-				colnames(df_results)[2]<-covariable
+				df_results_2<-data.frame(Pr_gt_t=names_Pr_gt_t,value=Pr_gt_t$Pr_gt_t)
+				colnames(df_results_2)[2]<-covariable
 
 				# Merge by names
-				df_names_Pr_gt_t<-merge(df_names_Pr_gt_t,df_results,by="Pr_gt_t")
+				df_names_Pr_gt_t<-merge(df_names_Pr_gt_t,df_results_2,by="Pr_gt_t")
+				
+				# Caterogical variable
+				print(paste(covariable," : Numeric")	)				
+				write.table(df_names_Pr_gt_t, paste(output_dir,"df_tissue_or_organ_of_origin_numeric_pvalues",".csv",sep=""), append = F)
 
-				print(paste(covariable," : Numeric")	)
 			}
 		}
 	}	

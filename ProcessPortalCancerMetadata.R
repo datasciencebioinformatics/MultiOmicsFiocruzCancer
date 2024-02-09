@@ -398,11 +398,14 @@ df_names_Pr_gt_t<-data.frame(Pr_gt_t=gsub("primary_diagnosis","",  names(lm_test
 rownames(df_names_Pr_gt_t)<-df_names_Pr_gt_t$Pr_gt_t
 ##########################################################################################################################################################################################################
 # Set co-variables
+# Set co-variables
+covariables <- as.vector(tolower(colnames(merge_all)))
 covariables<-covariables[-which(covariables=="primary_diagnosis")]
 covariables<-covariables[-which(covariables=="case_id")]
 covariables<-covariables[-which(covariables=="case_submitter_id.clincal")]
 covariables<-covariables[-which(covariables=="project_id.clincal")]
 covariables<-covariables[-which(covariables=="case_submitter_id.exposure")]
+covariables<-covariables[-which(covariables=="case_submitter_id.merge_2")]
 
 # Create a matrix for categorical results                                                                                                #
 df_tissue_or_organ_of_origin_categorical_pvalues <- data.frame(matrix(Inf, ncol = length(c("chisq","goodmanKruskalGamma") ), nrow = 0))  #
@@ -490,8 +493,6 @@ for (covariable in covariables)                                                 
 		}
 	}	
 }
-
-
 # To do : create three tables: 
 # A table for all covariables vs. all the tests, to store p-values.
 # A table for all covariables vs. all the tests, to store X-squared.

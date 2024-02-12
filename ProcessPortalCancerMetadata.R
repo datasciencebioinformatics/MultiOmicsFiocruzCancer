@@ -260,6 +260,12 @@ df_tissue_or_organ_of_origin_clone<-df_tissue_or_organ_of_origin_clone[which(row
 # Store co-variables with more than 50 samples per covariable
 fifty_samples_least_variable<-rownames(df_tissue_or_organ_of_origin_clone)
 
+# Store pathologies with more than 50 samples per covariable
+fifty_sample_names_variable<-names(table(merge_all$primary_diagnosis)[which(table(merge_all$primary_diagnosis)>50)])
+
+# Remove first line
+fifty_sample_names_variable<-fifty_sample_names_variable[fifty_sample_names_variable!="-"]
+
 # Remove 
 df_tissue_or_organ_of_origin_clone<-df_tissue_or_organ_of_origin_clone[-which(rownames(df_tissue_or_organ_of_origin_clone)=="case_submitter_id.clincal"),]# FindClusters_resolution
 
@@ -397,6 +403,7 @@ df_names_Pr_gt_t<-data.frame(Pr_gt_t=gsub("primary_diagnosis","",  names(lm_test
 # Set rownames
 rownames(df_names_Pr_gt_t)<-df_names_Pr_gt_t$Pr_gt_t
 ##########################################################################################################################################################################################################
+library(varhandle)
 # Set co-variables
 # Set co-variables
 covariables <- as.vector(tolower(colnames(merge_all)))
@@ -521,10 +528,14 @@ rownames(df_names_Pr_gt_t)<-df_names_Pr_gt_t$Pr_gt_t
 # Commentary : judicious choice of cancer type is expected according to goal.                                                                                                                            #
 #            : primary inspection of database can helo selecting cancer types.                                                                                                                           #
 #            : number and structure of samples too can give insights into cancer types.                                                                                                                  #
+# filter pathologies with at least 50 sammples
 ##########################################################################################################################################################################################################
 # Copy initial pavalues tabe
 df_tissue_or_organ_of_origin_categorical_pvalues_clone<-df_tissue_or_organ_of_origin_categorical_pvalues
 df_tissue_or_organ_of_origin_numerical_pvalues_clone  <-df_names_Pr_gt_t
+
+# set rownames
+rownames(df_tissue_or_organ_of_origin_numerical_pvalues_clone) <- df_names_Pr_gt_t$Pr_gt_t
 
 # Set a threshold for the p-values
 pvalue_threshold<-000.1
@@ -538,6 +549,15 @@ df_tissue_or_organ_of_origin_categorical_pvalues_clone[is.na(df_tissue_or_organ_
 df_tissue_or_organ_of_origin_numerical_pvalues_clone[df_tissue_or_organ_of_origin_numerical_pvalues_clone < pvalue_threshold]     <- 0
 df_tissue_or_organ_of_origin_numerical_pvalues_clone[df_tissue_or_organ_of_origin_numerical_pvalues_clone >= pvalue_threshold]    <- 1
 df_tissue_or_organ_of_origin_numerical_pvalues_clone[is.na(df_tissue_or_organ_of_origin_numerical_pvalues_clone)]                 <- 0.5
+
+# Filter up for the variables that have at least fifty
+df_tissue_or_organ_of_origin_numerical_pvalues_clone<-df_tissue_or_organ_of_origin_numerical_pvalues_clone[,colnames(df_tissue_or_organ_of_origin_numerical_pvalues_clone) %in% fifty_samples_least_variable]
+
+# Filter up for the variables that have at least fifty
+df_tissue_or_organ_of_origin_categorical_pvalues_clone<-df_tissue_or_organ_of_origin_categorical_pvalues_clone[rownames(df_tissue_or_organ_of_origin_categorical_pvalues_clone) %in% fifty_samples_least_variable,]
+
+# fifty_sample_names_variable
+df_tissue_or_organ_of_origin_numerical_pvalues_clone<-df_tissue_or_organ_of_origin_numerical_pvalues_clone[fifty_sample_names_variable,]
 
 ##########################################################################################################################################################################################################
 df_tissue_or_organ_of_origin_numerical_pvalues_clone_2 = as.data.frame(sapply(df_tissue_or_organ_of_origin_numerical_pvalues_clone, as.numeric))

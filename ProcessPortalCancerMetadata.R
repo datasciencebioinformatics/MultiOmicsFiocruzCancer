@@ -660,3 +660,9 @@ for (cancer_type in cancer_types)
 	# Store cancer types
 	list_cancer_types[[cancer_type]]<-common_samples
 }
+#############################################################################################################
+# for each cancer type 
+for (cancer_type in names(list_cancer_types))
+{
+	print(cancer_type)
+}

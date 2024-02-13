@@ -609,6 +609,8 @@ for (covariable in covariables)
 }
 ##########################################################################################################################################################################################################
 # A list to store commom samples per cancer_types
+list_cancer_types<-list()
+
 # For each cancer type
 for (cancer_type in cancer_types)
 {
@@ -619,7 +621,7 @@ for (cancer_type in cancer_types)
 	samples_subset<-merge_all[merge_all$tissue_or_organ_of_origin==cancer_type,]
 
 	# A vector to store complom samples
-	common_samples<-samples_subset
+	common_samples<-samples_subset$case_id
 
 	# For each covariable
 	for (covariable in covariables)
@@ -628,12 +630,15 @@ for (cancer_type in cancer_types)
 		covariables_values<-samples_subset[,covariable]
 		
 		# Replace empty by NA
-		#covariables_values[grepl("-",covariables_values)]<-NA
+		covariables_values[grepl("-",covariables_values)]<-NA
 
 		# Take subset of samples
 		samples_subset<-samples_subset[which(!is.na(covariables_values)),]
 
-		
-		
+		# Take the intersect samples_subset and common_samples
+		common_samples<-intersect(common_samples,samples_subset$case_id)				
 	}
+	# Store cancer types
+	list_cancer_types[[cancer_type]]<-common_samples
+	
 }

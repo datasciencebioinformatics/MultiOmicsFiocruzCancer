@@ -608,6 +608,25 @@ for (covariable in covariables)
 
 }
 ##########################################################################################################################################################################################################
+# All variables
+all_variables<-rownames(df_tissue_or_organ_of_origin_clone)
+
+# Store variables to be removes
+remove_variables<-c()
+
+# For each covariable
+for (covariable in rownames(df_tissue_or_organ_of_origin_clone))
+{
+	print(covariable)
+	if(sum(df_tissue_or_organ_of_origin_clone[covariable,]==0)>0)
+	{
+		# Add variable to vector
+		remove_variables<-c(covariable,remove_variables)
+	}	
+}
+# Selected variables
+selected_variables<-all_variables[!all_variables %in% remove_variables]
+
 # A list to store commom samples per cancer_types
 list_cancer_types<-list()
 
@@ -624,10 +643,10 @@ for (cancer_type in cancer_types)
 	common_samples<-samples_subset$case_id
 
 	# For each covariable
-	for (covariable in covariables)
+	for (covariable in selected_variables)
 	{
 		# Print covariables
-		covariables_values<-samples_subset[,covariable]
+		covariables_values<-merge_all[merge_all$tissue_or_organ_of_origin==cancer_type,covariable]
 		
 		# Replace empty by NA
 		covariables_values[grepl("-",covariables_values)]<-NA
@@ -640,5 +659,4 @@ for (cancer_type in cancer_types)
 	}
 	# Store cancer types
 	list_cancer_types[[cancer_type]]<-common_samples
-	
 }

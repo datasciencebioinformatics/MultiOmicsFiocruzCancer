@@ -580,4 +580,11 @@ png(filename=paste(output_dir,"/pheatmap_tissue_or_organ_of_origin_numerical_pva
 dev.off()
 # Questions : we will focus on the co-variables (use co-variables that can be used consistently accross pathologies?
 ##########################################################################################################################################################################################################
-# The cancer types will be anaysed independently. Associations with each variable can be tested if cancer_type
+# The cancer types will be anaysed independently. 
+# Use varibles that contains at least 10 entries per cancer_type accross all of them.
+# Use cancer_types that are complete in covariables. 
+
+
+row_indexes<-df_tissue_or_organ_of_origin_clone[df_tissue_or_organ_of_origin_clone > 30]
+df_tissue_or_organ_of_origin_clone[,row_indexes]
+

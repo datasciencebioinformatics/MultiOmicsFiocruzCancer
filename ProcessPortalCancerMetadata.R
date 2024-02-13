@@ -85,7 +85,7 @@ for (case_id in case_ids)                                                       
   df_cases_type_count[case_id,data_types_per_case]<-1                                                                  #
 }                                                                                                                      #
 ########################################################################################################################################################################################################## 
-tissue_or_organ_of_origin<-unique(clinical_data$tissue_or_organ_of_origin)[unique(clinical_data$tissue_or_organ_of_origin)!="-"]                                                                                                 #
+tissue_or_organ_of_origin<-unique(clinical_data$)[unique(clinical_data$tissue_or_organ_of_origin)!="-"]                                                                                                 #
 tissue_or_organ_of_origin<-tissue_or_organ_of_origin[tissue_or_organ_of_origin!=""]                                                                                                                                              #
                                                                                                                                                                                                          #
 # Create a matrix                                                                                                                                                                                        #
@@ -583,8 +583,57 @@ dev.off()
 # The cancer types will be anaysed independently. 
 # Use varibles that contains at least 10 entries per cancer_type accross all of them.
 # Use cancer_types that are complete in covariables. 
+covariables<-rownames(df_tissue_or_organ_of_origin_clone)
+cancer_types<-colnames(df_tissue_or_organ_of_origin_clone)
 
+# Binary dataset
+df_tissue_or_organ_of_origin_binary<-df_tissue_or_organ_of_origin_clone*0
 
-row_indexes<-df_tissue_or_organ_of_origin_clone[df_tissue_or_organ_of_origin_clone > 30]
-df_tissue_or_organ_of_origin_clone[,row_indexes]
+# For each covariable
+for (covariable in covariables)
+{
+	# For each cancer type
+	for (cancer_type in cancer_types)
+	{
+		# Number of samples
+		n_samples<-df_tissue_or_organ_of_origin_clone[covariable,cancer_type]
 
+		# If contains at least 30 samples
+		if (n_samples >= 30 )
+		{
+			# Assert number to one
+			df_tissue_or_organ_of_origin_binary[covariable,cancer_type]<-1		
+		}
+	}
+
+}
+##########################################################################################################################################################################################################
+# A list to store commom samples per cancer_types
+# For each cancer type
+for (cancer_type in cancer_types)
+{
+	# Print cancer_type
+	print(cancer_type)
+
+	# Take the samples for this cancer type
+	samples_subset<-merge_all[merge_all$tissue_or_organ_of_origin==cancer_type,]
+
+	# A vector to store complom samples
+	common_samples<-samples_subset
+
+	# For each covariable
+	for (covariable in covariables)
+	{
+		# Print covariables
+		covariables_values<-samples_subset[,covariable]
+		
+		# Replace empty by NA
+		#covariables_values[grepl("-",covariables_values)]<-NA
+
+		# Take subset of samples
+		samples_subset<-samples_subset[which(!is.na(covariables_values)),]
+
+		
+		
+	}
+}

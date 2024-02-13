@@ -170,6 +170,7 @@ cancer_types<-unique(c(rownames(df_tissue_or_organ_of_origin)[which(grepl("lung"
 
 # Filter datasets
 df_tissue_or_organ_of_origin_filtered<-df_tissue_or_organ_of_origin[rownames(df_tissue_or_organ_of_origin) %in% cancer_types,]
+
 ##########################################################################################################################################################################################################
 # I will now compute the number of samples per tissue+experiment·
 # Create table to adjust the indexes of the pheatmap
@@ -579,3 +580,4 @@ png(filename=paste(output_dir,"/pheatmap_tissue_or_organ_of_origin_numerical_pva
 dev.off()
 # Questions : we will focus on the co-variables (use co-variables that can be used consistently accross pathologies?
 ##########################################################################################################################################################################################################
+# The cancer types will be anaysed independently. Associations with each variable can be tested if cancer_type

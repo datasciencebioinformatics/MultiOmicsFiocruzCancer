@@ -661,8 +661,12 @@ for (cancer_type in cancer_types)
 	list_cancer_types[[cancer_type]]<-common_samples
 }
 #############################################################################################################
+# Table to store number of samples per cancer types
+number_of_samples_per_cancer_types<-data.frame(cancer_type=c(),number_of_sameples=c())
+
 # for each cancer type 
-for (cancer_type in names(list_cancer_types))
+for (cancer_type in 1:length(list_cancer_types))
 {
-	print(cancer_type)
+	# Store data
+	number_of_samples_per_cancer_types<-rbind(data.frame(cancer_type=names(list_cancer_types)[[cancer_type]],number_of_sameples=length(list_cancer_types[[cancer_type]])),number_of_samples_per_cancer_types)		
 }

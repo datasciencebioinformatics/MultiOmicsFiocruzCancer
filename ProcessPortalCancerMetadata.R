@@ -85,7 +85,7 @@ for (case_id in case_ids)                                                       
   df_cases_type_count[case_id,data_types_per_case]<-1                                                                  #
 }                                                                                                                      #
 ########################################################################################################################################################################################################## 
-tissue_or_organ_of_origin<-unique(clinical_data$)[unique(clinical_data$tissue_or_organ_of_origin)!="-"]                                                                                                 #
+tissue_or_organ_of_origin<-unique(clinical_data$tissue_or_organ_of_origin)[unique(clinical_data$tissue_or_organ_of_origin)!="-"]                                                                                                 #
 tissue_or_organ_of_origin<-tissue_or_organ_of_origin[tissue_or_organ_of_origin!=""]                                                                                                                                              #
                                                                                                                                                                                                          #
 # Create a matrix                                                                                                                                                                                        #
@@ -669,4 +669,34 @@ for (cancer_type in 1:length(list_cancer_types))
 {
 	# Store data
 	number_of_samples_per_cancer_types<-rbind(data.frame(cancer_type=names(list_cancer_types)[[cancer_type]],number_of_sameples=length(list_cancer_types[[cancer_type]])),number_of_samples_per_cancer_types)		
+}
+
+
+#############################################################################################################
+library("stringr")
+
+# Take the NOS samples
+NOS_samples<-c("lung","liver","kidney","breast","thyroid","prostate","stomach")
+
+# Take the non NOS samples
+non_NOS_samples<-tolower(df_tissue_or_organ_of_origin_indexes$cancer_type[!grepl("NOS",df_tissue_or_organ_of_origin_indexes$cancer_type)])
+
+# To lower case
+NOS_samples_names<-tolower(NOS_samples_names)
+
+# Store results
+store_results<-data.frame(cancer_type=c(),control=c())
+
+# For each control sampple
+for (NOS in NOS_samples)
+{	
+	# Store matches
+	non_NOS_samples_matches<-non_NOS_samples[grepl(NOS,non_NOS_samples)]
+	
+	# If there is at least one sample
+	if(length(non_NOS_samples_matches)>0)
+	{
+		# Put in the data.frame
+		store_results<-rbind(store_results,data.frame(cancer_type=non_NOS_samples[grepl(NOS,non_NOS_samples)],control=(paste(str_to_title(NOS),", NOS",sep=""))))
+	}		
 }

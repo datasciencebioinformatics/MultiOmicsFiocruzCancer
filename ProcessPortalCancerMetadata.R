@@ -681,6 +681,9 @@ NOS_samples<-c("lung","liver","kidney","breast","thyroid","prostate","stomach")
 # Take the non NOS samples
 non_NOS_samples<-tolower(df_tissue_or_organ_of_origin_indexes$cancer_type[!grepl("NOS",df_tissue_or_organ_of_origin_indexes$cancer_type)])
 
+# Set first character to upper case
+non_NOS_samples<-paste0(toupper(substr(non_NOS_samples, 1, 1)), substr(non_NOS_samples, 2, nchar(non_NOS_samples)))
+
 # To lower case
 NOS_samples_names<-tolower(NOS_samples_names)
 

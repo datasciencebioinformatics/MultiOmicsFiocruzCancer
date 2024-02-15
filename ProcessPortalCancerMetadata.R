@@ -26,13 +26,19 @@ library("dendextend")                                                           
 # mostly common in the case of Biospecimen and Clinical entries.                                                    #
 # The orginal file cotains 986114 entries while the filtered file contains 985223.                                  #
 experiment_description_file="/home/felipe/portal_gdc_cancer_gov/files.2024-01-30.filtered.csv"                      #
-                                                                                                                    #
+#####################################################################################################################                                                                                                                    #
 # tsv files  are saved as txt and null character '-- replace by -                                                   #
 clinical_file="/home/felipe/portal_gdc_cancer_gov/clinical.txt"                                                     #
 exposure_file="/home/felipe/portal_gdc_cancer_gov/exposure.txt"                                                     #
 famhisto_file="/home/felipe/portal_gdc_cancer_gov/family_history.txt"                                               #
 followup_file="/home/felipe/portal_gdc_cancer_gov/follow_up.txt"                                                    #
 patholog_file="/home/felipe/portal_gdc_cancer_gov/pathology_detail.txt"                                             #
+#####################################################################################################################
+aliquot_file="/home/felipe/portal_gdc_cancer_gov/aliquot.txt"                                                       #
+analyte_file="/home/felipe/portal_gdc_cancer_gov/analyte.txt"                                                       #
+portion_file="/home/felipe/portal_gdc_cancer_gov/portion.txt"                                                       #
+sample_file="/home/felipe/portal_gdc_cancer_gov/sample.txt"                                                         #
+slide_file="/home/felipe/portal_gdc_cancer_gov/slide.txt"                                                           #                                                                                                  
 #####################################################################################################################
 output_dir="/home/felipe/portal_gdc_cancer_gov/output/"                                                             #
 #####################################################################################################################
@@ -42,7 +48,14 @@ exposure_data<-read.table(file = exposure_file, sep = '\t', header = TRUE,fill=T
 famhisto_data<-read.table(file = famhisto_file, sep = '\t', header = TRUE,fill=TRUE)                                #
 followup_data<-read.table(file = famhisto_file, sep = '\t', header = TRUE,fill=TRUE)                                #
 patholog_data<-read.table(file = patholog_file, sep = '\t', header = TRUE,fill=TRUE)                                #
-####################################################################################################################################################################################################
+#####################################################################################################################
+# Read all metadata files                                                                                           #
+aliquot_data<-read.table(file = aliquot_file, sep = '\t', header = TRUE,fill=TRUE)                                  #
+analyte_data<-read.table(file = analyte_file, sep = '\t', header = TRUE,fill=TRUE)                                  #
+portion_data<-read.table(file = portion_file, sep = '\t', header = TRUE,fill=TRUE)                                  #
+sample_data<-read.table(file = sample_file, sep = '\t', header = TRUE,fill=TRUE)                                    #
+slide_data<-read.table(file = slide_file, sep = '\t', header = TRUE,fill=TRUE)                                      #
+#####################################################################################################################
 # Merge files without ducplicating collumns                                                                                                                                                        #                                                                                                                                                                                                 #
 merge_clinical_exposure                 <- merge(clinical_data, exposure_data, by = "case_id", suffixes = c(".clincal",".exposure"), all = TRUE, no.dups=TRUE)                                     #
 merge_clinical_exposure_fam             <- merge(merge_clinical_exposure, famhisto_data, by = "case_id", suffixes = c(".merge_1","famhisto"), all = TRUE, no.dups=TRUE)                            #
@@ -675,31 +688,55 @@ for (cancer_type in 1:length(list_cancer_types))
 #############################################################################################################
 library("stringr")
 
-# Take the NOS samples
-NOS_samples<-c("lung","liver","kidney","breast","thyroid","prostate","stomach")
+# A procedure to verify the existance of paired-samples between cancer_type and control.
+# Attempt 1 - The precudere will take all samples ids from cancer_type and all the ids from control.
+# store_results$cancer_type are matched against merge_all$tissue_or_organ_of_origin and the intesection of ids is calculated
+# this did not work...!
 
-# Take the non NOS samples
-non_NOS_samples<-tolower(df_tissue_or_organ_of_origin_indexes$cancer_type[!grepl("NOS",df_tissue_or_organ_of_origin_indexes$cancer_type)])
+# Attempt 2 - The procedure will scan each cancer_types and search the case_id in merge_all table
+# for each case, the paired samples will be searched on the table 
+# for each paired sample
+# for each cancer_types
+for (cancer_type in cancer_types)
+{
+	# Store case ids for each cancer type
+	cancer_type_case_ids=merge_all[which(merge_all$tissue_or_organ_of_origin==cancer_type),"case_id"]
 
-# Set first character to upper case
-non_NOS_samples<-paste0(toupper(substr(non_NOS_samples, 1, 1)), substr(non_NOS_samples, 2, nchar(non_NOS_samples)))
-
-# To lower case
-NOS_samples_names<-tolower(NOS_samples_names)
-
-# Store results
-store_results<-data.frame(cancer_type=c(),control=c())
-
-# For each control sampple
-for (NOS in NOS_samples)
-{	
-	# Store matches
-	non_NOS_samples_matches<-non_NOS_samples[grepl(NOS,non_NOS_samples)]
-	
-	# If there is at least one sample
-	if(length(non_NOS_samples_matches)>0)
-	{
-		# Put in the data.frame
-		store_results<-rbind(store_results,data.frame(cancer_type=non_NOS_samples[grepl(NOS,non_NOS_samples)],control=(paste(str_to_title(NOS),", NOS",sep=""))))
-	}		
+	# Take the samples for the stored cases
+	which(sample_data$case_id %in% cancer_type_case_ids)
+	sample_data[which(sample_data$case_id %in% cancer_type_case_ids),]
+	cancer_type_case_ids
 }
+sample_data
+
+
+
+# Store paired samples 
+paired_samples<-list()
+
+# For paired_samples
+for (paired_sample in rownames(store_results))
+{
+	# Store each variable in the pair independently
+	var_cancer_type<-store_results[paired_sample,"cancer_type"]
+	var_control<-store_results[paired_sample,"control"]
+
+	# Save ids from cancer_type and control
+	ids_cancer_type<-merge_all[merge_all$tissue_or_organ_of_origin %in% var_cancer_type,"case_id"]
+	ids_control<-merge_all[merge_all$tissue_or_organ_of_origin %in% var_control,"case_id"]
+
+	# Add paired samples
+	paired_samples[[paste(var_cancer_type,var_control,sep="/")]]<-intersect(ids_cancer_type,ids_control)	
+
+	# Check var_cancer_type variable in the table merge_all	
+	print(paste(paste(var_cancer_type,var_control,sep="/")," : Case-control-paired : ",sum(merge_all$tissue_or_organ_of_origin %in% var_cancer_type),"-",sum(merge_all$tissue_or_organ_of_origin %in% var_control),"-",length(intersect(ids_cancer_type,ids_control)),sep=""))
+
+}
+#########################################################################################################################
+# Verification of the meaning of the abbreviation NOS.                                                                  #
+# Essential variables   : Age Sex                                                                                       #
+# Interaction variables : Race                                                                                          #
+# Treatment, case and control                                                                                           #
+#########################################################################################################################
+
+

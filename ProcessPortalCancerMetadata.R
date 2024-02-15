@@ -265,7 +265,6 @@ for (tissue in all_pathologies)
 		
 		# Assert counts in the table
 		df_tissue_or_organ_of_origin_clone[variable,tissue]<-count_variables			
-
 	}
 }	
 # Filter up with the following criteria : at least 50 samples per co-variable.
@@ -428,7 +427,6 @@ covariables<-covariables[-which(covariables=="project_id.clincal")]
 covariables<-covariables[-which(covariables=="case_submitter_id.exposure")]
 covariables<-covariables[-which(covariables=="case_submitter_id.merge_2")]
 covariables<-covariables[-which(covariables=="case_submitter_id")]
-
 
 # Create a matrix for categorical results                                                                                                #
 df_tissue_or_organ_of_origin_categorical_pvalues <- data.frame(matrix(Inf, ncol = length(c("chisq","goodmanKruskalGamma") ), nrow = 0))  #

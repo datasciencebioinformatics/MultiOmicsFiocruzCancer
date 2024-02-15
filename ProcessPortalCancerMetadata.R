@@ -702,6 +702,14 @@ for (cancer_type in cancer_types)
 	# Store case ids for each cancer type
 	cancer_type_case_ids=merge_all[which(merge_all$tissue_or_organ_of_origin==cancer_type),"case_id"]
 
+	# Stopped here
+	# To finish, check paired samples
+	# remarks : I am interested in the co-variable sample_type.
+	# I will se the value "normal" as control and the value "tumor" as case.
+	# This way, the case must contains at least one normal and one tumor do be considered paired.
+	# if this condition is met, it can be there will be more than one tumor and/or more than one case.
+	# for this, combination will be created for case and sample.
+
 	# Take the samples for the stored cases
 	which(sample_data$case_id %in% cancer_type_case_ids)
 	sample_data[which(sample_data$case_id %in% cancer_type_case_ids),]

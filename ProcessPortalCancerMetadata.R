@@ -693,6 +693,9 @@ library("stringr")
 # store_results$cancer_type are matched against merge_all$tissue_or_organ_of_origin and the intesection of ids is calculated
 # this did not work...!
 
+# A list to store paired samples per cancer_type
+paired_sample_list<-list()
+
 # Attempt 2 - The procedure will scan each cancer_types and search the case_id in merge_all table
 # for each case, the paired samples will be searched on the table 
 # for each paired sample
@@ -709,37 +712,53 @@ for (cancer_type in cancer_types)
 	# This way, the case must contains at least one normal and one tumor do be considered paired.
 	# if this condition is met, it can be there will be more than one tumor and/or more than one case.
 	# for this, combination will be created for case and sample.
-
+	
 	# Take the samples for the stored cases
-	which(sample_data$case_id %in% cancer_type_case_ids)
-	sample_data[which(sample_data$case_id %in% cancer_type_case_ids),]
-	cancer_type_case_ids
+	cases_cancer_type<-sample_data[which(sample_data$case_id %in% cancer_type_case_ids),"case_id"]	
+
+	# Instance paired_sample_list
+	paired_sample_list[[cancer_type]]<-data.frame(normal=c(),tumor=c())
+
+	# For each case, a verification for paired-samples
+	for (case in cases_cancer_type)
+	{
+		# Store tissue types
+		tissue_types<-sample_data[sample_data$case_id==case,"tissue_type"]
+
+		# Store tssue data
+		tissue_data<-sample_data[sample_data$case_id==case,]		
+		
+
+		# If there is more than one 
+		if(length(tissue_types)>1)
+		{			
+			# if vector contains at least one tumor and one normal
+			if(sum(tissue_types=="Tumor")>0 && sum(tissue_types=="Normal")>0)
+			{
+				# Take the "Tumor sample" samples
+				tumor_samples<-tissue_data[tissue_data$tissue_type=="Tumor",]
+
+				# Take the "Normal sample" samples
+				normal_samples<-tissue_data[tissue_data$tissue_type=="Normal",]
+
+				# A filter to keep only solid samples
+				tumor_solid_samples<-tumor_samples[grepl("Solid",tumor_samples$composition ),]
+
+				# For each tumor sample
+				for (tumor_solid_sample_id in tumor_solid_samples$sample_id)
+				{
+					# for each normal sample, compile a paired samples
+					for (normal_samples_id in normal_samples$sample_id)
+					{
+						# Contatenate 
+						paired_sample_list[[cancer_type]]<-rbind(data.frame(normal=c(normal_samples_id),tumor=c(tumor_solid_sample_id)),paired_sample_list[[cancer_type]])
+					}
+				}	
+			}
+		}		 		
+	}	
 }
-sample_data
 
-
-
-# Store paired samples 
-paired_samples<-list()
-
-# For paired_samples
-for (paired_sample in rownames(store_results))
-{
-	# Store each variable in the pair independently
-	var_cancer_type<-store_results[paired_sample,"cancer_type"]
-	var_control<-store_results[paired_sample,"control"]
-
-	# Save ids from cancer_type and control
-	ids_cancer_type<-merge_all[merge_all$tissue_or_organ_of_origin %in% var_cancer_type,"case_id"]
-	ids_control<-merge_all[merge_all$tissue_or_organ_of_origin %in% var_control,"case_id"]
-
-	# Add paired samples
-	paired_samples[[paste(var_cancer_type,var_control,sep="/")]]<-intersect(ids_cancer_type,ids_control)	
-
-	# Check var_cancer_type variable in the table merge_all	
-	print(paste(paste(var_cancer_type,var_control,sep="/")," : Case-control-paired : ",sum(merge_all$tissue_or_organ_of_origin %in% var_cancer_type),"-",sum(merge_all$tissue_or_organ_of_origin %in% var_control),"-",length(intersect(ids_cancer_type,ids_control)),sep=""))
-
-}
 #########################################################################################################################
 # Verification of the meaning of the abbreviation NOS.                                                                  #
 # Essential variables   : Age Sex                                                                                       #

@@ -685,6 +685,7 @@ for (cancer_type in 1:length(list_cancer_types))
 
 #############################################################################################################
 library("stringr")
+library(dplyr)
 
 # A procedure to verify the existance of paired-samples between cancer_type and control.
 # Attempt 1 - The precudere will take all samples ids from cancer_type and all the ids from control.
@@ -756,7 +757,12 @@ for (cancer_type in cancer_types)
 		}		 		
 	}	
 }
-
+# for each tissue
+for (paired_sample in names(paired_sample_list))
+{	
+	df_paired_sample<-distinct(paired_sample_list[[paired_sample]])
+	print(paste(paired_sample,sep=" : ",dim(df_paired_sample)[1]))	
+}
 #########################################################################################################################
 # Verification of the meaning of the abbreviation NOS.                                                                  #
 # Essential variables   : Age Sex                                                                                       #

@@ -219,10 +219,10 @@ for (tissue in rownames(df_tissue_or_organ_of_origin_filtered))
 }
 
 # FindClusters_resolution
-pheatmap_df_tissue_or_organ_of_origin_filtered<-pheatmap(df_tissue_or_organ_of_origin_filtered,cluster_rows = FALSE,number_format = "%.0f",display_numbers=TRUE)
+pheatmap_df_tissue_or_organ_of_origin_filtered<-pheatmap(df_tissue_or_organ_of_origin_filtered,cluster_rows = FALSE,number_format = "%.0f",display_numbers=TRUE,main="Number of cases per platform")
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"/Pheatmap_number_of_samples.png",sep=""), width = 16, height = 16, res=600, units = "cm")
+png(filename=paste(output_dir,"/Pheatmap_number_of_cases.png",sep=""), width = 16, height = 16, res=600, units = "cm")
 	pheatmap_df_tissue_or_organ_of_origin_filtered
 dev.off()
 ##########################################################################################################################################################################################################
@@ -574,6 +574,7 @@ df_tissue_or_organ_of_origin_numerical_pvalues_clone<-df_tissue_or_organ_of_orig
 ##########################################################################################################################################################################################################
 df_tissue_or_organ_of_origin_numerical_pvalues_clone_2 = as.data.frame(sapply(df_tissue_or_organ_of_origin_numerical_pvalues_clone, as.numeric))
 rownames(df_tissue_or_organ_of_origin_numerical_pvalues_clone_2) <- rownames(df_tissue_or_organ_of_origin_numerical_pvalues_clone)
+df_tissue_or_organ_of_origin_numerical_pvalues_clone_2<-na.omit(df_tissue_or_organ_of_origin_numerical_pvalues_clone_2)
 
 # Pvalues
 pheatmap_tissue_or_organ_of_origin_categorical_pvalues_clone<-pheatmap(df_tissue_or_organ_of_origin_categorical_pvalues_clone,cluster_rows = TRUE,display_numbers=FALSE, main = "P-values of categorical values chi.test(covariable ~ primary_diagnosis)")
@@ -681,8 +682,6 @@ for (cancer_type in 1:length(list_cancer_types))
 	# Store data
 	number_of_samples_per_cancer_types<-rbind(data.frame(cancer_type=names(list_cancer_types)[[cancer_type]],number_of_sameples=length(list_cancer_types[[cancer_type]])),number_of_samples_per_cancer_types)		
 }
-
-
 #############################################################################################################
 library("stringr")
 library(dplyr)
@@ -716,7 +715,7 @@ for (cancer_type in cancer_types)
 	cases_cancer_type<-sample_data[which(sample_data$case_id %in% cancer_type_case_ids),"case_id"]	
 
 	# Instance paired_sample_list
-	paired_sample_list[[cancer_type]]<-data.frame(normal=c(),tumor=c())
+	paired_sample_list[[cancer_type]]<-data.frame(normal=c(),tumor=c(),case=c())
 
 	# For each case, a verification for paired-samples
 	for (case in cases_cancer_type)
@@ -750,24 +749,99 @@ for (cancer_type in cancer_types)
 					for (normal_samples_id in normal_samples$sample_id)
 					{
 						# Contatenate 
-						paired_sample_list[[cancer_type]]<-rbind(data.frame(normal=c(normal_samples_id),tumor=c(tumor_solid_sample_id)),paired_sample_list[[cancer_type]])
+						paired_sample_list[[cancer_type]]<-rbind(data.frame(normal=c(normal_samples_id),tumor=c(tumor_solid_sample_id),case=case),paired_sample_list[[cancer_type]])
 					}
 				}	
 			}
 		}		 		
 	}	
 }
+# Data frame to store variables
+df_paired_samples_info=data.frame(paired_sample=c(),number_of_cases=c(),number_of_samples=c())
+
 # for each tissue
 for (paired_sample in names(paired_sample_list))
 {	
+	# Take variables
 	df_paired_sample<-distinct(paired_sample_list[[paired_sample]])
-	print(paste(paired_sample,sep=" : ",dim(df_paired_sample)[1]))	
+	number_of_samples=0
+	number_of_cases=0
+	if (dim(df_paired_sample)[1]>0)
+	{
+		number_of_samples=dim(df_paired_sample)[1]
+		number_of_cases=length(unique(paired_sample_list[[paired_sample]][,"case"]))
+	}	
+	df_paired_samples_info<-rbind(df_paired_samples_info,data.frame(paired_sample=paired_sample,number_of_cases=number_of_cases,number_of_samples=number_of_samples))
 }
+#########################################################################################################################
+# Add information about the cases to the table
+
 #########################################################################################################################
 # Verification of the meaning of the abbreviation NOS.                                                                  #
 # Essential variables   : Age Sex                                                                                       #
 # Interaction variables : Race                                                                                          #
 # Treatment, case and control                                                                                           #
 #########################################################################################################################
+# A table, each tab containing one cancer type. Each at least n>30 paired samples
+##########################################################################################################################################################################################################
+# I will now compute the number of samples per tissue+experiment·
+# Create table to adjust the indexes of the pheatmap
+df_tissue_or_organ_of_origin_indexes<-data.frame(cancer_type=c(rownames(df_tissue_or_organ_of_origin)[which(grepl("lung",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],
+rownames(df_tissue_or_organ_of_origin)[which(grepl("liver",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],
+rownames(df_tissue_or_organ_of_origin)[which(grepl("kidney",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],
+rownames(df_tissue_or_organ_of_origin)[which(grepl("breast",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],
+rownames(df_tissue_or_organ_of_origin)[which(grepl("thyroid",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],
+rownames(df_tissue_or_organ_of_origin)[which(grepl("stomach",tolower(rownames(df_tissue_or_organ_of_origin) ) ))],
+rownames(df_tissue_or_organ_of_origin)[which(grepl("prostate",tolower(rownames(df_tissue_or_organ_of_origin) ) ))]),index=0)
+
+# Set indexes
+df_tissue_or_organ_of_origin_indexes$index<-1:length(df_tissue_or_organ_of_origin_indexes$index)
+
+# Re-order
+df_tissue_or_organ_of_origin_filtered<-df_tissue_or_organ_of_origin_filtered[df_tissue_or_organ_of_origin_indexes$cancer_type,]*0
+
+# For each tissue
+for (tissue in rownames(df_tissue_or_organ_of_origin_filtered))
+{			
+	# For each experiment
+	for (experiment in colnames(df_tissue_or_organ_of_origin_filtered))
+	{
+		# Start case
+		cases<-c()		
+		
+		# Take the cases
+		if(dim(paired_sample_list[[tissue]])[1]>0)
+		{
+			cases<-paired_sample_list[[tissue]][,"case"]
+		}
+		
+		experiments_table<-experiments_descripton[experiments_descripton$case_id %in% cases,"data_type"]
+		experiments<-names(table(experiments_table))
+		experiments_count<-as.vector(table(experiments_table)[experiments])
+
+		# Assert counts in the table
+		df_tissue_or_organ_of_origin_filtered[tissue,experiments]<-experiments_count			
+	}	
+}
+df_tissue_or_organ_of_origin_filtered$number_of_cases<-0
+df_tissue_or_organ_of_origin_filtered$number_of_samples<-0
+
+# For each line
+for (tissue in rownames(df_tissue_or_organ_of_origin_filtered))
+{
+	df_tissue_or_organ_of_origin_filtered[tissue,"number_of_cases"]<-df_paired_samples_info[df_paired_samples_info$paired_sample==tissue,"number_of_cases"]
+	df_tissue_or_organ_of_origin_filtered[tissue,"number_of_samples"]<-df_paired_samples_info[df_paired_samples_info$paired_sample==tissue,"number_of_samples"]
+}
+
+df_tissue_or_organ_of_origin_filtered[,-which(colnames(df_tissue_or_organ_of_origin_filtered)=="number_of_cases")]
+df_tissue_or_organ_of_origin_filtered[,-which(colnames(df_tissue_or_organ_of_origin_filtered)=="number_of_cases")]
+
+# FindClusters_resolution
+pheatmap_df_tissue_or_organ_of_origin_filtered<-pheatmap(df_tissue_or_organ_of_origin_filtered,cluster_rows = FALSE,number_format = "%.0f",display_numbers=TRUE,main="Number of paired samples per platform")
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"/Pheatmap_number_of_samples.png",sep=""), width = 16, height = 16, res=600, units = "cm")
+	pheatmap_df_tissue_or_organ_of_origin_filtered
+dev.off()
 
 

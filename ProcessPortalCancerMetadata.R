@@ -843,5 +843,6 @@ pheatmap_df_tissue_or_organ_of_origin_filtered<-pheatmap(df_tissue_or_organ_of_o
 png(filename=paste(output_dir,"/Pheatmap_number_of_samples.png",sep=""), width = 16, height = 16, res=600, units = "cm")
 	pheatmap_df_tissue_or_organ_of_origin_filtered
 dev.off()
-
+#########################################################################################################################
+# Write a script to write the cases per cancer_type. Each type per excel sheet.
 

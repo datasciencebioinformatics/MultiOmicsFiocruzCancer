@@ -749,7 +749,7 @@ for (cancer_type in cancer_types)
 					for (normal_samples_id in normal_samples$sample_id)
 					{
 						# Contatenate 
-						paired_sample_list[[cancer_type]]<-rbind(unique(data.frame(normal=c(normal_samples_id),tumor=c(tumor_solid_sample_id),case=case)),paired_sample_list[[cancer_type]])
+						paired_sample_list[[cancer_type]]<-rbind(data.frame(normal=c(normal_samples_id),tumor=c(tumor_solid_sample_id),case=case),paired_sample_list[[cancer_type]])
 					}
 				}	
 			}
@@ -764,6 +764,7 @@ for (paired_sample in names(paired_sample_list))
 {	
 	# Take variables
 	df_paired_sample<-distinct(paired_sample_list[[paired_sample]])
+	paired_sample_list[[paired_sample]]<-df_paired_sample
 	number_of_samples=0
 	number_of_cases=0
 	if (dim(df_paired_sample)[1]>0)
@@ -774,8 +775,27 @@ for (paired_sample in names(paired_sample_list))
 	df_paired_samples_info<-rbind(df_paired_samples_info,data.frame(paired_sample=paired_sample,number_of_cases=number_of_cases,number_of_samples=number_of_samples))
 }
 #########################################################################################################################
-# Add information about the cases to the table
+# File to case pairs
+case_pairs_file="/home/felipe/portal_gdc_cancer_gov/output/paired_sample_list.xlsx"
+cases_file="/home/felipe/portal_gdc_cancer_gov/output/cases_sample_list.xlsx"
 
+#Delete file if it exists
+file.remove(case_pairs_file)
+file.remove(cases_file)
+
+# Write paired-cases to file
+for (tissue in names(paired_sample_list))
+{
+	# If there is at least one elemment
+	if(dim(paired_sample_list[[tissue]])[1]>0)
+	{
+		# Write to table
+		write.xlsx(paired_sample_list[[tissue]], file=case_pairs_file, sheetName = tissue, col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)
+
+		# Take all cases 
+		write.xlsx(data.frame(case=unique(paired_sample_list[[tissue]]$case)), file=cases_file, sheetName = tissue, col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
+	}	
+}
 #########################################################################################################################
 # Verification of the meaning of the abbreviation NOS.                                                                  #
 # Essential variables   : Age Sex                                                                                       #

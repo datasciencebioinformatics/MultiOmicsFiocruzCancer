@@ -749,7 +749,7 @@ for (cancer_type in cancer_types)
 					for (normal_samples_id in normal_samples$sample_id)
 					{
 						# Contatenate 
-						paired_sample_list[[cancer_type]]<-rbind(data.frame(normal=c(normal_samples_id),tumor=c(tumor_solid_sample_id),case=case),paired_sample_list[[cancer_type]])
+						paired_sample_list[[cancer_type]]<-rbind(unique(data.frame(normal=c(normal_samples_id),tumor=c(tumor_solid_sample_id),case=case)),paired_sample_list[[cancer_type]])
 					}
 				}	
 			}

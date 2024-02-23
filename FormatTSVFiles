@@ -1,0 +1,6 @@
+ls /home/felipe/Documentos/Thyroid_gland/ | grep ".tsv" | while read tsv_file
+do
+	new_name=$(echo $tsv_file | sed 's|tsv|txt|g')
+	echo $new_name
+        cat /home/felipe/Documentos/Thyroid_gland/$tsv_file | sed 's|["'\'']||g' |  sed 's/--//g'  > /home/felipe/Documentos/Thyroid_gland/$new_name
+done

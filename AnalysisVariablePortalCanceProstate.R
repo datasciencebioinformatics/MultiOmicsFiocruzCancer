@@ -54,7 +54,23 @@ merge_all                               <- merge(merge_clinical_exposure_fam_fol
 #####################################################################################################################
 output_dir="/home/felipe/Documentos/ProstateGDC/output/"                                                           #
 #####################################################################################################################
-##########################################################################################################################################################################################################
+library("stringr")
+library(dplyr)
+# A procedure to verify the existance of paired-samples between cancer_type and control.
+# Attempt 1 - The precudere will take all samples ids from cancer_type and all the ids from control.
+# store_results$cancer_type are matched against merge_all$tissue_or_organ_of_origin and the intesection of ids is calculated
+# this did not work...!
+
+# Take all cases
+all_cases<-unique(clinical_data$case_id)
+
+# Take tumor and normal samples
+tumor_samples<-unique(sample_data[which(sample_data$sample_type=="Primary Tumor"),"sample_id"])
+normal_samples<-unique(sample_data[which(sample_data$sample_type=="Blood Derived Normal"),"sample_id"])
+
+# Take intersect
+intersect(tumor_samples,normal_samples)
+####################################################################################################################
 # Goal : which samples can be used for a given pathology?
 # Criterias :
 # 1) Samples that have all selected co-variables different than null.

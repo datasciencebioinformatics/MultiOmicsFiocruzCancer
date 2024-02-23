@@ -224,5 +224,17 @@ rownames(df_names_Pr_gt_t)<-df_names_Pr_gt_t$Pr_gt_t
 # anova
 ##########################################################################################################################################################################################################
 # A to do listt for the weekend.
-# 
+library("randomForest")
+
+# Recreate merge all table
+merge_all <- merge(merge_clinical_exposure_fam_followup, patholog_data, by = "case_id", suffixes = c(".merge_3","patholog"), all = TRUE, no.dups=TRUE)   
+
+# Set co-variables
+covariables <- c(rownames(df_tissue_or_organ_of_origin_categorical_pvalues),colnames(df_names_Pr_gt_t)[!colnames(df_names_Pr_gt_t) %in% c("Pr_gt_t","n")])
+
+# Data frame
+df_data<- merge_all[,c(covariables,"primary_diagnosis")]
+
+
+
 

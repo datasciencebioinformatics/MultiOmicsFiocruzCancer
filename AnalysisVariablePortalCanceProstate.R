@@ -4,29 +4,29 @@ library("dendextend")                                                           
 # A script to compile the table descriptive os the cases from the cancer database (https://portal.gdc.cancer.gov/)  #
 # Entries:                                                                                                          #
 # A) clinical.cohort.2024-02-23.tar.gz tar.gz file with Cases                                                       #
-#	/home/felipe/Documentos/ProstateGDC/                                                                            #
-#	- clinical.tsv                                                                                                    # 
-#	- exposure.tsv                                                                                                    # 
-#	- family_history.tsv                                                                                              #
-#	- follow_up.tsv                                                                                                   #
-#	- pathology_detail.tsv                                                                                            #
+#	/home/felipe/Documentos/ProstateGDC/                                                                        #
+#	- clinical.tsv                                                                                              # 
+#	- exposure.tsv                                                                                              # 
+#	- family_history.tsv                                                                                        #
+#	- follow_up.tsv                                                                                             #
+#	- pathology_detail.tsv                                                                                      #
 # B) biospecimen.cohort.2024-02-23.tar.gz tar.gz file with sample                                                   #
-#	/home/felipe/Documentos/ProstateGDC/                                                                            #
-#	- aliquot.tsv                                                                                                     # 
-#	- analyte.tsv                                                                                                     # 
-#	- portion.tsv                                                                                                     #
-#	- sample.tsv                                                                                                      #
-#	- slide.tsv                                                                                                       #
+#	/home/felipe/Documentos/ProstateGDC/                                                                        #
+#	- aliquot.tsv                                                                                               # 
+#	- analyte.tsv                                                                                               # 
+#	- portion.tsv                                                                                               #
+#	- sample.tsv                                                                                                #
+#	- slide.tsv                                                                                                 #
 #####################################################################################################################
 # Load files
 #####################################################################################################################                                                                                                                    #
-# tsv files  are saved as txt and null character '-- replace by -                                                   #
+# tsv files  are saved as txt and null character '-- replace by -                                                 #
 clinical_file="/home/felipe/Documentos/ProstateGDC/clinical.txt"                                                  #
 exposure_file="/home/felipe/Documentos/ProstateGDC/exposure.txt"                                                  #
 famhisto_file="/home/felipe/Documentos/ProstateGDC/family_history.txt"                                            #
 followup_file="/home/felipe/Documentos/ProstateGDC/follow_up.txt"                                                 #
 patholog_file="/home/felipe/Documentos/ProstateGDC/pathology_detail.txt"                                          #
-#####################################################################################################################
+###################################################################################################################
 aliquot_file="/home/felipe/Documentos/ProstateGDC/aliquot.txt"                                                    #
 analyte_file="/home/felipe/Documentos/ProstateGDC/analyte.txt"                                                    #
 portion_file="/home/felipe/Documentos/ProstateGDC/portion.txt"                                                    #
@@ -38,7 +38,6 @@ clinical_data<-read.table(file = clinical_file, sep = '\t', header = TRUE,fill=T
 exposure_data<-read.table(file = exposure_file, sep = '\t', header = TRUE,fill=TRUE)                                #
 famhisto_data<-read.table(file = famhisto_file, sep = '\t', header = TRUE,fill=TRUE)                                #
 followup_data<-read.table(file = famhisto_file, sep = '\t', header = TRUE,fill=TRUE)                                #
-patholog_data<-read.table(file = patholog_file, sep = '\t', header = TRUE,fill=TRUE)                                #
 #####################################################################################################################
 # Read all metadata files                                                                                           #
 aliquot_data<-read.table(file = aliquot_file, sep = '\t', header = TRUE,fill=TRUE)                                  #

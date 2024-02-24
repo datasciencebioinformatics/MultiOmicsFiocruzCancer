@@ -70,6 +70,13 @@ normal_samples<-unique(sample_data[which(sample_data$sample_type=="Blood Derived
 
 # Take intersect
 intersect(tumor_samples,normal_samples)
+
+# Take the union
+unique(union(tumor_samples,normal_samples))
+####################################################################################################################
+table(merge_all$primary_diagnosis)
+
+
 ####################################################################################################################
 # Goal : which samples can be used for a given pathology?
 # Criterias :

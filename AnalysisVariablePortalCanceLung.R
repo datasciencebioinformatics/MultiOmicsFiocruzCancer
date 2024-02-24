@@ -251,8 +251,30 @@ library("randomForest")
 # Recreate merge all table
 merge_all <- merge(merge_clinical_exposure_fam_followup, patholog_data, by = "case_id", suffixes = c(".merge_3","patholog"), all = TRUE, no.dups=TRUE)   
 
-# Set co-variables
-covariables <- c(rownames(df_tissue_or_organ_of_origin_categorical_pvalues),colnames(df_names_Pr_gt_t)[!colnames(df_names_Pr_gt_t) %in% c("Pr_gt_t","n")])
+# Percentage of complete data
+complete_data_per_variable<-data.frame(Covariable=c(),completeness=c())
 
-# Data frame
-df_data<- merge_all[,c(covariables,"primary_diagnosis")]
+# For each column, convert to numeric
+for (col_bio in colnames(merge_all))
+{               
+        # Percentage of complete data
+        complete_data_per_variable<-rbind(complete_data_per_variable,data.frame(Covariable=c(col_bio),completeness=c(sum(!is.na(merge_all[,col_bio]))/length(merge_all[,col_bio])*100)))
+}
+rownames(complete_data_per_variable)<-complete_data_per_variable$Covariable     
+
+# Sort completness table
+complete_data_per_variable<-complete_data_per_variable[order(complete_data_per_variable$completeness),]
+
+# Remove variables 
+complete_data_per_variable<-complete_data_per_variable[complete_data_per_variable$completeness>0,]
+
+
+# Create plot
+plt <- ggplot(complete_data_per_variable) +  geom_col(aes(completeness, Covariable)) + theme_bw()
+
+
+# FindClusters_resolution                                                              
+png(filename=paste(output_dir,"/complete_data_per_variable.png",sep=""), width = 18, height = 24, res=600, units = "cm")
+        plt
+dev.off()
+##########################################################################################################################################################################################################

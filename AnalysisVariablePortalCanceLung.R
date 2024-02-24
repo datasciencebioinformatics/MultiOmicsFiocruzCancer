@@ -124,12 +124,12 @@ library(varhandle)
 covariables <- as.vector(tolower(colnames(merge_all)))
 covariables<-covariables[-which(covariables=="primary_diagnosis")]
 covariables<-covariables[-which(covariables=="case_id")]
-covariables<-covariables[-which(covariables=="case_submitter_id.clincal")]
-covariables<-covariables[-which(covariables=="project_id.clincal")]
-covariables<-covariables[-which(covariables=="case_submitter_id.exposure")]
-covariables<-covariables[-which(covariables=="case_submitter_id.merge_2")]
-covariables<-covariables[-which(covariables=="case_submitter_id")]
-covariables<-covariables[-which(covariables=="project_id.exposure")]
+#covariables<-covariables[-which(covariables=="case_submitter_id.clincal")]
+#covariables<-covariables[-which(covariables=="project_id.clincal")]
+#covariables<-covariables[-which(covariables=="case_submitter_id.exposure")]
+#covariables<-covariables[-which(covariables=="case_submitter_id.merge_2")]
+#covariables<-covariables[-which(covariables=="case_submitter_id")]
+#covariables<-covariables[-which(covariables=="project_id.exposure")]
 
 
 # Create a matrix for categorical results                                                                                                #

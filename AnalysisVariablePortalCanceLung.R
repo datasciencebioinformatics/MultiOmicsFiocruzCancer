@@ -268,10 +268,14 @@ complete_data_per_variable<-complete_data_per_variable[order(complete_data_per_v
 # Remove variables 
 complete_data_per_variable<-complete_data_per_variable[complete_data_per_variable$completeness>0,]
 
+# Sort data
+complete_data_per_variable<-complete_data_per_variable[order(complete_data_per_variable$completeness),]
+
+# Re-factor
+complete_data_per_variable$Covariable<-factor(complete_data_per_variable$Covariable,levels=complete_data_per_variable$Covariable)
 
 # Create plot
-plt <- ggplot(complete_data_per_variable) +  geom_col(aes(completeness, Covariable)) + theme_bw()
-
+plt <- ggplot(complete_data_per_variable) +  geom_col(aes(completeness, Covariable)) + theme_bw() + geom_vline(xintercept=90, linetype='dotted', col = 'black',linewidth=2)
 
 # FindClusters_resolution                                                              
 png(filename=paste(output_dir,"/complete_data_per_variable.png",sep=""), width = 18, height = 24, res=600, units = "cm")

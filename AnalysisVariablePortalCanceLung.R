@@ -244,8 +244,11 @@ rownames(df_names_Pr_gt_t)<-df_names_Pr_gt_t$Pr_gt_t
 # To do :
 # chi-square
 # anova
-write.xlsx(df_names_Pr_gt_t, file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "numeric", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
-write.xlsx(df_tissue_or_organ_of_origin_categorical_pvalues, file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "categorical", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
+write.xlsx(t(df_names_Pr_gt_t), file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "numeric", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
+write.xlsx(t(df_tissue_or_organ_of_origin_categorical_pvalues), file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "categorical", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
+write.xlsx(t(df_names_Pr_gt_t<0.001), file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "numeric_b", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
+write.xlsx(t(df_tissue_or_organ_of_origin_categorical_pvalues)<0.001, file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "categorical_b", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
+
 
 ##########################################################################################################################################################################################################
 # A to do listt for the weekend.
@@ -285,3 +288,45 @@ png(filename=paste(output_dir,"/complete_data_per_variable.png",sep=""), width =
         plt
 dev.off()
 ##########################################################################################################################################################################################################
+race
+"asian"
+"black or african american"
+"not reported"
+"white"
+
+ajcc_pathologic_t
+"T1"
+"T1a"
+"T1b"
+"T2"
+"T2a"
+"T2b"
+"T3"
+"T4"
+
+morphology
+"8052/3"
+"8070/3"
+"8071/3"
+"8072/3"
+"8073/3" 
+"8083/3"
+
+tissue_or_organ_of_origin
+"Lower lobe, lung"
+"Lung, NOS"                 
+"Main bronchus"
+"Middle lobe, lung"         
+"Overlapping lesion of lung"
+"Upper lobe, lung" 
+
+
+Primary_diagnosis
+"Basaloid squamous cell carcinoma"                         
+"Papillary squamous cell carcinoma"                        
+"Squamous cell carcinoma, keratinizing, NOS"               
+"Squamous cell carcinoma, large cell, nonkeratinizing, NOS"
+"Squamous cell carcinoma, NOS"                             
+"Squamous cell carcinoma, small cell, nonkeratinizing" 
+
+I want a tile plot with 6 collumns (Primary_diagnosis), and each row a value of the covariable.

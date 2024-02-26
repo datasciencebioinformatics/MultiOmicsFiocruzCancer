@@ -244,6 +244,9 @@ rownames(df_names_Pr_gt_t)<-df_names_Pr_gt_t$Pr_gt_t
 # To do :
 # chi-square
 # anova
+write.xlsx(df_names_Pr_gt_t, file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "numeric", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
+write.xlsx(df_tissue_or_organ_of_origin_categorical_pvalues, file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "categorical", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
+
 ##########################################################################################################################################################################################################
 # A to do listt for the weekend.
 library("randomForest")

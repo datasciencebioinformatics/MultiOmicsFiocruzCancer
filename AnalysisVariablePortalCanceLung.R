@@ -1,5 +1,6 @@
 library(pheatmap)                                                                                                   #
 library("dendextend")                                                                                               #
+library("ggplot2")
 #####################################################################################################################
 # A script to compile the table descriptive os the cases from the cancer database (https://portal.gdc.cancer.gov/)  #
 # Entries:                                                                                                          #
@@ -251,8 +252,7 @@ write.xlsx(t(df_tissue_or_organ_of_origin_categorical_pvalues)<0.001, file=paste
 # A to do listt for the weekend.
 library("randomForest")
 
-# Recreate merge all table
-merge_all <- merge(merge_clinical_exposure_fam_followup, patholog_data, by = "case_id", suffixes = c(".merge_3","patholog"), all = TRUE, no.dups=TRUE)   
+merge_all <- merge(merge_clinical_exposure_fam, followup_data, by = "case_id", suffixes = c(".merge_2","famhisto"), all = TRUE, no.dups=TRUE)                        #
 
 # Percentage of complete data
 complete_data_per_variable<-data.frame(Covariable=c(),completeness=c())
@@ -284,7 +284,9 @@ plt <- ggplot(complete_data_per_variable) +  geom_col(aes(completeness, Covariab
 png(filename=paste(output_dir,"/complete_data_per_variable.png",sep=""), width = 18, height = 24, res=600, units = "cm")
         plt
 dev.off()
+
 ##########################################################################################################################################################################################################
+# Covariable RACE
 # Create data.frame
 df_covariable<-table(merge_all$primary_diagnosis,merge_all$race)
 
@@ -296,55 +298,78 @@ df_covariable<-cbind(df_covariable,data.frame(names=variable_names))
 
 # Rename colnames
 colnames(df_covariable)<-c("Name","Covariable","Count","Names")
-##########################################################################################################################################################################################################
+
 # Compute percentage
+df_covariable$Percentage<-0
+
 # Compute percentage 
-for (name in unique(df_covariable$names))
-{
-        df_covariable[df_covariable$names==name,"Freq"]/sum(df_covariable[df_covariable$names==name,"Freq"])
+for (name in unique(df_covariable$Names))
+{        
+	df_covariable[df_covariable$Names==name,"Percentage"]<-df_covariable[df_covariable$Names==name,"Count"]/sum(df_covariable[df_covariable$Names==name,"Count"])*100
 }
-ggplot(df_covariable,aes(x=Names,y=Percentage,fill=Covariable))+ geom_bar(stat="identity") + theme_bw()+ coord_flip()
+
+# FindClusters_resolution                                                              
+png(filename=paste(output_dir,"/Race_primary_diagnosis_barplot.png",sep=""), width = 24, height = 16, res=600, units = "cm")
+        ggplot(df_covariable,aes(x=Names,y=Percentage,fill=Covariable))+ geom_bar(stat="identity") + theme_bw()+ coord_flip() + ggtitle("Race vs. Primary diganosis")
+dev.off()
+##########################################################################################################################################################################################################
+# Covariable ajcc_pathologic_t
+# Create data.frame
+df_covariable<-table(merge_all$primary_diagnosis,merge_all$ajcc_pathologic_t)
+
+# Take name of covariables
+variable_names<-rownames(df_covariable)
+
+# Merge table
+df_covariable<-cbind(df_covariable,data.frame(names=variable_names))
+
+# Rename colnames
+colnames(df_covariable)<-c("Name","Covariable","Count","Names")
+
+# Compute percentage
+df_covariable$Percentage<-0
+
+# Compute percentage 
+for (name in unique(df_covariable$Names))
+{        
+	df_covariable[df_covariable$Names==name,"Percentage"]<-df_covariable[df_covariable$Names==name,"Count"]/sum(df_covariable[df_covariable$Names==name,"Count"])*100
+}
+
+# FindClusters_resolution                                                              
+png(filename=paste(output_dir,"/ajcc_pathologic_t_primary_diagnosis_barplot.png",sep=""), width = 24, height = 16, res=600, units = "cm")
+        ggplot(df_covariable,aes(x=Names,y=Percentage,fill=Covariable))+ geom_bar(stat="identity") + theme_bw()+ coord_flip() + ggtitle("ajcc_pathologic_t vs. Primary diganosis")
+dev.off()
+##########################################################################################################################################################################################################
+# Df table numeric
+df_table_numeric<-
+
+# Take data frames
+df_1<-data.frame(merge_all[,c("days_to_death","primary_diagnosis")],Variable="days_to_death")
+df_2<-data.frame(merge_all[,c("days_to_last_follow_up","primary_diagnosis")],Variable="days_to_last_follow_up")
+df_3<-data.frame(merge_all[,c("cigarettes_per_day","primary_diagnosis")],Variable="cigarettes_per_day")
+df_4<-data.frame(merge_all[,c("pack_years_smoked","primary_diagnosis")],Variable="pack_years_smoked")
+
+# Take data frames
+colnames(df_1)[1]<-c("Count")
+colnames(df_2)[1]<-c("Count")
+colnames(df_3)[1]<-c("Count")
+colnames(df_4)[1]<-c("Count")
+
+# Store all counts
+df_all_counts<-rbind(df_1,df_2,df_3,df_4)
+
+# Remove NA lines
+df_table_numeric<-na.omit(df_all_counts) 
+
+# Re-level factor
+df_table_numeric$Variable<-factor(df_table_numeric$Variable,levels=c("pack_years_smoked","cigarettes_per_day","days_to_last_follow_up","days_to_death"))
+
+# Use semi-transparent fill
+p<-ggplot(df_table_numeric, aes(x=Count, fill=primary_diagnosis, color=primary_diagnosis)) +  geom_histogram(position="identity", alpha=0.5,binwidth = NULL)  + theme_bw()+ ggtitle("days_to_death vs. Primary diganosis")+ facet_wrap("Variable", ncol = 2)
+
+# FindClusters_resolution                                                              
+png(filename=paste(output_dir,"/Numeric_variables_primary_diagnosis_barplot.png",sep=""), width = 24, height = 16, res=600, units = "cm")
+        ggplot(df_table_numeric, aes(x=Count, fill=primary_diagnosis, color=primary_diagnosis)) +  geom_histogram(position="identity", alpha=0.5,binwidth = NULL)  + theme_bw()+ ggtitle("Numeric variables vs. Primary diganosis")+ facet_wrap("Variable", ncol = 2)
+dev.off()
 
 
-race
-"asian"
-"black or african american"
-"not reported"
-"white"
-
-ajcc_pathologic_t
-"T1"
-"T1a"
-"T1b"
-"T2"
-"T2a"
-"T2b"
-"T3"
-"T4"
-
-morphology
-"8052/3"
-"8070/3"
-"8071/3"
-"8072/3"
-"8073/3" 
-"8083/3"
-
-tissue_or_organ_of_origin
-"Lower lobe, lung"
-"Lung, NOS"                 
-"Main bronchus"
-"Middle lobe, lung"         
-"Overlapping lesion of lung"
-"Upper lobe, lung" 
-
-
-Primary_diagnosis
-"Basaloid squamous cell carcinoma"                         
-"Papillary squamous cell carcinoma"                        
-"Squamous cell carcinoma, keratinizing, NOS"               
-"Squamous cell carcinoma, large cell, nonkeratinizing, NOS"
-"Squamous cell carcinoma, NOS"                             
-"Squamous cell carcinoma, small cell, nonkeratinizing" 
-
-I want a tile plot with 6 collumns (Primary_diagnosis), and each row a value of the covariable.

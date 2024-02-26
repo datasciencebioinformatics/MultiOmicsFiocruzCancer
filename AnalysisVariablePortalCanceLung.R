@@ -25,7 +25,6 @@ clinical_file="/home/felipe/Documentos/LungSquaGDC/clinical.txt"                
 exposure_file="/home/felipe/Documentos/LungSquaGDC/exposure.txt"                                                  #
 famhisto_file="/home/felipe/Documentos/LungSquaGDC/family_history.txt"                                            #
 followup_file="/home/felipe/Documentos/LungSquaGDC/follow_up.txt"                                                 #
-patholog_file="/home/felipe/Documentos/LungSquaGDC/pathology_detail.txt"                                          #
 ###################################################################################################################
 aliquot_file="/home/felipe/Documentos/LungSquaGDC/aliquot.txt"                                                    #
 analyte_file="/home/felipe/Documentos/LungSquaGDC/analyte.txt"                                                    #
@@ -49,8 +48,7 @@ slide_data<-read.table(file = slide_file, sep = '\t', header = TRUE,fill=TRUE)  
 # Merge files without ducplicating collumns                                                                                                                                                        #                                                                                                                                                                                                 #
 merge_clinical_exposure                 <- merge(clinical_data, exposure_data, by = "case_id", suffixes = c(".clincal",".exposure"), all = TRUE, no.dups=TRUE)                                     #
 merge_clinical_exposure_fam             <- merge(merge_clinical_exposure, famhisto_data, by = "case_id", suffixes = c(".merge_1","famhisto"), all = TRUE, no.dups=TRUE)                            #
-merge_clinical_exposure_fam_followup    <- merge(merge_clinical_exposure_fam, followup_data, by = "case_id", suffixes = c(".merge_2","famhisto"), all = TRUE, no.dups=TRUE)                        #
-merge_all                               <- merge(merge_clinical_exposure_fam_followup, patholog_data, by = "case_id", suffixes = c(".merge_3","patholog"), all = TRUE, no.dups=TRUE)               #
+merge_all                               <- merge(merge_clinical_exposure_fam, followup_data, by = "case_id", suffixes = c(".merge_2","famhisto"), all = TRUE, no.dups=TRUE)                        #
 #####################################################################################################################
 output_dir="/home/felipe/Documentos/LungSquaGDC/output/"                                                           #
 #####################################################################################################################
@@ -90,7 +88,7 @@ table(merge_all$primary_diagnosis)
 library("DescTools")
 
 # Recreate merge all table
-merge_all <- merge(merge_clinical_exposure_fam_followup, patholog_data, by = "case_id", suffixes = c(".merge_3","patholog"), all = TRUE, no.dups=TRUE)   
+merge_all  <- merge(merge_clinical_exposure_fam, followup_data, by = "case_id", suffixes = c(".merge_2","famhisto"), all = TRUE, no.dups=TRUE)                        #
 
 # Set co-variables
 covariables <- as.vector(tolower(colnames(merge_all)))
@@ -131,7 +129,6 @@ covariables<-covariables[-which(covariables=="case_id")]
 #covariables<-covariables[-which(covariables=="case_submitter_id")]
 #covariables<-covariables[-which(covariables=="project_id.exposure")]
 
-
 # Create a matrix for categorical results                                                                                                #
 df_tissue_or_organ_of_origin_categorical_pvalues <- data.frame(matrix(Inf, ncol = length(c("chisq","goodmanKruskalGamma") ), nrow = 0))  #
                                                                                                                                          #
@@ -148,7 +145,7 @@ colnames(df_tissue_or_organ_of_origin_numeric_pvalues)<-unique(merge_all$primary
 for (covariable in covariables)                                                                                                          #
 {
 	# Recreate merge all table
-	merge_all <- merge(merge_clinical_exposure_fam_followup, patholog_data, by = "case_id", suffixes = c(".merge_3","patholog"), all = TRUE, no.dups=TRUE)               #
+	merge_all <- merge(merge_clinical_exposure_fam, followup_data, by = "case_id", suffixes = c(".merge_2","famhisto"), all = TRUE, no.dups=TRUE)                        #
 
 	# Check if co-varibale is numerical or categorical
 	categorical_variable<-FALSE

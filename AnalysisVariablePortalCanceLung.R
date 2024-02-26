@@ -288,6 +288,27 @@ png(filename=paste(output_dir,"/complete_data_per_variable.png",sep=""), width =
         plt
 dev.off()
 ##########################################################################################################################################################################################################
+# Create data.frame
+df_covariable<-table(merge_all$primary_diagnosis,merge_all$race)
+
+# Take name of covariables
+variable_names<-rownames(df_covariable)
+
+# Merge table
+df_covariable<-cbind(df_covariable,data.frame(names=variable_names))
+
+# Rename colnames
+colnames(df_covariable)<-c("Name","Covariable","Count","Names")
+##########################################################################################################################################################################################################
+# Compute percentage
+# Compute percentage 
+for (name in unique(df_covariable$names))
+{
+        df_covariable[df_covariable$names==name,"Freq"]/sum(df_covariable[df_covariable$names==name,"Freq"])
+}
+ggplot(df_covariable,aes(x=Names,y=Percentage,fill=Covariable))+ geom_bar(stat="identity") + theme_bw()+ coord_flip()
+
+
 race
 "asian"
 "black or african american"

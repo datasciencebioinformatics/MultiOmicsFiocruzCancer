@@ -66,5 +66,5 @@ df_results<-df_results[,-1]
 
 ## To write a file in Mac Roman for simple use in Mac Excel 2004/8
 write.csv(df_results, file = paste(output_dir,"Transcriptome_profiling_lung.csv",sep="/"))
-
-
+#####################################################################################################################
+gdc_sample_sheet_data_info<-gdc_sample_sheet_data[gdc_sample_sheet_data$File.ID %in% colnames(df_results),]

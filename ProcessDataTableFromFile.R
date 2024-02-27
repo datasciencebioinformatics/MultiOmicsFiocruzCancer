@@ -67,4 +67,14 @@ df_results<-df_results[,-1]
 ## To write a file in Mac Roman for simple use in Mac Excel 2004/8
 write.csv(df_results, file = paste(output_dir,"Transcriptome_profiling_lung.csv",sep="/"))
 #####################################################################################################################
+# Subset datainfo
 gdc_sample_sheet_data_info<-gdc_sample_sheet_data[gdc_sample_sheet_data$File.ID %in% colnames(df_results),]
+
+# Set rownames
+rownames(gdc_sample_sheet_data_info)<-gdc_sample_sheet_data_info$File.ID
+
+# Get dataInfo
+datInfo<-gdc_sample_sheet_data_info[,c("Data.Category", "Data.Type", "Sample.Type")]
+
+# FindClusters_resolution
+pheatmap_df_results<-pheatmap(df_results,annotation_col =datInfo)

@@ -429,7 +429,16 @@ for (file_id in gdc_sample_sheet_data$File.ID)
 			# Merge table
 			df_results<-merge(df_results,file_sample_table,by="Gene")
 		}
+		gc()
 	}
 }
+# Set rownames
+rownames(df_results)<-df_results$Gene
+
+# Remove 
+df_results<-df_results[,-1]
+
+## To write a file in Mac Roman for simple use in Mac Excel 2004/8
+write.csv(df_results, file = paste(output_dir,"Transcriptome_profiling_lung.csv",sep="/"))
 
 

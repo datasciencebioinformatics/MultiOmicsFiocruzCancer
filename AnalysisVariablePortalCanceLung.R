@@ -395,7 +395,7 @@ transcriptome_Profiling_samples<-gdc_sample_sheet_data[which(gdc_sample_sheet_da
 for (file_id in gdc_sample_sheet_data$File.ID)
 {
 	# Sample file id
-	file_sample_id<-list.files(paste("/home/felipe/Documentos/LungSquaGDC/samples/files/",file_id,"/",sep=""),pattern =".gz")
+	file_sample_id<-list.files(paste("/home/felipe/Documentos/LungSquaGDC/samples/files/",file_id,"/",sep=""),pattern =".FPKM.txt.gz")
 
 	# If at least one character
 	if (!identical(file_sample_id, character(0)))

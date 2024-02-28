@@ -264,7 +264,7 @@ for (covariable in covariables)                                                 
 					colnames(df_results_2)[2]<-covariable
 
 					# Merge by names
-					df_names_Pr_gt_t<-merge(df_names_Pr_gt_t,df_results_2,by="Pr_gt_t",all.x = TRUE)
+					df_names_Pr_gt_t<-merge(df_names_Pr_gt_t,df_results_2,by="Pr_gt_t",all.x = FALSE, ,all.y = FALSE)
 					
 					# Caterogical variable
 					print(paste(covariable," : Numeric")	)				

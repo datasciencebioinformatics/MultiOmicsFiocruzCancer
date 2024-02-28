@@ -6,21 +6,37 @@ library(readr)
 gdc_sample_sheet_file<-"/home/felipe/Documentos/LungSquaGDC/gdc_sample_sheet.2020-05-04.txt"
 
 # Read data
-gdc_sample_sheet_data<-read.table(file = gdc_sample_sheet_file, sep = '\t', header = TRUE,fill=TRUE)    
+gdc_sample_sheet_data<-read.table(file = gdc_sample_sheet_file, sep = '\t', header = TRUE,fill=TRUE)  
+
+# Add collumn sample_id
+gdc_sample_sheet_data$sample_submitter_id<-gdc_sample_sheet_data$Sample.ID
 #####################################################################################################################
-To do:
-- Merge data info with patient info
-- Associationg between Normal/Tumor and Covariables.
-- Check criterias for selectig data e.g. "Transcriptome Profiling" only. e.g. ".FPKM.txt.gz"
-- Outputs : a) a table dataInfo + patientInfo.
--           b) A table with expression of selected patients.
-- To plan : 1) association covariable~primary_diagnosis
--           2) association covariable~Normal/Tumor
-- To study : Literature of association co-variables ~ cancer
+#To do:
+# - Merge data info with patient info
+# - Associationg between Normal/Tumor and Covariables.
+# - Check criterias for selectig data e.g. "Transcriptome Profiling" only. e.g. ".FPKM.txt.gz"
+# - Outputs : a) a table dataInfo + patientInfo.
+# -           b) A table with expression of selected patients.
+# - To plan : 1) association covariable~primary_diagnosis
+# -           2) association covariable~Normal/Tumor
+# - To study : Literature of association co-variables ~ cancer
 #####################################################################################################################
+# Set path to files
+clinical_file="/home/felipe/Documentos/LungSquaGDC/clinical.txt" 
+sample_file="/home/felipe/Documentos/LungSquaGDC/sample.txt"    
 
+# Load data
+clinical_data<-read.table(file = clinical_file, sep = '\t', header = TRUE,fill=TRUE)    
+sample_data<-read.table(file = sample_file, sep = '\t', header = TRUE,fill=TRUE)                                    #
 
+sample_data$case_id 
+clinical_data$case_id
 
+# Merge data
+merged_sample_clinical_data<-merge(sample_data,clinical_data,by="case_id")
+
+# Merge tables
+merged_data_patient_info<-merge(merged_sample_clinical_data,gdc_sample_sheet_data,by="sample_submitter_id")
 
 #####################################################################################################################
 # Set count

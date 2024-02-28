@@ -27,13 +27,18 @@ output_dir="/home/felipe/Documentos/LungSquaGDC/output/"                        
 # Set path to files
 clinical_file="/home/felipe/Documentos/LungSquaGDC/clinical.txt" 
 sample_file="/home/felipe/Documentos/LungSquaGDC/sample.txt"    
+exposure_file="/home/felipe/Documentos/LungSquaGDC/exposure.txt"                                                  #
 
 # Load data
 clinical_data<-read.table(file = clinical_file, sep = '\t', header = TRUE,fill=TRUE)    
 sample_data<-read.table(file = sample_file, sep = '\t', header = TRUE,fill=TRUE)                                    #
+exposure_data<-read.table(file = exposure_file, sep = '\t', header = TRUE,fill=TRUE)                                #
 
 # Merge data
 merged_sample_clinical_data<-merge(sample_data,clinical_data,by="case_id")
+
+# Merge all
+merged_sample_clinical_data<-merge(merged_sample_clinical_data,exposure_data,by="case_id")
 
 # Merge tables
 merged_data_patient_info<-merge(merged_sample_clinical_data,gdc_sample_sheet_data,by="sample_submitter_id")
@@ -185,6 +190,9 @@ colnames(df_tissue_or_organ_of_origin_categorical_pvalues)<-c("chisq","goodmanKr
                                                                                                                                          #
 ## Set colnames                                                                                                                          #
 colnames(df_tissue_or_organ_of_origin_numeric_pvalues)<-unique(merged_data_patient_info$primary_diagnosis)                               #
+
+# Remove co-variables
+covariables<-covariables[-which(covariables %in% c("Diagnosis"))]
 
 # For each co-variable                                                                                                                   #
 for (covariable in covariables)                                                                                                          #

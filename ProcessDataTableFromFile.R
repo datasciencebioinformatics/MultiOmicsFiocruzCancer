@@ -10,6 +10,7 @@ gdc_sample_sheet_data<-read.table(file = gdc_sample_sheet_file, sep = '\t', head
 #####################################################################################################################
 To do:
 - Merge data info with patient info
+- Associationg between Normal/Tumor and Covariables.
 - Check criterias for selectig data e.g. "Transcriptome Profiling" only. e.g. ".FPKM.txt.gz"
 
 #####################################################################################################################

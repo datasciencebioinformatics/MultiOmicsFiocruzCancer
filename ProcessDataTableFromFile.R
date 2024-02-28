@@ -16,6 +16,7 @@ To do:
 -           b) A table with expression of selected patients.
 - To plan : 1) association covariable~primary_diagnosis
 -           2) association covariable~Normal/Tumor
+- To study : Literature of association co-variables ~ cancer
 #####################################################################################################################
 
 

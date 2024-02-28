@@ -1,5 +1,6 @@
 ##########################################################################################################################################################################################################
 library(readr)
+library("xlsx")
 # A table containing the Transcriptome Profiling of each sample
 # Read the sample tsv file and for each "Transcriptome Profiling" read the file
  # Reading the contents of TSV file using read_tsv() method
@@ -50,7 +51,7 @@ covariables<-covariables[-which(grepl("date", covariables))]
 covariables<-covariables[-which(grepl("Name", covariables))]
 
 # Remove co-variables
-covariables<-covariables[-which(covariables %in% c("File.ID","File.Name","Data.Category","Data.Type", "Project.ID" ,"Case.ID", "Sample.ID", "sample_submitter_id", "case_id","submitter_id", "project_id.y", "project_id.x", "case_submitter_id.x", "sample_id", "submitter_id", "project_id.y","sample_type_id","submitter_id.1","case_id.1","case_submitter_id.y","created_datetime.1","state.1","submitter_id.2","created_datetime.2","updated_datetime.2","Sample.Type","biospecimen_anatomic_site","biospecimen_laterality","catalog_reference","composition","current_weight","days_to_sample_procurement","diagnosis_pathologically_confirmed","distance_normal_to_tumor","treatment_id","submitter_id","created_datetime","submitter_id","diagnosis_id","pathology_report_uuid","treatment_id","submitter_id"))]
+covariables<-covariables[-which(covariables %in% c("File.ID","File.Name","Data.Category","Data.Type", "Project.ID" ,"Case.ID", "Sample.ID", "sample_submitter_id", "case_id","submitter_id", "project_id.y", "project_id.x", "case_submitter_id.x", "sample_id", "submitter_id", "project_id.y","sample_type_id","submitter_id.1","case_id.1","case_submitter_id.y","created_datetime.1","state.1","submitter_id.2","created_datetime.2","updated_datetime.2","Sample.Type","biospecimen_anatomic_site","biospecimen_laterality","catalog_reference","composition","current_weight","days_to_sample_procurement","diagnosis_pathologically_confirmed","distance_normal_to_tumor","treatment_id","submitter_id","created_datetime","submitter_id","diagnosis_id","pathology_report_uuid","treatment_id","submitter_id","primary_diagnosis"))]
 
 merged_data_patient_info$Diagnosis<-NA
 merged_data_patient_info[factor(merged_data_patient_info$Sample.Type)=="Primary Tumor","Diagnosis"]<-1
@@ -190,6 +191,9 @@ for (covariable in covariables)                                                 
 {
 	# Recreate merge all table
 
+	# Merge tables
+	merged_data_patient_info<-merge(merged_sample_clinical_data,gdc_sample_sheet_data,by="sample_submitter_id")
+
 	# Check if co-varibale is numerical or categorical
 	categorical_variable<-FALSE
 	categorical_variable<-sum(check.numeric(v=merged_data_patient_info[,covariable], na.rm=TRUE, only.integer=FALSE, exceptions=c(""), ignore.whitespace=TRUE))==0
@@ -284,3 +288,8 @@ rownames(df_names_Pr_gt_t)<-df_names_Pr_gt_t$Pr_gt_t
 # To do :
 # chi-square
 # anova
+write.xlsx(t(df_names_Pr_gt_t), file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "numeric", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
+write.xlsx(t(df_tissue_or_organ_of_origin_categorical_pvalues), file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "categorical", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
+write.xlsx(t(df_names_Pr_gt_t<0.001), file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "numeric_b", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
+write.xlsx(t(df_tissue_or_organ_of_origin_categorical_pvalues)<0.001, file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "categorical_b", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
+

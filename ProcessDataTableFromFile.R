@@ -12,9 +12,16 @@ To do:
 - Merge data info with patient info
 - Associationg between Normal/Tumor and Covariables.
 - Check criterias for selectig data e.g. "Transcriptome Profiling" only. e.g. ".FPKM.txt.gz"
-
+- Outputs : a) a table dataInfo + patientInfo.
+-           b) A table with expression of selected patients.
+- To plan : 1) association covariable~primary_diagnosis
+-           2) association covariable~Normal/Tumor
 #####################################################################################################################
 
+
+
+
+#####################################################################################################################
 # Set count
 count=0
 

@@ -192,7 +192,10 @@ colnames(df_tissue_or_organ_of_origin_categorical_pvalues)<-c("chisq","goodmanKr
 colnames(df_tissue_or_organ_of_origin_numeric_pvalues)<-unique(merged_data_patient_info$primary_diagnosis)                               #
 
 # Remove co-variables
-covariables<-covariables[-which(covariables %in% c("Diagnosis"))]
+covariables<-covariables[-which(covariables %in% c("Diagnosis",""))]
+
+# Remove co-variables
+covariables<-covariables[covariables!="covariable"]
 
 # For each co-variable                                                                                                                   #
 for (covariable in covariables)                                                                                                          #

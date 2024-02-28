@@ -8,6 +8,12 @@ gdc_sample_sheet_file<-"/home/felipe/Documentos/LungSquaGDC/gdc_sample_sheet.202
 # Read data
 gdc_sample_sheet_data<-read.table(file = gdc_sample_sheet_file, sep = '\t', header = TRUE,fill=TRUE)    
 #####################################################################################################################
+To do:
+- Merge data info with patient info
+- Check criterias for selectig data e.g. "Transcriptome Profiling" only. e.g. ".FPKM.txt.gz"
+
+#####################################################################################################################
+
 # Set count
 count=0
 
@@ -75,6 +81,3 @@ rownames(gdc_sample_sheet_data_info)<-gdc_sample_sheet_data_info$File.ID
 
 # Get dataInfo
 datInfo<-gdc_sample_sheet_data_info[,c("Data.Category", "Data.Type", "Sample.Type")]
-
-# FindClusters_resolution
-pheatmap_df_results<-pheatmap(df_results,annotation_col =datInfo)

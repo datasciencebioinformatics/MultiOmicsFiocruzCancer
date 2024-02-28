@@ -144,11 +144,143 @@ df_results<-df_results[,-1]
 ## To write a file in Mac Roman for simple use in Mac Excel 2004/8
 write.csv(df_results, file = paste(output_dir,"Transcriptome_profiling_lung.csv",sep="/"))
 #####################################################################################################################
-# Subset datainfo
-gdc_sample_sheet_data_info<-gdc_sample_sheet_data[gdc_sample_sheet_data$File.ID %in% colnames(df_results),]
+library("DescTools")
+
+# A tabel with data for analysis
+stu_data = data.frame(covariable=merged_data_patient_info$age_at_index,primary_diagnosis=factor(merged_data_patient_info$primary_diagnosis))	
+
+# Remove "-"
+stu_data<-stu_data[stu_data$covariable!="-",]
+stu_data<-stu_data[stu_data$primary_diagnosis!="-",]
+
+# set rownames
+stu_data<-na.omit(stu_data)
+
+# Set covariable and primary_diagnosis
+covariable<-stu_data$covariable
+primary_diagnosis<-stu_data$primary_diagnosis
+
+# Regression with categorical predictors
+lm_test<-summary(lm(covariable ~ primary_diagnosis))
+
+# Take the names of 
+df_names_Pr_gt_t<-data.frame(Pr_gt_t=gsub("primary_diagnosis","",  names(lm_test$coefficients[,4]), ignore.case = FALSE, perl = FALSE,  fixed = FALSE, useBytes = FALSE),n=0)
 
 # Set rownames
-rownames(gdc_sample_sheet_data_info)<-gdc_sample_sheet_data_info$File.ID
+rownames(df_names_Pr_gt_t)<-df_names_Pr_gt_t$Pr_gt_t
+##########################################################################################################################################################################################################
+library(varhandle)
+# Set co-variables
+# Set co-variables
 
-# Get dataInfo
-datInfo<-gdc_sample_sheet_data_info[,c("Data.Category", "Data.Type", "Sample.Type")]
+# Create a matrix for categorical results                                                                                                #
+df_tissue_or_organ_of_origin_categorical_pvalues <- data.frame(matrix(Inf, ncol = length(c("chisq","goodmanKruskalGamma") ), nrow = 0))  #
+                                                                                                                                         #
+# Create a matrix for numeric results                                                                                                    #                                                                                   #
+df_tissue_or_organ_of_origin_numeric_pvalues     <- data.frame(matrix(Inf, ncol = length(unique(merged_data_patient_info$primary_diagnosis)), nrow = 0))#
+                                                                                                                                         #
+## Set colnames                                                                                                                          #
+colnames(df_tissue_or_organ_of_origin_categorical_pvalues)<-c("chisq","goodmanKruskalGamma")                                             #                                                                                                #
+                                                                                                                                         #
+## Set colnames                                                                                                                          #
+colnames(df_tissue_or_organ_of_origin_numeric_pvalues)<-unique(merged_data_patient_info$primary_diagnosis)                               #
+
+# For each co-variable                                                                                                                   #
+for (covariable in covariables)                                                                                                          #
+{
+	# Recreate merge all table
+
+	# Check if co-varibale is numerical or categorical
+	categorical_variable<-FALSE
+	categorical_variable<-sum(check.numeric(v=merged_data_patient_info[,covariable], na.rm=TRUE, only.integer=FALSE, exceptions=c(""), ignore.whitespace=TRUE))==0
+
+	# Rename column for selected variable
+	colnames(merged_data_patient_info)[which(colnames(merged_data_patient_info)==covariable)]<-"covariable"
+
+	# A tabel with data for analysis
+	stu_data = data.frame(covariable=merged_data_patient_info$covariable,primary_diagnosis=merged_data_patient_info$primary_diagnosis)	
+
+	# Remove "-"
+	stu_data<-stu_data[stu_data$covariable!="-",]
+
+	# set rownames
+	stu_data<-na.omit(stu_data)
+
+	# If there is at least one non-na entry
+	if(dim(stu_data)[1]>2)
+	{			
+		# if categorial covariable
+		if(categorical_variable)
+		{		
+			# Create a contingency table with the needed variables.           
+			stu_data_table = table(stu_data$covariable,stu_data$primary_diagnosis) 
+
+			# primary_diagnosis must have at least 2 entries 
+			if(dim(stu_data_table)[2]>1)
+			{
+				# applying chisq.test() function
+				pvalue   <-chisq.test(stu_data_table)$p.value		
+				
+				# Applying GoodmanKruskalGamma 
+				goodmanKruskalGamma<-GoodmanKruskalGamma(stu_data$covariable, y = stu_data$primary_diagnosis, conf.level = NA)
+	
+				# Create data.frame with results
+				df_results<-data.frame(chisq=pvalue,goodmanKruskalGamma=goodmanKruskalGamma)
+	
+				# Set rownames
+				rownames(df_results)<-covariable
+	
+				# Add results to data frame
+				df_tissue_or_organ_of_origin_categorical_pvalues<-rbind(df_tissue_or_organ_of_origin_categorical_pvalues,df_results)			
+
+				# Caterogical variable
+				print(paste(covariable," : Categorial")	)				
+				write.table(df_tissue_or_organ_of_origin_categorical_pvalues, paste(output_dir,"df_tissue_or_organ_of_origin_categorical_pvalues",".csv",sep=""), append = F)
+			}	
+		}
+		else
+		{
+			# Store covariable and primary_diagnosis
+			covariable_n=as.numeric(stu_data[,"covariable"])
+			primary_diagnosis=stu_data[,"primary_diagnosis"]
+			
+			# At least two values
+			if(sum(!is.na(covariable_n))>2)
+			{
+				# primary_diagnosis must have at least 2 entries 
+				if(length(unique(primary_diagnosis))>1)
+				{																
+					# Regression with categorical predictors
+					lm_test<-summary(lm(covariable_n ~ primary_diagnosis))
+		
+					# "Pr(>|t|)" Pr_gt_t		
+					names_Pr_gt_t<-data.frame(Pr_gt_t=gsub("primary_diagnosis","",  names(lm_test$coefficients[,4]), ignore.case = FALSE, perl = FALSE,  fixed = FALSE, useBytes = FALSE))
+					Pr_gt_t<-data.frame(Pr_gt_t=lm_test$coefficients[,4], ignore.case = FALSE, perl = FALSE,  fixed = FALSE, useBytes = FALSE)
+					df_results_2<-data.frame(Pr_gt_t=names_Pr_gt_t,value=Pr_gt_t$Pr_gt_t)
+					colnames(df_results_2)[2]<-covariable
+
+					# Merge by names
+					df_names_Pr_gt_t<-merge(df_names_Pr_gt_t,df_results_2,by="Pr_gt_t",all.x = TRUE)
+					
+					# Caterogical variable
+					print(paste(covariable," : Numeric")	)				
+					write.table(df_names_Pr_gt_t, paste(output_dir,"df_tissue_or_organ_of_origin_numeric_pvalues",".csv",sep=""), append = F)
+
+				}
+			}
+		}
+	}	
+}
+# Set rownames
+rownames(df_names_Pr_gt_t)<-df_names_Pr_gt_t$Pr_gt_t
+# To do : create three tables: 
+# A table for all covariables vs. all the tests, to store p-values.
+# A table for all covariables vs. all the tests, to store X-squared.
+# A table for all covariables vs. all the tests, to store df.
+
+# To do :
+# Differential categorial from numerical predictors.
+
+# To do :
+# chi-square
+# anova

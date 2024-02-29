@@ -28,6 +28,14 @@ output_dir="/home/felipe/Documentos/LungSquaGDC/output/"                        
 # unique(merged_data_patient_info$sample_submitter_id) # Number of samples
 # sum(unique(merged_data_patient_info[,c("sample_submitter_id","Sample.Type")])[,2]=="Primary Tumor") # Number of Primary Tumor
 # sum(unique(merged_data_patient_info[,c("sample_submitter_id","Sample.Type")])[,2]=="Solid Tissue Normal") # Number of Solid Tissue Normal
+# Population demographic
+# table(unique(merged_data_patient_info[,c("sample_submitter_id","primary_diagnosis")])$primary_diagnosis)
+# table(unique(merged_data_patient_info[,c("sample_submitter_id","ethnicity")])$ethnicity)
+# table(unique(merged_data_patient_info[,c("sample_submitter_id","gender")])$gender)
+# table(unique(merged_data_patient_info[,c("sample_submitter_id","vital_status")])$vital_status)
+# min(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
+# max(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
+# mean(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
 #####################################################################################################################
 # Set path to files
 clinical_file="/home/felipe/Documentos/LungSquaGDC/clinical.txt" 

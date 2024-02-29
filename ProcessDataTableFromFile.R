@@ -304,3 +304,35 @@ write.xlsx(t(df_tissue_or_organ_of_origin_categorical_pvalues), file=paste(outpu
 write.xlsx(t(df_names_Pr_gt_t<0.001), file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "numeric_b", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
 write.xlsx(t(df_tissue_or_organ_of_origin_categorical_pvalues)<0.001, file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "categorical_b", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
 
+
+##########################################################################################################################################################################################################
+# Percentage of complete data
+complete_data_per_variable<-data.frame(Covariable=c(),completeness=c())
+
+# For each column, convert to numeric
+for (col_bio in colnames(merged_data_patient_info))
+{               
+        # Percentage of complete data
+        complete_data_per_variable<-rbind(complete_data_per_variable,data.frame(Covariable=c(col_bio),completeness=c(sum(!is.na(merged_data_patient_info[,col_bio]))/length(merged_data_patient_info[,col_bio])*100)))
+}
+rownames(complete_data_per_variable)<-complete_data_per_variable$Covariable     
+
+# Sort completness table
+complete_data_per_variable<-complete_data_per_variable[order(complete_data_per_variable$completeness),]
+
+# Remove variables 
+complete_data_per_variable<-complete_data_per_variable[complete_data_per_variable$completeness>0,]
+
+# Sort data
+complete_data_per_variable<-complete_data_per_variable[order(complete_data_per_variable$completeness),]
+
+# Re-factor
+complete_data_per_variable$Covariable<-factor(complete_data_per_variable$Covariable,levels=complete_data_per_variable$Covariable)
+
+# Create plot
+plt <- ggplot(complete_data_per_variable) +  geom_col(aes(completeness, Covariable)) + theme_bw() + geom_vline(xintercept=90, linetype='dotted', col = 'black',linewidth=2)
+
+# FindClusters_resolution                                                              
+png(filename=paste(output_dir,"/complete_data_per_variable.png",sep=""), width = 18, height = 24, res=600, units = "cm")
+        plt
+dev.off()

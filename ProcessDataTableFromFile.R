@@ -1,5 +1,5 @@
 ##########################################################################################################################################################################################################
-library(readr)
+wlibrary(readr)
 library("xlsx")
 # A table containing the Transcriptome Profiling of each sample
 # Read the sample tsv file and for each "Transcriptome Profiling" read the file
@@ -23,6 +23,11 @@ output_dir="/home/felipe/Documentos/LungSquaGDC/output/"                        
 # - To plan : 1) association covariable~primary_diagnosis
 # -           2) association covariable~Normal/Tumor
 # - To study : Literature of association co-variables ~ cancer
+#####################################################################################################################
+# unique(merged_data_patient_info$case_id) # Number of cases
+# unique(merged_data_patient_info$sample_submitter_id) # Number of samples
+# sum(unique(merged_data_patient_info[,c("sample_submitter_id","Sample.Type")])[,2]=="Primary Tumor") # Number of Primary Tumor
+# sum(unique(merged_data_patient_info[,c("sample_submitter_id","Sample.Type")])[,2]=="Solid Tissue Normal") # Number of Solid Tissue Normal
 #####################################################################################################################
 # Set path to files
 clinical_file="/home/felipe/Documentos/LungSquaGDC/clinical.txt" 

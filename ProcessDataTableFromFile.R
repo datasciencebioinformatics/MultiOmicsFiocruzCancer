@@ -1,6 +1,7 @@
 ##########################################################################################################################################################################################################
-wlibrary(readr)
+library(readr)
 library("xlsx")
+library(ggplot2)
 # A table containing the Transcriptome Profiling of each sample
 # Read the sample tsv file and for each "Transcriptome Profiling" read the file
  # Reading the contents of TSV file using read_tsv() method
@@ -409,7 +410,7 @@ dev.off()
 
 ##########################################################################################################################################################################################################
 # Df table numeric
-df_table_numeric<-
+merge_all<-merged_data_patient_info
 
 # Take data frames
 df_1<-data.frame(merge_all[,c("days_to_death","primary_diagnosis")],Variable="days_to_death")

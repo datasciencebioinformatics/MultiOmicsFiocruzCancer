@@ -18,14 +18,6 @@ library("dendextend")                                                           
 # Obs. A script was created to transform json to csv at :                                                           #
 #      /home/felipe/portal_gdc_cancer_gov/covnert_simply_json.sh                                                    #  
 #     clinical.tsv file was modified to include data_type field from files.2024-01-30.csv                           #
-#####################################################################################################################
-# Set up iput files                                                                                                 #
-# The experiment description file orginally downloaded from the Cancer Portal plattaform was filterd as follow      #
-# Only entries with number of columns less or equal to five was kept                                                #
-# This was done because for some cases, more than one sample was attibuted to the experiment (case_id)              #
-# mostly common in the case of Biospecimen and Clinical entries.                                                    #
-# The orginal file cotains 986114 entries while the filtered file contains 985223.                                  #
-experiment_description_file="/home/felipe/portal_gdc_cancer_gov/files.2024-01-30.filtered.csv"                      #
 #####################################################################################################################                                                                                                                    #
 # tsv files  are saved as txt and null character '-- replace by -                                                   #
 clinical_file="/home/felipe/portal_gdc_cancer_gov/clinical.txt"                                                     #
@@ -62,12 +54,6 @@ merge_clinical_exposure_fam             <- merge(merge_clinical_exposure, famhis
 merge_clinical_exposure_fam_followup    <- merge(merge_clinical_exposure_fam, followup_data, by = "case_id", suffixes = c(".merge_2","famhisto"), all = TRUE, no.dups=TRUE)                        #
 merge_all                               <- merge(merge_clinical_exposure_fam_followup, patholog_data, by = "case_id", suffixes = c(".merge_3","patholog"), all = TRUE, no.dups=TRUE)               #
 ####################################################################################################################################################################################################
-# Table for the description of the data and experiments                                                                #
-experiments_descripton<-unique(read.table(file = experiment_description_file, sep = '\t', header = FALSE,fill=TRUE))   #
-                                                                                                                       #
-# Rename colnames                                                                                                      #
-colnames(experiments_descripton)<-c("data_type","case_id","project")                                                   #
-########################################################################################################################
 # Table : Rows = cases_id vs. Cols = data_type                                                                         #
 # Clean data_types by removing entries in this collumn that do not belong to data_types.                               #
 data_types<-unique(experiments_descripton$data_type)[unique(experiments_descripton$data_type)!="CGCI-BLGSP"]           #

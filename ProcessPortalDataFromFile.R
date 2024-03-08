@@ -76,6 +76,7 @@ merged_data_patient_info[factor(merged_data_patient_info$Sample.Type)=="Solid Ti
 
 # Save results
 df_results<-data.frame(Estimate=c(), Std.Error=c(), z.value=c(), pvalue=c())
+##########################################################################################################################################
 
 # For each covariables
 for (covariable in covariables)
@@ -99,8 +100,43 @@ for (covariable in covariables)
 		df_results<-rbind(df_results,df_summary)
 	}
 }
+# Put star for caterogories of siginificance
+for (line in rownames(df_results))
+{
+	for (colunmn in colnames(df_results))
+	{
+		value<-df_results[line,colunmn]		
+		# Replace values
+		replaced_value<-value<-format(as.numeric(value), scientific = TRUE,digits =4)
+		df_results[line,colunmn]<-replaced_value
+
+		print(replaced_value)
+		
+		if(as.numeric(value)<0.06)
+		{	
+			# Replace values
+			df_results[line,colunmn]<-paste(replaced_value,"¬",sep="")			
+		}		
+		if(as.numeric(value)<0.05)
+		{
+			# Replace values
+			df_results[line,colunmn]<-paste(replaced_value,"*",sep="")			
+		}				
+		if(as.numeric(value)<0.01)
+		{
+			# Replace values
+			df_results[line,colunmn]<-paste(replaced_value,"**",sep="")			
+		}				
+		if(as.numeric(value)<0.001)
+		{
+			# Replace values
+			df_results[line,colunmn]<-paste(replaced_value,"***",sep="")			
+		}
+	}
+}
+
 ## To write a file in Mac Roman for simple use in Mac Excel 2004/8
-write.csv(df_results, file = paste(output_dir,"Association_covariables_Diagnosis.csv",sep="/"))
+write.xlsx(df_results, file=paste(output_dir,"association_covariables_Diagnosis",".xlsx",sep=""), sheetName = "numeric", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
 
 #####################################################################################################################
 # To Do : Download files

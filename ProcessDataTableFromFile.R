@@ -5,7 +5,7 @@ library(ggplot2)
 # A table containing the Transcriptome Profiling of each sample
 # Read the sample tsv file and for each "Transcriptome Profiling" read the file
  # Reading the contents of TSV file using read_tsv() method
-gdc_sample_sheet_file<-"/home/felipe/Documentos/LungSquaGDC/gdc_sample_sheet.2020-05-04.txt"
+gdc_sample_sheet_file<-"/home/felipe/Documentos/LungPortal/gdc_sample_sheet.2024-03-08.tsv"
 
 # Read data
 gdc_sample_sheet_data<-read.table(file = gdc_sample_sheet_file, sep = '\t', header = TRUE,fill=TRUE)  

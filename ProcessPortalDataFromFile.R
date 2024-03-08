@@ -13,7 +13,7 @@ gdc_sample_sheet_data<-read.table(file = gdc_sample_sheet_file, sep = '\t', head
 # Add collumn sample_id
 gdc_sample_sheet_data$sample_submitter_id<-gdc_sample_sheet_data$Sample.ID
 #####################################################################################################################
-output_dir="/home/felipe/Documentos/LungSquaGDC/output/"                                                           #
+output_dir="/home/felipe/Documentos/LungPortal/output/"                                                           #
 #####################################################################################################################
 #To do:
 # - Merge data info with patient info
@@ -304,14 +304,88 @@ rownames(df_names_Pr_gt_t)<-df_names_Pr_gt_t$Pr_gt_t
 
 # To do :
 # Differential categorial from numerical predictors.
+# To do :
+# Differential categorial from numerical predictors.
+# Set to inf
+df_names_Pr_gt_t[is.na(df_names_Pr_gt_t)] <- Inf
+
+# Remove tw
+df_names_Pr_gt_t<-df_names_Pr_gt_t[,-c(1,2)]
+
+# Put star for caterogories of siginificance
+for (line in rownames(df_names_Pr_gt_t))
+{
+	for (colunmn in colnames(df_names_Pr_gt_t))
+	{
+		value<-df_names_Pr_gt_t[line,colunmn]
+		df_names_Pr_gt_t[line,colunmn]<-round(as.numeric(value),4)
+		if(value<0.06)
+		{
+			# Replace values
+			df_names_Pr_gt_t[line,colunmn]<-paste(round(as.numeric(value),4),"¬",sep="")			
+		}		
+		if(value<0.05)
+		{
+			# Replace values
+			df_names_Pr_gt_t[line,colunmn]<-paste(round(as.numeric(value),4),"*",sep="")			
+		}				
+		if(value<0.01)
+		{
+			# Replace values
+			df_names_Pr_gt_t[line,colunmn]<-paste(round(as.numeric(value),4),"**",sep="")			
+		}				
+		if(value<0.001)
+		{
+			# Replace values
+			df_names_Pr_gt_t[line,colunmn]<-paste(round(as.numeric(value),4),"***",sep="")			
+		}
+	}
+}
+
+# To do :
+# Differential categorial from numerical predictors.
+# Set to inf
+df_tissue_or_organ_of_origin_categorical_pvalues[is.na(df_tissue_or_organ_of_origin_categorical_pvalues)] <- Inf
+
+
+# Put star for caterogories of siginificance
+for (line in rownames(df_tissue_or_organ_of_origin_categorical_pvalues))
+{
+	for (colunmn in colnames(df_tissue_or_organ_of_origin_categorical_pvalues))
+	{
+		value<-df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]
+		df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]<-round(as.numeric(value),4)
+		if(value<0.06)
+		{
+			# Replace values
+			df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]<-paste(round(as.numeric(value),4),"¬",sep="")			
+		}		
+		if(value<0.05)
+		{
+			# Replace values
+			df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]<-paste(round(as.numeric(value),4),"*",sep="")			
+		}				
+		if(value<0.01)
+		{
+			# Replace values
+			df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]<-paste(round(as.numeric(value),4),"**",sep="")			
+		}				
+		if(value<0.001)
+		{
+			# Replace values
+			df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]<-paste(round(as.numeric(value),4),"***",sep="")			
+		}
+	}
+}
 
 # To do :
 # chi-square
 # anova
+t_df_names_Pr_gt_t<-t(df_names_Pr_gt_t)
+t_df_names_Pr_gt_t
+
 write.xlsx(t(df_names_Pr_gt_t), file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "numeric", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
 write.xlsx(t(df_tissue_or_organ_of_origin_categorical_pvalues), file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "categorical", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
-write.xlsx(t(df_names_Pr_gt_t<0.001), file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "numeric_b", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
-write.xlsx(t(df_tissue_or_organ_of_origin_categorical_pvalues)<0.001, file=paste(output_dir,"categorical_numeric_pvalues",".xlsx",sep=""), sheetName = "categorical_b", col.names = TRUE, row.names = TRUE, append = TRUE, showNA = TRUE, password = NULL)						
 
 
 ##########################################################################################################################################################################################################

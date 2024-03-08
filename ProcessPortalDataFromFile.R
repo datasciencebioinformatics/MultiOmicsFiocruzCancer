@@ -103,6 +103,7 @@ for (covariable in covariables)
 write.csv(df_results, file = paste(output_dir,"Association_covariables_Diagnosis.csv",sep="/"))
 
 #####################################################################################################################
+# To Do : Download files
 # Set count
 count=0
 
@@ -116,7 +117,7 @@ transcriptome_Profiling_samples<-gdc_sample_sheet_data[which(gdc_sample_sheet_da
 for (file_id in gdc_sample_sheet_data$File.ID)
 {
 	# Sample file id
-	file_sample_id<-list.files(paste("/home/felipe/Documentos/LungSquaGDC/samples/files/",file_id,"/",sep=""),pattern =".FPKM.txt.gz")
+	file_sample_id<-list.files(paste("/home/felipe/Documentos/LungPortal/samples/files/",file_id,"/",sep=""),pattern =".FPKM.txt.gz")
 
 	# If at least one character
 	if (!identical(file_sample_id, character(0)))
@@ -126,7 +127,7 @@ for (file_id in gdc_sample_sheet_data$File.ID)
 		count=count+1
 		
 		# Set path 
-		file_path<-paste("/home/felipe/Documentos/LungSquaGDC/samples/files/",file_id,"/",file_sample_id,sep="")
+		file_path<-paste("/home/felipe/Documentos/LungPortal/samples/files/",file_id,"/",file_sample_id,sep="")
 
 		# Adjust file table
 		file_sample_table<-read.table(gzfile(file_path))

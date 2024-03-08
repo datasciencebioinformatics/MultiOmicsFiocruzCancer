@@ -207,14 +207,10 @@ colnames(df_tissue_or_organ_of_origin_numeric_pvalues)<-unique(merged_data_patie
 # Remove co-variables
 covariables<-covariables[-which(covariables %in% c("Diagnosis",""))]
 
-# Remove co-variables
-covariables<-covariables[covariables!="covariable"]
-
 # For each co-variable                                                                                                                   #
 for (covariable in covariables)                                                                                                          #
 {
 	# Recreate merge all table
-
 	# Merge tables
 	merged_data_patient_info<-merge(merged_sample_clinical_data,gdc_sample_sheet_data,by="sample_submitter_id")
 

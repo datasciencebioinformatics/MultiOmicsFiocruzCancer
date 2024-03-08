@@ -25,19 +25,6 @@ output_dir="/home/felipe/Documentos/LungSquaGDC/output/"                        
 # -           2) association covariable~Normal/Tumor
 # - To study : Literature of association co-variables ~ cancer
 #####################################################################################################################
-# unique(merged_data_patient_info$case_id) # Number of cases
-# unique(merged_data_patient_info$sample_submitter_id) # Number of samples
-# sum(unique(merged_data_patient_info[,c("sample_submitter_id","Sample.Type")])[,2]=="Primary Tumor") # Number of Primary Tumor
-# sum(unique(merged_data_patient_info[,c("sample_submitter_id","Sample.Type")])[,2]=="Solid Tissue Normal") # Number of Solid Tissue Normal
-# Population demographic
-# table(unique(merged_data_patient_info[,c("sample_submitter_id","primary_diagnosis")])$primary_diagnosis)
-# table(unique(merged_data_patient_info[,c("sample_submitter_id","ethnicity")])$ethnicity)
-# table(unique(merged_data_patient_info[,c("sample_submitter_id","gender")])$gender)
-# table(unique(merged_data_patient_info[,c("sample_submitter_id","vital_status")])$vital_status)
-# min(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
-# max(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
-# mean(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
-#####################################################################################################################
 # Set path to files
 clinical_file="/home/felipe/Documentos/LungPortal/clinical.txt" 
 sample_file="/home/felipe/Documentos/LungPortal/sample.txt"    
@@ -56,7 +43,19 @@ merged_sample_clinical_data<-merge(merged_sample_clinical_data,exposure_data,by=
 
 # Merge tables
 merged_data_patient_info<-merge(merged_sample_clinical_data,gdc_sample_sheet_data,by="sample_submitter_id")
-
+#####################################################################################################################
+# unique(merged_data_patient_info$case_id) # Number of cases
+# unique(merged_data_patient_info$sample_submitter_id) # Number of samples
+# sum(unique(merged_data_patient_info[,c("sample_submitter_id","Sample.Type")])[,2]=="Primary Tumor") # Number of Primary Tumor
+# sum(unique(merged_data_patient_info[,c("sample_submitter_id","Sample.Type")])[,2]=="Solid Tissue Normal") # Number of Solid Tissue Normal
+# Population demographic
+# table(unique(merged_data_patient_info[,c("sample_submitter_id","primary_diagnosis")])$primary_diagnosis)
+# table(unique(merged_data_patient_info[,c("sample_submitter_id","ethnicity")])$ethnicity)
+# table(unique(merged_data_patient_info[,c("sample_submitter_id","gender")])$gender)
+# table(unique(merged_data_patient_info[,c("sample_submitter_id","vital_status")])$vital_status)
+# min(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
+# max(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
+# mean(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
 ##########################################################################################################################################
 # Take the colnames
 covariables<-colnames(merged_data_patient_info)
@@ -66,8 +65,7 @@ covariables<-covariables[-which(grepl("id", covariables))]
 covariables<-covariables[-which(grepl("ID", covariables))]
 covariables<-covariables[-which(grepl("code", covariables))]
 covariables<-covariables[-which(grepl("state", covariables))]
-covariables<-covariables[-which(grepl("date", covariables))]
-covariables<-covariables[-which(grepl("Name", covariables))]
+
 
 # Remove co-variables
 covariables<-covariables[-which(covariables %in% c("File.ID","File.Name","Data.Category","Data.Type", "Project.ID" ,"Case.ID", "Sample.ID", "sample_submitter_id", "case_id","submitter_id", "project_id.y", "project_id.x", "case_submitter_id.x", "sample_id", "submitter_id", "project_id.y","sample_type_id","submitter_id.1","case_id.1","case_submitter_id.y","created_datetime.1","state.1","submitter_id.2","created_datetime.2","updated_datetime.2","Sample.Type","biospecimen_anatomic_site","biospecimen_laterality","catalog_reference","composition","current_weight","days_to_sample_procurement","diagnosis_pathologically_confirmed","distance_normal_to_tumor","treatment_id","submitter_id","created_datetime","submitter_id","diagnosis_id","pathology_report_uuid","treatment_id","submitter_id","primary_diagnosis"))]

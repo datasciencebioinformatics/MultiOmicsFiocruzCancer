@@ -15,7 +15,9 @@ gdc-client download -m /home/felipe/Documentos/LungPortal/gdc_manifest.2024-03-0
 #####  File path: 
 /home/felipe/LungPortal/Documentos/metadata.cohort.2024-03-08.json
 
-#####  Two excel files were generated
+#####  Two excel files were generated from the script:
+https://github.com/datasciencebioinformatics/MultiOmicsFiocruzCancer/blob/main/ProcessPortalDataFromFile.R
+
 #####  One with the association to the primary_diagnosis
 ##### and the second with the association to the Diagnosis
 /home/felipe/LungPortal/Documentos/output/categorical_numeric_pvalues.xlsx

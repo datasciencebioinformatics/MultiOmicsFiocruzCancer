@@ -197,6 +197,9 @@ df_tissue_or_organ_of_origin_categorical_pvalues <- data.frame(matrix(Inf, ncol 
                                                                                                                                          #
 # Create a matrix for numeric results                                                                                                    #                                                                                   #
 df_tissue_or_organ_of_origin_numeric_pvalues     <- data.frame(matrix(Inf, ncol = length(unique(merged_data_patient_info$primary_diagnosis)), nrow = 0))#
+
+# Merge tables
+merged_data_patient_info<-merge(merged_sample_clinical_data,gdc_sample_sheet_data,by="sample_submitter_id")
                                                                                                                                          #
 ## Set colnames                                                                                                                          #
 colnames(df_tissue_or_organ_of_origin_categorical_pvalues)<-c("chisq","goodmanKruskalGamma")                                             #                                                                                                #
@@ -204,8 +207,17 @@ colnames(df_tissue_or_organ_of_origin_categorical_pvalues)<-c("chisq","goodmanKr
 ## Set colnames                                                                                                                          #
 colnames(df_tissue_or_organ_of_origin_numeric_pvalues)<-unique(merged_data_patient_info$primary_diagnosis)                               #
 
+# Take the colnames
+covariables<-colnames(merged_data_patient_info)
+
+# remove id, code, date, ID, state, code
+covariables<-covariables[-which(grepl("id", covariables))]
+covariables<-covariables[-which(grepl("ID", covariables))]
+covariables<-covariables[-which(grepl("code", covariables))]
+covariables<-covariables[-which(grepl("state", covariables))]
+
 # Remove co-variables
-covariables<-covariables[-which(covariables %in% c("Diagnosis",""))]
+covariables<-covariables[-which(covariables %in% c("File.ID","File.Name","Data.Category","Data.Type", "Project.ID" ,"Case.ID", "Sample.ID", "sample_submitter_id", "case_id","submitter_id", "project_id.y", "project_id.x", "case_submitter_id.x", "sample_id", "submitter_id", "project_id.y","sample_type_id","submitter_id.1","case_id.1","case_submitter_id.y","created_datetime.1","state.1","submitter_id.2","created_datetime.2","updated_datetime.2","Sample.Type","biospecimen_anatomic_site","biospecimen_laterality","catalog_reference","composition","current_weight","days_to_sample_procurement","diagnosis_pathologically_confirmed","distance_normal_to_tumor","treatment_id","submitter_id","created_datetime","submitter_id","diagnosis_id","pathology_report_uuid","treatment_id","submitter_id","primary_diagnosis"))]
 
 # For each co-variable                                                                                                                   #
 for (covariable in covariables)                                                                                                          #
@@ -317,27 +329,32 @@ for (line in rownames(df_names_Pr_gt_t))
 {
 	for (colunmn in colnames(df_names_Pr_gt_t))
 	{
-		value<-df_names_Pr_gt_t[line,colunmn]
-		df_names_Pr_gt_t[line,colunmn]<-round(as.numeric(value),4)
-		if(value<0.06)
-		{
+		value<-df_names_Pr_gt_t[line,colunmn]		
+		# Replace values
+		replaced_value<-value<-format(as.numeric(value), scientific = TRUE,digits =4)
+		df_names_Pr_gt_t[line,colunmn]<-replaced_value
+
+		print(replaced_value)
+		
+		if(as.numeric(value)<0.06)
+		{	
 			# Replace values
-			df_names_Pr_gt_t[line,colunmn]<-paste(round(as.numeric(value),4),"¬",sep="")			
+			df_names_Pr_gt_t[line,colunmn]<-paste(replaced_value,"¬",sep="")			
 		}		
-		if(value<0.05)
+		if(as.numeric(value)<0.05)
 		{
 			# Replace values
-			df_names_Pr_gt_t[line,colunmn]<-paste(round(as.numeric(value),4),"*",sep="")			
+			df_names_Pr_gt_t[line,colunmn]<-paste(replaced_value,"*",sep="")			
 		}				
-		if(value<0.01)
+		if(as.numeric(value)<0.01)
 		{
 			# Replace values
-			df_names_Pr_gt_t[line,colunmn]<-paste(round(as.numeric(value),4),"**",sep="")			
+			df_names_Pr_gt_t[line,colunmn]<-paste(replaced_value,"**",sep="")			
 		}				
-		if(value<0.001)
+		if(as.numeric(value)<0.001)
 		{
 			# Replace values
-			df_names_Pr_gt_t[line,colunmn]<-paste(round(as.numeric(value),4),"***",sep="")			
+			df_names_Pr_gt_t[line,colunmn]<-paste(replaced_value,"***",sep="")			
 		}
 	}
 }
@@ -355,25 +372,32 @@ for (line in rownames(df_tissue_or_organ_of_origin_categorical_pvalues))
 	{
 		value<-df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]
 		df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]<-round(as.numeric(value),4)
-		if(value<0.06)
+
+		# Replace values
+		replaced_value<-value<-format(as.numeric(value), scientific = TRUE,digits =4)
+
+		print(replaced_value)
+
+		
+		if(as.numeric(value)<0.06)
 		{
 			# Replace values
-			df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]<-paste(round(as.numeric(value),4),"¬",sep="")			
+			df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]<-paste(replaced_value,"¬",sep="")			
 		}		
-		if(value<0.05)
+		if(as.numeric(value)<0.05)
 		{
 			# Replace values
-			df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]<-paste(round(as.numeric(value),4),"*",sep="")			
+			df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]<-paste(replaced_value,"*",sep="")			
 		}				
-		if(value<0.01)
+		if(as.numeric(value)<0.01)
 		{
 			# Replace values
-			df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]<-paste(round(as.numeric(value),4),"**",sep="")			
+			df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]<-paste(replaced_value,"**",sep="")			
 		}				
-		if(value<0.001)
+		if(as.numeric(value)<0.001)
 		{
 			# Replace values
-			df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]<-paste(round(as.numeric(value),4),"***",sep="")			
+			df_tissue_or_organ_of_origin_categorical_pvalues[line,colunmn]<-paste(replaced_value,"***",sep="")			
 		}
 	}
 }

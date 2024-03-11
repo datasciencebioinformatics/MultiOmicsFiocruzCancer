@@ -45,22 +45,22 @@ merged_sample_clinical_data<-merge(merged_sample_clinical_data,exposure_data,by=
 merged_data_patient_info<-merge(merged_sample_clinical_data,gdc_sample_sheet_data,by="sample_submitter_id")
 #####################################################################################################################
 # length(unique(merged_data_patient_info$case_id)) # Number of cases
-# length(unique(merged_data_patient_info$sample_submitter_id)) # Number of samples
-# sum(unique(merged_data_patient_info[,c("sample_submitter_id","Sample.Type")])[,2]=="Primary Tumor") # Number of Primary Tumor
-# sum(unique(merged_data_patient_info[,c("sample_submitter_id","Sample.Type")])[,2]=="Solid Tissue Normal") # Number of Solid Tissue Normal
+# length(unique(merged_data_patient_info$sample_id)) # Number of samples
+# sum(unique(merged_data_patient_info[,c("sample_id","Sample.Type")])[,2]=="Primary Tumor") # Number of Primary Tumor
+# sum(unique(merged_data_patient_info[,c("sample_id","Sample.Type")])[,2]=="Solid Tissue Normal") # Number of Solid Tissue Normal
 
 # Filter tumor and normal samples
-primary_tumor<-merged_data_patient_info[merged_data_patient_info[,c("sample_submitter_id","Sample.Type")][,2]=="Primary Tumor",]
-solid_tissue<-merged_data_patient_info[merged_data_patient_info[,c("sample_submitter_id","Sample.Type")][,2]=="Solid Tissue Normal",]
+primary_tumor<-merged_data_patient_info[merged_data_patient_info[,c("sample_id","Sample.Type")][,2]=="Primary Tumor",]
+solid_tissue<-merged_data_patient_info[merged_data_patient_info[,c("sample_id","Sample.Type")][,2]=="Solid Tissue Normal",]
 merged_data_patient_info<-rbind(primary_tumor,solid_tissue)
 
 # Population demographic
-# table(unique(merged_data_patient_info[,c("sample_submitter_id","primary_diagnosis")])$primary_diagnosis)
+# table(unique(merged_data_patient_info[,c("sample_id","primary_diagnosis")])$primary_diagnosis)
 merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$primary_diagnosis=="Squamous cell carcinoma, NOS",]
 
-# table(unique(merged_data_patient_info[,c("sample_submitter_id","ethnicity")])$ethnicity)
-# table(unique(merged_data_patient_info[,c("sample_submitter_id","gender")])$gender)
-# table(unique(merged_data_patient_info[,c("sample_submitter_id","vital_status")])$vital_status)
+# table(unique(merged_data_patient_info[,c("sample_id","ethnicity")])$ethnicity)
+# table(unique(merged_data_patient_info[,c("sample_id","gender")])$gender)
+# table(unique(merged_data_patient_info[,c("sample_id","vital_status")])$vital_status)
 # min(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
 # max(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
 # mean(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
@@ -70,6 +70,11 @@ merged_data_patient_info<-merge(merged_sample_clinical_data,gdc_sample_sheet_dat
 
 # Take only Squamous cell carcinoma, NOS
 merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$primary_diagnosis=="Squamous cell carcinoma, NOS",]
+
+# Filter tumor and normal samples
+primary_tumor<-merged_data_patient_info[merged_data_patient_info[,c("sample_id","Sample.Type")][,2]=="Primary Tumor",]
+solid_tissue<-merged_data_patient_info[merged_data_patient_info[,c("sample_id","Sample.Type")][,2]=="Solid Tissue Normal",]
+merged_data_patient_info<-rbind(primary_tumor,solid_tissue)
 
 # Take all case ids
 all_case_ids<-unique(merged_data_patient_info$case_id)
@@ -95,8 +100,14 @@ for (case in all_case_ids)
 	df_paired_samples<-rbind(data.frame(case=case, paired=paired_sample),df_paired_samples)		
 }
 # Number of paired cases
-paired_cases<-sum(df_paired_samples$paired)
+paired_cases<-df_paired_samples[df_paired_samples$paired,"case"]
 
+# Paired cases
+merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$case_id %in% paired_cases,]
+
+# length(unique(merged_data_patient_info$case_id)) # Number of cases
+# length(unique(merged_data_patient_info$sample_submitter_id))
+length(unique(merged_data_patient_info$sample_submitter_id))
 
 
 ##########################################################################################################################################

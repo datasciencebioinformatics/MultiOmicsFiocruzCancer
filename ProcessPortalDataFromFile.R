@@ -44,18 +44,61 @@ merged_sample_clinical_data<-merge(merged_sample_clinical_data,exposure_data,by=
 # Merge tables
 merged_data_patient_info<-merge(merged_sample_clinical_data,gdc_sample_sheet_data,by="sample_submitter_id")
 #####################################################################################################################
-# unique(merged_data_patient_info$case_id) # Number of cases
-# unique(merged_data_patient_info$sample_submitter_id) # Number of samples
+# length(unique(merged_data_patient_info$case_id)) # Number of cases
+# length(unique(merged_data_patient_info$sample_submitter_id)) # Number of samples
 # sum(unique(merged_data_patient_info[,c("sample_submitter_id","Sample.Type")])[,2]=="Primary Tumor") # Number of Primary Tumor
 # sum(unique(merged_data_patient_info[,c("sample_submitter_id","Sample.Type")])[,2]=="Solid Tissue Normal") # Number of Solid Tissue Normal
+
+# Filter tumor and normal samples
+primary_tumor<-merged_data_patient_info[merged_data_patient_info[,c("sample_submitter_id","Sample.Type")][,2]=="Primary Tumor",]
+solid_tissue<-merged_data_patient_info[merged_data_patient_info[,c("sample_submitter_id","Sample.Type")][,2]=="Solid Tissue Normal",]
+merged_data_patient_info<-rbind(primary_tumor,solid_tissue)
+
 # Population demographic
 # table(unique(merged_data_patient_info[,c("sample_submitter_id","primary_diagnosis")])$primary_diagnosis)
+merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$primary_diagnosis=="Squamous cell carcinoma, NOS",]
+
 # table(unique(merged_data_patient_info[,c("sample_submitter_id","ethnicity")])$ethnicity)
 # table(unique(merged_data_patient_info[,c("sample_submitter_id","gender")])$gender)
 # table(unique(merged_data_patient_info[,c("sample_submitter_id","vital_status")])$vital_status)
 # min(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
 # max(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
 # mean(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
+##########################################################################################################################################
+# Merge tables
+merged_data_patient_info<-merge(merged_sample_clinical_data,gdc_sample_sheet_data,by="sample_submitter_id")
+
+# Take only Squamous cell carcinoma, NOS
+merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$primary_diagnosis=="Squamous cell carcinoma, NOS",]
+
+# Take all case ids
+all_case_ids<-unique(merged_data_patient_info$case_id)
+
+# A data frame to store if samples are paired
+df_paired_samples<-data.frame(case=c(), paired=c())
+
+# For each case ID, check if the sample is present in both, solid_tissue and primary_tumor
+# if present in both, the PAIRED=TRUE
+for (case in all_case_ids)
+{
+	print(case)
+	# If case present in case
+	case_in_tumor<-(case %in% primary_tumor$case_id)
+
+	# If case present in control
+	case_in_normal<-(case %in% solid_tissue$case_id)
+	
+	# if paired
+	paired_sample<-(case_in_tumor && case_in_normal)
+
+	# Add to the database
+	df_paired_samples<-rbind(data.frame(case=case, paired=paired_sample),df_paired_samples)		
+}
+# Number of paired cases
+paired_cases<-sum(df_paired_samples$paired)
+
+
+
 ##########################################################################################################################################
 # Take the colnames
 covariables<-colnames(merged_data_patient_info)

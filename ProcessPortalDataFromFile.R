@@ -125,16 +125,11 @@ length(unique(sample_tumor_id))
 length(unique(sample_normal_id))
 
 
-
-
-
-
-
 # Number of paired cases
-paired_samples<-df_paired_samples[df_paired_samples$paired,"samples"]
+paired_cases<-unique(df_paired_samples$case)
 
 # Paired cases
-merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$case_id %in% paired_samples,]
+merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$case_id %in% paired_cases,]
 
 # length(unique(merged_data_patient_info$case_id)) # Number of cases
 # length(unique(merged_data_patient_info$sample_id))

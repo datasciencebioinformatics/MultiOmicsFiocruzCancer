@@ -140,6 +140,11 @@ merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$case
 # length(unique(merged_data_patient_info$sample_id))
 length(unique(merged_data_patient_info$sample_id))
 
+merged_data_patient_info
+
+
+
+
 
 ##########################################################################################################################################
 # Take the colnames

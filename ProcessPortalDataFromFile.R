@@ -61,6 +61,11 @@ merged_data_patient_info<-rbind(primary_tumor,solid_tissue)
 # table(unique(merged_data_patient_info[,c("sample_id","primary_diagnosis")])$primary_diagnosis)
 merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$primary_diagnosis=="Squamous cell carcinoma, NOS",]
 
+# Filter tumor and normal samples
+primary_tumor<-merged_data_patient_info[merged_data_patient_info[,c("sample_id","Sample.Type")][,2]=="Primary Tumor",]
+solid_tissue<-merged_data_patient_info[merged_data_patient_info[,c("sample_id","Sample.Type")][,2]=="Solid Tissue Normal",]
+merged_data_patient_info<-rbind(primary_tumor,solid_tissue)
+
 # table(unique(merged_data_patient_info[,c("sample_id","ethnicity")])$ethnicity)
 # table(unique(merged_data_patient_info[,c("sample_id","gender")])$gender)
 # table(unique(merged_data_patient_info[,c("sample_id","vital_status")])$vital_status)
@@ -69,32 +74,67 @@ merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$prim
 # mean(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
 ##########################################################################################################################################
 # Take all case ids
-all_samples_ids<-unique(merged_data_patient_info$sample_id)
+all_cases_ids<-unique(merged_data_patient_info$case_id)
+
+# Take all overlapṕing cases
+overlapping_cases<-unique(primary_tumor$case_id)[which(unique(primary_tumor$case_id) %in% unique(solid_tissue$case_id))]
 
 # A data frame to store if samples are paired
-df_paired_samples<-data.frame(samples=c(), paired=c())
+df_paired_samples<-data.frame(case=c(), normal=c(),tumor=c())
 
 # For each case ID, check if the sample is present in both, solid_tissue and primary_tumor
 # if present in both, the PAIRED=TRUE
-for (samples in all_case_ids)
+for (case in overlapping_cases)
 {
-	# If case present in case
-	sample_in_tumor<-(samples %in% unique(primary_tumor$sample_id))
+	# Take the samples for that cases in tumor
+	samples_for_case_in_tumor<-unique(primary_tumor[primary_tumor$case_id==case,"sample_id"])
 
-	# If case present in control
-	sample_in_normal<-(samples %in% unique(solid_tissue$sample_id))
-	
-	# if paired
-	paired_sample<-(sample_in_normal && sample_in_tumor)
+	# Take the samples for that cases in normal
+	samples_for_case_in_normal<-unique(solid_tissue[solid_tissue$case_id==case,"sample_id"])	
 
-	# Add to the database
-	df_paired_samples<-rbind(data.frame(samples=samples, paired=paired_sample),df_paired_samples)		
+	# For each case in samples_for_case_in_tumor
+	for (tumor_case in samples_for_case_in_tumor)
+	{
+		# For each case in samples_for_case_in_tumor
+		for ( normal_case in samples_for_case_in_normal)		
+		{			
+			# rbind the paired sample
+			df_paired_samples<-rbind(data.frame(case=case,normal=normal_case,tumor=tumor_case),df_paired_samples)
+		}
+		
+	}
 }
+# Save unique pairs samples
+df_unique_pairs_of_samples<-unique(df_paired_samples)
+
+# Take paired samples
+merged_data_patient_info_paired<-merged_data_patient_info[merged_data_patient_info$case_id %in% unique(df_unique_pairs_of_samples$case),]
+
+# Set of unique cases
+length(unique(df_paired_samples$case))
+length(unique(merged_data_patient_info_paired$case_id))
+
+# Number of paired samples
+paired_samples_1<<-unique(c(df_paired_samples$normal,df_paired_samples$tumor))
+paired_samples_2<<-unique(merged_data_patient_info_paired$sample_id)
+
+sample_tumor_id<-merged_data_patient_info_paired[merged_data_patient_info_paired[merged_data_patient_info_paired$sample_id %in% paired_samples_1,"Sample.Type"]=="Primary Tumor","sample_id"]
+sample_normal_id<-merged_data_patient_info_paired[merged_data_patient_info_paired[merged_data_patient_info_paired$sample_id %in% paired_samples_1,"Sample.Type"]=="Solid Tissue Normal","sample_id"]
+
+length(unique(sample_tumor_id))
+length(unique(sample_normal_id))
+
+
+
+
+
+
+
 # Number of paired cases
 paired_samples<-df_paired_samples[df_paired_samples$paired,"samples"]
 
 # Paired cases
-merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$case_id %in% paired_cases,]
+merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$case_id %in% paired_samples,]
 
 # length(unique(merged_data_patient_info$case_id)) # Number of cases
 # length(unique(merged_data_patient_info$sample_id))

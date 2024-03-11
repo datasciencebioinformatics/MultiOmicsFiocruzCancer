@@ -140,7 +140,8 @@ merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$case
 # length(unique(merged_data_patient_info$sample_id))
 length(unique(merged_data_patient_info$sample_id))
 
-merged_data_patient_info
+# Number of samples per stage
+# table(unique(merged_data_patient_info[,c("sample_id","ajcc_pathologic_stage")])$ajcc_pathologic_stage)
 
 
 

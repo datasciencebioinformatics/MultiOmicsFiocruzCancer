@@ -143,6 +143,8 @@ unique(merged_data_patient_info$case_submitter_id)
 # A table to load the gene expression of the samples
 merged_data_patient_info
 
+merged_data_patient_info
+
 
 
 

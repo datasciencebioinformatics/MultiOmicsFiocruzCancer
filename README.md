@@ -49,18 +49,14 @@ $sample_id.rna_seq.augmented_star_gene_counts.tsv
 $sample_id.ff36264d-8485-46e6-8259-0b55f651ed8f.rna_seq.transcriptome.gdc_realn.bam 
 
 To do is :
-- Check if more data can be obtained other than using augmented_star_gene_counts.tsv (bam, tsv, etc)
 - check expression file name format (case/sample/submitter)
-- Maybe bam files, maybe gz
 - take a look on Carels dataset
-- check for similarity of dataset 
-
      
 
 
 
 
-
+/home/felipe/Documentos/LungPortal/samples/fd2c6ba0-66fc-4406-aaf3-ef151682de0b/f13e95d9-dca8-4a22-ab0e-1d01e69a995f.rna_seq.augmented_star_gene_counts.tsv
 
 
 

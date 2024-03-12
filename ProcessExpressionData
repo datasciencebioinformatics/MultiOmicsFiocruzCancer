@@ -30,6 +30,9 @@ do
     cat $file_path | grep -v GENCODE | grep -v gene_id | grep -v N_unmapped | grep -v N_multimapping | grep -v N_noFeature | grep -v N_ambiguous | awk '{print $8}' > $folder_name$file_name".fpkm_unstranded.txt"
 
 done
+# Finish here, to do
+# Add collumn to the table
+# I stopped here 
 
 # Paste all samples
 # paste /home/felipe/Documentos/LungPortal/samples/*/*."gene_id.txt"

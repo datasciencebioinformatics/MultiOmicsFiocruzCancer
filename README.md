@@ -48,6 +48,8 @@ Files will be found here : ls /home/felipe/Documentos/LungPortal/samples/$file_i
 $sample_id.rna_seq.augmented_star_gene_counts.tsv
 $sample_id.ff36264d-8485-46e6-8259-0b55f651ed8f.rna_seq.transcriptome.gdc_realn.bam 
 
+
+
 To do is :
 - take a look on Carels dataset
   

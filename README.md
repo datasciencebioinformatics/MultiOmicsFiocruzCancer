@@ -33,10 +33,16 @@ We analised population demographics of lung cancer patients and found greater in
 
 #####  Noteworhy:
 Be meticulous in the obtantion of data
-Criteria for the number of samples is valid (Carels dataase is smaller).
+Criteria for the number of samples is valid (Carels database is smaller).
 Be meticulous, simple and robust.
 
 #####  Ethic and morals:
 Morality : responsibility (money, fiocruz, time, etc), reprodutibility, interdiciplinarity (medical/scientific/bioinformatic authorities)
 Ethic    : meticulous with the data, result well documented, re-usability of scripts.
+
+#####  Obtantion of expression data
+The downloaded manifest file (gdc_manifest.2024-03-08.txt) was filtered to keep only .augmented_star_gene_counts.tsv files (total of 285 samples).
+
+
+
 

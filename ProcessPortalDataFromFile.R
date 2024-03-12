@@ -138,7 +138,10 @@ length(unique(merged_data_patient_info$sample_id))
 # Number of samples per stage
 # table(unique(merged_data_patient_info[,c("sample_id","ajcc_pathologic_stage")])$ajcc_pathologic_stage)
 ##########################################################################################################################################
+unique(merged_data_patient_info$case_submitter_id)
+
 # A table to load the gene expression of the samples
+merged_data_patient_info
 
 
 

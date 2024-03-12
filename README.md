@@ -44,6 +44,10 @@ Ethic    : meticulous with the data, result well documented, re-usability of scr
 The downloaded manifest file (gdc_manifest.2024-03-08.txt) was filtered to keep only .augmented_star_gene_counts.tsv files (total of 285 samples).
 Files will be found here : ls /home/felipe/Documentos/LungPortal/samples/*/*.rna_seq.augmented_star_gene_counts.tsv
 
+1144 samples
+$sample_id.rna_seq.augmented_star_gene_counts.tsv
+$sample_id.ff36264d-8485-46e6-8259-0b55f651ed8f.rna_seq.transcriptome.gdc_realn.bam 
+
 To do is :
 - Check if more data can be obtained other than using augmented_star_gene_counts.tsv (bam, tsv, etc)
 - check expression file name format (case/sample/submitter)
@@ -52,7 +56,6 @@ To do is :
 - check for similarity of dataset 
 
      
-
 
 
 

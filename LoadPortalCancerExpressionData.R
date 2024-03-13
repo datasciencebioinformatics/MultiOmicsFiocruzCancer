@@ -44,15 +44,10 @@ merged_sample_clinical_data<-merge(merged_sample_clinical_data,exposure_data,by=
 # Merge tables
 merged_data_patient_info<-merge(merged_sample_clinical_data,gdc_sample_sheet_data,by="sample_submitter_id")
 #####################################################################################################################
-# length(unique(merged_data_patient_info$case_id)) # Number of cases
-# length(unique(merged_data_patient_info$sample_id)) # Number of samples
-# sum(unique(merged_data_patient_info[,c("sample_id","Sample.Type")])[,2]=="Primary Tumor") # Number of Primary Tumor
-# sum(unique(merged_data_patient_info[,c("sample_id","Sample.Type")])[,2]=="Solid Tissue Normal") # Number of Solid Tissue Normal
+# Set file name variable 
+merged_data_patient_info$<-merged_data_patient_info$File.Name
 
-# Filter tumor and normal samples
-primary_tumor<-merged_data_patient_info[merged_data_patient_info[,c("sample_id","Sample.Type")][,2]=="Primary Tumor",]
-solid_tissue<-merged_data_patient_info[merged_data_patient_info[,c("sample_id","Sample.Type")][,2]=="Solid Tissue Normal",]
-merged_data_patient_info<-rbind(primary_tumor,solid_tissue)
+
 #####################################################################################################################
 # A script to load cancer data base in R
 unstranded_file       <- "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tsv"
@@ -69,4 +64,4 @@ rownames(unstranded_data)<-rownames_data[,1]
 colnames(unstranded_data)<-colnames_data[,1]
 
 # To check counts and sample_ids
-
+sum(merged_data_patient_info$sample_id %in% colnames(unstranded_data))

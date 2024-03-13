@@ -1,7 +1,5 @@
 # A script to obtain all expression data into a data table
 input_folder= /home/felipe/Documentos/LungPortal/samples/
-
-
 gene_id	            #1
 gene_name	        #2  
 gene_typec	        #3
@@ -12,7 +10,6 @@ tpm_unstranded	    #7
 fpkm_unstranded	    #6
 
 # List of files fo gene id
-
 # For each file
 ls /home/felipe/Documentos/LungPortal/samples/*/*.rna_seq.augmented_star_gene_counts.tsv  | while read file
 do
@@ -36,7 +33,7 @@ done
 paste /home/felipe/Documentos/LungPortal/samples/*/*."gene_id.txt"  > /home/felipe/Documentos/LungPortal/samples/gene_id.order.txt
 
 # I stopped here 
-ls /home/felipe/Documentos/LungPortal/samples/*/*.rna_seq.augmented_star_gene_counts.tsv | sed 's/\// /g' | sed 's/.rna_seq.augmented_star_gene_counts.tsv/ /g' | awk '{print $6}'  | sed -e 's/ \t/\t/g'  > /home/felipe/Documentos/LungPortal/samples/header.txt
+ls /home/felipe/Documentos/LungPortal/samples/*/*.rna_seq.augmented_star_gene_counts.tsv | sed 's/\// /g' | sed 's/.rna_seq.augmented_star_gene_counts.tsv/ /g' | awk '{print $7}'  | sed -e 's/ \t/\t/g'  > /home/felipe/Documentos/LungPortal/samples/header.txt
 paste /home/felipe/Documentos/LungPortal/samples/*/*."gene_id.txt" | awk '{print $1}' > /home/felipe/Documentos/LungPortal/samples/gene_ids.txt
 
 # Save all rnaseq counts

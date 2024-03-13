@@ -32,25 +32,15 @@ do
 done
 # Finish here, to do
 # Add collumn to the table
+# Check order of gene_ids
+paste /home/felipe/Documentos/LungPortal/samples/*/*."gene_id.txt"  > /home/felipe/Documentos/LungPortal/samples/gene_id.order.txt
+
 # I stopped here 
 ls /home/felipe/Documentos/LungPortal/samples/*/*.rna_seq.augmented_star_gene_counts.tsv | sed 's/\// /g' | sed 's/.rna_seq.augmented_star_gene_counts.tsv/ /g' | awk '{print "\t"$6}' | tr '\n' ' ' | sed -e 's/ \t/\t/g'  > /home/felipe/Documentos/LungPortal/samples/header.txt
+paste /home/felipe/Documentos/LungPortal/samples/*/*."gene_id.txt" | awk '{print $1}' > /home/felipe/Documentos/LungPortal/samples/gene_ids.txt
 
-# Paste all samples
-# paste /home/felipe/Documentos/LungPortal/samples/*/*."gene_id.txt"
-# paste /home/felipe/Documentos/LungPortal/samples/*/*."gene_name.txt"
-# paste /home/felipe/Documentos/LungPortal/samples/*/*."gene_typec.txt"
-cat /home/felipe/Documentos/LungPortal/samples/header.txt > /home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tmp
-cat /home/felipe/Documentos/LungPortal/samples/header.txt > /home/felipe/Documentos/LungPortal/samples/stranded_first.rna_seq.augmented_star_gene_counts.tmp
-cat /home/felipe/Documentos/LungPortal/samples/header.txt > /home/felipe/Documentos/LungPortal/samples/tpm_unstranded.rna_seq.augmented_star_gene_counts.tmp
-cat /home/felipe/Documentos/LungPortal/samples/header.txt > /home/felipe/Documentos/LungPortal/samples/fpkm_unstranded.rna_seq.augmented_star_gene_counts.tmp
-
-paste /home/felipe/Documentos/LungPortal/samples/*/*."unstranded.txt"      >> /home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tmp
-paste /home/felipe/Documentos/LungPortal/samples/*/*."stranded_first.txt"  >> /home/felipe/Documentos/LungPortal/samples/stranded_first.rna_seq.augmented_star_gene_counts.tmp
-paste /home/felipe/Documentos/LungPortal/samples/*/*."tpm_unstranded.txt"  >> /home/felipe/Documentos/LungPortal/samples/tpm_unstranded.rna_seq.augmented_star_gene_counts.tmp
-paste /home/felipe/Documentos/LungPortal/samples/*/*."fpkm_unstranded.txt" >> /home/felipe/Documentos/LungPortal/samples/fpkm_unstranded.rna_seq.augmented_star_gene_counts.tmp
-
-# Add gene_id to file
-paste /home/felipe/Documentos/LungPortal/samples/*/*."gene_id.txt" /home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tmp      > /home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tsv
-paste /home/felipe/Documentos/LungPortal/samples/*/*."gene_id.txt" /home/felipe/Documentos/LungPortal/samples/stranded_first.rna_seq.augmented_star_gene_counts.tmp  > /home/felipe/Documentos/LungPortal/samples/stranded_first.rna_seq.augmented_star_gene_counts.tsv
-paste /home/felipe/Documentos/LungPortal/samples/*/*."gene_id.txt" /home/felipe/Documentos/LungPortal/samples/tpm_unstranded.rna_seq.augmented_star_gene_counts.tmp  > /home/felipe/Documentos/LungPortal/samples/tpm_unstranded.rna_seq.augmented_star_gene_counts.tsv
-paste /home/felipe/Documentos/LungPortal/samples/*/*."gene_id.txt" /home/felipe/Documentos/LungPortal/samples/fpkm_unstranded.rna_seq.augmented_star_gene_counts.tmp > /home/felipe/Documentos/LungPortal/samples/fpkm_unstranded.rna_seq.augmented_star_gene_counts.tsv
+# Save all rnaseq counts
+paste /home/felipe/Documentos/LungPortal/samples/*/*."unstranded.txt"      > /home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tmp
+paste /home/felipe/Documentos/LungPortal/samples/*/*."stranded_first.txt"  > /home/felipe/Documentos/LungPortal/samples/stranded_first.rna_seq.augmented_star_gene_counts.tmp
+paste /home/felipe/Documentos/LungPortal/samples/*/*."tpm_unstranded.txt"  > /home/felipe/Documentos/LungPortal/samples/tpm_unstranded.rna_seq.augmented_star_gene_counts.tmp
+paste /home/felipe/Documentos/LungPortal/samples/*/*."fpkm_unstranded.txt" > /home/felipe/Documentos/LungPortal/samples/fpkm_unstranded.rna_seq.augmented_star_gene_counts.tmp

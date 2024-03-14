@@ -119,3 +119,8 @@ write_tsv(unstranded_data[rownames(Stage_I),], "/home/felipe/Documentos/LungPort
 write_tsv(unstranded_data[rownames(Stage_II),], "/home/felipe/Documentos/LungPortal/samples/stages_StageII.unstranded.rna_seq.gene_counts.tsv")
 write_tsv(unstranded_data[rownames(Stage_III),], "/home/felipe/Documentos/LungPortal/samples/stages_StageIII.unstranded.rna_seq.gene_counts.tsv")
 #####################################################################################################################
+### Transform counts for data visualization
+rlog_dds <- rlog(dds, blind=TRUE)
+
+### Plot PCA 
+pca_tumor_normal<-plotPCA(rlog_dds, intgroup="sampletype")

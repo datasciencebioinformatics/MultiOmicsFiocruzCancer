@@ -90,6 +90,7 @@ merged_data_patient_info<-merged_data_patient_info[,c("sample_id","age_at_index"
 ## and to read this file back into R one needs
 read.table("/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv", header = TRUE, sep = ",", row.names = 1)
 
+# Organize how to send to Carles
 write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
 write_tsv(merged_data_patient_info, "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv")
 

@@ -81,6 +81,15 @@ merged_data_patient_info$stages<-gsub("Stage IIIB", "Stage III", merged_data_pat
 merged_data_patient_info$stages<-gsub("Stage IVA", "Stage IV", merged_data_patient_info$stages)
 merged_data_patient_info$stages<-gsub("Stage IVB", "Stage IV", merged_data_patient_info$stages)
 
-
 # Save table with samples and metatada
-# There are 238 cases, 570 samples, 478 tumor, 92 norma
+# There are 238 cases, 570 samples, 478 tumor, 92 normal
+
+# Filter collumns that are used for age_at_index, gender, stages, Sample.ID
+merged_data_patient_info<-merged_data_patient_info[,c("sample_id","age_at_index","gender","stages")]
+
+## and to read this file back into R one needs
+read.table("/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv", header = TRUE, sep = ",", row.names = 1)
+
+write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
+write_tsv(merged_data_patient_info, "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv")
+

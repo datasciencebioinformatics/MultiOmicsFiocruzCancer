@@ -63,6 +63,9 @@ rownames(colData)<-colData$sample_id
 # Filter merged_data_patient_info stages with N>30
 merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$stage %in%  names(which(table(merged_data_patient_info$stage)>30)),]
 
+# Filter colData
+colData<-colData[unique(merged_data_patient_info$sample_id),]
+
 # Filter DESeq2 steps
 #####################################################################################################################
 # Add columns for patient ID
@@ -76,7 +79,6 @@ colnames(unstranded_data) <- colData[colnames(unstranded_data),"patient_id"]
 
 # Set colnames
 rownames(colData)<-colData$patient_id
-
 #####################################################################################################################
 merged_data_patient_info$patient_id<-paste("patient_",1:length(merged_data_patient_info$sample_id),sep="")
 write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")

@@ -1,6 +1,7 @@
 library(readr)
 library("xlsx")
 library(ggplot2)
+library("DESeq2")
 ##########################################################################################################################################################################################################
 output_dir="/home/felipe/Documentos/LungPortal/output/"                                                             #
 #####################################################################################################################
@@ -8,7 +9,7 @@ output_dir="/home/felipe/Documentos/LungPortal/output/"                         
 merged_data_patient_info_file<- "/home/felipe/Documentos/LungPortal/samples/merged_data_patient_info.tsv"
 
 # Load metadata table
-merged_data_patient_info     <-read.table(file = merged_data_patient_info, sep = '\t', header = TRUE,fill=TRUE)   
+merged_data_patient_info     <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)   
 #####################################################################################################################
 # A script to load cancer data base in R
 unstranded_file       <- "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tsv"
@@ -44,20 +45,43 @@ merged_data_patient_info$stages<-gsub("Stage IVB", "Stage IV", merged_data_patie
 merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$sample_id %in% colnames(unstranded_data),]
 
 # Save table with samples and metatada
-# There are 238 cases, 570 samples, 478 tumor, 92 normal
+# There are 238 cases, 285 samples, 570 pairs
 
 # Filter collumns that are used for age_at_index, gender, stages, Sample.ID
-merged_data_patient_info<-merged_data_patient_info[,c("sample_id","age_at_index","gender","stages")]
+merged_data_patient_info<-merged_data_patient_info[,c("case_id","sample_id","age_at_index","gender","Sample.Type","stages")]
 
-## and to read this file back into R one needs
-read.table("/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv", header = TRUE, sep = ",", row.names = 1)
+# Rename collumns
+colnames(merged_data_patient_info)<-c("case_id","sample_id","age_at_index","gender","tumor_normal","stages")
+
+#####################################################################################################################
+# Set colData
+colData<-unique(merged_data_patient_info[,c("sample_id","age_at_index","gender","tumor_normal","stages")])
+
+# Set colnames
+rownames(colData)<-colData$sample_id
 
 # Organize how to send to Carles
 write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
-write_tsv(merged_data_patient_info, "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv")
+write_tsv(colData, "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv")
+#####################################################################################################################
+# Add columns for patient ID
+colData$patient_id<-paste("patient_",1:length(colData$sample_id),sep="")
 
+# Set colnames
+rownames(colData)<-colData$sample_id
+
+# Set rownames
+colnames(unstranded_data) <- colData[colnames(unstranded_data),"patient_id"]
+
+# Set colnames
+rownames(colData)<-colData$patient_id
+#####################################################################################################################
+# Organize how to send to Carles
+write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
+write_tsv(colData, "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv")
+#####################################################################################################################
 # Creat DEseq element from unstranded_data and merged_data_patient_info
-dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=merged_data_patient_info, design = ~sample_id + age_at_index + gender + stages)
+dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData, design = sample_id~ age_at_index + gender + stages + tumor_normal)
 
 # Run DESeq2
 dds <- DESeq(dds)

@@ -59,7 +59,13 @@ colData<-unique(merged_data_patient_info[,c("sample_id","age_at_index","gender",
 
 # Set colnames
 rownames(colData)<-colData$sample_id
+#####################################################################################################################
+# To DO:
+# Filter stages with N>30
+merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$stage %in%  names(which(table(merged_data_patient_info$stage)>30)),]
 
+# Filter DESeq2 steps
+#####################################################################################################################
 # Organize how to send to Carles
 write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
 write_tsv(colData, "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv")
@@ -96,5 +102,10 @@ dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData, desi
 dds <- DESeq(dds)
 
 # Obtain differential expression numbers
-res <- results(dds, alpha=0.05, lfcThreshold=log2(2))
-res
+resultsNames(dds)
+
+# Save results for each stage
+Stage_I   <-results(dds,name="stages_Stage.I_vs_")
+Stage_II  <-results(dds,name="stages_Stage.II_vs_")
+Stage_III <-results(dds,name="stages_Stage.III_vs_")
+

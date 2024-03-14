@@ -1,10 +1,15 @@
 <!-- GETTING STARTED -->
 ##### Portal Cancer download criteria (create gdc_manifest)
-EXPERIMENTAL_STRATEGY  = RNA-Seq#
+EXPERIMENTAL_STRATEGY  = RNA-Seq
+
 TISSUE_OR_ORGAN_ORIGIN = lower lobe, lung / lung, NOS / middle lobe, lung / upper lobe, lung / overlapping lesion of lungs
+
 DATA_CATEGORY          = transcriptome profiling
+
 WORKFLOW_TYPE          = STAR - Counts
+
 DATA_FORMAT            = TSV
+
 PROGRAM                = TCGA
 
 ##### Download command line with gdc_manifest

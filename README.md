@@ -24,6 +24,7 @@ Squamous cell carcinoma, NOS  samples (238 cases, 285 samples, 570 pairs), LUAD 
 
 ###  Tables
 There are 238 cases, 570 samples, 478 tumor, 92 normal
+The sample_ids were simplified to sample_1...sample_N
 
 /home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv
 

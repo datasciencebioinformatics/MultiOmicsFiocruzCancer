@@ -45,11 +45,11 @@ merged_sample_clinical_data<-merge(merged_sample_clinical_data,exposure_data,by=
 merged_data_patient_info<-merge(merged_sample_clinical_data,gdc_sample_sheet_data,by="sample_submitter_id")
 #####################################################################################################################
 # Set file name variable 
-merged_data_patient_info$<-paste(merged_data_patient_info$File.ID,".rna_seq.augmented_star_gene_counts.tsv",sep="")
+# From the File.ID, only the ID is kept in the variable sample_id
+merged_data_patient_info$sample_id<-gsub(".rna_seq.augmented_star_gene_counts.tsv", "", merged_data_patient_info$File.Name)
 
-
-
-
+# Filter the table to contain only samples in the dataset
+merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$sample_id %in% colnames(unstranded_data),]
 #####################################################################################################################
 # A script to load cancer data base in R
 unstranded_file       <- "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tsv"

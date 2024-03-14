@@ -94,3 +94,5 @@ read.table("/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_c
 write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
 write_tsv(merged_data_patient_info, "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv")
 
+# Creat DEseq element from unstranded_data and merged_data_patient_info
+dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=merged_data_patient_info, design = ~sample_id + age_at_index + gender + stages)

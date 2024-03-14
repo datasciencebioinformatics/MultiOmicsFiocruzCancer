@@ -120,10 +120,11 @@ write_tsv(unstranded_data[rownames(Stage_II),], "/home/felipe/Documentos/LungPor
 write_tsv(unstranded_data[rownames(Stage_III),], "/home/felipe/Documentos/LungPortal/samples/stages_StageIII.unstranded.rna_seq.gene_counts.tsv")
 #####################################################################################################################
 ### Transform counts for data visualization
-rlog_dds <- rlog(dds, blind=TRUE)
+vst_dds <- vst(dds, blind = TRUE, nsub = 1000, fitType = "parametric")
 
 ### Plot PCA 
-pca_tumor_normal<-plotPCA(rlog_dds, intgroup="tumor_normal")
-pca_gender<-plotPCA(rlog_dds, intgroup="gender")
-pca_age_range<-plotPCA(rlog_dds, intgroup="age_range")
-pca_stages<-plotPCA(rlog_dds, intgroup="stages")
+pca_tumor_normal<-plotPCA(vst_dds, intgroup="tumor_normal") + theme_bw() + ggtitle("tumor/normal")
+pca_gender<-plotPCA(vst_dds, intgroup="gender") + theme_bw()             + ggtitle("gender")
+pca_age_range<-plotPCA(vst_dds, intgroup="age_range")+ theme_bw()        + ggtitle("age_range")
+pca_stages<-plotPCA(vst_dds, intgroup="stages")+ theme_bw()              + ggtitle("stages")
+

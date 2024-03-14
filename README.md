@@ -15,12 +15,16 @@ PROGRAM                = TCGA
 ##### Download command line with gdc_manifest
 gdc-client download -m /home/felipe/Documentos/LungPortal/gdc_manifest.2024-03-08.txt
 
+
 ##### Filter data (primary_diagnosis==Squamous cell carcinoma, NOS)
 Squamous cell carcinoma, NOS  samples (238 cases, 570 samples = 478 tumor + 92 normal), LUAD database
 
+
 #####  Tables
 There are 238 cases, 570 samples, 478 tumor, 92 normal
+
 /home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv
+
 /home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv
 
 

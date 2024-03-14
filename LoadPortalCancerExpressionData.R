@@ -123,4 +123,7 @@ write_tsv(unstranded_data[rownames(Stage_III),], "/home/felipe/Documentos/LungPo
 rlog_dds <- rlog(dds, blind=TRUE)
 
 ### Plot PCA 
-pca_tumor_normal<-plotPCA(rlog_dds, intgroup="sampletype")
+pca_tumor_normal<-plotPCA(rlog_dds, intgroup="tumor_normal")
+pca_gender<-plotPCA(rlog_dds, intgroup="gender")
+pca_age_range<-plotPCA(rlog_dds, intgroup="age_range")
+pca_stages<-plotPCA(rlog_dds, intgroup="stages")

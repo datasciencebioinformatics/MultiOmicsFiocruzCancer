@@ -12,7 +12,7 @@ DATA_FORMAT            = TSV
 
 PROGRAM                = TCGA
 
-### Download command line with gdc_manifest
+### Download command line (cases in gdc_manifest)
 gdc-client download -m /home/felipe/Documentos/LungPortal/gdc_manifest.2024-03-08.txt
 
 

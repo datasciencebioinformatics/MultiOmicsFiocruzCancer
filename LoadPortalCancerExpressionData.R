@@ -2,7 +2,7 @@ library(readr)
 library("xlsx")
 library(ggplot2)
 library("DESeq2")
-##########################################################################################################################################################################################################
+#####################################################################################################################
 output_dir="/home/felipe/Documentos/LungPortal/output/"                                                             #
 #####################################################################################################################
 # Reading the contents of TSV file using read_tsv() method
@@ -52,7 +52,6 @@ merged_data_patient_info<-merged_data_patient_info[,c("case_id","sample_id","age
 
 # Rename collumns
 colnames(merged_data_patient_info)<-c("case_id","sample_id","age_at_index","gender","tumor_normal","stages")
-
 #####################################################################################################################
 # Set colData
 colData<-unique(merged_data_patient_info[,c("sample_id","age_at_index","gender","tumor_normal","stages")])
@@ -66,10 +65,6 @@ merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$stag
 
 # Filter DESeq2 steps
 #####################################################################################################################
-# Organize how to send to Carles
-write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
-write_tsv(colData, "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv")
-#####################################################################################################################
 # Add columns for patient ID
 colData$patient_id<-paste("patient_",1:length(colData$sample_id),sep="")
 
@@ -82,9 +77,9 @@ colnames(unstranded_data) <- colData[colnames(unstranded_data),"patient_id"]
 # Set colnames
 rownames(colData)<-colData$patient_id
 #####################################################################################################################
-# Organize how to send to Carles
+merged_data_patient_info$patient_id<-paste("patient_",1:length(merged_data_patient_info$sample_id),sep="")
 write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
-write_tsv(colData, "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv")
+write_tsv(merged_data_patient_info[,c("patient_id","case_id","sample_id","age_at_index","gender","tumor_normal","stages")], "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv")
 #####################################################################################################################
 # Set collumn to factor
 #####################################################################################################################
@@ -103,16 +98,24 @@ dds <- DESeq(dds)
 
 # Obtain differential expression numbers
 resultsNames(dds)
-
 #####################################################################################################################
-# Save results for each stage
-Stage_I   <-results(dds,name="stages_Stage.I_vs_")
-Stage_II  <-results(dds,name="stages_Stage.II_vs_")
-Stage_III <-results(dds,name="stages_Stage.III_vs_")
+# Save results for each stage                                                                                       #
+Stage_I   <-data.frame(results(dds,name="stages_Stage.I_vs_", alpha=0.001, lfcThreshold = 4))                        #
+Stage_II  <-data.frame(results(dds,name="stages_Stage.II_vs_", alpha=0.001, lfcThreshold = 4))                       #
+Stage_III <-data.frame(results(dds,name="stages_Stage.III_vs_", alpha=0.001, lfcThreshold = 4))                      #
+                                                                                                                    #
+Stage_I<-Stage_I[which(Stage_I$log2FoldChange>4   & Stage_I$pvalue     > 0.001),]                                    #
+Stage_II<-Stage_II[which(Stage_II$log2FoldChange>4  & Stage_II$pvalue   > 0.001),]                                    #
+Stage_III<-Stage_III[which(Stage_III$log2FoldChange>4 & Stage_III$pvalue > 0.001),]                                    #
 #####################################################################################################################
 # Save differential expression table
 write_tsv(Stage_I, "/home/felipe/Documentos/LungPortal/samples/stages_StageI.tsv")
 write_tsv(Stage_II, "/home/felipe/Documentos/LungPortal/samples/stages_StageII.tsv")
 write_tsv(Stage_III, "/home/felipe/Documentos/LungPortal/samples/stages_StageIII.tsv")
 #####################################################################################################################
-
+# Save list of genes
+# Save differential expression table
+write_tsv(unstranded_data[rownames(Stage_I),], "/home/felipe/Documentos/LungPortal/samples/stages_StageI.unstranded.rna_seq.gene_counts.tsv")
+write_tsv(unstranded_data[rownames(Stage_II),], "/home/felipe/Documentos/LungPortal/samples/stages_StageII.unstranded.rna_seq.gene_counts.tsv")
+write_tsv(unstranded_data[rownames(Stage_III),], "/home/felipe/Documentos/LungPortal/samples/stages_StageIII.unstranded.rna_seq.gene_counts.tsv")
+#####################################################################################################################

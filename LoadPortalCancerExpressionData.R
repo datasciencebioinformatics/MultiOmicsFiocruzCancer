@@ -80,11 +80,21 @@ rownames(colData)<-colData$patient_id
 write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
 write_tsv(colData, "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv")
 #####################################################################################################################
+# Set collumn to factor
+#####################################################################################################################
+# Set collumn to factor
+colData$sample_id<-factor(colData$sample_id)
+colData$tumor_normal<-factor(colData$tumor_normal)
+colData$stages<-factor(colData$stages)
+colData$gender<-factor(colData$gender)
+colData$age_range<-factor(cut(colData$age_at_index, breaks = c(0, 25, 50,75,100 )))
+
 # Creat DEseq element from unstranded_data and merged_data_patient_info
-dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData, design = sample_id~ age_at_index + gender + stages + tumor_normal)
+dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData, design = sample_id~ age_range + gender + stages + tumor_normal)
 
 # Run DESeq2
 dds <- DESeq(dds)
 
 # Obtain differential expression numbers
-res <- results(dds, alpha=0.05, lfcThreshold=log2(2))
+res <- results(dds, alpha=0.05, lfcThreshold=log2(2), contrast = c("stages", "tumor_normal"))
+res

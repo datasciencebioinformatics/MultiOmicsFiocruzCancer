@@ -132,4 +132,9 @@ pca_age_range<-plotPCA(vst_dds, intgroup="age_range")+ theme_bw()        + ggtit
 pca_stages<-plotPCA(vst_dds, intgroup="stages")+ theme_bw()              + ggtitle("stages")
 
 library(gridExtra)
-grid.arrange(pca_tumor_normal, pca_gender,pca_age_range,pca_stages,  nrow = 2)
+pca_plots<-grid.arrange(pca_tumor_normal, pca_gender,pca_age_range,pca_stages,  nrow = 2)
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"pca_plots.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+	pca_plots
+dev.off()

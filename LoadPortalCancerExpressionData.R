@@ -90,13 +90,12 @@ colData$gender<-factor(colData$gender)
 colData$age_range<-factor(cut(colData$age_at_index, breaks = c(0, 25, 50,75,100 )))
 
 # Creat DEseq element from unstranded_data and merged_data_patient_info
-dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData, design = sample_id~ age_range + gender + stages + tumor_normal)
-dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData, design = stages ~ age_range + gender +  tumor_normal + patient_id + patient_id:tumor_normal)
+dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData, design = stages~ age_range + gender  + tumor_normal)
+dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData, design = stages~ age_range + gender  + tumor_normal + patient_id + tumor_normal:patient_id )
 
 # Run DESeq2
 dds <- DESeq(dds)
 
 # Obtain differential expression numbers
-res <- results(dds, alpha=0.05, lfcThreshold=log2(2), contrast = c("stages", "tumor_normal"))
 res <- results(dds, alpha=0.05, lfcThreshold=log2(2))
 res

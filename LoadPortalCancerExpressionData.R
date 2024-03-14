@@ -90,8 +90,7 @@ colData$gender<-factor(colData$gender)
 colData$age_range<-factor(cut(colData$age_at_index, breaks = c(0, 25, 50,75,100 )))
 
 # Creat DEseq element from unstranded_data and merged_data_patient_info
-dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData, design = stages~ age_range + gender  + tumor_normal)
-dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData, design = stages~ age_range + gender  + tumor_normal + patient_id + tumor_normal:patient_id )
+dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData, design = tumor_normal~ age_range + gender  + stages )
 
 # Run DESeq2
 dds <- DESeq(dds)

@@ -104,8 +104,15 @@ dds <- DESeq(dds)
 # Obtain differential expression numbers
 resultsNames(dds)
 
+#####################################################################################################################
 # Save results for each stage
 Stage_I   <-results(dds,name="stages_Stage.I_vs_")
 Stage_II  <-results(dds,name="stages_Stage.II_vs_")
 Stage_III <-results(dds,name="stages_Stage.III_vs_")
+#####################################################################################################################
+# Save differential expression table
+write_tsv(Stage_I, "/home/felipe/Documentos/LungPortal/samples/stages_StageI.tsv")
+write_tsv(Stage_II, "/home/felipe/Documentos/LungPortal/samples/stages_StageII.tsv")
+write_tsv(Stage_III, "/home/felipe/Documentos/LungPortal/samples/stages_StageIII.tsv")
+#####################################################################################################################
 

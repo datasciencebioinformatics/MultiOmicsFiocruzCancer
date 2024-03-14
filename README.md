@@ -1,58 +1,23 @@
 <!-- GETTING STARTED -->
-##### gdc_manifest to download the data
-##### Command line for download:
+##### Portal Cancer download criteria (create gdc_manifest)
+EXPERIMENTAL_STRATEGY  = RNA-Seq
+TISSUE_OR_ORGAN_ORIGIN = lower lobe, lung / lung, NOS / middle lobe, lung / upper lobe, lung / overlapping lesion of lungs
+DATA_CATEGORY          = transcriptome profiling
+WORKFLOW_TYPE          = STAR - Counts
+DATA_FORMAT            = TSV
+PROGRAM                = TCGA
+
+##### Download command line with gdc_manifest
 gdc-client download -m /home/felipe/Documentos/LungPortal/gdc_manifest.2024-03-08.txt
-#####  File path: 
-/home/felipe/Documentos/LungPortal/gdc_manifest.2024-03-08.txt
 
-#####  gdc_sample_sheet to download the data
-#####  Command line for download:
-#####  File path: 
-/home/felipe/LungPortal/Documentos/gdc_sample_sheet.2024-03-08.tsv
+##### Filter data (primary_diagnosis==Squamous cell carcinoma, NOS)
+Squamous cell carcinoma, NOS  samples (238 cases, 570 samples = 478 tumor + 92 normal), LUAD database
 
-#####  metadata.cohort to download the data
-#####  Command line for download:
-#####  File path: 
-/home/felipe/LungPortal/Documentos/metadata.cohort.2024-03-08.json
+#####  Tables
+There are 238 cases, 570 samples, 478 tumor, 92 normal
+/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv
+/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv
 
-#####  Two excel files were generated from the script:
-https://github.com/datasciencebioinformatics/MultiOmicsFiocruzCancer/blob/main/ProcessPortalDataFromFile.R
-
-#####  One with the association to the primary_diagnosis
-##### and the second with the association to the Diagnosis
-/home/felipe/LungPortal/Documentos/output/categorical_numeric_pvalues.xlsx
-/home/felipe/LungPortal/Documentos/output/association_covariables_Diagnosis.xlsx
-
-#####  Report results to:
-Media.
-Vacines, treatment, Sanofi.
-Laboratorio
-Ciencia
-
-We analised population demographics of lung cancer patients and found greater incidence of cases among age XX, gender XX, race XX [my expertise]. Moreover, tumor stage were considered together with treatment responsiveness, and we found treatment XX for tumors in stage YY are more responsive, while tumors at stage UU are more aggressive [Nicolas/Carlyle expertise].  White race interacts with number of ciggarrets smoked, this can be because they have this gene epressed while not in the black race [to be discussed with doctors].  Finally, genes XX, YY and ZZ in the pathways TT are further considered as putative for cancer development/treatment and so forth [to be discussed with molecular biologists]. 
-
-#####  Noteworhy:
-Be meticulous in the obtantion of data
-Criteria for the number of samples is valid (Carels database is smaller).
-Be meticulous, simple and robust.
-
-#####  Ethic and morals:
-Morality : responsibility (money, fiocruz, time, etc), reprodutibility, interdiciplinarity (medical/scientific/bioinformatic authorities)
-Ethic    : meticulous with the data, result well documented, re-usability of scripts.
-
-#####  Obtantion of expression data
-The downloaded manifest file (gdc_manifest.2024-03-08.txt) was filtered to keep only .augmented_star_gene_counts.tsv files (total of 285 samples).
-Files will be found here : ls /home/felipe/Documentos/LungPortal/samples/$file_id/$sample_id.rna_seq.augmented_star_gene_counts.tsv
-
-1144 samples
-$sample_id.rna_seq.augmented_star_gene_counts.tsv
-$sample_id.ff36264d-8485-46e6-8259-0b55f651ed8f.rna_seq.transcriptome.gdc_realn.bam 
-
-
-
-To do is :
-- take a look on Carels dataset
-  
 
 
 

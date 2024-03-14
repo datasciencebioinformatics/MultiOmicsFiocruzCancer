@@ -60,7 +60,7 @@ colData<-unique(merged_data_patient_info[,c("sample_id","age_at_index","gender",
 rownames(colData)<-colData$sample_id
 #####################################################################################################################
 # To DO:
-# Filter stages with N>30
+# Filter merged_data_patient_info stages with N>30
 merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$stage %in%  names(which(table(merged_data_patient_info$stage)>30)),]
 
 # Filter DESeq2 steps
@@ -76,6 +76,7 @@ colnames(unstranded_data) <- colData[colnames(unstranded_data),"patient_id"]
 
 # Set colnames
 rownames(colData)<-colData$patient_id
+
 #####################################################################################################################
 merged_data_patient_info$patient_id<-paste("patient_",1:length(merged_data_patient_info$sample_id),sep="")
 write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
@@ -128,3 +129,5 @@ pca_gender<-plotPCA(vst_dds, intgroup="gender") + theme_bw()             + ggtit
 pca_age_range<-plotPCA(vst_dds, intgroup="age_range")+ theme_bw()        + ggtitle("age_range")
 pca_stages<-plotPCA(vst_dds, intgroup="stages")+ theme_bw()              + ggtitle("stages")
 
+library(gridExtra)
+grid.arrange(pca_tumor_normal, pca_gender,pca_age_range,pca_stages,  nrow = 2)

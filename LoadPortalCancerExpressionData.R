@@ -134,7 +134,25 @@ pca_stages<-plotPCA(vst_dds, intgroup="stages")+ theme_bw()              + ggtit
 library(gridExtra)
 pca_plots<-grid.arrange(pca_tumor_normal, pca_gender,pca_age_range,pca_stages,  nrow = 2)
 
+
 # FindClusters_resolution
 png(filename=paste(output_dir,"pca_plots.png",sep=""), width = 24, height = 24, res=600, units = "cm")
-	pca_plots
+	plot_grid(pca_tumor_normal, pca_gender,pca_age_range,pca_stages,         ncol = 2, nrow = 2)
 dev.off()
+####################################################################################################################
+### Plot PCA 
+pca_tumor_normal<-plotPCA(vst_dds, intgroup="tumor_normal") + theme_bw() + ggtitle("tumor/normal")
+pca_gender<-plotPCA(vst_dds, intgroup="gender") + theme_bw()             + ggtitle("gender")
+pca_age_range<-plotPCA(vst_dds, intgroup="age_range")+ theme_bw()        + ggtitle("age_range")
+pca_stages<-plotPCA(vst_dds, intgroup="stages")+ theme_bw()              + ggtitle("stages")
+
+library(gridExtra)
+pca_plots<-grid.arrange(pca_tumor_normal, pca_gender,pca_age_range,pca_stages,  nrow = 2)
+
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"pca_plots.png",sep=""), width = 24, height = 24, res=600, units = "cm")
+	plot_grid(pca_tumor_normal, pca_gender,pca_age_range,pca_stages,         ncol = 2, nrow = 2)
+dev.off()
+
+

@@ -67,3 +67,20 @@ colnames(unstranded_data)<-colnames_data[,1]
 
 # To check counts and sample_ids
 sum(merged_data_patient_info$sample_id %in% colnames(unstranded_data))
+
+# A field to store 
+merged_data_patient_info$stages<-merged_data_patient_info$ajcc_pathologic_stage
+
+# Group stages I,II,III and IV
+merged_data_patient_info$stages<-gsub("Stage IA", "Stage I", merged_data_patient_info$stages)
+merged_data_patient_info$stages<-gsub("Stage IB", "Stage I", merged_data_patient_info$stages)
+merged_data_patient_info$stages<-gsub("Stage IIA", "Stage II", merged_data_patient_info$stages)
+merged_data_patient_info$stages<-gsub("Stage IIB", "Stage II", merged_data_patient_info$stages)
+merged_data_patient_info$stages<-gsub("Stage IIIA", "Stage III", merged_data_patient_info$stages)
+merged_data_patient_info$stages<-gsub("Stage IIIB", "Stage III", merged_data_patient_info$stages)
+merged_data_patient_info$stages<-gsub("Stage IVA", "Stage IV", merged_data_patient_info$stages)
+merged_data_patient_info$stages<-gsub("Stage IVB", "Stage IV", merged_data_patient_info$stages)
+
+
+# Save table with samples and metatada
+# There are 238 cases, 570 samples, 478 tumor, 92 norma

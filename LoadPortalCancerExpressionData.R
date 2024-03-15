@@ -101,6 +101,9 @@ colData$age_range<-factor(cut(colData$age_at_index, breaks = c(0, 25, 50,75,100 
 # age_range + gender + stages are the covariables
 # for one reason, DESeq is setting the last variable to group vs. all
 # Two ways to check this information 1) check group vs. all, check to pca's
+
+# If you use a design of ~0 + covariable, then you will have a coefficient for each level of condition. 
+# This is one of the cases where it helps to not have condition at the end of the design (for convenience, we often recommend to put condition at the end, but not in this case).
 dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + tumor_normal + age_range + gender + stages)
 
 # Run DESeq2
@@ -108,6 +111,11 @@ dds <- DESeq(dds)
 
 # Obtain differential expression numbers
 resultsNames(dds)
+
+# Obtain differential expression numbers
+Stage_I   <-results(dds,contrast=list(c("conditionA"), c("conditionB","conditionC","conditionD","conditionE")),listValues=c(1, -1/4))
+Stage_II  <-results(dds,contrast=list(c("conditionA"), c("conditionB","conditionC","conditionD","conditionE")),listValues=c(1, -1/4))
+Stage_III <-results(dds,contrast=list(c("conditionA"), c("conditionB","conditionC","conditionD","conditionE")),listValues=c(1, -1/4))
 #####################################################################################################################
 # Save results for each stage                                                                                       #
 Stage_I   <-data.frame(results(dds,name="stages_Stage.I_vs_", alpha=0.001, lfcThreshold = 4))                        #

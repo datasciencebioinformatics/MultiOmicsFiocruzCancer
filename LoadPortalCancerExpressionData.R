@@ -16,7 +16,7 @@ merged_data_patient_info     <-read.table(file = merged_data_patient_info_file, 
 unstranded_file       <- "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tsv"
 colnames_file         <- "/home/felipe/Documentos/LungPortal/samples/header.txt"
 rownames_file         <- "/home/felipe/Documentos/LungPortal/samples/gene_ids.txt"
-rownames_file_2         <- "/home/felipe/Documentos/LungPortal/samples/gene_ids.txt"
+
 
 # Load data
 unstranded_data<-read.table(file = unstranded_file, sep = '\t', header = FALSE,fill=TRUE)    
@@ -92,7 +92,30 @@ rownames(colData)<-colData$patient_id
 # The 9,190 genes for which the equivalence between GeneSymbols and UniProtKB could be obtained went through further analysis. 
 # This equivalence list is available in Supplementary Table 1. 
 # To do : use only genes in the list
-/home/felipe/Documentos/LungPortal/Table_1.xls
+# /home/felipe/Documentos/LungPortal/Table_1.tsv
+gene_ids_file       <- "/home/felipe/Documentos/LungPortal/samples/gene_ids.txt"                            
+gene_name_file      <- "/home/felipe/Documentos/LungPortal/samples/gene_name.txt"
+
+# Load gene data (name and id)
+gene_ids_data<-read.table(file = gene_ids_file, sep = '\t', header = FALSE,fill=TRUE)      
+gene_name_data<-read.table(file = gene_name_file, sep = '\t', header = FALSE,fill=TRUE)      
+
+# Put both in a data
+df_gene_id_symbol<-data.frame(gene_id=gene_ids_data,gene_symbol=gene_name_data)
+
+# Rename collumns
+colnames(df_gene_id_symbol)<-c("gene_id","gene_symbol")
+
+library("readxl")
+Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_1.tsv", sep = '\t', header = TRUE,fill=TRUE)      
+
+# Genes in conforte et al data
+selected_gene_id<-df_gene_id_symbol[df_gene_id_symbol$gene_symbol %in% Table1_data$GeneSymbol,"gene_id"]
+
+#####################################################################################################################
+# Filter RNA-seq data to contain only data from Conforte et.al
+unstranded_data<-unstranded_data[selected_gene_id,]
+
 #####################################################################################################################
 merged_data_patient_info$patient_id<-paste("patient_",1:length(merged_data_patient_info$sample_id),sep="")
 write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")

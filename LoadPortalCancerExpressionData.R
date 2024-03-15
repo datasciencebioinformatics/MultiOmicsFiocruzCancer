@@ -113,18 +113,10 @@ dds <- DESeq(dds)
 resultsNames(dds)
 
 # Obtain differential expression numbers
-Stage_I   <-results(dds,contrast=list(c("conditionA"), c("conditionB","conditionC","conditionD","conditionE")),listValues=c(1, -1/4))
-Stage_II  <-results(dds,contrast=list(c("conditionA"), c("conditionB","conditionC","conditionD","conditionE")),listValues=c(1, -1/4))
-Stage_III <-results(dds,contrast=list(c("conditionA"), c("conditionB","conditionC","conditionD","conditionE")),listValues=c(1, -1/4))
+Stage_I   <-data.frame(results(dds,contrast=list(c("stagesStage.II"), c("stagesStage.III"))), alpha=0.05, lfcThreshold = 1) 
+Stage_I   <-Stage_I[which(Stage_I$log2FoldChange>2   & Stage_I$pvalue     > 0.05),]
 #####################################################################################################################
 # Save results for each stage                                                                                       #
-Stage_I   <-data.frame(results(dds,name="stages_Stage.I_vs_", alpha=0.001, lfcThreshold = 4))                        #
-Stage_II  <-data.frame(results(dds,name="stages_Stage.II_vs_", alpha=0.001, lfcThreshold = 4))                       #
-Stage_III <-data.frame(results(dds,name="stages_Stage.III_vs_", alpha=0.001, lfcThreshold = 4))                      #
-                                                                                                                    #
-Stage_I<-Stage_I[which(Stage_I$log2FoldChange>4   & Stage_I$pvalue     > 0.001),]                                    #
-Stage_II<-Stage_II[which(Stage_II$log2FoldChange>4  & Stage_II$pvalue   > 0.001),]                                    #
-Stage_III<-Stage_III[which(Stage_III$log2FoldChange>4 & Stage_III$pvalue > 0.001),]                                    #
 #####################################################################################################################
 # Save differential expression table
 write_tsv(Stage_I, "/home/felipe/Documentos/LungPortal/samples/stages_StageI.tsv")

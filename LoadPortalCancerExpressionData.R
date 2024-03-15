@@ -118,7 +118,7 @@ unstranded_data<-unstranded_data[selected_gene_id,]
 
 #####################################################################################################################
 merged_data_patient_info$patient_id<-paste("patient_",1:length(merged_data_patient_info$sample_id),sep="")
-write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
+write_tsv(c, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
 write_tsv(merged_data_patient_info[,c("patient_id","case_id","sample_id","age_at_index","gender","tumor_normal","stages")], "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv")
 #####################################################################################################################
 # Set collumn to factor
@@ -180,6 +180,10 @@ Stage_I    <-data.frame(results(dds,contrast=list(c("stagesStage.I"), c("stagesS
 Stage_II   <-data.frame(results(dds,contrast=list(c("stagesStage.II"), c("stagesStage.I","stagesStage.III")))) 
 Stage_III   <-data.frame(results(dds,contrast=list(c("stagesStage.III"), c("stagesStage.I","stagesStage.II")))) 
 
+vst_Stage_I  <- vst(dds, blind = TRUE, nsub = 1000, fitType = "parametric")
+vst_Stage_II <- vst(dds, blind = TRUE, nsub = 1000, fitType = "parametric")
+vst_Stage_III<- vst(dds, blind = TRUE, nsub = 1000, fitType = "parametric")
+
 log2fc_threshold  = 1
 padj_treshold     = 0.05
 
@@ -187,9 +191,26 @@ padj_treshold     = 0.05
 Stage_I_sub<-Stage_I[which(Stage_I$log2FoldChange>log2fc_threshold),]
 Stage_II_sub<-Stage_II[which(Stage_II$log2FoldChange>log2fc_threshold),]
 Stage_III_sub<-Stage_III[which(Stage_III$log2FoldChange>log2fc_threshold),]
+
+vst_Stage_I_sub<-varianceStabilizingTransformation(dds[rownames(Stage_I_sub),], blind = TRUE, fitType = "parametric")
+vst_Stage_II_sub<-varianceStabilizingTransformation(dds[rownames(Stage_II_sub),], blind = TRUE, fitType = "parametric")
+vst_Stage_III_sub<-varianceStabilizingTransformation(dds[rownames(Stage_III_sub),], blind = TRUE, fitType = "parametric")
+
+pca_stageI<-plotPCA(vst_Stage_I_sub, intgroup="Tumor_Stage") + theme_bw() + ggtitle("Tumor_Stage : DE Genes from Stage I")
+pca_stageII<-plotPCA(vst_Stage_II_sub, intgroup="Tumor_Stage") + theme_bw() + ggtitle("Tumor_Stage : DE Genes from Stage II")
+pca_stageIII<-plotPCA(vst_Stage_III_sub, intgroup="Tumor_Stage") + theme_bw() + ggtitle("Tumor_Stage : DE Genes from Stage III")
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"pca_stages_normal_cancer.png",sep=""), width = 36, height = 48, res=600, units = "cm")
+	plot_grid(pca_stageI, pca_stageII,pca_stageIII, ncol = 2, nrow = 3)
+dev.off()
 #####################################################################################################################
 # Save differential expression table
 write_tsv(Stage_I_sub, "/home/felipe/Documentos/LungPortal/samples/stages_StageI.tsv")
-write_tsv(Stage_II, "/home/felipe/Documentos/LungPortal/samples/stages_StageII.tsv")
-write_tsv(Stage_II_sub, "/home/felipe/Documentos/LungPortal/samples/stages_StageIII.tsv")
+write_tsv(Stage_II_sub, "/home/felipe/Documentos/LungPortal/samples/stages_StageII.tsv")
+write_tsv(Stage_III_sub, "/home/felipe/Documentos/LungPortal/samples/stages_StageIII.tsv")
 #####################################################################################################################
+# Save differential expression table
+write_tsv(unstranded_data[rownames(Stage_I_sub),], "/home/felipe/Documentos/LungPortal/samples/rnaseq_raw_counts_StageI.tsv")
+write_tsv(unstranded_data[rownames(Stage_II_sub),], "/home/felipe/Documentos/LungPortal/samples/rnaseq_raw_counts_StageII.tsv")
+write_tsv(unstranded_data[rownames(Stage_III_sub),], "/home/felipe/Documentos/LungPortal/samples/rnaseq_raw_counts_StageIII.tsv")

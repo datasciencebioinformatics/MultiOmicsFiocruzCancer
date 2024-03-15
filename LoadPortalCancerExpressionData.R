@@ -112,51 +112,31 @@ dds <- DESeq(dds)
 
 # Obtain differential expression numbers
 resultsNames(dds)
-
+#####################################################################################################################
+# Analysis of differential expression by stages, "one group vs. all others".
 # Obtain differential expression numbers
 Stage_I    <-data.frame(results(dds,contrast=list(c("stagesStage.I"), c("stagesStage.II","stagesStage.III"))))
 Stage_II   <-data.frame(results(dds,contrast=list(c("stagesStage.II"), c("stagesStage.I","stagesStage.III")))) 
 Stage_III   <-data.frame(results(dds,contrast=list(c("stagesStage.III"), c("stagesStage.I","stagesStage.II")))) 
 
-# Filterby alpha values
-Stage_I<-Stage_I[Stage_I$alpha<0.01,]
-Stage_II<-Stage_I[Stage_II$alpha<0.01,]
-Stage_II<-Stage_I[Stage_III$alpha<0.01,]
+log2fc_threshold  = 1
+padj_treshold     = 0.05
+
+# perform a PCA on the data in assay(x) for the selected genes
+pca <- prcomp(t(assay(object)[select,]))
 
 # Filterby lfcThreshold values
-Stage_I<-Stage_I[Stage_I$lfcThreshold>2,]
-Stage_II<-Stage_I[Stage_II$lfcThreshold>2,]
-Stage_II<-Stage_I[Stage_III$lfcThreshold>2,]
-
+Stage_I<-Stage_I[which(Stage_I$log2FoldChange>log2fc_threshold),]
+Stage_II<-Stage_II[which(Stage_II$log2FoldChange>log2fc_threshold),]
+Stage_III<-Stage_III[which(Stage_III$log2FoldChange>log2fc_threshold),]
 
 ### Transform counts for data visualization
 vst_dds <- vst(dds, blind = TRUE, nsub = 1000, fitType = "parametric")
 #####################################################################################################################
+# Analysis of PCA 
+## All Genes
 ### Plot PCA 
 pca_tumor_normal<-plotPCA(vst_dds, intgroup="tumor_normal") + theme_bw() + ggtitle("tumor_normal")
-pca_gender<-plotPCA(vst_dds, intgroup="gender") + theme_bw()             + ggtitle("gender")
-pca_age_range<-plotPCA(vst_dds, intgroup="age_range")+ theme_bw()        + ggtitle("age_range")
-pca_stages<-plotPCA(vst_dds, intgroup="stages")+ theme_bw()              + ggtitle("stages")
-#####################################################################################################################
-# Save results for each stage
-Stage_I$lfcThreshold
-#####################################################################################################################
-# Save differential expression table
-write_tsv(Stage_I, "/home/felipe/Documentos/LungPortal/samples/stages_StageI.tsv")
-write_tsv(Stage_II, "/home/felipe/Documentos/LungPortal/samples/stages_StageII.tsv")
-write_tsv(Stage_III, "/home/felipe/Documentos/LungPortal/samples/stages_StageIII.tsv")
-#####################################################################################################################
-# Save list of genes
-# Save differential expression table
-write_tsv(unstranded_data[rownames(Stage_I),], "/home/felipe/Documentos/LungPortal/samples/stages_StageI.unstranded.rna_seq.gene_counts.tsv")
-write_tsv(unstranded_data[rownames(Stage_II),], "/home/felipe/Documentos/LungPortal/samples/stages_StageII.unstranded.rna_seq.gene_counts.tsv")
-write_tsv(unstranded_data[rownames(Stage_III),], "/home/felipe/Documentos/LungPortal/samples/stages_StageIII.unstranded.rna_seq.gene_counts.tsv")
-#####################################################################################################################
-### Transform counts for data visualization
-vst_dds <- vst(dds, blind = TRUE, nsub = 1000, fitType = "parametric")
-
-### Plot PCA 
-pca_tumor_normal<-plotPCA(vst_dds, intgroup="tumor_normal") + theme_bw() + ggtitle("tumor/normal")
 pca_gender<-plotPCA(vst_dds, intgroup="gender") + theme_bw()             + ggtitle("gender")
 pca_age_range<-plotPCA(vst_dds, intgroup="age_range")+ theme_bw()        + ggtitle("age_range")
 pca_stages<-plotPCA(vst_dds, intgroup="stages")+ theme_bw()              + ggtitle("stages")
@@ -169,20 +149,34 @@ pca_plots<-grid.arrange(pca_tumor_normal, pca_gender,pca_age_range,pca_stages,  
 png(filename=paste(output_dir,"pca_plots.png",sep=""), width = 24, height = 24, res=600, units = "cm")
 	plot_grid(pca_tumor_normal, pca_gender,pca_age_range,pca_stages,         ncol = 2, nrow = 2)
 dev.off()
-####################################################################################################################
+
+#####################################################################################################################
+# VST per stage
+vst_dds_I  <- varianceStabilizingTransformation(dds[rownames(Stage_I),], blind = TRUE,fitType = "parametric")
+vst_dds_II  <- varianceStabilizingTransformation(dds[rownames(Stage_II),], blind = TRUE,fitType = "parametric")
+vst_dds_III <- varianceStabilizingTransformation(dds[rownames(Stage_III),], blind = TRUE,fitType = "parametric")
+
+pca_stageI<-plotPCA(vst_dds_I, intgroup="stages") + theme_bw()      + ggtitle(paste("Genes of Stages I, padj<",padj_treshold,"log2FoldChange>",log2fc_threshold))
+pca_stageII<-plotPCA(vst_dds_II, intgroup="stages") + theme_bw()    + ggtitle(paste("Genes of Stages II, padj<",padj_treshold,"log2FoldChange>",log2fc_threshold))
+pca_stageIII<-plotPCA(vst_dds_III, intgroup="stages") + theme_bw()    + ggtitle(paste("Genes of Stages III, padj<",padj_treshold,"log2FoldChange>",log2fc_threshold))
+
+
+# Analysis of PCA 
+## Per stage
 ### Plot PCA 
-pca_tumor_normal<-plotPCA(vst_dds, intgroup="tumor_normal") + theme_bw() + ggtitle("tumor/normal")
-pca_gender<-plotPCA(vst_dds, intgroup="gender") + theme_bw()             + ggtitle("gender")
-pca_age_range<-plotPCA(vst_dds, intgroup="age_range")+ theme_bw()        + ggtitle("age_range")
-pca_stages<-plotPCA(vst_dds, intgroup="stages")+ theme_bw()              + ggtitle("stages")
-
-library(gridExtra)
-pca_plots<-grid.arrange(pca_tumor_normal, pca_gender,pca_age_range,pca_stages,  nrow = 2)
 
 
-# FindClusters_resolution
-png(filename=paste(output_dir,"pca_plots.png",sep=""), width = 24, height = 24, res=600, units = "cm")
-	plot_grid(pca_tumor_normal, pca_gender,pca_age_range,pca_stages,         ncol = 2, nrow = 2)
-dev.off()
-
-
+#####################################################################################################################
+# Save differential expression table
+write_tsv(Stage_I, "/home/felipe/Documentos/LungPortal/samples/stages_StageI.tsv")
+write_tsv(Stage_II, "/home/felipe/Documentos/LungPortal/samples/stages_StageII.tsv")
+write_tsv(Stage_III, "/home/felipe/Documentos/LungPortal/samples/stages_StageIII.tsv")
+#####################################################################################################################
+# Save results for each stage
+Stage_I$lfcThreshold
+# Save list of genes
+# Save differential expression table
+write_tsv(unstranded_data[rownames(Stage_I),], "/home/felipe/Documentos/LungPortal/samples/stages_StageI.unstranded.rna_seq.gene_counts.tsv")
+write_tsv(unstranded_data[rownames(Stage_II),], "/home/felipe/Documentos/LungPortal/samples/stages_StageII.unstranded.rna_seq.gene_counts.tsv")
+write_tsv(unstranded_data[rownames(Stage_III),], "/home/felipe/Documentos/LungPortal/samples/stages_StageIII.unstranded.rna_seq.gene_counts.tsv")
+#####################################################################################################################

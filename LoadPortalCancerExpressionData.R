@@ -96,6 +96,7 @@ colData$tumor_normal<-factor(colData$tumor_normal)
 colData$stages<-factor(colData$stages)
 colData$gender<-factor(colData$gender)
 colData$age_range<-factor(cut(colData$age_at_index, breaks = c(0, 25, 50,75,100 )))
+colData$Tumor_Stage<-paste(colData$tumor_normal,colData$stages,sep="")
 
 # Creat DEseq element from unstranded_data and merged_data_patient_info
 # Here, tumor_normal is the outcome
@@ -103,9 +104,11 @@ colData$age_range<-factor(cut(colData$age_at_index, breaks = c(0, 25, 50,75,100 
 # for one reason, DESeq is setting the last variable to group vs. all
 # Two ways to check this information 1) check group vs. all, check to pca's
 
+# Now, I do have the expression
+dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + stages:tumor_normal + stages + tumor_normal + age_range + gender )
+
 # If you use a design of ~0 + covariable, then you will have a coefficient for each level of condition. 
 # This is one of the cases where it helps to not have condition at the end of the design (for convenience, we often recommend to put condition at the end, but not in this case).
-dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + stages + tumor_normal + age_range + gender )
 
 # Run DESeq2
 dds <- DESeq(dds)
@@ -124,17 +127,18 @@ vst_dds <- vst(dds, blind = TRUE, nsub = 1000, fitType = "parametric")
 ## All Genes
 ### Plot PCA 
 pca_tumor_normal<-plotPCA(vst_dds, intgroup="tumor_normal") + theme_bw() + ggtitle("tumor_normal")
-pca_gender<-plotPCA(vst_dds, intgroup="gender") + theme_bw()             + ggtitle("gender")
-pca_age_range<-plotPCA(vst_dds, intgroup="age_range")+ theme_bw()        + ggtitle("age_range")
-pca_stages<-plotPCA(vst_dds, intgroup="stages")+ theme_bw()              + ggtitle("stages")
+pca_gender      <-plotPCA(vst_dds, intgroup="gender") + theme_bw()             + ggtitle("gender")
+pca_age_range   <-plotPCA(vst_dds, intgroup="age_range")+ theme_bw()        + ggtitle("age_range")
+pca_stages      <-plotPCA(vst_dds, intgroup="stages")+ theme_bw()              + ggtitle("stages")
+pca_tumor_stages<-plotPCA(vst_dds, intgroup="Tumor_Stage")+ theme_bw()         + ggtitle("stages")
 
 library(gridExtra)
 library(cowplot)
 pca_plots<-grid.arrange(pca_tumor_normal, pca_gender,pca_age_range,pca_stages,  nrow = 2)
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"pca_plots.png",sep=""), width = 24, height = 24, res=600, units = "cm")
-	plot_grid(pca_tumor_normal, pca_gender,pca_age_range,pca_stages,         ncol = 2, nrow = 2)
+png(filename=paste(output_dir,"pca_plots.png",sep=""), width = 24, height = 36, res=600, units = "cm")
+	plot_grid(pca_tumor_normal, pca_gender,pca_age_range,pca_stages, pca_tumor_stages,         ncol = 2, nrow = 3)
 dev.off()
 #####################################################################################################################
 # Analysis of differential expression by stages, "one group vs. all others".
@@ -156,3 +160,5 @@ write_tsv(Stage_I_sub, "/home/felipe/Documentos/LungPortal/samples/stages_StageI
 write_tsv(Stage_II, "/home/felipe/Documentos/LungPortal/samples/stages_StageII.tsv")
 write_tsv(Stage_II_sub, "/home/felipe/Documentos/LungPortal/samples/stages_StageIII.tsv")
 #####################################################################################################################
+
+

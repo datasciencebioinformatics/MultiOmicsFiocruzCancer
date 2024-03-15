@@ -35,6 +35,7 @@ paste /home/felipe/Documentos/LungPortal/samples/*/*."gene_id.txt"  > /home/feli
 # I stopped here 
 ls /home/felipe/Documentos/LungPortal/samples/*/*.rna_seq.augmented_star_gene_counts.tsv | sed 's/\// /g' | sed 's/.rna_seq.augmented_star_gene_counts.tsv/ /g' | awk '{print $7}'  | sed -e 's/ \t/\t/g'  > /home/felipe/Documentos/LungPortal/samples/header.txt
 paste /home/felipe/Documentos/LungPortal/samples/*/*."gene_id.txt" | awk '{print $1}' > /home/felipe/Documentos/LungPortal/samples/gene_ids.txt
+paste /home/felipe/Documentos/LungPortal/samples/*/*."gene_name.txt" | awk '{print $1}' > /home/felipe/Documentos/LungPortal/samples/gene_name.txt
 
 # Save all rnaseq counts
 paste /home/felipe/Documentos/LungPortal/samples/*/*."unstranded.txt"      > /home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tsv

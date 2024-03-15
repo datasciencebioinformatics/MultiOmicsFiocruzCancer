@@ -187,7 +187,7 @@ padj_treshold     = 0.05
 Stage_I_sub<-Stage_I[which(Stage_I$log2FoldChange>log2fc_threshold),]
 Stage_II_sub<-Stage_II[which(Stage_II$log2FoldChange>log2fc_threshold),]
 Stage_III_sub<-Stage_III[which(Stage_III$log2FoldChange>log2fc_threshold),]
-
+#####################################################################################################################
 # Save differential expression table
 write_tsv(Stage_I_sub, "/home/felipe/Documentos/LungPortal/samples/stages_StageI.tsv")
 write_tsv(Stage_II, "/home/felipe/Documentos/LungPortal/samples/stages_StageII.tsv")

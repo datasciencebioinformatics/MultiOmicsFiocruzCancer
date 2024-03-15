@@ -2,6 +2,7 @@ library(readr)
 library("xlsx")
 library(ggplot2)
 library("DESeq2")
+library(gridExtra)
 #####################################################################################################################
 output_dir="/home/felipe/Documentos/LungPortal/output/"                                                             #
 #####################################################################################################################
@@ -113,10 +114,32 @@ dds <- DESeq(dds)
 resultsNames(dds)
 
 # Obtain differential expression numbers
-Stage_I   <-data.frame(results(dds,contrast=list(c("stagesStage.II"), c("stagesStage.III"))), alpha=0.05, lfcThreshold = 1) 
-Stage_I   <-Stage_I[which(Stage_I$log2FoldChange>2   & Stage_I$pvalue     > 0.05),]
+Stage_I    <-data.frame(results(dds,contrast=list(c("stagesStage.I"), c("stagesStage.II","stagesStage.III"))))
+Stage_II   <-data.frame(results(dds,contrast=list(c("stagesStage.II"), c("stagesStage.I","stagesStage.III")))) 
+Stage_III   <-data.frame(results(dds,contrast=list(c("stagesStage.III"), c("stagesStage.I","stagesStage.II")))) 
+
+# Filterby alpha values
+Stage_I<-Stage_I[Stage_I$alpha<0.01,]
+Stage_II<-Stage_I[Stage_II$alpha<0.01,]
+Stage_II<-Stage_I[Stage_III$alpha<0.01,]
+
+# Filterby lfcThreshold values
+Stage_I<-Stage_I[Stage_I$lfcThreshold>2,]
+Stage_II<-Stage_I[Stage_II$lfcThreshold>2,]
+Stage_II<-Stage_I[Stage_III$lfcThreshold>2,]
+
+
+### Transform counts for data visualization
+vst_dds <- vst(dds, blind = TRUE, nsub = 1000, fitType = "parametric")
 #####################################################################################################################
-# Save results for each stage                                                                                       #
+### Plot PCA 
+pca_tumor_normal<-plotPCA(vst_dds, intgroup="tumor_normal") + theme_bw() + ggtitle("tumor_normal")
+pca_gender<-plotPCA(vst_dds, intgroup="gender") + theme_bw()             + ggtitle("gender")
+pca_age_range<-plotPCA(vst_dds, intgroup="age_range")+ theme_bw()        + ggtitle("age_range")
+pca_stages<-plotPCA(vst_dds, intgroup="stages")+ theme_bw()              + ggtitle("stages")
+#####################################################################################################################
+# Save results for each stage
+Stage_I$lfcThreshold
 #####################################################################################################################
 # Save differential expression table
 write_tsv(Stage_I, "/home/felipe/Documentos/LungPortal/samples/stages_StageI.tsv")
@@ -139,8 +162,8 @@ pca_age_range<-plotPCA(vst_dds, intgroup="age_range")+ theme_bw()        + ggtit
 pca_stages<-plotPCA(vst_dds, intgroup="stages")+ theme_bw()              + ggtitle("stages")
 
 library(gridExtra)
+library(cowplot)
 pca_plots<-grid.arrange(pca_tumor_normal, pca_gender,pca_age_range,pca_stages,  nrow = 2)
-
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"pca_plots.png",sep=""), width = 24, height = 24, res=600, units = "cm")

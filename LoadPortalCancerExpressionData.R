@@ -63,6 +63,9 @@ rownames(colData)<-colData$sample_id
 # Filter merged_data_patient_info stages with N>30
 merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$stage %in%  names(which(table(merged_data_patient_info$stage)>30)),]
 
+# Filter merged_data_patient_info stages with N>30
+unstranded_data<-unstranded_data[,colnames(unstranded_data) %in% merged_data_patient_info$sample_id]
+
 # Filter colData
 colData<-colData[unique(merged_data_patient_info$sample_id),]
 

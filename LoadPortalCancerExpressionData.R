@@ -16,6 +16,7 @@ merged_data_patient_info     <-read.table(file = merged_data_patient_info_file, 
 unstranded_file       <- "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tsv"
 colnames_file         <- "/home/felipe/Documentos/LungPortal/samples/header.txt"
 rownames_file         <- "/home/felipe/Documentos/LungPortal/samples/gene_ids.txt"
+rownames_file_2         <- "/home/felipe/Documentos/LungPortal/samples/gene_ids.txt"
 
 # Load data
 unstranded_data<-read.table(file = unstranded_file, sep = '\t', header = FALSE,fill=TRUE)    
@@ -83,6 +84,15 @@ colnames(unstranded_data) <- colData[colnames(unstranded_data),"patient_id"]
 
 # Set colnames
 rownames(colData)<-colData$patient_id
+#####################################################################################################################
+# https://www.frontiersin.org/journals/genetics/articles/10.3389/fgene.2019.00930/full#h3
+# The gene expression data were obtained as RNA-seq files in their version 2 (Illumina Hi-Seq) available for tissues affected by cancer or not (paired tissues), 
+# from TCGA (https://cancergenome.nih.gov/) accessed in February 2016. Version 2 gives gene expression values for 20,532 genes referred to as GeneSymbol, 
+# calculated by RNA-seq through expectation maximization (RSEM) (Li and Dewey, 2011) and normalized according to the upper quartile methods. 
+# The 9,190 genes for which the equivalence between GeneSymbols and UniProtKB could be obtained went through further analysis. 
+# This equivalence list is available in Supplementary Table 1. 
+# To do : use only genes in the list
+/home/felipe/Documentos/LungPortal/Table_1.xls
 #####################################################################################################################
 merged_data_patient_info$patient_id<-paste("patient_",1:length(merged_data_patient_info$sample_id),sep="")
 write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
@@ -160,10 +170,3 @@ write_tsv(Stage_I_sub, "/home/felipe/Documentos/LungPortal/samples/stages_StageI
 write_tsv(Stage_II, "/home/felipe/Documentos/LungPortal/samples/stages_StageII.tsv")
 write_tsv(Stage_II_sub, "/home/felipe/Documentos/LungPortal/samples/stages_StageIII.tsv")
 #####################################################################################################################
-# https://www.frontiersin.org/journals/genetics/articles/10.3389/fgene.2019.00930/full#h3
-# The gene expression data were obtained as RNA-seq files in their version 2 (Illumina Hi-Seq) available for tissues affected by cancer or not (paired tissues), 
-# from TCGA (https://cancergenome.nih.gov/) accessed in February 2016. Version 2 gives gene expression values for 20,532 genes referred to as GeneSymbol, 
-# calculated by RNA-seq through expectation maximization (RSEM) (Li and Dewey, 2011) and normalized according to the upper quartile methods. 
-# The 9,190 genes for which the equivalence between GeneSymbols and UniProtKB could be obtained went through further analysis. 
-# This equivalence list is available in Supplementary Table 1. 
-/home/felipe/Documentos/LungPortal/Table_1.xls

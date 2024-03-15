@@ -97,7 +97,11 @@ colData$gender<-factor(colData$gender)
 colData$age_range<-factor(cut(colData$age_at_index, breaks = c(0, 25, 50,75,100 )))
 
 # Creat DEseq element from unstranded_data and merged_data_patient_info
-dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = tumor_normal ~ age_range + gender + stages   )
+# Here, tumor_normal is the outcome
+# age_range + gender + stages are the covariables
+# for one reason, DESeq is setting the last variable to group vs. all
+# Two ways to check this information 1) check group vs. all, check to pca's
+dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + tumor_normal + age_range + gender + stages)
 
 # Run DESeq2
 dds <- DESeq(dds)

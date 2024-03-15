@@ -126,13 +126,14 @@ padj_treshold     = 0.05
 pca <- prcomp(t(assay(object)[select,]))
 
 # Filterby lfcThreshold values
-Stage_I<-Stage_I[which(Stage_I$log2FoldChange>log2fc_threshold),]
-Stage_II<-Stage_II[which(Stage_II$log2FoldChange>log2fc_threshold),]
-Stage_III<-Stage_III[which(Stage_III$log2FoldChange>log2fc_threshold),]
+Stage_I_sub<-Stage_I[which(Stage_I$log2FoldChange>log2fc_threshold),]
+Stage_II_sub<-Stage_II[which(Stage_II$log2FoldChange>log2fc_threshold),]
+Stage_III_sub<-Stage_III[which(Stage_III$log2FoldChange>log2fc_threshold),]
 
+#####################################################################################################################
 ### Transform counts for data visualization
 vst_dds <- vst(dds, blind = TRUE, nsub = 1000, fitType = "parametric")
-#####################################################################################################################
+
 # Analysis of PCA 
 ## All Genes
 ### Plot PCA 
@@ -151,10 +152,11 @@ png(filename=paste(output_dir,"pca_plots.png",sep=""), width = 24, height = 24, 
 dev.off()
 
 #####################################################################################################################
+$ Plot PCA per genes
 # VST per stage
-vst_dds_I  <- varianceStabilizingTransformation(dds[rownames(Stage_I),], blind = TRUE,fitType = "parametric")
-vst_dds_II  <- varianceStabilizingTransformation(dds[rownames(Stage_II),], blind = TRUE,fitType = "parametric")
-vst_dds_III <- varianceStabilizingTransformation(dds[rownames(Stage_III),], blind = TRUE,fitType = "parametric")
+vst_dds_I  <- varianceStabilizingTransformation(dds[rownames(Stage_I_sub),], blind = TRUE,fitType = "parametric")
+vst_dds_II  <- varianceStabilizingTransformation(dds[rownames(Stage_II_sub),], blind = TRUE,fitType = "parametric")
+vst_dds_III <- varianceStabilizingTransformation(dds[rownames(Stage_III_sub),], blind = TRUE,fitType = "parametric")
 
 pca_stageI<-plotPCA(vst_dds_I, intgroup="stages") + theme_bw()      + ggtitle(paste("Genes of Stages I, padj<",padj_treshold,"log2FoldChange>",log2fc_threshold))
 pca_stageII<-plotPCA(vst_dds_II, intgroup="stages") + theme_bw()    + ggtitle(paste("Genes of Stages II, padj<",padj_treshold,"log2FoldChange>",log2fc_threshold))

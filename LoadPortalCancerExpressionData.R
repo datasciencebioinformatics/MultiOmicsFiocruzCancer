@@ -104,7 +104,7 @@ colData$age_range<-factor(cut(colData$age_at_index, breaks = c(0, 25, 50,75,100 
 
 # If you use a design of ~0 + covariable, then you will have a coefficient for each level of condition. 
 # This is one of the cases where it helps to not have condition at the end of the design (for convenience, we often recommend to put condition at the end, but not in this case).
-dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + tumor_normal + stages + age_range + gender )
+dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + stages + tumor_normal + age_range + gender )
 
 # Run DESeq2
 dds <- DESeq(dds)

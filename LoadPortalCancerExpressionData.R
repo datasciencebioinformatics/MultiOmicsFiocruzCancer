@@ -160,5 +160,10 @@ write_tsv(Stage_I_sub, "/home/felipe/Documentos/LungPortal/samples/stages_StageI
 write_tsv(Stage_II, "/home/felipe/Documentos/LungPortal/samples/stages_StageII.tsv")
 write_tsv(Stage_II_sub, "/home/felipe/Documentos/LungPortal/samples/stages_StageIII.tsv")
 #####################################################################################################################
-
-
+# https://www.frontiersin.org/journals/genetics/articles/10.3389/fgene.2019.00930/full#h3
+# The gene expression data were obtained as RNA-seq files in their version 2 (Illumina Hi-Seq) available for tissues affected by cancer or not (paired tissues), 
+# from TCGA (https://cancergenome.nih.gov/) accessed in February 2016. Version 2 gives gene expression values for 20,532 genes referred to as GeneSymbol, 
+# calculated by RNA-seq through expectation maximization (RSEM) (Li and Dewey, 2011) and normalized according to the upper quartile methods. 
+# The 9,190 genes for which the equivalence between GeneSymbols and UniProtKB could be obtained went through further analysis. 
+# This equivalence list is available in Supplementary Table 1. 
+/home/felipe/Documentos/LungPortal/Table_1.xls

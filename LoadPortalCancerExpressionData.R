@@ -196,6 +196,9 @@ Stage_I_sub   <-Stage_I_sub[Stage_I_sub$padj<padj_treshold,]
 Stage_II_sub  <-Stage_II_sub[Stage_II_sub$padj<padj_treshold,]
 Stage_III_sub <-Stage_III_sub[Stage_III_sub$padj<padj_treshold,]
 
+Stage_I_bck   <-Stage_I_sub
+Stage_II_bck  <-Stage_II_sub
+Stage_III_bck <-Stage_III_sub
 ########################################################################################################################
 vst_Stage_I_sub<-varianceStabilizingTransformation(dds[rownames(Stage_I_sub),], blind = TRUE, fitType = "parametric")
 vst_Stage_II_sub<-varianceStabilizingTransformation(dds[rownames(Stage_II_sub),], blind = TRUE, fitType = "parametric")
@@ -225,6 +228,10 @@ colData(vst_Stage_I_sub)$StageI_one_against_All<-factor(colData(vst_Stage_I_sub)
 colData(vst_Stage_II_sub)$StageII_one_against_All<-factor(colData(vst_Stage_II_sub)$stages=="Stage II")
 colData(vst_Stage_III_sub)$StageIII_one_against_All<-factor(colData(vst_Stage_III_sub)$stages=="Stage III")
 #####################################################################################################################
+Stage_I_sub   <-Stage_I_sub_bck
+Stage_II_sub  <-Stage_II_sub_bck
+Stage_III_sub <-Stage_III_sub_bck
+
 colData(vst_Stage_I_sub)$StageI_one_against_All    <-""
 colData(vst_Stage_II_sub)$StageII_one_against_All  <-""
 colData(vst_Stage_III_sub)$StageIII_one_against_All<-""
@@ -240,13 +247,17 @@ pca_stageI_one_against_All<-plotPCA(vst_Stage_I_sub, intgroup="StageI_one_agains
 pca_stageII_one_against_All<-plotPCA(vst_Stage_II_sub, intgroup="StageII_one_against_All") + theme_bw() + ggtitle("DE Genes from Stage II")
 pca_stageIII_one_against_All<-plotPCA(vst_Stage_III_sub, intgroup="StageIII_one_against_All") + theme_bw() + ggtitle("DE Genes from Stage III")
 
-pca_plots<-grid.arrange(pca_stageI, pca_stageII,pca_stageIII, nrow = 2)
+pca_plots<-grid.arrange(pca_stageI_one_against_All, pca_stageII_one_against_All,pca_stageIII_one_against_All, nrow = 2)
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"Stage_one_against_All.png",sep=""), width = 36, height = 48, res=600, units = "cm")
-	plot_grid(pca_stageI_one_against_All, pca_stageII_one_against_All,pca_stageIII_one_against_All, ncol = 2, nrow = 3)
+	pca_plots<-grid.arrange(pca_stageI_one_against_All, pca_stageII_one_against_All,pca_stageIII_one_against_All, nrow = 2)
 dev.off()
 #####################################################################################################################
+Stage_I_sub   <-Stage_I_sub_bck
+Stage_II_sub  <-Stage_II_sub_bck
+Stage_III_sub <-Stage_III_sub_bck
+
 colData(vst_Stage_I_sub)$Primary_TumorStage_I        <-""
 colData(vst_Stage_II_sub)$Primary_TumorStage_II      <-""
 colData(vst_Stage_III_sub)$Primary_TumorStage_III    <-""
@@ -267,3 +278,17 @@ png(filename=paste(output_dir,"Stage_PrimaryTumorStage_against_All.png",sep=""),
 	plot_grid(pca_stageI, pca_stageII,pca_stageIII, ncol = 2, nrow = 3)
 dev.off()
 #####################################################################################################################
+Stage_I_sub   <-Stage_I_sub_bck
+Stage_II_sub  <-Stage_II_sub_bck
+Stage_III_sub <-Stage_III_sub_bck
+
+# Primary Tumor Stage I Normal
+# Primary Tumor Stage I Tumor
+# All others : colour black
+colData(vst_Stage_I_sub)$Type_Stage_Tumor_Stage_I    <-""
+colData(vst_Stage_I_sub)$Type_Stage_Tumor_Stage_II   <-""
+colData(vst_Stage_I_sub)$Type_Stage_Tumor_Stage_III   <-""
+
+which(colData(vst_Stage_I_sub)$Tumor_Stage!="Primary TumorStage I")
+
+

@@ -1,4 +1,4 @@
-library(readr)
+ibrary(readr)
 library("xlsx")
 library(ggplot2)
 library("DESeq2")
@@ -192,6 +192,18 @@ Stage_I_sub<-Stage_I[which(Stage_I$log2FoldChange>log2fc_threshold),]
 Stage_II_sub<-Stage_II[which(Stage_II$log2FoldChange>log2fc_threshold),]
 Stage_III_sub<-Stage_III[which(Stage_III$log2FoldChange>log2fc_threshold),]
 
+#####################################################################################################################
+# Assert group for stage I samples in the form of Stage I vs. All Others
+colData$StageI_one_against_All<-colData$stages=="Stage I"
+
+# Assert group for stage II samples in the form of Stage II vs. All Others
+colData$StageII_one_against_All<-colData$stages=="Stage II"
+
+# Assert group for stage III samples in the form of Stage III vs. All Others
+colData$StageIII_one_against_All<-colData$stages=="Stage III"
+#####################################################################################################################
+
+
 vst_Stage_I_sub<-varianceStabilizingTransformation(dds[rownames(Stage_I_sub),], blind = TRUE, fitType = "parametric")
 vst_Stage_II_sub<-varianceStabilizingTransformation(dds[rownames(Stage_II_sub),], blind = TRUE, fitType = "parametric")
 vst_Stage_III_sub<-varianceStabilizingTransformation(dds[rownames(Stage_III_sub),], blind = TRUE, fitType = "parametric")
@@ -214,3 +226,13 @@ write_tsv(Stage_III_sub, "/home/felipe/Documentos/LungPortal/samples/stages_Stag
 write_tsv(unstranded_data[rownames(Stage_I_sub),], "/home/felipe/Documentos/LungPortal/samples/rnaseq_raw_counts_StageI.tsv")
 write_tsv(unstranded_data[rownames(Stage_II_sub),], "/home/felipe/Documentos/LungPortal/samples/rnaseq_raw_counts_StageII.tsv")
 write_tsv(unstranded_data[rownames(Stage_III_sub),], "/home/felipe/Documentos/LungPortal/samples/rnaseq_raw_counts_StageIII.tsv")
+#####################################################################################################################
+pca_stageI<-plotPCA(vst_Stage_I_sub, intgroup="stages") + theme_bw() + ggtitle("Tumor_Stage : DE Genes from Stage I")
+pca_stageII<-plotPCA(vst_Stage_II_sub, intgroup="Tumor_Stage") + theme_bw() + ggtitle("Tumor_Stage : DE Genes from Stage II")
+pca_stageIII<-plotPCA(vst_Stage_III_sub, intgroup="Tumor_Stage") + theme_bw() + ggtitle("Tumor_Stage : DE Genes from Stage III")
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"pca_stages_normal_cancer.png",sep=""), width = 36, height = 48, res=600, units = "cm")
+	plot_grid(pca_stageI, pca_stageII,pca_stageIII, ncol = 2, nrow = 3)
+dev.off()
+

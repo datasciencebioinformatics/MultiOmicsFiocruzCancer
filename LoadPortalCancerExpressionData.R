@@ -264,6 +264,3 @@ dev.off()
 #####################################################################################################################
 "stagesStage.II.tumor_normalSolid.Tissue.Normal" 
 "stagesStage.III.tumor_normalSolid.Tissue.Normal"
-
-[8] "stagesStage.II.tumor_normalSolid.Tissue.Normal" 
-[9] "stagesStage.III.tumor_normalSolid.Tissue.Normal"

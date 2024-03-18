@@ -139,6 +139,7 @@ colData$Tumor_Stage<-paste(colData$tumor_normal,colData$stages,sep="")
 
 # Now, I do have the expression
 dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + stages:tumor_normal + stages + tumor_normal + age_range + gender )
+dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + stages + tumor_normal + age_range + gender )
 
 # If you use a design of ~0 + covariable, then you will have a coefficient for each level of condition. 
 # This is one of the cases where it helps to not have condition at the end of the design (for convenience, we often recommend to put condition at the end, but not in this case).
@@ -176,6 +177,8 @@ dev.off()
 #####################################################################################################################
 # Analysis of differential expression by stages, "one group vs. all others".
 # Obtain differential expression numbers
+Normal_Tumor<-data.frame(results(dds,name="tumor_normalSolid.Tissue.Normal")
+
 Stage_I    <-data.frame(results(dds,contrast=list(c("stagesStage.I"), c("stagesStage.II","stagesStage.III"))))
 Stage_II   <-data.frame(results(dds,contrast=list(c("stagesStage.II"), c("stagesStage.I","stagesStage.III")))) 
 Stage_III   <-data.frame(results(dds,contrast=list(c("stagesStage.III"), c("stagesStage.I","stagesStage.II")))) 
@@ -188,9 +191,9 @@ Stage_III_sub<-na.omit(Stage_III)
 log2fc_threshold  = 6
 padj_treshold     = 0.01
 
-Stage_I_sub  <-Stage_I_sub[which(abs(Stage_I_sub$log2FoldChange)>log2fc_threshold),]
+Stage_I_sub   <-Stage_I_sub[which(abs(Stage_I_sub$log2FoldChange)>log2fc_threshold),]
 Stage_II_sub  <-Stage_II_sub[which(abs(Stage_II_sub$log2FoldChange)>log2fc_threshold),]
-Stage_III_sub  <-Stage_III_sub[which(abs(Stage_III_sub$log2FoldChange)>log2fc_threshold),]
+Stage_III_sub <-Stage_III_sub[which(abs(Stage_III_sub$log2FoldChange)>log2fc_threshold),]
 
 Stage_I_sub   <-Stage_I_sub[Stage_I_sub$padj<padj_treshold,]
 Stage_II_sub  <-Stage_II_sub[Stage_II_sub$padj<padj_treshold,]
@@ -291,4 +294,31 @@ colData(vst_Stage_I_sub)$Type_Stage_Tumor_Stage_III   <-""
 
 which(colData(vst_Stage_I_sub)$Tumor_Stage!="Primary TumorStage I")
 
+########################################################################################################################
+library(tidyverse)
+library(ggrepel)
+library(kableExtra)
 
+			 
+p1 <- ggplot(Normal_Tumor, aes(log2FoldChange, -log(padj))) + # -log10 conversion  
+  geom_point(size = 2/5) +  theme_bw()
+
+# Adding color to differentially expressed genes (DEGs)
+ data <- Normal_Tumor %>% 
+  mutate(
+    Expression = case_when(log2FoldChange >= log(2) & padj <= 0.05 ~ "Up-regulated",
+                           log2FoldChange <= -log(2) & padj <= 0.05 ~ "Down-regulated",
+                           TRUE ~ "Unchanged")
+    )
+
+p2 <- ggplot(data, aes(log2FoldChange, -log(padj))) +
+  geom_point(aes(color = Expression), size = 2/5) +
+  xlab(expression("log2FoldChange")) + 
+  ylab(expression("-log"[10]*"padj")) +
+  scale_color_manual(values = c("dodgerblue3", "gray50", "firebrick3")) +
+  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle("DE Genes Tumor-Normal")
+
+
+
+
+			 

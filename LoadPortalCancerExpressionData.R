@@ -242,3 +242,23 @@ png(filename=paste(output_dir,"Stage_one_against_All.png",sep=""), width = 36, h
 	plot_grid(pca_stageI_one_against_All, pca_stageII_one_against_All,pca_stageIII_one_against_All, ncol = 2, nrow = 3)
 dev.off()
 #####################################################################################################################
+colData(vst_Stage_I_sub)$Primary_TumorStage_I        <-""
+colData(vst_Stage_II_sub)$Primary_TumorStage_II      <-""
+colData(vst_Stage_III_sub)$Primary_TumorStage_III    <-""
+
+colData(vst_Stage_I_sub)$Primary_TumorStage_I[which(colData(vst_Stage_I_sub)$Tumor_Stage=="Primary TumorStage I")]<-"Primary TumorStage I"
+colData(vst_Stage_I_sub)$Primary_TumorStage_I[which(colData(vst_Stage_I_sub)$Tumor_Stage!="Primary TumorStage I")]<-"All others"
+colData(vst_Stage_II_sub)$Primary_TumorStage_II[which(colData(vst_Stage_II_sub)$Tumor_Stage=="Primary TumorStage II")]<-"Primary TumorStage II"
+colData(vst_Stage_II_sub)$Primary_TumorStage_II[which(colData(vst_Stage_II_sub)$Tumor_Stage!="Primary TumorStage II")]<-"All others"
+colData(vst_Stage_III_sub)$Primary_TumorStage_III[which(colData(vst_Stage_III_sub)$Tumor_Stage=="Primary TumorStage III")]<-"Primary TumorStage III"
+colData(vst_Stage_III_sub)$Primary_TumorStage_III[which(colData(vst_Stage_III_sub)$Tumor_Stage!="Primary TumorStage III")]<-"All others"
+
+pca_stageI<-plotPCA(vst_Stage_I_sub, intgroup="Primary_TumorStage_I") + theme_bw() + ggtitle("DE Genes from Primary TumorStage I")
+pca_stageII<-plotPCA(vst_Stage_II_sub, intgroup="Primary_TumorStage_II") + theme_bw() + ggtitle("DE Genes from Primary TumorStage II")
+pca_stageIII<-plotPCA(vst_Stage_III_sub, intgroup="Primary_TumorStage_III") + theme_bw() + ggtitle("DE Genes from Primary TumorStage III")
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"Stage_PrimaryTumorStage_against_All.png",sep=""), width = 36, height = 48, res=600, units = "cm")
+	plot_grid(pca_stageI, pca_stageII,pca_stageIII, ncol = 2, nrow = 3)
+dev.off()
+#####################################################################################################################

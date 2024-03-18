@@ -185,26 +185,17 @@ Stage_I_sub<-na.omit(Stage_I)
 Stage_II_sub<-na.omit(Stage_II)
 Stage_III_sub<-na.omit(Stage_III)
 ########################################################################################################################
-log2fc_threshold  = 2
-padj_treshold     = 0.001
-pvalue            = 0.0001
+log2fc_threshold  = 6
+padj_treshold     = 0.01
 
-Stage_I_sub  <-Stage_I_sub[which(abs(Stage_I_sub$log2FoldChange)>padj_treshold),]
-Stage_II_sub <-Stage_II_sub[Stage_II_sub$padj>padj_treshold,]
-Stage_III_sub<-Stage_III_sub[Stage_III_sub$padj>padj_treshold,]
+Stage_I_sub  <-Stage_I_sub[which(abs(Stage_I_sub$log2FoldChange)>log2fc_threshold),]
+Stage_II_sub  <-Stage_II_sub[which(abs(Stage_II_sub$log2FoldChange)>log2fc_threshold),]
+Stage_III_sub  <-Stage_III_sub[which(abs(Stage_III_sub$log2FoldChange)>log2fc_threshold),]
 
-Stage_II_sub <-Stage_II_sub[Stage_II_sub$padj<padj_treshold,]
-Stage_II_sub <-Stage_II_sub[Stage_II_sub$padj<padj_treshold,]
-Stage_III_sub<-Stage_III_sub[Stage_III_sub$padj<padj_treshold,]
+Stage_I_sub   <-Stage_I_sub[Stage_I_sub$padj<padj_treshold,]
+Stage_II_sub  <-Stage_II_sub[Stage_II_sub$padj<padj_treshold,]
+Stage_III_sub <-Stage_III_sub[Stage_III_sub$padj<padj_treshold,]
 
-
-& abs(Stage_I_sub$log2FoldChange)>log2fc_threshold)
-sum(Stage_II_sub$padj<padj_treshold   & abs(Stage_II_sub$log2FoldChange)>log2fc_threshold)
-sum(Stage_III_sub$padj<padj_treshold   & abs(Stage_III_sub$log2FoldChange)>log2fc_threshold)
-
-Stage_I_sub[which(Stage_I_sub$padj<padj_treshold   & abs(Stage_I_sub$log2FoldChange)>log2fc_threshold),]
-Stage_II_sub[which(Stage_II_sub$padj<padj_treshold & abs(Stage_II_sub$log2FoldChange)>log2fc_threshold),]
-Stage_II_sub[which(Stage_II_sub$padj<padj_treshold & abs(Stage_II_sub$log2FoldChange)>log2fc_threshold),]
 ########################################################################################################################
 vst_Stage_I_sub<-varianceStabilizingTransformation(dds[rownames(Stage_I_sub),], blind = TRUE, fitType = "parametric")
 vst_Stage_II_sub<-varianceStabilizingTransformation(dds[rownames(Stage_II_sub),], blind = TRUE, fitType = "parametric")

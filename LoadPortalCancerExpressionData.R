@@ -163,7 +163,7 @@ pca_tumor_normal<-plotPCA(vst_dds, intgroup="tumor_normal") + theme_bw() + ggtit
 pca_gender      <-plotPCA(vst_dds, intgroup="gender") + theme_bw()             + ggtitle("gender")
 pca_age_range   <-plotPCA(vst_dds, intgroup="age_range")+ theme_bw()        + ggtitle("age_range")
 pca_stages      <-plotPCA(vst_dds, intgroup="stages")+ theme_bw()              + ggtitle("stages")
-pca_tumor_stages<-plotPCA(vst_dds, intgroup="Tumor_Stage")+ theme_bw()         + ggtitle("stages")
+pca_tumor_stages<-plotPCA(vst_dds, intgroup="Tumor_Stage")+ theme_bw()         + ggtitle("Stages + Primary diagnosis")
 
 library(gridExtra)
 library(cowplot)
@@ -180,17 +180,35 @@ Stage_I    <-data.frame(results(dds,contrast=list(c("stagesStage.I"), c("stagesS
 Stage_II   <-data.frame(results(dds,contrast=list(c("stagesStage.II"), c("stagesStage.I","stagesStage.III")))) 
 Stage_III   <-data.frame(results(dds,contrast=list(c("stagesStage.III"), c("stagesStage.I","stagesStage.II")))) 
 
+# Filter NA values
+Stage_I_sub<-na.omit(Stage_I)
+Stage_II_sub<-na.omit(Stage_II)
+Stage_III_sub<-na.omit(Stage_III)
+
+log2fc_threshold  = 6
+padj_treshold     = 0.001
+
+Stage_I_sub[which(Stage_I_sub$padj<padj_treshold   & abs(Stage_I_sub$log2FoldChange)>log2fc_threshold),]
+Stage_II_sub[which(Stage_II_sub$padj<padj_treshold & abs(Stage_II_sub$log2FoldChange)>log2fc_threshold),]
+Stage_II_sub[which(Stage_II_sub$padj<padj_treshold & abs(Stage_II_sub$log2FoldChange)>log2fc_threshold),]
+
+sum(Stage_II_sub$padj<padj_treshold)
+sum(Stage_III_sub$padj<padj_treshold)
+
+sum()
+sum(Stage_II_sub$padj<padj_treshold)
+sum(Stage_III_sub$padj<padj_treshold)
+
+
+
 vst_Stage_I  <- vst(dds, blind = TRUE, nsub = 1000, fitType = "parametric")
 vst_Stage_II <- vst(dds, blind = TRUE, nsub = 1000, fitType = "parametric")
 vst_Stage_III<- vst(dds, blind = TRUE, nsub = 1000, fitType = "parametric")
 
-log2fc_threshold  = 1
-padj_treshold     = 0.05
 
-# Filterby lfcThreshold values
-Stage_I_sub<-Stage_I[which(Stage_I$log2FoldChange>log2fc_threshold),]
-Stage_II_sub<-Stage_II[which(Stage_II$log2FoldChange>log2fc_threshold),]
-Stage_III_sub<-Stage_III[which(Stage_III$log2FoldChange>log2fc_threshold),]
+
+
+
 ########################################################################################################################
 vst_Stage_I_sub<-varianceStabilizingTransformation(dds[rownames(Stage_I_sub),], blind = TRUE, fitType = "parametric")
 vst_Stage_II_sub<-varianceStabilizingTransformation(dds[rownames(Stage_II_sub),], blind = TRUE, fitType = "parametric")
@@ -246,21 +264,19 @@ colData(vst_Stage_I_sub)$Primary_TumorStage_I        <-""
 colData(vst_Stage_II_sub)$Primary_TumorStage_II      <-""
 colData(vst_Stage_III_sub)$Primary_TumorStage_III    <-""
 
-colData(vst_Stage_I_sub)$Primary_TumorStage_I[which(colData(vst_Stage_I_sub)$Tumor_Stage=="Primary TumorStage I")]<-"Primary TumorStage I"
+colData(vst_Stage_I_sub)$Primary_TumorStage_I[which(colData(vst_Stage_I_sub)$Tumor_Stage=="Primary TumorStage I")]<-"Primary Tumor Stage I"
 colData(vst_Stage_I_sub)$Primary_TumorStage_I[which(colData(vst_Stage_I_sub)$Tumor_Stage!="Primary TumorStage I")]<-"All others"
-colData(vst_Stage_II_sub)$Primary_TumorStage_II[which(colData(vst_Stage_II_sub)$Tumor_Stage=="Primary TumorStage II")]<-"Primary TumorStage II"
+colData(vst_Stage_II_sub)$Primary_TumorStage_II[which(colData(vst_Stage_II_sub)$Tumor_Stage=="Primary TumorStage II")]<-"Primary Tumor Stage II"
 colData(vst_Stage_II_sub)$Primary_TumorStage_II[which(colData(vst_Stage_II_sub)$Tumor_Stage!="Primary TumorStage II")]<-"All others"
-colData(vst_Stage_III_sub)$Primary_TumorStage_III[which(colData(vst_Stage_III_sub)$Tumor_Stage=="Primary TumorStage III")]<-"Primary TumorStage III"
+colData(vst_Stage_III_sub)$Primary_TumorStage_III[which(colData(vst_Stage_III_sub)$Tumor_Stage=="Primary TumorStage III")]<-"Primary Tumor Stage III"
 colData(vst_Stage_III_sub)$Primary_TumorStage_III[which(colData(vst_Stage_III_sub)$Tumor_Stage!="Primary TumorStage III")]<-"All others"
 
-pca_stageI<-plotPCA(vst_Stage_I_sub, intgroup="Primary_TumorStage_I") + theme_bw() + ggtitle("DE Genes from Primary TumorStage I")
-pca_stageII<-plotPCA(vst_Stage_II_sub, intgroup="Primary_TumorStage_II") + theme_bw() + ggtitle("DE Genes from Primary TumorStage II")
-pca_stageIII<-plotPCA(vst_Stage_III_sub, intgroup="Primary_TumorStage_III") + theme_bw() + ggtitle("DE Genes from Primary TumorStage III")
+pca_stageI<-plotPCA(vst_Stage_I_sub, intgroup="Primary_TumorStage_I") + theme_bw() + ggtitle("DE Genes from Primary Tumor_Stage I")
+pca_stageII<-plotPCA(vst_Stage_II_sub, intgroup="Primary_TumorStage_II") + theme_bw() + ggtitle("DE Genes from Primary Tumor_Stage II")
+pca_stageIII<-plotPCA(vst_Stage_III_sub, intgroup="Primary_TumorStage_III") + theme_bw() + ggtitle("DE Genes from Primary Tumor_Stage III")
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"Stage_PrimaryTumorStage_against_All.png",sep=""), width = 36, height = 48, res=600, units = "cm")
 	plot_grid(pca_stageI, pca_stageII,pca_stageIII, ncol = 2, nrow = 3)
 dev.off()
 #####################################################################################################################
-"stagesStage.II.tumor_normalSolid.Tissue.Normal" 
-"stagesStage.III.tumor_normalSolid.Tissue.Normal"

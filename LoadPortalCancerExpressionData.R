@@ -262,3 +262,8 @@ png(filename=paste(output_dir,"Stage_PrimaryTumorStage_against_All.png",sep=""),
 	plot_grid(pca_stageI, pca_stageII,pca_stageIII, ncol = 2, nrow = 3)
 dev.off()
 #####################################################################################################################
+"stagesStage.II.tumor_normalSolid.Tissue.Normal" 
+"stagesStage.III.tumor_normalSolid.Tissue.Normal"
+
+[8] "stagesStage.II.tumor_normalSolid.Tissue.Normal" 
+[9] "stagesStage.III.tumor_normalSolid.Tissue.Normal"

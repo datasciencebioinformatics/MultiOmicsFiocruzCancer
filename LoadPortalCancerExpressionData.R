@@ -1,4 +1,4 @@
-ibrary(readr)
+library(readr)
 library("xlsx")
 library(ggplot2)
 library("DESeq2")
@@ -184,31 +184,17 @@ Stage_III   <-data.frame(results(dds,contrast=list(c("stagesStage.III"), c("stag
 Stage_I_sub<-na.omit(Stage_I)
 Stage_II_sub<-na.omit(Stage_II)
 Stage_III_sub<-na.omit(Stage_III)
-
-log2fc_threshold  = 6
+########################################################################################################################
+log2fc_threshold  = 4
 padj_treshold     = 0.001
+
+sum(Stage_I_sub$padj<padj_treshold   & abs(Stage_I_sub$log2FoldChange)>log2fc_threshold)
+sum(Stage_II_sub$padj<padj_treshold   & abs(Stage_II_sub$log2FoldChange)>log2fc_threshold)
+sum(Stage_III_sub$padj<padj_treshold   & abs(Stage_III_sub$log2FoldChange)>log2fc_threshold)
 
 Stage_I_sub[which(Stage_I_sub$padj<padj_treshold   & abs(Stage_I_sub$log2FoldChange)>log2fc_threshold),]
 Stage_II_sub[which(Stage_II_sub$padj<padj_treshold & abs(Stage_II_sub$log2FoldChange)>log2fc_threshold),]
 Stage_II_sub[which(Stage_II_sub$padj<padj_treshold & abs(Stage_II_sub$log2FoldChange)>log2fc_threshold),]
-
-sum(Stage_II_sub$padj<padj_treshold)
-sum(Stage_III_sub$padj<padj_treshold)
-
-sum()
-sum(Stage_II_sub$padj<padj_treshold)
-sum(Stage_III_sub$padj<padj_treshold)
-
-
-
-vst_Stage_I  <- vst(dds, blind = TRUE, nsub = 1000, fitType = "parametric")
-vst_Stage_II <- vst(dds, blind = TRUE, nsub = 1000, fitType = "parametric")
-vst_Stage_III<- vst(dds, blind = TRUE, nsub = 1000, fitType = "parametric")
-
-
-
-
-
 ########################################################################################################################
 vst_Stage_I_sub<-varianceStabilizingTransformation(dds[rownames(Stage_I_sub),], blind = TRUE, fitType = "parametric")
 vst_Stage_II_sub<-varianceStabilizingTransformation(dds[rownames(Stage_II_sub),], blind = TRUE, fitType = "parametric")

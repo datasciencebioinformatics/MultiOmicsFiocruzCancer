@@ -177,7 +177,7 @@ dev.off()
 #####################################################################################################################
 # Analysis of differential expression by stages, "one group vs. all others".
 # Obtain differential expression numbers
-Normal_Tumor<-data.frame(results(dds,name="tumor_normalSolid.Tissue.Normal")
+Normal_Tumor<-data.frame(results(dds,name="tumor_normalSolid.Tissue.Normal"))
 
 Stage_I    <-data.frame(results(dds,contrast=list(c("stagesStage.I"), c("stagesStage.II","stagesStage.III"))))
 Stage_II   <-data.frame(results(dds,contrast=list(c("stagesStage.II"), c("stagesStage.I","stagesStage.III")))) 
@@ -299,7 +299,7 @@ library(tidyverse)
 library(ggrepel)
 library(kableExtra)
 
-			 
+# Create volcano plot
 p1 <- ggplot(Normal_Tumor, aes(log2FoldChange, -log(padj))) + # -log10 conversion  
   geom_point(size = 2/5) +  theme_bw()
 

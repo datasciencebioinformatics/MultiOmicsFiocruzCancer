@@ -118,7 +118,7 @@ unstranded_data<-unstranded_data[selected_gene_id,]
 
 #####################################################################################################################
 merged_data_patient_info$patient_id<-paste("patient_",1:length(merged_data_patient_info$sample_id),sep="")
-write_tsv(c, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
+write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
 write_tsv(merged_data_patient_info[,c("patient_id","case_id","sample_id","age_at_index","gender","tumor_normal","stages")], "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv")
 #####################################################################################################################
 # Set collumn to factor
@@ -142,7 +142,7 @@ dds <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colna
 
 # If you use a design of ~0 + covariable, then you will have a coefficient for each level of condition. 
 # This is one of the cases where it helps to not have condition at the end of the design (for convenience, we often recommend to put condition at the end, but not in this case).
-
+#####################################################################################################################
 # Run DESeq2
 dds <- DESeq(dds)
 
@@ -191,19 +191,7 @@ padj_treshold     = 0.05
 Stage_I_sub<-Stage_I[which(Stage_I$log2FoldChange>log2fc_threshold),]
 Stage_II_sub<-Stage_II[which(Stage_II$log2FoldChange>log2fc_threshold),]
 Stage_III_sub<-Stage_III[which(Stage_III$log2FoldChange>log2fc_threshold),]
-
-#####################################################################################################################
-# Assert group for stage I samples in the form of Stage I vs. All Others
-colData$StageI_one_against_All<-colData$stages=="Stage I"
-
-# Assert group for stage II samples in the form of Stage II vs. All Others
-colData$StageII_one_against_All<-colData$stages=="Stage II"
-
-# Assert group for stage III samples in the form of Stage III vs. All Others
-colData$StageIII_one_against_All<-colData$stages=="Stage III"
-#####################################################################################################################
-
-
+########################################################################################################################
 vst_Stage_I_sub<-varianceStabilizingTransformation(dds[rownames(Stage_I_sub),], blind = TRUE, fitType = "parametric")
 vst_Stage_II_sub<-varianceStabilizingTransformation(dds[rownames(Stage_II_sub),], blind = TRUE, fitType = "parametric")
 vst_Stage_III_sub<-varianceStabilizingTransformation(dds[rownames(Stage_III_sub),], blind = TRUE, fitType = "parametric")
@@ -227,12 +215,30 @@ write_tsv(unstranded_data[rownames(Stage_I_sub),], "/home/felipe/Documentos/Lung
 write_tsv(unstranded_data[rownames(Stage_II_sub),], "/home/felipe/Documentos/LungPortal/samples/rnaseq_raw_counts_StageII.tsv")
 write_tsv(unstranded_data[rownames(Stage_III_sub),], "/home/felipe/Documentos/LungPortal/samples/rnaseq_raw_counts_StageIII.tsv")
 #####################################################################################################################
-pca_stageI<-plotPCA(vst_Stage_I_sub, intgroup="stages") + theme_bw() + ggtitle("Tumor_Stage : DE Genes from Stage I")
-pca_stageII<-plotPCA(vst_Stage_II_sub, intgroup="Tumor_Stage") + theme_bw() + ggtitle("Tumor_Stage : DE Genes from Stage II")
-pca_stageIII<-plotPCA(vst_Stage_III_sub, intgroup="Tumor_Stage") + theme_bw() + ggtitle("Tumor_Stage : DE Genes from Stage III")
+# Assert group for stage I samples in the form of Stage I vs. All Others
+colData(vst_Stage_I_sub)$StageI_one_against_All<-factor(colData(vst_Stage_I_sub)$stages=="Stage I")
+colData(vst_Stage_II_sub)$StageII_one_against_All<-factor(colData(vst_Stage_II_sub)$stages=="Stage II")
+colData(vst_Stage_III_sub)$StageIII_one_against_All<-factor(colData(vst_Stage_III_sub)$stages=="Stage III")
+#####################################################################################################################
+colData(vst_Stage_I_sub)$StageI_one_against_All    <-""
+colData(vst_Stage_II_sub)$StageII_one_against_All  <-""
+colData(vst_Stage_III_sub)$StageIII_one_against_All<-""
+
+colData(vst_Stage_I_sub)$StageI_one_against_All[which(colData(vst_Stage_I_sub)$stages=="Stage I")]<-"Stage I"
+colData(vst_Stage_I_sub)$StageI_one_against_All[which(colData(vst_Stage_I_sub)$stages!="Stage I")]<-"All others"
+colData(vst_Stage_II_sub)$StageII_one_against_All[which(colData(vst_Stage_II_sub)$stages=="Stage II")]<-"Stage II"
+colData(vst_Stage_II_sub)$StageII_one_against_All[which(colData(vst_Stage_II_sub)$stages!="Stage II")]<-"All others"
+colData(vst_Stage_III_sub)$StageIII_one_against_All[which(colData(vst_Stage_III_sub)$stages=="Stage III")]<-"Stage III"
+colData(vst_Stage_III_sub)$StageIII_one_against_All[which(colData(vst_Stage_III_sub)$stages!="Stage III")]<-"All others"
+#####################################################################################################################
+pca_stageI_one_against_All<-plotPCA(vst_Stage_I_sub, intgroup="StageI_one_against_All") + theme_bw() + ggtitle("DE Genes from Stage I")
+pca_stageII_one_against_All<-plotPCA(vst_Stage_II_sub, intgroup="StageII_one_against_All") + theme_bw() + ggtitle("DE Genes from Stage II")
+pca_stageIII_one_against_All<-plotPCA(vst_Stage_III_sub, intgroup="StageIII_one_against_All") + theme_bw() + ggtitle("DE Genes from Stage III")
+
+pca_plots<-grid.arrange(pca_stageI, pca_stageII,pca_stageIII, nrow = 2)
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"pca_stages_normal_cancer.png",sep=""), width = 36, height = 48, res=600, units = "cm")
-	plot_grid(pca_stageI, pca_stageII,pca_stageIII, ncol = 2, nrow = 3)
+png(filename=paste(output_dir,"Stage_one_against_All.png",sep=""), width = 36, height = 48, res=600, units = "cm")
+	plot_grid(pca_stageI_one_against_All, pca_stageII_one_against_All,pca_stageIII_one_against_All, ncol = 2, nrow = 3)
 dev.off()
 

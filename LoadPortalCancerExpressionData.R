@@ -4,7 +4,7 @@ library(ggplot2)
 library("DESeq2")
 library(gridExtra)
 #####################################################################################################################
-output_dir="/home/felipe/Documentos/LungPortal/output/"                                                             #
+output_dir="/home/felipe/Do/LungPortal/output/"                                                             #
 #####################################################################################################################
 # Reading the contents of TSV file using read_tsv() method
 merged_data_patient_info_file<- "/home/felipe/Documentos/LungPortal/samples/merged_data_patient_info.tsv"
@@ -247,7 +247,7 @@ colData(vst_Stage_III_sub)$StageIII_one_against_All[which(colData(vst_Stage_III_
 colData(vst_Stage_III_sub)$StageIII_one_against_All[which(colData(vst_Stage_III_sub)$stages!="Stage III")]<-"All others"
 #####################################################################################################################
 pca_stageI_one_against_All<-plotPCA(vst_Stage_I_sub, intgroup="StageI_one_against_All") + theme_bw() + ggtitle("DE Genes from Stage I")
-pca_stageII_one_against_All<-plotPCA(vst_Stage_II_sub, intgroup="StageII_one_against_All") + theme_bw() + ggtitle("DE Genes from Stage II")
+pca_stageII_one_against_All<-plotvst_Normal_TumorPCA(vst_Stage_II_sub, intgroup="StageII_one_against_All") + theme_bw() + ggtitle("DE Genes from Stage II")
 pca_stageIII_one_against_All<-plotPCA(vst_Stage_III_sub, intgroup="StageIII_one_against_All") + theme_bw() + ggtitle("DE Genes from Stage III")
 
 pca_plots<-grid.arrange(pca_stageI_one_against_All, pca_stageII_one_against_All,pca_stageIII_one_against_All, nrow = 2)
@@ -341,8 +341,6 @@ Normal_Tumor_down_sort[which(Normal_Tumor_down_sort$Expression==0),"Categories"]
 Normal_Tumor_down_sort[which(Normal_Tumor_down_sort$Expression==1),"Categories"]<-"Up-regulated"
 Normal_Tumor_down_sort[which(Normal_Tumor_down_sort$Expression==-1),"Categories"]<-"Down-regulated"
 
-
-
 # Create volcano plot
 p1 <- ggplot(Normal_Tumor_up_sort, aes(log2FoldChange, -log(padj))) + # -log10 conversion  
   geom_point(size = 2/5) +  theme_bw()
@@ -353,14 +351,14 @@ p2 <- ggplot(Normal_Tumor_sort, aes(log2FoldChange, -log(padj),color = Categorie
   ylab(expression("-log"[10]*"padj")) +
   scale_color_manual(values = c("dodgerblue3", "gray50", "firebrick3")) +
   guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("5.0% DE Genes Tumor vs. Normal Samples \nsorted by padj\n",paste("Up-regulated :",sum(Normal_Tumor_sort$Categories=="Up-regulated"),"Down-regulated :",sum(Normal_Tumor_sort$Categories=="Down-regulated"),sep=" ")))
+
+# Obtain differential expression numbers
+pca_normal_stage<-plotPCA(vst_dds, intgroup="tumor_normal") + theme_bw() + ggtitle("Tumor_Normal : DE Genes")
 #######################################################################################################################
 # FindClusters_resolution
-png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor.png",sep=""), width = 16, height = 16, res=600, units = "cm")
-	p2
+png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor.png",sep=""), width = 24, height = 32, res=600, units = "cm")
+	pca_plots<-grid.arrange(p2, pca_normal_stage,  nrow = 2)
 dev.off()
 ########################################################################################################################
 write_tsv(Normal_Tumor_sort, "/home/felipe/Documentos/LungPortal/samples/DE_genes_normal_tumor.tsv")
 ########################################################################################################################
-
-
-			 

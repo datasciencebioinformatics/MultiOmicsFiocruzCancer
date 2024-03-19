@@ -350,14 +350,19 @@ p2 <- ggplot(Normal_Tumor_sort, aes(log2FoldChange, -log(padj),color = Categorie
   xlab(expression("log2FoldChange")) + 
   ylab(expression("-log"[10]*"padj")) +
   scale_color_manual(values = c("dodgerblue3", "gray50", "firebrick3")) +
-  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("10.0% DE Genes Tumor vs. Normal Samples \nsorted by padj\n",paste("Up-regulated :",sum(Normal_Tumor_sort$Categories=="Up-regulated"),"Down-regulated :",sum(Normal_Tumor_sort$Categories=="Down-regulated"),sep=" ")))
+  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes Tumor vs. Normal Samples \nsorted by padj - 10.0% of top up-regulated, 10.0% of top up-regulated\n",paste("Up-regulated :",sum(Normal_Tumor_sort$Categories=="Up-regulated"),"Down-regulated :",sum(Normal_Tumor_sort$Categories=="Down-regulated"),sep=" ")))
 
 # Obtain differential expression numbers
 pca_normal_stage<-plotPCA(vst_dds, intgroup="tumor_normal") + theme_bw() + ggtitle("Tumor_Normal : DE Genes")
+
+
+Normal_Tumor_sort_sub<-Normal_Tumor_sort[Normal_Tumor_sort$Categories!="Uncategorized",]
+# Change histogram plot fill colors by groups
+padj_histogram<-ggplot(Normal_Tumor_sort_sub, aes(x=-log(padj), fill=Categories, color=Categories)) +  geom_histogram(position="identity") + scale_fill_manual(values = c("dodgerblue3", "firebrick3"))  + theme_bw() 
 #######################################################################################################################
 # FindClusters_resolution
-png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor.png",sep=""), width = 24, height = 32, res=600, units = "cm")
-	pca_plots<-grid.arrange(p2, pca_normal_stage,  nrow = 2)
+png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor.png",sep=""), width = 24, height = 48, res=600, units = "cm")
+	pca_plots<-grid.arrange(p2, pca_normal_stage,padj_histogram,  nrow = 3)
 dev.off()
 ########################################################################################################################
 Normal_Tumor_sort$Gene<-rownames(Normal_Tumor_sort)

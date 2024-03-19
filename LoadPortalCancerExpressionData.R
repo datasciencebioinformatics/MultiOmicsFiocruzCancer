@@ -300,28 +300,46 @@ library(ggrepel)
 library(kableExtra)
 
 # Sort table by abs(log2FoldChange) and -log(padj)
-Normal_Tumor_sort<- Normal_Tumor[order(Normal_Tumor$padj), ]
+down_regulated<-Normal_Tumor[which(Normal_Tumor$log2FoldChange>=0), ]
+up_regulated<-Normal_Tumor[which(Normal_Tumor$log2FoldChange<0), ]
+
+Normal_Tumor_up_sort<- up_regulated[order(Normal_Tumor$padj), ]
+Normal_Tumor_down_sort<- down_regulated[order(Normal_Tumor$padj), ]
 
 # Field for top 2.5 percent of sorted sample
-Normal_Tumor_sort$Normal_Tumor_sort_5.0<-FALSE
+Normal_Tumor_up_sort$Normal_Tumor_sort_5.0<-FALSE
+Normal_Tumor_down_sort$Normal_Tumor_sort_5.0<-FALSE
 
 # Field for top 2.5 percent of sorted sample
-Normal_Tumor_sort[1:(dim(Normal_Tumor_sort)[1]*0.050),"Normal_Tumor_sort_5.0"]<-TRUE
+Normal_Tumor_up_sort[1:(dim(Normal_Tumor_up_sort)[1]*0.050),"Normal_Tumor_sort_5.0"]<-TRUE
+Normal_Tumor_down_sort[1:(dim(Normal_Tumor_down_sort)[1]*0.050),"Normal_Tumor_sort_5.0"]<-TRUE
 
 # "Unchanged"
-Normal_Tumor_sort$Expression<-0
+Normal_Tumor_up_sort$Expression<-0
+Normal_Tumor_down_sort$Expression<-0
 
-# Set expression
-Normal_Tumor_sort[intersect(which(Normal_Tumor_sort$Normal_Tumor_sort_5.0), which(Normal_Tumor_sort$log2FoldChange < 0)),"Expression"]<--1
-Normal_Tumor_sort[intersect(which(Normal_Tumor_sort$Normal_Tumor_sort_5.0), which(Normal_Tumor_sort$log2FoldChange >= 0)),"Expression"]<-1
+# Set expression up
+Normal_Tumor_up_sort[intersect(which(Normal_Tumor_up_sort$Normal_Tumor_sort_5.0), which(Normal_Tumor_up_sort$log2FoldChange < 0)),"Expression"]<--1
+Normal_Tumor_up_sort[intersect(which(Normal_Tumor_up_sort$Normal_Tumor_sort_5.0), which(Normal_Tumor_up_sort$log2FoldChange >= 0)),"Expression"]<-1
 
-Normal_Tumor_sort$Categories<-""
-Normal_Tumor_sort[which(Normal_Tumor_sort$Expression==0),"Categories"]<-"Uncategorized"
-Normal_Tumor_sort[which(Normal_Tumor_sort$Expression==1),"Categories"]<-"Up-regulated"
-Normal_Tumor_sort[which(Normal_Tumor_sort$Expression==-1),"Categories"]<-"Down-regulated"
+# Set expression up
+Normal_Tumor_down_sort[intersect(which(Normal_Tumor_down_sort$Normal_Tumor_sort_5.0), which(Normal_Tumor_down_sort$log2FoldChange < 0)),"Expression"]<--1
+Normal_Tumor_down_sort[intersect(which(Normal_Tumor_down_sort$Normal_Tumor_sort_5.0), which(Normal_Tumor_down_sort$log2FoldChange >= 0)),"Expression"]<-1
+
+Normal_Tumor_up_sort$Categories<-""
+Normal_Tumor_up_sort[which(Normal_Tumor_up_sort$Expression==0),"Categories"]<-"Uncategorized"
+Normal_Tumor_up_sort[which(Normal_Tumor_up_sort$Expression==1),"Categories"]<-"Up-regulated"
+Normal_Tumor_up_sort[which(Normal_Tumor_up_sort$Expression==-1),"Categories"]<-"Down-regulated"
+
+Normal_Tumor_down_sort$Categories<-""
+Normal_Tumor_down_sort[which(Normal_Tumor_down_sort$Expression==0),"Categories"]<-"Uncategorized"
+Normal_Tumor_down_sort[which(Normal_Tumor_down_sort$Expression==1),"Categories"]<-"Up-regulated"
+Normal_Tumor_down_sort[which(Normal_Tumor_down_sort$Expression==-1),"Categories"]<-"Down-regulated"
+
+rbind(Normal_Tumor_down_sort,Normal_Tumor_up_sort)
 
 # Create volcano plot
-p1 <- ggplot(Normal_Tumor_sort, aes(log2FoldChange, -log(padj))) + # -log10 conversion  
+p1 <- ggplot(Normal_Tumor_up_sort, aes(log2FoldChange, -log(padj))) + # -log10 conversion  
   geom_point(size = 2/5) +  theme_bw()
 
 # Adding color to differentially expressed genes (DEGs)
@@ -330,11 +348,13 @@ p2 <- ggplot(Normal_Tumor_sort, aes(log2FoldChange, -log(padj),color = Categorie
   ylab(expression("-log"[10]*"padj")) +
   scale_color_manual(values = c("dodgerblue3", "gray50", "firebrick3")) +
   guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("5.0% DE Genes Tumor vs. Normal Samples \nsorted by padj\n",paste("Up-regulated :",sum(Normal_Tumor_sort$Categories=="Up-regulated"),"Down-regulated :",sum(Normal_Tumor_sort$Categories=="Down-regulated"),sep=" ")))
-########################################################################################################################
+#######################################################################################################################
 # FindClusters_resolution
 png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor.png",sep=""), width = 16, height = 16, res=600, units = "cm")
 	p2
 dev.off()
+########################################################################################################################
+write_tsv(Normal_Tumor_sort, "/home/felipe/Documentos/LungPortal/samples/DE_genes_normal_tumor.tsv")
 ########################################################################################################################
 
 

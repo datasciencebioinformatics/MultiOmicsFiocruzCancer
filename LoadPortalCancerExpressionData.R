@@ -363,3 +363,9 @@ dev.off()
 Normal_Tumor_sort$Gene<-rownames(Normal_Tumor_sort)
 write_tsv(Normal_Tumor_sort, "/home/felipe/Documentos/LungPortal/samples/DESeq_tumor_normal.tsv")
 ########################################################################################################################
+# To continue here:                                                                                                    #
+# The pca + vocano plot with genes for each stage                                                                      #
+# contrast=list(c("stagesStage.I"), c("stagesStage.II","stagesStage.III")))                                            #
+# contrast=list(c("stagesStage.II"), c("stagesStage.I","stagesStage.III")))                                            #
+# contrast=list(c("stagesStage.III"), c("stagesStage.I","stagesStage.II")))                                            #
+########################################################################################################################

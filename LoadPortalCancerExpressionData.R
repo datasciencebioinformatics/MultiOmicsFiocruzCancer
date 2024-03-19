@@ -299,25 +299,35 @@ library(tidyverse)
 library(ggrepel)
 library(kableExtra)
 
+# Sort table by abs(log2FoldChange) and -log(padj)
+Normal_Tumor_sort<- Normal_Tumor[order(Normal_Tumor$log2FoldChange, -Normal_Tumor$padj), ]
+
+# Field for top 2.5 percent of sorted sample
+Normal_Tumor_sort$Normal_Tumor_sort_2.5<-FALSE
+
+# Field for top 2.5 percent of sorted sample
+Normal_Tumor_sort[1:(dim(Normal_Tumor_sort)[1]*0.025),"Normal_Tumor_sort_2.5"]<-TRUE
+
+# "Unchanged"
+Normal_Tumor_sort$Expression<-0
+
+# Set expression
+Normal_Tumor_sort[which(Normal_Tumor_sort$log2FoldChange >= 0  &    Normal_Tumor_sort_2.5),"Expression"] <-1
+Normal_Tumor_sort[which(Normal_Tumor_sort$log2FoldChange < 0  &     Normal_Tumor_sort_2.5),"Expression"] <--1
+
+Normal_Tumor_sort$Expression<-factor(Normal_Tumor_sort$Expression)
+
 # Create volcano plot
-p1 <- ggplot(Normal_Tumor, aes(log2FoldChange, -log(padj))) + # -log10 conversion  
+p1 <- ggplot(Normal_Tumor_sort, aes(log2FoldChange, -log(padj))) + # -log10 conversion  
   geom_point(size = 2/5) +  theme_bw()
 
 # Adding color to differentially expressed genes (DEGs)
- data <- Normal_Tumor %>% 
-  mutate(
-    Expression = case_when(log2FoldChange >= log(2) & padj <= 0.05 ~ "Up-regulated",
-                           log2FoldChange <= -log(2) & padj <= 0.05 ~ "Down-regulated",
-                           TRUE ~ "Unchanged")
-    )
-
-p2 <- ggplot(data, aes(log2FoldChange, -log(padj))) +
-  geom_point(aes(color = Expression), size = 2/5) +
+p2 <- ggplot(Normal_Tumor_sort, aes(log2FoldChange, -log(padj),color = Expression)) + geom_point(size = 2/5,aes(color = Expression))  +
   xlab(expression("log2FoldChange")) + 
   ylab(expression("-log"[10]*"padj")) +
   scale_color_manual(values = c("dodgerblue3", "gray50", "firebrick3")) +
-  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle("DE Genes Tumor-Normal")
-
+  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle("2.5% DE Genes Tumor vs. Normal Samples")
+########################################################################################################################
 
 
 

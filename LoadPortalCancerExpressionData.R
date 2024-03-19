@@ -360,3 +360,6 @@ png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor.png",sep=""), width = 2
 	pca_plots<-grid.arrange(p2, pca_normal_stage,  nrow = 2)
 dev.off()
 ########################################################################################################################
+Normal_Tumor_sort$Gene<-rownames(Normal_Tumor_sort)
+write_tsv(Normal_Tumor_sort, "/home/felipe/Documentos/LungPortal/samples/DESeq_tumor_normal.tsv")
+########################################################################################################################

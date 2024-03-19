@@ -306,9 +306,14 @@ up_regulated<-Normal_Tumor[which(Normal_Tumor$log2FoldChange<0), ]
 Normal_Tumor_up_sort<- up_regulated[order(Normal_Tumor$padj), ]
 Normal_Tumor_down_sort<- down_regulated[order(Normal_Tumor$padj), ]
 
+Normal_Tumor_up_sort<-na.omit(Normal_Tumor_up_sort)
+Normal_Tumor_down_sort<-na.omit(Normal_Tumor_down_sort)
+
 # Field for top 2.5 percent of sorted sample
 Normal_Tumor_up_sort$Normal_Tumor_sort_5.0<-FALSE
 Normal_Tumor_down_sort$Normal_Tumor_sort_5.0<-FALSE
+
+ 
 
 # Field for top 2.5 percent of sorted sample
 Normal_Tumor_up_sort[1:(dim(Normal_Tumor_up_sort)[1]*0.050),"Normal_Tumor_sort_5.0"]<-TRUE
@@ -336,7 +341,7 @@ Normal_Tumor_down_sort[which(Normal_Tumor_down_sort$Expression==0),"Categories"]
 Normal_Tumor_down_sort[which(Normal_Tumor_down_sort$Expression==1),"Categories"]<-"Up-regulated"
 Normal_Tumor_down_sort[which(Normal_Tumor_down_sort$Expression==-1),"Categories"]<-"Down-regulated"
 
-rbind(Normal_Tumor_down_sort,Normal_Tumor_up_sort)
+
 
 # Create volcano plot
 p1 <- ggplot(Normal_Tumor_up_sort, aes(log2FoldChange, -log(padj))) + # -log10 conversion  

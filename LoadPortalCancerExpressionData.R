@@ -315,8 +315,6 @@ Normal_Tumor_sort$Expression<-0
 Normal_Tumor_sort[which(Normal_Tumor_sort$log2FoldChange >= 0  &    Normal_Tumor_sort_2.5),"Expression"] <-1
 Normal_Tumor_sort[which(Normal_Tumor_sort$log2FoldChange < 0  &     Normal_Tumor_sort_2.5),"Expression"] <--1
 
-Normal_Tumor_sort$Expression<-factor(Normal_Tumor_sort$Expression)
-
 # Create volcano plot
 p1 <- ggplot(Normal_Tumor_sort, aes(log2FoldChange, -log(padj))) + # -log10 conversion  
   geom_point(size = 2/5) +  theme_bw()

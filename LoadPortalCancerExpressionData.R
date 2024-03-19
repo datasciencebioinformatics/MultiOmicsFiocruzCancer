@@ -320,12 +320,9 @@ Normal_Tumor_sort[which(Normal_Tumor_sort$Expression==0),"Categories"]<-"Uncateg
 Normal_Tumor_sort[which(Normal_Tumor_sort$Expression==1),"Categories"]<-"Up-regulated"
 Normal_Tumor_sort[which(Normal_Tumor_sort$Expression==-1),"Categories"]<-"Down-regulated"
 
-
-
 # Create volcano plot
 p1 <- ggplot(Normal_Tumor_sort, aes(log2FoldChange, -log(padj))) + # -log10 conversion  
   geom_point(size = 2/5) +  theme_bw()
-
 
 # Adding color to differentially expressed genes (DEGs)
 p2 <- ggplot(Normal_Tumor_sort, aes(log2FoldChange, -log(padj),color = Categories)) + geom_point(size = 2/5,aes(color = Categories))  +

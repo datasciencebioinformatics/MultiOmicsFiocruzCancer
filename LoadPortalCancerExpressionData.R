@@ -484,3 +484,11 @@ png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor.png",sep=""), width = 2
 	pca_plots<-grid.arrange( p2, padj_histogram,pca_normal_stageI,  ncol = 2)
 dev.off()
 ########################################################################################################################
+colData$stage_I   <- "Stages_II_III"
+colData$stage_II  <- "Stages_I_III"
+colData$stage_III <- "Stages_I_II"
+
+colData$stage_I[which(colData$stages=="Stage I")]<-"Stage I"
+colData$stage_I[which(colData$stages=="Stage I")]<-"Stage II"
+colData$stage_I[which(colData$stages=="Stage I")]<-"Stage III"
+########################################################################################################################

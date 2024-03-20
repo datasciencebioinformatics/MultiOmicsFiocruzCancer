@@ -481,6 +481,6 @@ padj_histogram_Stage_III<-ggplot(Normal_Tumor_sort_Stage_III, aes(x=-log(padj), 
 #######################################################################################################################
 # FindClusters_resolution
 png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor.png",sep=""), width = 24, height = 48, res=600, units = "cm")
-	pca_plots<-grid.arrange(pca_normal_stageI,p2, padj_histogram,  nrow = 3)
+	pca_plots<-grid.arrange( p2, padj_histogram,pca_normal_stageI,  ncol = 2)
 dev.off()
 ########################################################################################################################

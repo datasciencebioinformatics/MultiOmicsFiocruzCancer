@@ -345,25 +345,44 @@ Normal_Tumor_sort<-rbind(Normal_Tumor_down_sort,Normal_Tumor_up_sort)
 p1 <- ggplot(Normal_Tumor_sort, aes(log2FoldChange, -log(padj))) + # -log10 conversion  
   geom_point(size = 2/5) +  theme_bw()
 
+# The thresholds
+threshold_padj<-min(-log(Normal_Tumor_sort[Normal_Tumor_sort$Categories!="Uncategorized","padj"]))
+threshold_log2fc_up<-min(Normal_Tumor_sort[Normal_Tumor_sort$Categories=="Up-regulated","log2FoldChange"])
+threshold_log2fc_down<-max(Normal_Tumor_sort[Normal_Tumor_sort$Categories=="Down-regulated","log2FoldChange"])
+
 # Adding color to differentially expressed genes (DEGs)
 p2 <- ggplot(Normal_Tumor_sort, aes(log2FoldChange, -log(padj),color = Categories)) + geom_point(size = 2/5,aes(color = Categories))  +
   xlab(expression("log2FoldChange")) + 
-  ylab(expression("-log"[10]*"padj")) +
+  ylab(expression("-log(padj)")) +
   scale_color_manual(values = c("dodgerblue3", "gray50", "firebrick3")) +
-  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes Tumor vs. Normal Samples \nsorted by padj - 10.0% of top up-regulated, 10.0% of top up-regulated\n",paste("Up-regulated :",sum(Normal_Tumor_sort$Categories=="Up-regulated"),"Down-regulated :",sum(Normal_Tumor_sort$Categories=="Down-regulated"),sep=" ")))
+  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes Tumor vs. Normal Samples \nsorted by padj - 10.0% of top up-regulated, 10.0% of top up-regulated\n",paste("Up-regulated :",sum(Normal_Tumor_sort$Categories=="Up-regulated"),"Down-regulated :",sum(Normal_Tumor_sort$Categories=="Down-regulated"),sep=" "))) 
+
+# Add treshold lines
+p2 <- p2 + geom_hline(yintercept=threshold_padj ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_up ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_down ,linetype = 'dashed')
+
++ scale_x_continuous(name="Speed of cars", limits=c(0, 30)) 
+
++ (min(Normal_Tumor_sort$log2FoldChange)-0.1):threshold_log2fc_down
+threshold_log2fc_down:Normal_Tumor_sort$log2FoldChange
+
+
+
+    
 
 # Obtain differential expression numbers
 pca_normal_stage<-plotPCA(vst_dds, intgroup="tumor_normal") + theme_bw() + ggtitle("Tumor_Normal : DE Genes")
-
 
 Normal_Tumor_sort_sub<-Normal_Tumor_sort[Normal_Tumor_sort$Categories!="Uncategorized",]
 # Change histogram plot fill colors by groups
 padj_histogram<-ggplot(Normal_Tumor_sort_sub, aes(x=-log(padj), fill=Categories, color=Categories)) +  geom_histogram(position="identity") + scale_fill_manual(values = c("dodgerblue3", "firebrick3"))  + theme_bw() 
 #######################################################################################################################
+
 # FindClusters_resolution
 png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor.png",sep=""), width = 24, height = 48, res=600, units = "cm")
 	pca_plots<-grid.arrange(p2, pca_normal_stage,padj_histogram,  nrow = 3)
 dev.off()
+########################################################################################################################
+
 ########################################################################################################################
 Normal_Tumor_sort$Gene<-rownames(Normal_Tumor_sort)
 write_tsv(Normal_Tumor_sort, "/home/felipe/Documentos/LungPortal/samples/DESeq_tumor_normal.tsv")

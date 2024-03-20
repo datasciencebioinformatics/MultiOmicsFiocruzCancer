@@ -472,13 +472,15 @@ Normal_Tumor_sort_Stage_I<-Normal_Tumor_sort_Stage_I[Normal_Tumor_sort_Stage_I$C
 Normal_Tumor_sort_Stage_II<-Normal_Tumor_sort_Stage_II[Normal_Tumor_sort_Stage_II$Categories!="Uncategorized",]
 Normal_Tumor_sort_Stage_II<-Normal_Tumor_sort_Stage_III[Normal_Tumor_sort_Stage_III$Categories!="Uncategorized",]
 
+df_threshold<-data.frame(threshold_padj=threshold_padj,threshold_pvalue=,threshold_log2fc_up=threshold_log2fc_up,threshold_log2fc_down=threshold_log2fc_down)
+
 # Change histogram plot fill colors by groups
 padj_histogram_Stage_I<-ggplot(Normal_Tumor_sort_Stage_I, aes(x=-log(padj), fill=Categories, color=Categories)) +  geom_histogram(position="identity") + scale_fill_manual(values = c("dodgerblue3", "firebrick3"))  + theme_bw() 
 padj_histogram_Stage_II<-ggplot(Normal_Tumor_sort_Stage_II, aes(x=-log(padj), fill=Categories, color=Categories)) +  geom_histogram(position="identity") + scale_fill_manual(values = c("dodgerblue3", "firebrick3"))  + theme_bw() 
+padj_histogram_Stage_III<-ggplot(Normal_Tumor_sort_Stage_III, aes(x=-log(padj), fill=Categories, color=Categories)) +  geom_histogram(position="identity") + scale_fill_manual(values = c("dodgerblue3", "firebrick3"))  + theme_bw() 
 #######################################################################################################################
-
 # FindClusters_resolution
 png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor.png",sep=""), width = 24, height = 48, res=600, units = "cm")
-	pca_plots<-grid.arrange(pca_normal_stage,p2, padj_histogram,  nrow = 3)
+	pca_plots<-grid.arrange(pca_normal_stageI,p2, padj_histogram,  nrow = 3)
 dev.off()
 ########################################################################################################################

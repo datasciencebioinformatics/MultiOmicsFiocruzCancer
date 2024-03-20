@@ -4,7 +4,7 @@ library(ggplot2)
 library("DESeq2")
 library(gridExtra)
 #####################################################################################################################
-output_dir="/home/felipe/Do/LungPortal/output/"                                                             #
+output_dir="/home/felipe/Documentos/LungPortal/output/"                                                             #
 #####################################################################################################################
 # Reading the contents of TSV file using read_tsv() method
 merged_data_patient_info_file<- "/home/felipe/Documentos/LungPortal/samples/merged_data_patient_info.tsv"
@@ -483,12 +483,228 @@ padj_histogram_Stage_III<-ggplot(Normal_Tumor_sort_Stage_III, aes(x=-log(padj), 
 png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor.png",sep=""), width = 24, height = 48, res=600, units = "cm")
 	pca_plots<-grid.arrange( p2, padj_histogram,pca_normal_stageI,  ncol = 2)
 dev.off()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ########################################################################################################################
 colData$stage_I   <- "Stages_II_III"
 colData$stage_II  <- "Stages_I_III"
 colData$stage_III <- "Stages_I_II"
 
 colData$stage_I[which(colData$stages=="Stage I")]<-"Stage I"
-colData$stage_I[which(colData$stages=="Stage I")]<-"Stage II"
-colData$stage_I[which(colData$stages=="Stage I")]<-"Stage III"
+colData$stage_II[which(colData$stages=="Stage II")]<-"Stage II"
+colData$stage_III[which(colData$stages=="Stage III")]<-"Stage III"
 ########################################################################################################################
+# Run DESeq2
+dds_stage_I   <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + stage_I + tumor_normal + age_range + gender )
+dds_stage_II  <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + stage_II + tumor_normal + age_range + gender )
+dds_stage_III <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + stage_III + tumor_normal + age_range + gender )
+
+# Run DESeq2
+dds_stage_I <- DESeq(dds_stage_I)
+dds_stage_II <- DESeq(dds_stage_II)
+dds_stage_III <- DESeq(dds_stage_III)
+
+# Obtain differential expression numbers
+resultsNames(dds_stage_I)
+resultsNames(dds_stage_II)
+resultsNames(dds_stage_III)
+
+# Df s6tages I
+df_stage_I<-data.frame(results(dds_stage_I,name="stage_IStages_II_III"))
+df_stage_II<-data.frame(results(dds_stage_II,name="stage_IIStages_I_III"))
+df_stage_III<-data.frame(results(dds_stage_III,name="stage_IIIStages_I_II"))
+####################################################################################################################
+# First, stageI
+# Sort table by abs(log2FoldChange) and -log(padj)
+down_regulated_df_stage_I<-Normal_Tumor[which(df_stage_I$log2FoldChange>=0), ]
+up_regulated_df_stage_I<-Normal_Tumor[which(df_stage_I$log2FoldChange<0), ]
+
+# Then, stageII
+# Sort table by abs(log2FoldChange) and -log(padj)
+down_regulated_df_stage_II<-Normal_Tumor[which(df_stage_II$log2FoldChange>=0), ]
+up_regulated_df_stage_II<-Normal_Tumor[which(df_stage_II$log2FoldChange<0), ]
+
+# Then, stageIII
+# Sort table by abs(log2FoldChange) and -log(padj)
+down_regulated_df_stage_III<-Normal_Tumor[which(df_stage_III$log2FoldChange>=0), ]
+up_regulated_df_stage_III<-Normal_Tumor[which(df_stage_III$log2FoldChange<0), ]
+####################################################################################################################
+# First, stageI
+# Sort table by abs(log2FoldChange) and -log(padj)
+Normal_Tumor_up_sort_df_stage_I<- up_regulated_df_stage_I[order(up_regulated_df_stage_I$padj), ]
+Normal_Tumor_down_sort_df_stage_I<- down_regulated_df_stage_I[order(down_regulated_df_stage_I$padj), ]
+Normal_Tumor_up_sort_df_stage_I<- up_regulated_df_stage_I[order(up_regulated_df_stage_I$padj), ]
+Normal_Tumor_down_sort_df_stage_I<- down_regulated_df_stage_I[order(down_regulated_df_stage_I$padj), ]
+
+# Then, stageII
+# Sort table by abs(log2FoldChange) and -log(padj)
+Normal_Tumor_up_sort_df_stage_II<- up_regulated_df_stage_II[order(up_regulated_df_stage_II$padj), ]
+Normal_Tumor_down_sort_df_stage_II<- down_regulated_df_stage_II[order(down_regulated_df_stage_II$padj), ]
+Normal_Tumor_up_sort_df_stage_II<- up_regulated_df_stage_II[order(up_regulated_df_stage_II$padj), ]
+Normal_Tumor_down_sort_df_stage_II<- down_regulated_df_stage_II[order(down_regulated_df_stage_II$padj), ]
+####################################################################################################################
+# Remove NA rows
+# First, stageI
+Normal_Tumor_up_sort_df_stage_I<-na.omit(Normal_Tumor_up_sort_df_stage_I)
+Normal_Tumor_down_sort_df_stage_I<-na.omit(Normal_Tumor_down_sort_df_stage_I)
+
+# Second, stageII
+Normal_Tumor_up_sort_df_stage_II<-na.omit(Normal_Tumor_up_sort_df_stage_II)
+Normal_Tumor_down_sort_df_stage_II<-na.omit(Normal_Tumor_down_sort_df_stage_II)
+####################################################################################################################
+# Field for top 10 percent of sorted sample
+# First, stageI
+Normal_Tumor_up_sort_df_stage_I$Normal_Tumor_sort_10.0<-FALSE
+Normal_Tumor_down_sort_df_stage_I$Normal_Tumor_sort_10.0<-FALSE
+
+# Second, stageII
+Normal_Tumor_up_sort_df_stage_II$Normal_Tumor_sort_10.0<-FALSE
+Normal_Tumor_down_sort_df_stage_II$Normal_Tumor_sort_10.0<-FALSE
+####################################################################################################################
+# First, stageI
+# Field for top 10 percent of sorted sample
+Normal_Tumor_up_sort_df_stage_I[1:(dim(Normal_Tumor_up_sort_df_stage_I)[1]*0.100),"Normal_Tumor_sort_10.0"]<-TRUE
+Normal_Tumor_down_sort_df_stage_I[1:(dim(Normal_Tumor_down_sort_df_stage_I)[1]*0.100),"Normal_Tumor_sort_10.0"]<-TRUE
+
+# Second, stageII
+Normal_Tumor_up_sort_df_stage_II[1:(dim(Normal_Tumor_up_sort_df_stage_II)[1]*0.100),"Normal_Tumor_sort_10.0"]<-TRUE
+Normal_Tumor_down_sort_df_stage_II[1:(dim(Normal_Tumor_down_sort_df_stage_II)[1]*0.100),"Normal_Tumor_sort_10.0"]<-TRUE
+####################################################################################################################
+# First, stageI
+# "Unchanged"
+Normal_Tumor_up_sort_df_stage_I$Expression<-0
+Normal_Tumor_down_sort_df_stage_I$Expression<-0
+
+# Second, stageII
+# "Unchanged"
+Normal_Tumor_up_sort_df_stage_II$Expression<-0
+Normal_Tumor_down_sort_df_stage_II$Expression<-0
+####################################################################################################################
+# Set expression up
+# First, stageI
+Normal_Tumor_up_sort_df_stage_I[intersect(which(Normal_Tumor_up_sort_df_stage_I$Normal_Tumor_sort_10.0), which(Normal_Tumor_up_sort_df_stage_I$log2FoldChange < 0)),"Expression"]<--1
+Normal_Tumor_up_sort_df_stage_I[intersect(which(Normal_Tumor_up_sort_df_stage_I$Normal_Tumor_sort_10.0), which(Normal_Tumor_up_sort_df_stage_I$log2FoldChange >= 0)),"Expression"]<-1
+
+# Then, stageII
+Normal_Tumor_up_sort_df_stage_II[intersect(which(Normal_Tumor_up_sort_df_stage_II$Normal_Tumor_sort_10.0), which(Normal_Tumor_up_sort_df_stage_II$log2FoldChange < 0)),"Expression"]<--1
+Normal_Tumor_up_sort_df_stage_II[intersect(which(Normal_Tumor_up_sort_df_stage_II$Normal_Tumor_sort_10.0), which(Normal_Tumor_up_sort_df_stage_II$log2FoldChange >= 0)),"Expression"]<-1
+####################################################################################################################
+# Set expression up
+# First, stageI
+Normal_Tumor_down_sort_df_stage_I[intersect(which(Normal_Tumor_down_sort_df_stage_I$Normal_Tumor_sort_10.0), which(Normal_Tumor_down_sort_df_stage_I$log2FoldChange < 0)),"Expression"]<--1
+Normal_Tumor_down_sort_df_stage_I[intersect(which(Normal_Tumor_down_sort_df_stage_I$Normal_Tumor_sort_10.0), which(Normal_Tumor_down_sort_df_stage_I$log2FoldChange >= 0)),"Expression"]<-1
+
+# Second, stageII
+Normal_Tumor_down_sort_df_stage_II[intersect(which(Normal_Tumor_down_sort_df_stage_II$Normal_Tumor_sort_10.0), which(Normal_Tumor_down_sort_df_stage_II$log2FoldChange < 0)),"Expression"]<--1
+Normal_Tumor_down_sort_df_stage_II[intersect(which(Normal_Tumor_down_sort_df_stage_II$Normal_Tumor_sort_10.0), which(Normal_Tumor_down_sort_df_stage_II$log2FoldChange >= 0)),"Expression"]<-1
+####################################################################################################################
+# First, stageI
+Normal_Tumor_up_sort_Stage_I$Categories<-""
+Normal_Tumor_up_sort_Stage_I[which(Normal_Tumor_up_sort_Stage_I$Expression==0),"Categories"]<-"Uncategorized"
+Normal_Tumor_up_sort_Stage_I[which(Normal_Tumor_up_sort_Stage_I$Expression==1),"Categories"]<-"Up-regulated"
+Normal_Tumor_up_sort_Stage_I[which(Normal_Tumor_up_sort_Stage_I$Expression==-1),"Categories"]<-"Down-regulated"
+
+# Second, stageII
+Normal_Tumor_up_sort_Stage_II$Categories<-""
+Normal_Tumor_up_sort_Stage_II[which(Normal_Tumor_up_sort_Stage_II$Expression==0),"Categories"]<-"Uncategorized"
+Normal_Tumor_up_sort_Stage_II[which(Normal_Tumor_up_sort_Stage_II$Expression==1),"Categories"]<-"Up-regulated"
+Normal_Tumor_up_sort_Stage_II[which(Normal_Tumor_up_sort_Stage_II$Expression==-1),"Categories"]<-"Down-regulated"
+####################################################################################################################
+# Second, stageI
+Normal_Tumor_down_sort_Stage_I$Categories<-""
+Normal_Tumor_down_sort_Stage_I[which(Normal_Tumor_down_sort_Stage_I$Expression==0),"Categories"]<-"Uncategorized"
+Normal_Tumor_down_sort_Stage_I[which(Normal_Tumor_down_sort_Stage_I$Expression==1),"Categories"]<-"Up-regulated"
+Normal_Tumor_down_sort_Stage_I[which(Normal_Tumor_down_sort_Stage_I$Expression==-1),"Categories"]<-"Down-regulated"
+
+# Second, stageII
+Normal_Tumor_down_sort_Stage_II$Categories<-""
+Normal_Tumor_down_sort_Stage_II[which(Normal_Tumor_down_sort_Stage_II$Expression==0),"Categories"]<-"Uncategorized"
+Normal_Tumor_down_sort_Stage_II[which(Normal_Tumor_down_sort_Stage_II$Expression==1),"Categories"]<-"Up-regulated"
+Normal_Tumor_down_sort_Stage_II[which(Normal_Tumor_down_sort_Stage_II$Expression==-1),"Categories"]<-"Down-regulated"
+####################################################################################################################
+Normal_Tumor_sort_Stage_I<-rbind(Normal_Tumor_up_sort_Stage_I,Normal_Tumor_down_sort_Stage_I)
+Normal_Tumor_sort_Stage_II<-rbind(Normal_Tumor_up_sort_Stage_II,Normal_Tumor_down_sort_Stage_II)
+Normal_Tumor_sort_Stage_III<-rbind(Normal_Tumor_up_sort_Stage_II,Normal_Tumor_down_sort_Stage_III)
+####################################################################################################################
+
+# Create volcano plot
+p1 <- ggplot(Normal_Tumor_sort, aes(log2FoldChange, -log(padj))) + # -log10 conversion  
+  geom_point(size = 2/5) +  theme_bw()
+
+# The thresholds
+threshold_padj<-min(-log(Normal_Tumor_sort[Normal_Tumor_sort$Categories!="Uncategorized","padj"]))
+threshold_log2fc_up<-min(Normal_Tumor_sort[Normal_Tumor_sort$Categories=="Up-regulated","log2FoldChange"])
+threshold_log2fc_down<-max(Normal_Tumor_sort[Normal_Tumor_sort$Categories=="Down-regulated","log2FoldChange"])
+
+# Adding color to differentially expressed genes (DEGs)
+p2 <- ggplot(Normal_Tumor_sort_Stage_I, aes(log2FoldChange, -log(padj),color = Categories)) + geom_point(size = 2/5,aes(color = Categories))  +
+  xlab(expression("log2FoldChange")) + 
+  ylab(expression("-log(padj)")) +
+  scale_color_manual(values = c("dodgerblue3", "gray50", "firebrick3")) +
+  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes Stage I vs. Stages II and III \n10.0% of top up-regulated, 10.0% of top up-regulated (padj)\n",paste("Up-regulated :",sum(Normal_Tumor_sort_Stage_I$Categories=="Up-regulated"),"Down-regulated :",sum(Normal_Tumor_sort_Stage_I$Categories=="Down-regulated"),sep=" "))) 
+
+# Add treshold lines
+p2 <- p2 + geom_hline(yintercept=threshold_padj ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_up ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_down ,linetype = 'dashed')
+ 
+# Obtain differential expression numbers
+pca_normal_stageI<-plotPCA(vst_Stage_I_sub, intgroup="Tumor_Stage") + theme_bw() + ggtitle("DE Genes of Stage I") + theme(legend.position='bottom')
+
+Normal_Tumor_sort_Stage_I<-Normal_Tumor_sort_Stage_I[Normal_Tumor_sort_Stage_I$Categories!="Uncategorized",]
+
+# Change histogram plot fill colors by groups
+padj_histogram_Stage_I<-ggplot(Normal_Tumor_sort_Stage_I, aes(x=-log(padj), fill=Categories, color=Categories)) +  geom_histogram(position="identity") + scale_fill_manual(values = c("dodgerblue3", "firebrick3"))  + theme_bw() 
+#######################################################################################################################
+# FindClusters_resolution
+png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor.png",sep=""), width = 28, height = 24, res=600, units = "cm")
+	pca_plots<-grid.arrange( p2, padj_histogram,pca_normal_stageI,  ncol = 2)
+dev.off()
+########################################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# pca_tumor_stages
+pca_tumor_stage_I<-plotPCA(vst_stage_I, intgroup="stage_I")+ theme_bw()         + ggtitle("DE Genes Stage I against Stages II and III")

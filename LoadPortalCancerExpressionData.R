@@ -230,10 +230,6 @@ colData(vst_Stage_I_sub)$StageI_one_against_All<-factor(colData(vst_Stage_I_sub)
 colData(vst_Stage_II_sub)$StageII_one_against_All<-factor(colData(vst_Stage_II_sub)$stages=="Stage II")
 colData(vst_Stage_III_sub)$StageIII_one_against_All<-factor(colData(vst_Stage_III_sub)$stages=="Stage III")
 #####################################################################################################################
-Stage_I_sub   <-Stage_I_sub_bck
-Stage_II_sub  <-Stage_II_sub_bck
-Stage_III_sub <-Stage_III_sub_bck
-
 colData(vst_Stage_I_sub)$StageI_one_against_All    <-""
 colData(vst_Stage_II_sub)$StageII_one_against_All  <-""
 colData(vst_Stage_III_sub)$StageIII_one_against_All<-""
@@ -246,9 +242,8 @@ colData(vst_Stage_III_sub)$StageIII_one_against_All[which(colData(vst_Stage_III_
 colData(vst_Stage_III_sub)$StageIII_one_against_All[which(colData(vst_Stage_III_sub)$stages!="Stage III")]<-"All others"
 #####################################################################################################################
 pca_stageI_one_against_All<-plotPCA(vst_Stage_I_sub, intgroup="StageI_one_against_All") + theme_bw() + ggtitle("DE Genes from Stage I")
-pca_stageII_one_against_All<-plotvst_Normal_TumorPCA(vst_Stage_II_sub, intgroup="StageII_one_against_All") + theme_bw() + ggtitle("DE Genes from Stage II")
+pca_stageII_one_against_All<-plotPCA(vst_Stage_II_sub, intgroup="StageII_one_against_All") + theme_bw() + ggtitle("DE Genes from Stage I")
 pca_stageIII_one_against_All<-plotPCA(vst_Stage_III_sub, intgroup="StageIII_one_against_All") + theme_bw() + ggtitle("DE Genes from Stage III")
-
 pca_plots<-grid.arrange(pca_stageI_one_against_All, pca_stageII_one_against_All,pca_stageIII_one_against_All, nrow = 2)
 
 # FindClusters_resolution
@@ -266,10 +261,6 @@ dev.off()
 
 
 #####################################################################################################################
-Stage_I_sub   <-Stage_I_sub_bck
-Stage_II_sub  <-Stage_II_sub_bck
-Stage_III_sub <-Stage_III_sub_bck
-
 colData(vst_Stage_I_sub)$Primary_TumorStage_I        <-""
 colData(vst_Stage_II_sub)$Primary_TumorStage_II      <-""
 colData(vst_Stage_III_sub)$Primary_TumorStage_III    <-""
@@ -410,71 +401,6 @@ dev.off()
 
 
 
-########################################################################################################################
-# A panel to analyse differential expression comparing samples of each stage against all others stages.
-########################################################################################################################
-# Set colData
-colData$stage_I   <- "Stages_II_III"
-colData$stage_II  <- "Stages_I_III"
-colData$stage_III <- "Stages_I_II"
-
-# Each stage
-colData$stage_I[which(colData$stages=="Stage I")]<-"Stage I"
-colData$stage_II[which(colData$stages=="Stage II")]<-"Stage II"
-colData$stage_III[which(colData$stages=="Stage III")]<-"Stage III"
-########################################################################################################################
-# Run DESeq2
-dds_stage_I   <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + stage_I + tumor_normal + age_range + gender )
-dds_stage_II  <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + stage_II + tumor_normal + age_range + gender )
-dds_stage_III <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + stage_III + tumor_normal + age_range + gender )
-
-# Run DESeq2
-dds_stage_I <- DESeq(dds_stage_I)
-dds_stage_II <- DESeq(dds_stage_II)
-dds_stage_III <- DESeq(dds_stage_III)
-
-# Obtain differential expression numbers
-resultsNames(dds_stage_I)
-resultsNames(dds_stage_II)
-resultsNames(dds_stage_III)
-
-# Df s6tages I
-df_stage_I<-data.frame(results(dds_stage_I,name="stage_IStages_II_III"))
-df_stage_II<-data.frame(results(dds_stage_II,name="stage_IIStages_I_III"))
-df_stage_III<-data.frame(results(dds_stage_III,name="stage_IIIStages_I_II"))
-########################################################################################################################
-# Create volcano plots
-p1 <- ggplot(df_stage_I, aes(log2FoldChange, pvalue)) +  geom_point(size = 2/5) +  theme_bw() + ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")
-p2 <- ggplot(df_stage_II, aes(log2FoldChange, pvalue)) +  geom_point(size = 2/5) +  theme_bw() + ggtitle("DE analysis stage II vs. Stages I and III") + theme(legend.position="bottom")
-p3 <- ggplot(df_stage_III, aes(log2FoldChange, pvalue)) +  geom_point(size = 2/5) +  theme_bw() + ggtitle("DE analysis stage III vs. Stages I and II")  + theme(legend.position="bottom")
-########################################################################################################################
-# Run varianceStabilizingTransformation
-vst_Stage_I_sub<-varianceStabilizingTransformation(dds_stage_I, blind = TRUE, fitType = "parametric")
-vst_Stage_II_sub<-varianceStabilizingTransformation(dds_stage_II, blind = TRUE, fitType = "parametric")
-vst_Stage_III_sub<-varianceStabilizingTransformation(dds_stage_III, blind = TRUE, fitType = "parametric")
-########################################################################################################################
-# Create pcas
-pca_stageI<-plotPCA(vst_Stage_I_sub, intgroup="Tumor_Stage") + theme_bw() +  ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")
-pca_stageII<-plotPCA(vst_Stage_II_sub, intgroup="Tumor_Stage") + theme_bw() + ggtitle("DE analysis stage I vs. Stages II and III")  + theme(legend.position="bottom")
-pca_stageIII<-plotPCA(vst_Stage_III_sub, intgroup="Tumor_Stage") + theme_bw() + ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")
-########################################################################################################################
-write_tsv(df_stage_I, "/home/felipe/Documentos/LungPortal/samples/stage_I_DE_genes.tsv")
-write_tsv(df_stage_II, "/home/felipe/Documentos/LungPortal/samples/stage_II_DE_genes.tsv")
-write_tsv(df_stage_III, "/home/felipe/Documentos/LungPortal/samples/stage_III_DE_genes.tsv")
-########################################################################################################################
-# FindClusters_resolution
-png(filename=paste(output_dir,"OneStage_against_All.png",sep=""), width = 36, height = 24, res=600, units = "cm")
-	plot_grid(pca_stageI, pca_stageII,pca_stageIII,p1, p2,p3, ncol = 3)
-dev.off()
-
-
-
-
-
-
-
-
-
 
 ####################################################################################################################
 # First, stage O
@@ -560,3 +486,176 @@ dev.off()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+########################################################################################################################
+# A panel to analyse differential expression comparing samples of each stage against all others stages.
+########################################################################################################################
+# Set colData
+colData$stage_I   <- "Stages_II_III"
+colData$stage_II  <- "Stages_I_III"
+colData$stage_III <- "Stages_I_II"
+
+# Each stage
+colData$stage_I[which(colData$stages=="Stage I")]<-"Stage I"
+colData$stage_II[which(colData$stages=="Stage II")]<-"Stage II"
+colData$stage_III[which(colData$stages=="Stage III")]<-"Stage III"
+########################################################################################################################
+# Run DESeq2
+dds_stage_I   <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + stage_I + tumor_normal + age_range + gender )
+dds_stage_II  <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + stage_II + tumor_normal + age_range + gender )
+dds_stage_III <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 + stage_III + tumor_normal + age_range + gender )
+
+# Run DESeq2
+dds_stage_I <- DESeq(dds_stage_I)
+dds_stage_II <- DESeq(dds_stage_II)
+dds_stage_III <- DESeq(dds_stage_III)
+
+# Obtain differential expression numbers
+resultsNames(dds_stage_I)
+resultsNames(dds_stage_II)
+resultsNames(dds_stage_III)
+
+# Df s6tages I
+df_stage_I<-data.frame(results(dds_stage_I,name="stage_IStages_II_III"))
+df_stage_II<-data.frame(results(dds_stage_II,name="stage_IIStages_I_III"))
+df_stage_III<-data.frame(results(dds_stage_III,name="stage_IIIStages_I_II"))
+########################################################################################################################
+# Create volcano plots
+p1 <- ggplot(df_stage_I, aes(log2FoldChange, pvalue)) +  geom_point(size = 2/5) +  theme_bw() + ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")
+p2 <- ggplot(df_stage_II, aes(log2FoldChange, pvalue)) +  geom_point(size = 2/5) +  theme_bw() + ggtitle("DE analysis stage II vs. Stages I and III") + theme(legend.position="bottom")
+p3 <- ggplot(df_stage_III, aes(log2FoldChange, pvalue)) +  geom_point(size = 2/5) +  theme_bw() + ggtitle("DE analysis stage III vs. Stages I and II")  + theme(legend.position="bottom")
+########################################################################################################################
+# Run varianceStabilizingTransformation
+vst_Stage_I_sub<-varianceStabilizingTransformation(dds_stage_I, blind = TRUE, fitType = "parametric")
+vst_Stage_II_sub<-varianceStabilizingTransformation(dds_stage_II, blind = TRUE, fitType = "parametric")
+vst_Stage_III_sub<-varianceStabilizingTransformation(dds_stage_III, blind = TRUE, fitType = "parametric")
+########################################################################################################################
+# Create pcas
+pca_stageI<-plotPCA(vst_Stage_I_sub, intgroup="Tumor_Stage") + theme_bw() +  ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")
+pca_stageII<-plotPCA(vst_Stage_II_sub, intgroup="Tumor_Stage") + theme_bw() + ggtitle("DE analysis stage I vs. Stages II and III")  + theme(legend.position="bottom")
+pca_stageIII<-plotPCA(vst_Stage_III_sub, intgroup="Tumor_Stage") + theme_bw() + ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")
+########################################################################################################################
+write_tsv(df_stage_I, "/home/felipe/Documentos/LungPortal/samples/stage_I_DE_genes.tsv")
+write_tsv(df_stage_II, "/home/felipe/Documentos/LungPortal/samples/stage_II_DE_genes.tsv")
+write_tsv(df_stage_III, "/home/felipe/Documentos/LungPortal/samples/stage_III_DE_genes.tsv")
+########################################################################################################################
+# FindClusters_resolution
+# ~0 + stage_I + tumor_normal + age_range + gender
+png(filename=paste(output_dir,"OneStage_against_All_0_stage_X.png",sep=""), width = 36, height = 24, res=600, units = "cm")
+	plot_grid(pca_stageI, pca_stageII,pca_stageIII,p1, p2,p3, ncol = 3) 
+dev.off()
+########################################################################################################################
+# Create pcas
+pca_stageI<-plotPCA(vst_Stage_I_sub, intgroup="tumor_normal") + theme_bw() +  ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")
+pca_stageII<-plotPCA(vst_Stage_II_sub, intgroup="tumor_normal") + theme_bw() + ggtitle("DE analysis stage I vs. Stages II and III")  + theme(legend.position="bottom")
+pca_stageIII<-plotPCA(vst_Stage_III_sub, intgroup="tumor_normal") + theme_bw() + ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")
+
+png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Investigation_0_All_0_stage_X.png",sep=""), width = 36, height = 12, res=600, units = "cm")
+	pca_plots<-grid.arrange(pca_stageI,pca_stageII, pca_stageIII,nrow = 1)
+dev.off()
+
+
+
+
+
+
+
+
+
+########################################################################################################################
+# A panel to analyse differential expression comparing samples of each stage against all others stages.
+########################################################################################################################
+# Aggregate stage and tumor_normal
+colData$stages_diagnosis<-factor(gsub(" ", "_",paste(colData$stages,colData$tumor_normal,sep="_")))
+########################################################################################################################
+# Run DESeq2
+dds_stages_diagnosis <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 +  stages + tumor_normal + age_range + gender   )
+
+# Run DESeq2
+dds_stages_diagnosis <- DESeq(dds_stages_diagnosis)
+
+# Obtain differential expression numbers
+resultsNames(dds_stages_diagnosis)
+
+# Df s6tages I
+df_stage_I<-data.frame(results(dds_stages_diagnosis,name="stagesStage.I"))
+df_stage_II<-data.frame(results(dds_stages_diagnosis,name="stagesStage.II"))
+df_stage_III<-data.frame(results(dds_stages_diagnosis,name="stagesStage.III"))
+########################################################################################################################
+# Create volcano plots
+p1 <- ggplot(df_stage_I, aes(log2FoldChange, pvalue)) +  geom_point(size = 2/5) +  theme_bw() + ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")
+p2 <- ggplot(df_stage_II, aes(log2FoldChange, pvalue)) +  geom_point(size = 2/5) +  theme_bw() + ggtitle("DE analysis stage II vs. Stages I and III") + theme(legend.position="bottom")
+p3 <- ggplot(df_stage_III, aes(log2FoldChange, pvalue)) +  geom_point(size = 2/5) +  theme_bw() + ggtitle("DE analysis stage III vs. Stages I and II")  + theme(legend.position="bottom")
+########################################################################################################################
+# Run varianceStabilizingTransformation
+vst_stages_diagnosis<-varianceStabilizingTransformation(dds_stages_diagnosis, blind = TRUE, fitType = "parametric")
+########################################################################################################################
+# Create pcas
+pca_stageI<-plotPCA(varianceStabilizingTransformation, intgroup="stages") + theme_bw() +  ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")
+########################################################################################################################
+write_tsv(pca_stageI, "/home/felipe/Documentos/LungPortal/samples/stage_I_DE_genes.tsv")
+########################################################################################################################
+# FindClusters_resolution
+# ~0 + stage_I + tumor_normal + age_range + gender
+png(filename=paste(output_dir,"OneStage_against_All_0_All_stages.png",sep=""), width = 36, height = 24, res=600, units = "cm")
+	plot_grid(pca_stageI, pca_stageII,pca_stageIII,p1, p2,p3, ncol = 3)
+dev.off()
+########################################################################################################################
+# Create pcas
+pca_stageI<-plotPCA(vst_Stage_I_sub, intgroup="tumor_normal") + theme_bw() +  ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")
+pca_stageII<-plotPCA(vst_Stage_II_sub, intgroup="tumor_normal") + theme_bw() + ggtitle("DE analysis stage I vs. Stages II and III")  + theme(legend.position="bottom")
+pca_stageIII<-plotPCA(vst_Stage_III_sub, intgroup="tumor_normal") + theme_bw() + ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")
+
+png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Investigation_0_All_stages.png",sep=""), width = 36, height = 12, res=600, units = "cm")
+	pca_plots<-grid.arrange(pca_stageI,pca_stageII, pca_stageIII,nrow = 1)
+dev.off()

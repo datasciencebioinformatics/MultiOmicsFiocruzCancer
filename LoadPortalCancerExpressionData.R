@@ -375,7 +375,7 @@ Normal_Tumor_sort_sub<-Normal_Tumor_sort[Normal_Tumor_sort$Categories!="Uncatego
 padj_histogram<-ggplot(Normal_Tumor_sort_sub, aes(x=-log(padj), fill=Categories, color=Categories)) +  geom_histogram(position="identity") + scale_fill_manual(values = c("dodgerblue3", "firebrick3"))  + theme_bw() 
 #######################################################################################################################
 # FindClusters_resolution
-png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor.png",sep=""), width = 24, height = 48, res=600, units = "cm")
+png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor.png",sep=""), width = 24, height = 36, res=600, units = "cm")
 	pca_plots<-grid.arrange(pca_normal_stage,p2, padj_histogram,  nrow = 3)
 dev.off()
 

@@ -9,7 +9,7 @@ gdc_sample_sheet.2024-03-08.tsv, clinical.txt, sample.txt, exposure.txt, merged_
 Script:
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataFromGDCFiles.R")
 
-# A bash script scan all downloaded .tsv files and create a table containing information for all samples.
+## A bash script scan all downloaded .tsv files and create a table containing information for all samples.
 Output folder :
 
 /home/felipe/Documentos/LungPortal/samples/

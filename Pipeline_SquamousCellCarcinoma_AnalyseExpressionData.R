@@ -559,13 +559,36 @@ dev.off()
 
 
 
+########################################################################################################################
+# A panel to analyse differential expression comparing samples of each stage against all others stages.
+########################################################################################################################
+# Aggregate stage and tumor_normal
+colData$stages_diagnosis<-factor(gsub(" ", "_",paste(colData$stages,colData$tumor_normal,sep="_")))
+########################################################################################################################
+# Run DESeq2
+dds_stages_diagnosis <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~0 +  stages + tumor_normal + age_range + gender   )
 
+# Run DESeq2
+dds_stages_diagnosis <- DESeq(dds_stages_diagnosis)
+
+# Obtain differential expression numbers
+resultsNames(dds_stages_diagnosis)
+
+# Df s6tages I
+df_stage_I<-data.frame(results(dds_stages_diagnosis,name="stagesStage.I"))
+df_stage_II<-data.frame(results(dds_stages_diagnosis,name="stagesStage.II"))
+df_stage_III<-data.frame(results(dds_stages_diagnosis,name="stagesStage.III"))
+
+# Filter dataset by padj and take top 10% of genes
+df_stage_I<-head(df_stage_I[order(df_stage_I$padj,df_stage_I$pvalue, abs(df_stage_I$log2FoldChange)),],n=1000)
+df_stage_II<-head(df_stage_II[order(df_stage_II$padj,df_stage_II$pvalue, abs(df_stage_II$log2FoldChange)),],n=1000)
+df_stage_III<-head(df_stage_III[order(df_stage_III$padj,df_stage_III$pvalue, abs(df_stage_III$log2FoldChange)),],n=1000)
 ########################################################################################################################
 # Verify all components of PCA
 # Run varianceStabilizingTransformation
-vst_Stage_I_sub<-varianceStabilizingTransformation(dds_stage_I, blind = TRUE, fitType = "parametric")
-vst_Stage_II_sub<-varianceStabilizingTransformation(dds_stage_II, blind = TRUE, fitType = "parametric")
-vst_Stage_III_sub<-varianceStabilizingTransformation(dds_stage_III, blind = TRUE, fitType = "parametric")
+vst_Stage_I_sub<-varianceStabilizingTransformation(dds_stage_I[rownames(df_stage_I),], blind = TRUE, fitType = "parametric")
+vst_Stage_II_sub<-varianceStabilizingTransformation(dds_stage_II[rownames(df_stage_II),], blind = TRUE, fitType = "parametric")
+vst_Stage_III_sub<-varianceStabilizingTransformation(dds_stage_III[rownames(df_stage_III),], blind = TRUE, fitType = "parametric")
 
 
 # Obtain assays from VST
@@ -574,9 +597,17 @@ vst_Stage_II_sub_mat <- assay(vst_Stage_II_sub)
 vst_Stage_III_sub_mat <- assay(vst_Stage_III_sub)
 
 # Compute pca matrix
-pca_vst_StageI  <- data.frame(prcomp(t(vst_Stage_I_sub_mat))$x)
-pca_vst_StageII  <- data.frame(prcomp(t(vst_Stage_II_sub_mat))$x)
+pca_vst_StageI    <- data.frame(prcomp(t(vst_Stage_I_sub_mat))$x)
+pca_vst_StageII   <- data.frame(prcomp(t(vst_Stage_II_sub_mat))$x)
 pca_vst_StageIII  <- data.frame(prcomp(t(vst_Stage_III_sub_mat))$x)
+
+########################################################################################################################
+# Filter dataset by padj and take top 10% of genes
+df_stage_I<-head(df_stage_I[order(df_stage_I$padj,df_stage_I$pvalue, abs(df_stage_I$log2FoldChange)),],n=1000)
+df_stage_II<-head(df_stage_II[order(df_stage_II$padj,df_stage_II$pvalue, abs(df_stage_II$log2FoldChange)),],n=1000)
+df_stage_III<-head(df_stage_III[order(df_stage_III$padj,df_stage_III$pvalue, abs(df_stage_III$log2FoldChange)),],n=1000)
+########################################################################################################################
+
 
 # Set colnames
 pca_vst_StageI$patient_id<-rownames(pca_vst_StageI)

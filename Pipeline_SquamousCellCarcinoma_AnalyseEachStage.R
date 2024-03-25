@@ -126,6 +126,9 @@ padj_histogram_Stage_I<-ggplot(Normal_Tumor_sort_Stage_I, aes(x=-log(padj), fill
 png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage1.png",sep=""), width = 28, height = 24, res=600, units = "cm")
 	pca_plots<-grid.arrange( p2, padj_histogram_Stage_I,pca_normal_stageI,  ncol = 2)
 dev.off()
+
+# Save TSV file with genes from Stage1
+write_tsv(Normal_Tumor_sort_Stage_I[Normal_Tumor_sort_Stage_I$Categories!="Uncategorized",], "/home/felipe/Documentos/LungPortal/output/selected_genes_Stage_I.tsv")
 ########################################################################################################################
 # First, stage O
 # First, stageI
@@ -209,6 +212,9 @@ padj_histogram_stage_II<-ggplot(Normal_Tumor_sort_stage_II, aes(x=-log(padj), fi
 png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage2.png",sep=""), width = 28, height = 24, res=600, units = "cm")
 	pca_plots<-grid.arrange( p2, padj_histogram_stage_II,pca_normal_stageII,  ncol = 2)
 dev.off()
+
+# Save TSV file with genes from Stage1
+write_tsv(Normal_Tumor_sort_stage_II[Normal_Tumor_sort_stage_II$Categories!="Uncategorized",], "/home/felipe/Documentos/LungPortal/output/selected_genes_Stage_II.tsv")
 ####################################################################################################################
 # First, stage O
 # First, stageI
@@ -292,5 +298,8 @@ padj_histogram_stage_III<-ggplot(Normal_Tumor_sort_stage_III, aes(x=-log(padj), 
 png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage3.png",sep=""), width = 28, height = 24, res=600, units = "cm")
 	pca_plots<-grid.arrange( p2, padj_histogram_stage_III,pca_normal_stageIII,  ncol = 2)
 dev.off()
+
+# Save TSV file with genes from Stage1
+write_tsv(Normal_Tumor_sort_stage_III[Normal_Tumor_sort_stage_III$Categories!="Uncategorized",], "/home/felipe/Documentos/LungPortal/output/selected_genes_Stage_III.tsv")
 ########################################################################################################################
 

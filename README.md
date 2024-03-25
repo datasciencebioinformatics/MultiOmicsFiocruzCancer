@@ -1,7 +1,7 @@
-# This script downlod the samples from the portal cancer database
+## A script download the samples from the portal cancer database
 gdc-client download -m /home/felipe/Documentos/LungPortal/gdc_manifest.2024-03-08.txt
 
-#### A R script to create metadata from gdc files. 
+## A R script to create metadata from gdc files. 
 Inputs:
 gdc_sample_sheet.2024-03-08.tsv, clinical.txt, sample.txt, exposure.txt, merged_data_patient_info.tsv
 Script:

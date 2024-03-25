@@ -10,8 +10,22 @@ Script:
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataFromGDCFiles.R")
 
 #### This bash script scan all downloaded .tsv files and create a table containing information for all samples.
-Output folder /home/felipe/Documentos/LungPortal/samples/, Output files : unstranded.rna_seq.augmented_star_gene_counts.tsv, unstranded.rna_seq.augmented_star_gene_counts.tsv, stranded_first.rna_seq.augmented_star_gene_counts.tsv, stranded_second.rna_seq.augmented_star_gene_counts.tsv, stranded_second.rna_seq.augmented_star_gene_counts.tsv, tpm_unstranded.rna_seq.augmented_star_gene_counts.tsv, fpkm_unstranded.rna_seq.augmented_star_gene_counts.tsv, header.txt, gene_name.txt
+Output folder :
+
+/home/felipe/Documentos/LungPortal/samples/
+
+Output files : unstranded.rna_seq.augmented_star_gene_counts.tsv 
+unstranded.rna_seq.augmented_star_gene_counts.tsv 
+stranded_first.rna_seq.augmented_star_gene_counts.tsv 
+stranded_second.rna_seq.augmented_star_gene_counts.tsv
+stranded_second.rna_seq.augmented_star_gene_counts.tsv
+tpm_unstranded.rna_seq.augmented_star_gene_counts.tsv
+fpkm_unstranded.rna_seq.augmented_star_gene_counts.tsv 
+header.txt 
+gene_name.txt
+
 Script:
+
 /home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateTableFromFiles.sh
 
 ##### This R script will take the TSV file (metadata), unstranded.rna_seq.augmented_star_gene_counts (rna-seq count data), the name of genes and samples already processed for the primary_diagnosis=Squamous cell carcinoma, NOS

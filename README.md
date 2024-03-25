@@ -1,36 +1,31 @@
-<!-- GETTING STARTED -->
-### Portal Cancer download criteria (create gdc_manifest)
-EXPERIMENTAL_STRATEGY  = RNA-Seq
-
-TISSUE_OR_ORGAN_ORIGIN = lower lobe, lung / lung, NOS / middle lobe, lung / upper lobe, lung / overlapping lesion of lungs
-
-DATA_CATEGORY          = transcriptome profiling
-
-WORKFLOW_TYPE          = STAR - Counts
-
-DATA_FORMAT            = TSV
-
-PROGRAM                = TCGA
-
-### Download command line (cases in gdc_manifest)
+#### This script downlod the samples from the portal cancer database
 gdc-client download -m /home/felipe/Documentos/LungPortal/gdc_manifest.2024-03-08.txt
 
+#### A R script to create metadata from gdc files. 
+#### Inputs:
+#### gdc_sample_sheet.2024-03-08.tsv
+#### clinical.txt
+#### sample.txt
+#### exposure.txt
+#### Output : 
+#### merged_data_patient_info.tsv
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataFromGDCFiles.R")
 
+#### This bash script scan all downloaded .tsv files and create a table containing information for all samples.
+#### Output folder /home/felipe/Documentos/LungPortal/samples/:
+#### unstranded.rna_seq.augmented_star_gene_counts.tsv          
+#### stranded_first.rna_seq.augmented_star_gene_counts.tsv
+#### stranded_second.rna_seq.augmented_star_gene_counts.tsv
+#### tpm_unstranded.rna_seq.augmented_star_gene_counts.tsv
+#### fpkm_unstranded.rna_seq.augmented_star_gene_counts.tsv
+#### header.txt ENSG gene id
+#### gene_name.txt gene symbol
+/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateTableFromFiles.sh
 
-### Filter data (primary_diagnosis==Squamous cell carcinoma, NOS)
-Squamous cell carcinoma, NOS  samples (238 cases, 285 samples, 570 pairs), LUAD database
+#### This R script will take the TSV file (metadata), unstranded.rna_seq.augmented_star_gene_counts (rna-seq count data), 
+#### the name of genes and samples already processed for the primary_diagnosis=Squamous cell carcinoma, NOS
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadExpressionData.R")
 
-
-
-###  Tables
-There are 238 cases, 570 samples, 478 tumor, 92 normal
-The sample_ids were simplified to sample_1...sample_N
-
-/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv
-
-/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv
-
-
-
-
-
+#### A script to analise metadata and expression data of selected samples and cases
+#### In progress
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_AnalyseExpressionData.R")

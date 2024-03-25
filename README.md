@@ -1,4 +1,4 @@
-#### This script downlod the samples from the portal cancer database
+# This script downlod the samples from the portal cancer database
 gdc-client download -m /home/felipe/Documentos/LungPortal/gdc_manifest.2024-03-08.txt
 
 #### A R script to create metadata from gdc files. 

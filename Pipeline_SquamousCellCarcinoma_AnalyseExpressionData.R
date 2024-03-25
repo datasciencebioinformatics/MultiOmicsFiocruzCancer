@@ -541,3 +541,95 @@ pca_stageIII<-plotPCA(vst_Stage_III_sub, intgroup="tumor_normal") + theme_bw() +
 png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Investigation_0_All_stages.png",sep=""), width = 36, height = 12, res=600, units = "cm")
 	pca_plots<-grid.arrange(pca_stageI,pca_stageII, pca_stageIII,nrow = 1)
 dev.off()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+########################################################################################################################
+# Verify all components of PCA
+# Run varianceStabilizingTransformation
+vst_Stage_I_sub<-varianceStabilizingTransformation(dds_stage_I, blind = TRUE, fitType = "parametric")
+vst_Stage_II_sub<-varianceStabilizingTransformation(dds_stage_II, blind = TRUE, fitType = "parametric")
+vst_Stage_III_sub<-varianceStabilizingTransformation(dds_stage_III, blind = TRUE, fitType = "parametric")
+
+
+# Obtain assays from VST
+vst_Stage_I_sub_mat <- assay(vst_Stage_I_sub)
+vst_Stage_II_sub_mat <- assay(vst_Stage_II_sub)
+vst_Stage_III_sub_mat <- assay(vst_Stage_III_sub)
+
+# Compute pca matrix
+pca_vst_StageI  <- data.frame(prcomp(t(vst_Stage_I_sub_mat))$x)
+pca_vst_StageII  <- data.frame(prcomp(t(vst_Stage_II_sub_mat))$x)
+pca_vst_StageIII  <- data.frame(prcomp(t(vst_Stage_III_sub_mat))$x)
+
+# Set colnames
+pca_vst_StageI$patient_id<-rownames(pca_vst_StageI)
+pca_vst_StageII$patient_id<-rownames(pca_vst_StageII)
+pca_vst_StageIII$patient_id<-rownames(pca_vst_StageIII)
+
+# Merge collumns
+df_StageI<-merge(pca_vst_StageI, colData, by = "patient_id")
+df_StageII<-merge(pca_vst_StageII, colData, by = "patient_id")
+df_StageIII<-merge(pca_vst_StageIII, colData, by = "patient_id")
+
+# Merge collumns
+pc1_pc2_StageI<-ggplot(df_StageI, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC1, y=PC2)) + theme_bw() + theme( legend.position = "none" )  
+pc1_pc3_StageI<-ggplot(df_StageI, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC1, y=PC3)) + theme_bw() + theme( legend.position = "none" )  
+pc1_pc4_StageI<-ggplot(df_StageI, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC1, y=PC4)) + theme_bw() + theme( legend.position = "none" )  
+pc2_pc3_StageI<-ggplot(df_StageI, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC2, y=PC3)) + theme_bw() + theme( legend.position = "none" )  
+pc2_pc4_StageI<-ggplot(df_StageI, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC2, y=PC4)) + theme_bw() + theme( legend.position = "none" )  
+pc3_pc4_StageI<-ggplot(df_StageI, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC3, y=PC4)) + theme_bw() + theme( legend.position = "bottom" )  
+
+# Merge collumns
+pc1_pc2_StageII<-ggplot(df_StageII, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC1, y=PC2)) + theme_bw() + theme( legend.position = "none" )  
+pc1_pc3_StageII<-ggplot(df_StageII, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC1, y=PC3)) + theme_bw() + theme( legend.position = "none" )  
+pc1_pc4_StageII<-ggplot(df_StageII, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC1, y=PC4)) + theme_bw() + theme( legend.position = "none" )  
+pc2_pc3_StageII<-ggplot(df_StageII, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC2, y=PC3)) + theme_bw() + theme( legend.position = "none" )  
+pc2_pc4_StageII<-ggplot(df_StageII, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC2, y=PC4)) + theme_bw() + theme( legend.position = "none" )  
+pc3_pc4_StageII<-ggplot(df_StageII, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC3, y=PC4)) + theme_bw() + theme( legend.position = "bottom" )  
+
+
+# Merge collumns
+pc1_pc2_StageIII<-ggplot(df_StageIII, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC1, y=PC2)) + theme_bw() + theme( legend.position = "none" )  
+pc1_pc3_StageIII<-ggplot(df_StageIII, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC1, y=PC3)) + theme_bw() + theme( legend.position = "none" )  
+pc1_pc4_StageIII<-ggplot(df_StageIII, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC1, y=PC4)) + theme_bw() + theme( legend.position = "none" )  
+pc2_pc3_StageIII<-ggplot(df_StageIII, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC2, y=PC3)) + theme_bw() + theme( legend.position = "none" )  
+pc2_pc4_StageIII<-ggplot(df_StageIII, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC2, y=PC4)) + theme_bw() + theme( legend.position = "none" )  
+pc3_pc4_StageIII<-ggplot(df_StageIII, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC3, y=PC4)) + theme_bw() + theme( legend.position = "bottom" )  
+
+
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"stageI_Components.png",sep=""), width = 18, height = 24, res=600, units = "cm")
+	grid.arrange(pc1_pc2_StageI,pc1_pc3_StageI,pc2_pc3_StageI,pc1_pc4_StageI,pc2_pc3_StageI,pc2_pc4_StageI,pc3_pc4_StageI, ncol = 2)  + theme( legend.position = "bottom" )   + theme( legend.position = "none" )  
+dev.off()
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"stageII_Components.png",sep=""), width = 18, height = 24, res=600, units = "cm")
+	grid.arrange(pc1_pc2_StageII,pc1_pc3_StageII,pc2_pc3_StageII,pc1_pc4_StageII,pc2_pc3_StageII,pc2_pc4_StageII,pc3_pc4_StageII,  ncol = 2)  + theme( legend.position = "bottom" )   + theme( legend.position = "none" ) 
+dev.off()
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"stageIII_Components.png",sep=""), width = 18, height = 24, res=600, units = "cm")
+grid.arrange(pc1_pc2_StageII,pc1_pc3_StageIII,pc2_pc3_StageIII,pc1_pc4_StageIII,pc2_pc3_StageIII,pc2_pc4_StageIII,pc3_pc4_StageIII,  ncol = 2)  + theme( legend.position = "bottom" )   + theme( legend.position = "none" ) 
+dev.off()
+
+
+
+

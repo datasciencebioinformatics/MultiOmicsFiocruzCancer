@@ -53,4 +53,3 @@ paste /home/felipe/Documentos/LungPortal/samples/*/*."stranded_first.txt"  > /ho
 paste /home/felipe/Documentos/LungPortal/samples/*/*."stranded_second.txt"  > /home/felipe/Documentos/LungPortal/samples/stranded_second.rna_seq.augmented_star_gene_counts.tsv
 paste /home/felipe/Documentos/LungPortal/samples/*/*."tpm_unstranded.txt"  > /home/felipe/Documentos/LungPortal/samples/tpm_unstranded.rna_seq.augmented_star_gene_counts.tsv
 paste /home/felipe/Documentos/LungPortal/samples/*/*."fpkm_unstranded.txt" > /home/felipe/Documentos/LungPortal/samples/fpkm_unstranded.rna_seq.augmented_star_gene_counts.tsv
-    

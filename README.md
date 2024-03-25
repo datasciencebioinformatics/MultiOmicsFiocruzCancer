@@ -3,12 +3,12 @@ gdc-client download -m /home/felipe/Documentos/LungPortal/gdc_manifest.2024-03-0
 
 #### A R script to create metadata from gdc files. 
 #### Inputs:
-#### gdc_sample_sheet.2024-03-08.tsv
-#### clinical.txt
-#### sample.txt
-#### exposure.txt
-#### Output : 
-#### merged_data_patient_info.tsv
+gdc_sample_sheet.2024-03-08.tsv
+clinical.txt
+sample.txt
+exposure.txt
+Output : 
+merged_data_patient_info.tsv
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataFromGDCFiles.R")
 
 #### This bash script scan all downloaded .tsv files and create a table containing information for all samples.

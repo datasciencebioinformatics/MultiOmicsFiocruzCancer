@@ -658,7 +658,7 @@ dev.off()
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"stageIII_Components.png",sep=""), width = 18, height = 24, res=600, units = "cm")
-grid.arrange(pc1_pc2_StageII,pc1_pc3_StageIII,pc2_pc3_StageIII,pc1_pc4_StageIII,pc2_pc3_StageIII,pc2_pc4_StageIII,pc3_pc4_StageIII,  ncol = 2)  + theme( legend.position = "bottom" )   + theme( legend.position = "none" ) 
+	grid.arrange(pc1_pc2_StageII,pc1_pc3_StageIII,pc2_pc3_StageIII,pc1_pc4_StageIII,pc2_pc3_StageIII,pc2_pc4_StageIII,pc3_pc4_StageIII,  ncol = 2)  + theme( legend.position = "bottom" )   + theme( legend.position = "none" ) 
 dev.off()
 
 

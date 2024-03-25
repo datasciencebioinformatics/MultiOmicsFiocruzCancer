@@ -1,14 +1,24 @@
+# This bash script scan all downloaded .tsv files and create a table containing information for all samples.
+# Output folder /home/felipe/Documentos/LungPortal/samples/:
+# unstranded.rna_seq.augmented_star_gene_counts.tsv          
+# stranded_first.rna_seq.augmented_star_gene_counts.tsv
+# stranded_second.rna_seq.augmented_star_gene_counts.tsv
+# tpm_unstranded.rna_seq.augmented_star_gene_counts.tsv
+# fpkm_unstranded.rna_seq.augmented_star_gene_counts.tsv
+# header.txt ENSG gene id
+# gene_name.txt gene symbol
+
 # A script to obtain all expression data into a data table
 input_folder= /home/felipe/Documentos/LungPortal/samples/
-gene_id	            #1
-gene_name	        #2  
-gene_typec	        #3
-unstranded	        #4	
-stranded_first	    #5
-stranded_second	    #6	
-tpm_unstranded	    #7	
-fpkm_unstranded	    #6
 
+# gene_id	            #1
+# gene_name	            #2  
+# gene_typec	        #3
+# unstranded	        #4	
+# stranded_first	    #5
+# stranded_second	    #6	
+# tpm_unstranded	    #7	
+#fpkm_unstranded	    #6
 # List of files fo gene id
 # For each file
 ls /home/felipe/Documentos/LungPortal/samples/*/*.rna_seq.augmented_star_gene_counts.tsv  | while read file

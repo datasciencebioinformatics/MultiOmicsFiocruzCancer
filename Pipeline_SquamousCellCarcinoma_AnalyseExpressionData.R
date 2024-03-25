@@ -561,6 +561,10 @@ dev.off()
 
 ########################################################################################################################
 # A panel to analyse differential expression comparing samples of each stage against all others stages.
+# This panel has done with pca results of differential expression analysis
+# The used design formula is : ~0 +  stages + tumor_normal + age_range + gender
+# The criteria used to select the genes and construct the pca was:
+# sort results simutaneously by padj, pvalue and abs(log2foldchange) and take the top 10000 genes
 ########################################################################################################################
 # Aggregate stage and tumor_normal
 colData$stages_diagnosis<-factor(gsub(" ", "_",paste(colData$stages,colData$tumor_normal,sep="_")))
@@ -590,7 +594,6 @@ vst_Stage_I_sub<-varianceStabilizingTransformation(dds_stage_I[rownames(df_stage
 vst_Stage_II_sub<-varianceStabilizingTransformation(dds_stage_II[rownames(df_stage_II),], blind = TRUE, fitType = "parametric")
 vst_Stage_III_sub<-varianceStabilizingTransformation(dds_stage_III[rownames(df_stage_III),], blind = TRUE, fitType = "parametric")
 
-
 # Obtain assays from VST
 vst_Stage_I_sub_mat <- assay(vst_Stage_I_sub)
 vst_Stage_II_sub_mat <- assay(vst_Stage_II_sub)
@@ -600,15 +603,28 @@ vst_Stage_III_sub_mat <- assay(vst_Stage_III_sub)
 pca_vst_StageI    <- data.frame(prcomp(t(vst_Stage_I_sub_mat))$x)
 pca_vst_StageII   <- data.frame(prcomp(t(vst_Stage_II_sub_mat))$x)
 pca_vst_StageIII  <- data.frame(prcomp(t(vst_Stage_III_sub_mat))$x)
-
 ########################################################################################################################
+# First, stageI
+# Sort table by abs(log2FoldChange) and -log(padj)
+df_stage_I$up_down<-"uncategorized"
+df_stage_II$up_down<-"uncategorized"
+df_stage_III$up_down<-"uncategorized"
+
+# Up and down-regulated
+df_stage_I[which(df_stage_I$log2FoldChange>=0),"up-regulated"]
+df_stage_I[which(df_stage_I$log2FoldChange<0),"down-regulated" ]
+df_stage_II[which(df_stage_II$log2FoldChange>=0),"up-regulated"]
+df_stage_II[which(df_stage_II$log2FoldChange<0),"down-regulated" ]
+df_stage_III[which(df_stage_III$log2FoldChange>=0),"up-regulated"]
+df_stage_III[which(df_stage_III$log2FoldChange<0),"down-regulated" ]
+
+df_stage_I{df_stage_I$up_down=="up-regulated",]
+
 # Filter dataset by padj and take top 10% of genes
-df_stage_I<-head(df_stage_I[order(df_stage_I$padj,df_stage_I$pvalue, abs(df_stage_I$log2FoldChange)),],n=1000)
+df_stage_I<-head(df_stage_I[order(df_stage_I$padj),],n=1000)
 df_stage_II<-head(df_stage_II[order(df_stage_II$padj,df_stage_II$pvalue, abs(df_stage_II$log2FoldChange)),],n=1000)
 df_stage_III<-head(df_stage_III[order(df_stage_III$padj,df_stage_III$pvalue, abs(df_stage_III$log2FoldChange)),],n=1000)
 ########################################################################################################################
-
-
 # Set colnames
 pca_vst_StageI$patient_id<-rownames(pca_vst_StageI)
 pca_vst_StageII$patient_id<-rownames(pca_vst_StageII)
@@ -661,6 +677,61 @@ png(filename=paste(output_dir,"stageIII_Components.png",sep=""), width = 18, hei
 	grid.arrange(pc1_pc2_StageII,pc1_pc3_StageIII,pc2_pc3_StageIII,pc1_pc4_StageIII,pc2_pc3_StageIII,pc2_pc4_StageIII,pc3_pc4_StageIII,  ncol = 2)  + theme( legend.position = "bottom" )   + theme( legend.position = "none" ) 
 dev.off()
 
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+########################################################################################################################
+# Removal of the normal samples and recalculate differential expression only with tumor samples
+# Filter up only "Primary Tumor"
+colData<-colData[colData$tumor_normal=="Primary Tumor",]
 
+# Filter up only "Primary Tumor" patients
+unstranded_data<-unstranded_data[,as.vector(colData$patient_id)]
 
+# Run DESeq2
+dds_stages_stage_I <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~  age_range + gender +stage_I  )
+dds_stages_stage_II <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~  age_range + gender +stage_II  )
+dds_stages_stage_III <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~  age_range + gender +stage_III  )
 
+# Run DESeq2
+dds_stages_stage_I <- DESeq(dds_stages_stage_I)
+dds_stages_stage_II <- DESeq(dds_stages_stage_II)
+dds_stages_stage_III <- DESeq(dds_stages_stage_III)
+
+# Obtain differential expression numbers
+resultsNames(dds_stages_stage_I)
+resultsNames(dds_stages_stage_II)
+resultsNames(dds_stages_stage_III)
+
+# Df s6tages I
+df_stage_I<-data.frame(results(dds_stages_stage_I,name="stage_I_Stages_II_III_vs_Stage.I"))
+df_stage_II<-data.frame(results(dds_stages_stage_II,name="stage_II_Stages_I_III_vs_Stage.II"))
+df_stage_III<-data.frame(results(dds_stages_stage_III,name="stage_III_Stages_I_II_vs_Stage.III"))
+
+# Verify all components of PCA
+# Run varianceStabilizingTransformation
+vst_Stage_I_sub<-varianceStabilizingTransformation(dds_stages_stage_I, blind = TRUE, fitType = "parametric")
+vst_Stage_II_sub<-varianceStabilizingTransformation(dds_stages_stage_II, blind = TRUE, fitType = "parametric")
+vst_Stage_III_sub<-varianceStabilizingTransformation(dds_stages_stage_III, blind = TRUE, fitType = "parametric")
+
+# Create volcano plots
+p1 <- ggplot(df_stage_I, aes(log2FoldChange, pvalue)) +  geom_point(size = 2/5) +  theme_bw() + ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")
+p2 <- ggplot(df_stage_II, aes(log2FoldChange, pvalue)) +  geom_point(size = 2/5) +  theme_bw() + ggtitle("DE analysis stage II vs. Stages I and III") + theme(legend.position="bottom")
+p3 <- ggplot(df_stage_III, aes(log2FoldChange, pvalue)) +  geom_point(size = 2/5) +  theme_bw() + ggtitle("DE analysis stage III vs. Stages I and II")  + theme(legend.position="bottom")
+
+# Create pcas
+pca_stageI<-plotPCA(vst_Stage_I_sub, intgroup="stages") + theme_bw() +  ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")
+pca_stageII<-plotPCA(vst_Stage_II_sub, intgroup="stages") + theme_bw() +  ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")
+pca_stageIII<-plotPCA(vst_Stage_III_sub, intgroup="stages") + theme_bw() +  ggtitle("DE analysis stage I vs. Stages II and III") + theme(legend.position="bottom")

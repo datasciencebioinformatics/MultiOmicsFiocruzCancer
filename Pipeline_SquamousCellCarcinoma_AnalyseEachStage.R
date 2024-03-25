@@ -189,7 +189,7 @@ p2 <- ggplot(Normal_Tumor_sort_stage_II, aes(log2FoldChange, -log(padj),color = 
   xlab(expression("log2FoldChange")) + 
   ylab(expression("-log(padj)")) +
   scale_color_manual(values = c("dodgerblue3", "gray50", "firebrick3")) +
-  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes Stage I vs. Stages II and III \n10.0% of top up-regulated, 10.0% of top up-regulated (padj)\n",paste("Up-regulated :",sum(Normal_Tumor_sort_stage_II$Categories=="Up-regulated"),"Down-regulated :",sum(Normal_Tumor_sort_stage_II$Categories=="Down-regulated"),sep=" "))) 
+  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes Stage II vs. Stages I and III \n10.0% of top up-regulated, 10.0% of top up-regulated (padj)\n",paste("Up-regulated :",sum(Normal_Tumor_sort_stage_II$Categories=="Up-regulated"),"Down-regulated :",sum(Normal_Tumor_sort_stage_II$Categories=="Down-regulated"),sep=" "))) 
 
 # Add treshold lines
 p2 <- p2 + geom_hline(yintercept=threshold_padj ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_up ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_down ,linetype = 'dashed')
@@ -272,7 +272,7 @@ p2 <- ggplot(Normal_Tumor_sort_stage_III, aes(log2FoldChange, -log(padj),color =
   xlab(expression("log2FoldChange")) + 
   ylab(expression("-log(padj)")) +
   scale_color_manual(values = c("dodgerblue3", "gray50", "firebrick3")) +
-  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes Stage I vs. Stages II and III \n10.0% of top up-regulated, 10.0% of top up-regulated (padj)\n",paste("Up-regulated :",sum(Normal_Tumor_sort_stage_III$Categories=="Up-regulated"),"Down-regulated :",sum(Normal_Tumor_sort_stage_III$Categories=="Down-regulated"),sep=" "))) 
+  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes Stage III vs. Stages I and II \n10.0% of top up-regulated, 10.0% of top up-regulated (padj)\n",paste("Up-regulated :",sum(Normal_Tumor_sort_stage_III$Categories=="Up-regulated"),"Down-regulated :",sum(Normal_Tumor_sort_stage_III$Categories=="Down-regulated"),sep=" "))) 
 
 # Add treshold lines
 p2 <- p2 + geom_hline(yintercept=threshold_padj ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_up ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_down ,linetype = 'dashed')

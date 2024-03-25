@@ -90,6 +90,9 @@ Normal_Tumor_sort_Stage_I[which(Normal_Tumor_sort_Stage_I$Expression==0),"Catego
 Normal_Tumor_sort_Stage_I[which(Normal_Tumor_sort_Stage_I$Expression==1),"Categories"]<-"Up-regulated"
 Normal_Tumor_sort_Stage_I[which(Normal_Tumor_sort_Stage_I$Expression==-1),"Categories"]<-"Down-regulated"
 ####################################################################################################################
+# Save TSV file with genes from Stage1
+write_tsv(Normal_Tumor_sort_Stage_I, "/home/felipe/Documentos/LungPortal/output/genes_StageI.tsv")
+####################################################################################################################
 # Create volcano plot
 p1 <- ggplot(Normal_Tumor_sort_Stage_I, aes(log2FoldChange, -log(padj,2))) +  geom_point(size = 2/5) +  theme_bw()
 
@@ -121,12 +124,9 @@ padj_histogram_Stage_I<-ggplot(Normal_Tumor_sort_Stage_I, aes(x=-log(padj), fill
 #######################################################################################################################
 # FindClusters_resolution
 png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage1.png",sep=""), width = 28, height = 24, res=600, units = "cm")
-	pca_plots<-grid.arrange( p2, padj_histogram_Stage_I,pca_normal_stageI,  ncol = 1)
+	pca_plots<-grid.arrange( p2, padj_histogram_Stage_I,pca_normal_stageI,  ncol = 2)
 dev.off()
 ########################################################################################################################
-# Save TSV file with genes from Stage1
-write_tsv(Normal_Tumor_sort_stage_I, "/home/felipe/Documentos/LungPortal/output/genes_StageI.tsv")
-####################################################################################################################
 # First, stage O
 # First, stageI
 # Sort table by abs(log2FoldChange) and -log(padj)
@@ -173,6 +173,9 @@ Normal_Tumor_sort_stage_II[which(Normal_Tumor_sort_stage_II$Expression==0),"Cate
 Normal_Tumor_sort_stage_II[which(Normal_Tumor_sort_stage_II$Expression==1),"Categories"]<-"Up-regulated"
 Normal_Tumor_sort_stage_II[which(Normal_Tumor_sort_stage_II$Expression==-1),"Categories"]<-"Down-regulated"
 ####################################################################################################################
+# Save TSV file with genes from Stage1
+write_tsv(Normal_Tumor_sort_stage_II, "/home/felipe/Documentos/LungPortal/output/genes_StageII.tsv")
+####################################################################################################################
 # Create volcano plot
 p1 <- ggplot(Normal_Tumor_sort_stage_II, aes(log2FoldChange, -log(padj,2))) +  geom_point(size = 2/5) +  theme_bw()
 
@@ -206,9 +209,6 @@ padj_histogram_stage_II<-ggplot(Normal_Tumor_sort_stage_II, aes(x=-log(padj), fi
 png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage2.png",sep=""), width = 28, height = 24, res=600, units = "cm")
 	pca_plots<-grid.arrange( p2, padj_histogram_stage_II,pca_normal_stageII,  ncol = 2)
 dev.off()
-########################################################################################################################
-# Save TSV file with genes from Stage1
-write_tsv(Normal_Tumor_sort_stage_II, "/home/felipe/Documentos/LungPortal/output/genes_StageII.tsv")
 ####################################################################################################################
 # First, stage O
 # First, stageI
@@ -256,6 +256,9 @@ Normal_Tumor_sort_stage_III[which(Normal_Tumor_sort_stage_III$Expression==0),"Ca
 Normal_Tumor_sort_stage_III[which(Normal_Tumor_sort_stage_III$Expression==1),"Categories"]<-"Up-regulated"
 Normal_Tumor_sort_stage_III[which(Normal_Tumor_sort_stage_III$Expression==-1),"Categories"]<-"Down-regulated"
 ####################################################################################################################
+# Save TSV file with genes from Stage3
+write_tsv(Normal_Tumor_sort_stage_III, "/home/felipe/Documentos/LungPortal/output/genes_StageIII.tsv")
+####################################################################################################################
 # Create volcano plot
 p1 <- ggplot(Normal_Tumor_sort_stage_III, aes(log2FoldChange, -log(padj,2))) +  geom_point(size = 2/5) +  theme_bw()
 
@@ -290,5 +293,4 @@ png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage3.png",sep=""), wi
 	pca_plots<-grid.arrange( p2, padj_histogram_stage_III,pca_normal_stageIII,  ncol = 2)
 dev.off()
 ########################################################################################################################
-# Save TSV file with genes from Stage3
-write_tsv(Normal_Tumor_sort_stage_III, "/home/felipe/Documentos/LungPortal/output/genes_StageIII.tsv")
+

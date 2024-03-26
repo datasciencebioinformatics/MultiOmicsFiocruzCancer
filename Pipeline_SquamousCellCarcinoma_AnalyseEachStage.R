@@ -460,6 +460,11 @@ write_tsv(Normal_Tumor_sort_stage_III[Normal_Tumor_sort_stage_III$Categories!="U
 
 
 ########################################################################################################################
+pca_res <- prcomp(t(assay(vst_stages_sub)))
+summ <- summary(pca_res)
+summ$importance[2,]
+
+
 # Compute pca matrix
 pca_vst_Stage_I_III    <- data.frame(prcomp(t(assay(vst_stages_sub)))$x)
 ########################################################################################################################
@@ -489,5 +494,11 @@ pc3_pc4_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = stages)) + geom_p
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"stageI_Components.png",sep=""), width = 18, height = 24, res=600, units = "cm")
-	grid.arrange(, ncol = 2)  + theme( legend.position = "bottom" )   + theme( legend.position = "none" )  
+	grid.arrange(pc1_pc2_Stage_I_vs_III, pc1_pc3_Stage_I_vs_III, pc1_pc4_Stage_I_vs_III, pc2_pc3_Stage_I_vs_III, pc2_pc4_Stage_I_vs_III, pc3_pc4_Stage_I_vs_III, ncol = 2)  + theme( legend.position = "bottom" )   + theme( legend.position = "none" )  
 dev.off()
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"pca_stageI_Components.png",sep=""), width = 14, height = 14, res=600, units = "cm")
+	scatterplot3d(df_stage_I_vs_III[,c("PC1","PC2","PC3")],color=as.numeric(factor(df_stage_I_vs_III$stages)), pch = 16)
+dev.off()
+

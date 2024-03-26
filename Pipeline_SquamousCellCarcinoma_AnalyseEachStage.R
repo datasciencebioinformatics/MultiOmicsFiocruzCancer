@@ -1,4 +1,4 @@
-á########################################################################################################################
+########################################################################################################################
 # A panel to analyse differential expression comparing samples of each stage against all others stages.
 ########################################################################################################################
 # Set colData
@@ -10,7 +10,7 @@ colData$stage_III <- "Stages_I_II"
 colData$stage_I[which(colData$stages=="Stage I")]<-"Stage I"
 colData$stage_II[which(colData$stages=="Stage II")]<-"Stage II"
 colData$stage_III[which(colData$stages=="Stage III")]<-"Stage III"
-########################################################################################################################
+
 # Removal of the normal samples and recalculate differential expression only with tumor samples
 # Filter up only "Primary Tumor"
 colData<-colData[colData$tumor_normal=="Primary Tumor",]
@@ -437,6 +437,28 @@ write_tsv(Normal_Tumor_sort_stage_III[Normal_Tumor_sort_stage_III$Categories!="U
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ########################################################################################################################
 # Compute pca matrix
 pca_vst_Stage_I_III    <- data.frame(prcomp(t(assay(vst_stages_sub)))$x)
@@ -446,8 +468,9 @@ pca_vst_Stage_I_III    <- data.frame(prcomp(t(assay(vst_stages_sub)))$x)
 df_stage_I_vs_III$up_down<-"uncategorized"
 ########################################################################################################################
 # Select genes and patiens
-selected_genes   <-rownames(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories!="Uncategorized",])
 selected_patients<-colData[colData$stages!="Stage II","patient_id"]
+########################################################################################################################
+pca_vst_Stage_I_III<-pca_vst_Stage_I_III[selected_patients,]
 ########################################################################################################################
 # Set colnames
 pca_vst_Stage_I_III$patient_id<-rownames(pca_vst_Stage_I_III)
@@ -455,12 +478,16 @@ pca_vst_Stage_I_III$patient_id<-rownames(pca_vst_Stage_I_III)
 # Merge collumns
 df_stage_I_vs_III<-merge(pca_vst_Stage_I_III, colData, by = "patient_id")
 ########################################################################################################################
-pca_vst_Stage_I_III[selected_patients,]
-
 # Merge collumns
-pc1_pc2_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC1, y=PC2)) + theme_bw() + theme( legend.position = "none" )  
-pc1_pc3_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC1, y=PC3)) + theme_bw() + theme( legend.position = "none" )  
-pc1_pc4_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC1, y=PC4)) + theme_bw() + theme( legend.position = "none" )  
-pc2_pc3_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC2, y=PC3)) + theme_bw() + theme( legend.position = "none" )  
-pc2_pc4_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC2, y=PC4)) + theme_bw() + theme( legend.position = "none" )  
-pc3_pc4_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC3, y=PC4)) + theme_bw() + theme( legend.position = "bottom" )  
+pc1_pc2_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = stages)) + geom_point(aes(x=PC1, y=PC2)) + theme_bw() + theme( legend.position = "none" )  
+pc1_pc3_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = stages)) + geom_point(aes(x=PC1, y=PC3)) + theme_bw() + theme( legend.position = "none" )  
+pc1_pc4_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = stages)) + geom_point(aes(x=PC1, y=PC4)) + theme_bw() + theme( legend.position = "none" )  
+pc2_pc3_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = stages)) + geom_point(aes(x=PC2, y=PC3)) + theme_bw() + theme( legend.position = "none" )  
+pc2_pc4_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = stages)) + geom_point(aes(x=PC2, y=PC4)) + theme_bw() + theme( legend.position = "none" )  
+pc3_pc4_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = stages)) + geom_point(aes(x=PC3, y=PC4)) + theme_bw() + theme( legend.position = "bottom" )  
+
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"stageI_Components.png",sep=""), width = 18, height = 24, res=600, units = "cm")
+	grid.arrange(, ncol = 2)  + theme( legend.position = "bottom" )   + theme( legend.position = "none" )  
+dev.off()

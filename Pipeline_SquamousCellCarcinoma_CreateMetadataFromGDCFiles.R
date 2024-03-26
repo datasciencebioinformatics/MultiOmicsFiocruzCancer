@@ -75,6 +75,3 @@ merged_data_patient_info<-rbind(primary_tumor,solid_tissue)
 # min(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
 # max(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
 # mean(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
-##########################################################################################################################################
-write_tsv(merged_data_patient_info, "/home/felipe/Documentos/LungPortal/output/merged_data_patient_info.tsv")
-##########################################################################################################################################

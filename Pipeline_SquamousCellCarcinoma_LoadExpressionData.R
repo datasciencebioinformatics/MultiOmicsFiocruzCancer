@@ -59,7 +59,7 @@ merged_data_patient_info<-merged_data_patient_info[,c("case_id","sample_id","age
 colnames(merged_data_patient_info)<-c("case_id","sample_id","age_at_index","gender","tumor_normal","stages")
 #####################################################################################################################
 # Set colData
-colData<-unique(merged_data_patient_info[,c("sample_id","age_at_index","gender","tumor_normal","stages")])
+colData<-unique(merged_data_patient_info[,c("race","sample_id","age_at_index","gender","tumor_normal","stages")])
 
 # Set colnames
 rownames(colData)<-colData$sample_id

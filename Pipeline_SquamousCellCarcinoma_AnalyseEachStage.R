@@ -317,7 +317,11 @@ write_tsv(Normal_Tumor_sort_stage_III[Normal_Tumor_sort_stage_III$Categories!="U
 
 
 
-
+####################################################################################################################
+# Checar o códgio
+# Organizar o discurso para análise
+# Nós temos com isso uma lista de genes, da comparação das amostras do estágio I, contra o estágio II.
+# Posso ter que atribuir genes para cada estágio? Genes do estágio I e genes do 
 
 ####################################################################################################################
 # Run DESeq2

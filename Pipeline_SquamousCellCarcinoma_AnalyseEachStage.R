@@ -287,7 +287,7 @@ p2 <- p2 + geom_hline(yintercept=threshold_padj ,linetype = 'dashed') + geom_vli
 selected_genes<-rownames(Normal_Tumor_sort_stage_III[Normal_Tumor_sort_stage_III$Categories!="Uncategorized",])
  
 # Obtain differential expression numbers
-pca_normal_stageIII<-plotPCA(vst_Stage_III_sub[selected_genes,], intgroup="stage_III") + theme_bw() + ggtitle("DE Genes of Stage II") + theme(legend.position='bottom')
+pca_normal_stageIII<-plotPCA(vst_Stage_III_sub[selected_genes,], intgroup="stage_III") + theme_bw() + ggtitle("DE Genes of Stage III") + theme(legend.position='bottom')
 
 Normal_Tumor_sort_stage_III<-Normal_Tumor_sort_stage_III[Normal_Tumor_sort_stage_III$Categories!="Uncategorized",]
 
@@ -315,9 +315,11 @@ write_tsv(Normal_Tumor_sort_stage_III[Normal_Tumor_sort_stage_III$Categories!="U
 
 
 
-########################################################################################################################
-# Contrast only stage I against stage III and constrct the panel                                                       #
-########################################################################################################################
+
+
+
+
+####################################################################################################################
 # Run DESeq2
 dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~  age_at_index +  gender +stages  )
 
@@ -403,15 +405,15 @@ p2 <- p2 + geom_hline(yintercept=threshold_padj ,linetype = 'dashed') + geom_vli
 selected_genes<-rownames(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories!="Uncategorized",])
  
 # Obtain differential expression numbers
-pca_normal_stages<-plotPCA(vst_stages_sub[selected_genes,], intgroup="stages") + theme_bw() + ggtitle("DE Genes of Stage I vs. Stage III") + theme(legend.position='bottom')
+pca_normal_stageIII<-plotPCA(vst_stages_sub[selected_genes,], intgroup="stages") + theme_bw() + ggtitle("DE Genes of Stage I vs. Stages II and III") + theme(legend.position='bottom')
 
 Normal_Tumor_sort_stages<-Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories!="Uncategorized",]
 
 # Change histogram plot fill colors by groups
 padj_histogram_stages<-ggplot(Normal_Tumor_sort_stages, aes(x=-log(padj), fill=Categories, color=Categories)) +  geom_histogram(position="identity") + scale_fill_manual(values = c("dodgerblue3", "firebrick3"))  + theme_bw() 
 #######################################################################################################################
-# Remove samples from Stage II and plot again
-pca_normal_stages_I_III<-plotPCA(vst_stages_sub[selected_genes,colData[colData$stages!="Stage II","patient_id"]], intgroup="stages") + theme_bw() + ggtitle("DE Genes of Stage I vs. Stage II") + theme(legend.position='bottom')
+# Remove samples from Stage III and plot again
+pca_normal_stages_I_III<-plotPCA(vst_stages_sub[selected_genes,colData[colData$stages!="Stage III","patient_id"]], intgroup="stages") + theme_bw() + ggtitle("DE Genes of Stage I vs. Stage III") + theme(legend.position='bottom')
 #######################################################################################################################
 # FindClusters_resolution
 png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage1_3.png",sep=""), width = 28, height = 24, res=600, units = "cm")
@@ -421,7 +423,14 @@ dev.off()
 # Save TSV file with genes from Stage1
 # Save TSV file with genes from Stage1
 write_tsv(Normal_Tumor_sort_stage_III[Normal_Tumor_sort_stage_III$Categories!="Uncategorized",], "/home/felipe/Documentos/LungPortal/output/selected_genes_Stage_I_III.tsv")
+########################################################################################################################
 
-########################################################################################################################
-# Remove samples from stage II and construct the panel                                                                 #
-########################################################################################################################
+
+
+
+
+
+
+
+
+

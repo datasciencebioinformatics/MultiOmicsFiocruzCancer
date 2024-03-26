@@ -19,9 +19,9 @@ colData<-colData[colData$tumor_normal=="Primary Tumor",]
 unstranded_data<-unstranded_data[,as.vector(colData$patient_id)]
 
 # Run DESeq2
-dds_stages_stage_I <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~  age_at_index + gender +stage_I  )
+dds_stages_stage_I <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~  age_at_index +  gender +stage_I  )
 dds_stages_stage_II <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~  age_at_index + gender +stage_II  )
-dds_stages_stage_III <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~  age_at_index + gender +stage_III  )
+dds_stages_stage_III <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~  age_at_index +  gender +stage_III  )
 
 # Run DESeq2
 dds_stages_stage_I <- DESeq(dds_stages_stage_I)

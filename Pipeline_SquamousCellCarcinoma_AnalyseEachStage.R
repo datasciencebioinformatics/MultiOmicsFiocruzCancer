@@ -437,3 +437,30 @@ write_tsv(Normal_Tumor_sort_stage_III[Normal_Tumor_sort_stage_III$Categories!="U
 
 
 
+########################################################################################################################
+# Compute pca matrix
+pca_vst_Stage_I_III    <- data.frame(prcomp(t(assay(vst_stages_sub)))$x)
+########################################################################################################################
+# First, stage_I_III_III
+# Sort table by abs(log2FoldChange) and -log(padj)
+df_stage_I_vs_III$up_down<-"uncategorized"
+########################################################################################################################
+# Select genes and patiens
+selected_genes   <-rownames(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories!="Uncategorized",])
+selected_patients<-colData[colData$stages!="Stage II","patient_id"]
+########################################################################################################################
+# Set colnames
+pca_vst_Stage_I_III$patient_id<-rownames(pca_vst_Stage_I_III)
+
+# Merge collumns
+df_stage_I_vs_III<-merge(pca_vst_Stage_I_III, colData, by = "patient_id")
+########################################################################################################################
+pca_vst_Stage_I_III[selected_patients,]
+
+# Merge collumns
+pc1_pc2_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC1, y=PC2)) + theme_bw() + theme( legend.position = "none" )  
+pc1_pc3_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC1, y=PC3)) + theme_bw() + theme( legend.position = "none" )  
+pc1_pc4_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC1, y=PC4)) + theme_bw() + theme( legend.position = "none" )  
+pc2_pc3_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC2, y=PC3)) + theme_bw() + theme( legend.position = "none" )  
+pc2_pc4_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC2, y=PC4)) + theme_bw() + theme( legend.position = "none" )  
+pc3_pc4_Stage_I_vs_III<-ggplot(df_stage_I_vs_III, aes(colour = Tumor_Stage)) + geom_point(aes(x=PC3, y=PC4)) + theme_bw() + theme( legend.position = "bottom" )  

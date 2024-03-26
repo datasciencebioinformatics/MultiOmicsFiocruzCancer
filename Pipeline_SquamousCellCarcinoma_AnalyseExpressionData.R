@@ -618,8 +618,6 @@ df_stage_II[which(df_stage_II$log2FoldChange<0),"down-regulated" ]
 df_stage_III[which(df_stage_III$log2FoldChange>=0),"up-regulated"]
 df_stage_III[which(df_stage_III$log2FoldChange<0),"down-regulated" ]
 
-df_stage_I{df_stage_I$up_down=="up-regulated",]
-
 # Filter dataset by padj and take top 10% of genes
 df_stage_I<-head(df_stage_I[order(df_stage_I$padj),],n=1000)
 df_stage_II<-head(df_stage_II[order(df_stage_II$padj,df_stage_II$pvalue, abs(df_stage_II$log2FoldChange)),],n=1000)

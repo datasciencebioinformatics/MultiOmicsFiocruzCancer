@@ -29,10 +29,10 @@ gene_name.txt
 
 /home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateTableFromFiles.sh
 
-## A R scripts to create metadata and expression files
+## A R scripts to load expression files
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadExpressionData.R")
 
-## A R script to DE genes of each stage
+## A R script to create metadata
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataFromGDCFiles.R")
 
 ## A R script to analise metadata and expression data of selected samples and cases, In progress

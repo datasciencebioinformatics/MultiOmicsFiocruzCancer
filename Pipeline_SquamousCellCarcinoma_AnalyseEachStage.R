@@ -396,7 +396,7 @@ p2 <- ggplot(Normal_Tumor_sort_stages, aes(log2FoldChange, -log(padj),color = Ca
   xlab(expression("log2FoldChange")) + 
   ylab(expression("-log(padj)")) +
   scale_color_manual(values = c("dodgerblue3", "gray50", "firebrick3")) +
-  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes Stage III vs. Stages I and II \n10.0% of top up-regulated, 10.0% of top up-regulated (padj)\n",paste("Up-regulated :",sum(Normal_Tumor_sort_stages$Categories=="Up-regulated"),"Down-regulated :",sum(Normal_Tumor_sort_stages$Categories=="Down-regulated"),sep=" "))) 
+  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes Stage I vs. Stages III \n10.0% of top up-regulated, 10.0% of top up-regulated (padj)\n",paste("Up-regulated :",sum(Normal_Tumor_sort_stages$Categories=="Up-regulated"),"Down-regulated :",sum(Normal_Tumor_sort_stages$Categories=="Down-regulated"),sep=" "))) 
 
 # Add treshold lines
 p2 <- p2 + geom_hline(yintercept=threshold_padj ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_up ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_down ,linetype = 'dashed')
@@ -405,7 +405,7 @@ p2 <- p2 + geom_hline(yintercept=threshold_padj ,linetype = 'dashed') + geom_vli
 selected_genes<-rownames(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories!="Uncategorized",])
  
 # Obtain differential expression numbers
-pca_normal_stageIII<-plotPCA(vst_stages_sub[selected_genes,], intgroup="stages") + theme_bw() + ggtitle("DE Genes of Stage I vs. Stages II and III") + theme(legend.position='bottom')
+pca_normal_stageIII<-plotPCA(vst_stages_sub[selected_genes,], intgroup="stages") + theme_bw() + ggtitle("DE Genes of Stage I vs. Stages III") + theme(legend.position='bottom')
 
 Normal_Tumor_sort_stages<-Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories!="Uncategorized",]
 
@@ -413,7 +413,7 @@ Normal_Tumor_sort_stages<-Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Cate
 padj_histogram_stages<-ggplot(Normal_Tumor_sort_stages, aes(x=-log(padj), fill=Categories, color=Categories)) +  geom_histogram(position="identity") + scale_fill_manual(values = c("dodgerblue3", "firebrick3"))  + theme_bw() 
 #######################################################################################################################
 # Remove samples from Stage III and plot again
-pca_normal_stages_I_III<-plotPCA(vst_stages_sub[selected_genes,colData[colData$stages!="Stage III","patient_id"]], intgroup="stages") + theme_bw() + ggtitle("DE Genes of Stage I vs. Stage III") + theme(legend.position='bottom')
+pca_normal_stages_I_III<-plotPCA(vst_stages_sub[selected_genes,colData[colData$stages!="Stage II","patient_id"]], intgroup="stages") + theme_bw() + ggtitle("DE Genes of Stage I vs. Stage III") + theme(legend.position='bottom')
 #######################################################################################################################
 # FindClusters_resolution
 png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage1_3.png",sep=""), width = 28, height = 24, res=600, units = "cm")

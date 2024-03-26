@@ -321,8 +321,7 @@ write_tsv(Normal_Tumor_sort_stage_III[Normal_Tumor_sort_stage_III$Categories!="U
 # Checar o códgio
 # Organizar o discurso para análise
 # Nós temos com isso uma lista de genes, da comparação das amostras do estágio I, contra o estágio II.
-# Posso ter que atribuir genes para cada estágio? Genes do estágio I e genes do 
-
+# Posso ter que atribuir genes para cada estágio? Genes do estágio I e genes do estágio II são identificados pela comparisson I vs. III.
 ####################################################################################################################
 # Run DESeq2
 dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~  age_at_index +  gender +stages  )

@@ -4,10 +4,8 @@
 # Second, only stages II and III
 # Third,  only stages II and III
 ####################################################################################################################
-# Checar o códgio
-# Organizar o discurso para análise
-# Nós temos com isso uma lista de genes, da comparação das amostras do estágio I, contra o estágio II.
-# Posso ter que atribuir genes para cada estágio? Genes do estágio I e genes do estágio II são identificados pela comparisson I vs. III.
+# Aalysed pairs
+df_stages<-data.frame(First=c("Stage I","Stage I","Stage II"),Second=c("Stage II","Stage III","Stage III"))
 ####################################################################################################################
 # Run DESeq2
 dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~  age_at_index +  gender +stages  )

@@ -5,7 +5,7 @@
 # Third,  only stages II and III
 ####################################################################################################################
 # Aalysed pairs
-df_stages<-data.frame(First=c("Stage I","Stage I","Stage II"),Second=c("Stage II","Stage III","Stage III"))
+df_stage_pairs<-data.frame(First=c("Stage I","Stage I","Stage II"),Second=c("Stage II","Stage III","Stage III"))
 ####################################################################################################################
 # Create bck for colData_bck
 colData_bck<-colData
@@ -14,8 +14,8 @@ colData_bck<-colData
 for (stage_pair in rownames(df_stages))
 {
 	# First and second stages
-	first_stage<-df_stages[stage_pair,"First"]
-	second_stage<-df_stages[stage_pair,"Second"]
+	first_stage<-df_stage_pairs[stage_pair,"First"]
+	second_stage<-df_stage_pairs[stage_pair,"Second"]
 	
 	# Create bck for colData_bck
 	colData_bck<-colData

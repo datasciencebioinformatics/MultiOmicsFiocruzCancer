@@ -8,7 +8,7 @@
 df_stages<-data.frame(First=c("Stage I","Stage I","Stage II"),Second=c("Stage II","Stage III","Stage III"))
 ####################################################################################################################
 # Create bck for colData_bck
-colData_bck<-colData_bck
+colData_bck<-colData
 
 # for each pair of stage.
 for (stage_pair in rownames(df_stages))

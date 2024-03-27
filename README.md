@@ -44,4 +44,6 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 ## A R script to compute Ven Diagram for DE genes
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_AnalyseEachStage.R")
 
+## A R script to compute GO terms analysis
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_FunctionalAnalyse.R")
 

@@ -15,7 +15,14 @@ library(ggVennDiagram)                                                          
 stages_I_II_III<-ggVennDiagram(list(Stage_I    =selected_genes_Stage_I_data$Gene,Stage_III  =selected_genes_Stage_III_data$Gene,Stage_II   =selected_genes_Stage_II_data$Gene), label_alpha = 0) + scale_fill_viridis() + theme_bw() + ggtitle("Stages I, II and III")                                #
 stages_I_vs_III<-ggVennDiagram(list(Stages_I    =selected_genes_Stage_I_data$Gene, Stages_III    =selected_genes_Stage_III_data$Gene, Stages_II_vs_III    =selected_genes_Stage_I_III_data$Gene), label_alpha = 0) + scale_fill_viridis() + theme_bw() + ggtitle("Stages I, III and Stage I vs III")  #
 #######################################################################################################################################################################################################################################################################################################
-
+# Select stages 
+stages_I_II_III<-ggVennDiagram(list(Stage_I    =selected_genes_Stage_I_data$Gene,Stage_III  =selected_genes_Stage_III_data$Gene,Stage_II   =selected_genes_Stage_II_data$Gene), label_alpha = 0) + scale_fill_viridis() + theme_bw() + ggtitle("Stages I, II and III")
+stages_I_vs_III<-ggVennDiagram(list(Stages_I    =selected_genes_Stage_I_data$Gene, Stages_III    =selected_genes_Stage_III_data$Gene, Stages_II_vs_III    =selected_genes_Stage_I_III_data$Gene), label_alpha = 0) + scale_fill_viridis() + theme_bw() + ggtitle("Stages I, III and Stage I vs III")
+###################################################################################################################################################################################################################################################################################################
+# FindClusters_resolution
+png(filename=paste(output_dir,"Veen_diagrams.png",sep=""), width = 14, height = 28, res=600, units = "cm")
+  pca_plots<-grid.arrange( stages_I_II_III, stages_I_vs_III,  ncol = 1)
+dev.off()
 
 
 

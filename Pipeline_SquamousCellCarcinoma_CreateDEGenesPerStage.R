@@ -69,6 +69,7 @@ for (stage_pair in rownames(df_stage_pairs))
 	Normal_Tumor_down_sort_df_stages[1:(dim(Normal_Tumor_down_sort_df_stages)[1]*0.20),"Normal_Tumor_sort_20.0"]<-TRUE
 	####################################################################################################################
 	Normal_Tumor_sort_stages<-rbind(Normal_Tumor_up_sort_df_stages,Normal_Tumor_down_sort_df_stages)
+	Normal_Tumor_sort_stages<-Normal_Tumor_up_sort_df_stages
 	####################################################################################################################
 	# First, stageI
 	# "Unchanged"

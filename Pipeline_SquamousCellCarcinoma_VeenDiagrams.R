@@ -28,7 +28,17 @@ dev.off()
 unique_genes_Stage_I <-setdiff(selected_genes_Stage_I_data$Gene,   c(selected_genes_Stage_II_data$Gene,selected_genes_Stage_III_data$Gene))
 unique_genes_Stage_II <-setdiff(selected_genes_Stage_II_data$Gene,  c(selected_genes_Stage_I_data$Gene,selected_genes_Stage_III_data$Gene))
 unique_genes_Stage_III<-setdiff(selected_genes_Stage_III_data$Gene, c(selected_genes_Stage_I_data$Gene,selected_genes_Stage_II_data$Gene))
+
+# Set rownames
+rownames(selected_genes_Stage_I_data)<-selected_genes_Stage_I_data$Gene
+rownames(selected_genes_Stage_II_data)<-selected_genes_Stage_II_data$Gene
+rownames(selected_genes_Stage_III_data)<-selected_genes_Stage_III_data$Gene
 ###################################################################################################################################################################################################################################################################################################
+write_tsv(selected_genes_Stage_I_data[unique_genes_Stage_I,], "/home/felipe/Documentos/LungPortal/samples/unique_genes_Stage_I.tsv")
+write_tsv(selected_genes_Stage_II_data[unique_genes_Stage_II,], "/home/felipe/Documentos/LungPortal/samples/unique_genes_Stage_II.tsv")
+write_tsv(selected_genes_Stage_III_data[unique_genes_Stage_III,], "/home/felipe/Documentos/LungPortal/samples/unique_genes_Stage_III.tsv")
+###################################################################################################################################################################################################################################################################################################
+
 
 
 

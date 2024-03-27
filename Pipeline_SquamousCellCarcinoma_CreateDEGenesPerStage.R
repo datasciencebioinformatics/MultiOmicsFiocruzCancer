@@ -65,8 +65,8 @@ for (stage_pair in rownames(df_stage_pairs))
 	####################################################################################################################
 	# First, stageI
 	# Field for top 10 percent of sorted sample
-	Normal_Tumor_up_sort_df_stages[1:(dim(Normal_Tumor_up_sort_df_stages)[1]*0.10),"Normal_Tumor_sort_20.0"]<-TRUE
-	Normal_Tumor_down_sort_df_stages[1:(dim(Normal_Tumor_down_sort_df_stages)[1]*0.10),"Normal_Tumor_sort_20.0"]<-TRUE
+	Normal_Tumor_up_sort_df_stages[1:(dim(Normal_Tumor_up_sort_df_stages)[1]*0.20),"Normal_Tumor_sort_20.0"]<-TRUE
+	Normal_Tumor_down_sort_df_stages[1:(dim(Normal_Tumor_down_sort_df_stages)[1]*0.20),"Normal_Tumor_sort_20.0"]<-TRUE
 	####################################################################################################################
 	Normal_Tumor_sort_stages<-rbind(Normal_Tumor_up_sort_df_stages,Normal_Tumor_down_sort_df_stages)
 	####################################################################################################################
@@ -76,8 +76,8 @@ for (stage_pair in rownames(df_stage_pairs))
 	####################################################################################################################
 	# Set expression up
 	# First, stageI
-	Normal_Tumor_sort_stages[intersect(which(Normal_Tumor_sort_stages$Normal_Tumor_sort_20.0), which(Normal_Tumor_sort_stages$log2FoldChange < 1.0)),"Expression"]<--1
-	Normal_Tumor_sort_stages[intersect(which(Normal_Tumor_sort_stages$Normal_Tumor_sort_20.0), which(Normal_Tumor_sort_stages$log2FoldChange >= 1.0)),"Expression"]<-1
+	Normal_Tumor_sort_stages[intersect(which(Normal_Tumor_sort_stages$Normal_Tumor_sort_20.0), which(Normal_Tumor_sort_stages$log2FoldChange < 1.5)),"Expression"]<--1
+	Normal_Tumor_sort_stages[intersect(which(Normal_Tumor_sort_stages$Normal_Tumor_sort_20.0), which(Normal_Tumor_sort_stages$log2FoldChange >= 1.5)),"Expression"]<-1
 	####################################################################################################################
 	# First, stageI
 	Normal_Tumor_sort_stages$Categories<-""

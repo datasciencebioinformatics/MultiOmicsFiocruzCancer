@@ -18,7 +18,7 @@ for (stage_pair in rownames(df_stages))
 	second_stage<-df_stages[stage_pair,"Second"]
 	
 	# Create bck for colData_bck
-	colData_bck<-colData_bck
+	colData_bck<-colData
 
 	# Filter col data
 	colData_bck<-colData_bck[union(which(colData_bck$stages==first_stage), which(colData_bck$stages==second_stage)),]

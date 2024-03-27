@@ -33,7 +33,12 @@ write_tsv(selected_genes_Stage_II_pos,   "/home/felipe/Documentos/LungPortal/sam
 write_tsv(selected_genes_Stage_III_pos,  "/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stage_III.tsv")
 write_tsv(selected_genes_Stage_I_III_pos, "/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stages_I_III.tsv")
 ###################################################################################################################################################################################################################################################################################################
-library(ggVennDiagram)                                                                                                                #################################################################################################################################################################
+selected_genes_Stage_I_data       <- selected_genes_Stage_I_pos
+selected_genes_Stage_II_data      <- selected_genes_Stage_II_pos
+selected_genes_Stage_III_data     <- selected_genes_Stage_III_pos
+selected_genes_Stage_I_III_data   <- selected_genes_Stage_I_III_pos
+
+library(ggVennDiagram)
 stages_I_II_III<-ggVennDiagram(list(Stage_I    =selected_genes_Stage_I_data$Gene,Stage_III  =selected_genes_Stage_III_data$Gene,Stage_II   =selected_genes_Stage_II_data$Gene), label_alpha = 0) + scale_fill_viridis() + theme_bw() + ggtitle("Stages I, II and III")                                #
 stages_I_vs_III<-ggVennDiagram(list(Stages_I    =selected_genes_Stage_I_data$Gene, Stages_III    =selected_genes_Stage_III_data$Gene, Stages_I_vs_III    =selected_genes_Stage_I_III_data$Gene), label_alpha = 0) + scale_fill_viridis() + theme_bw() + ggtitle("Stages I, III and Stage I vs III")  #
 #######################################################################################################################################################################################################################################################################################################

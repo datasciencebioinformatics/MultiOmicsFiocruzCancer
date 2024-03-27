@@ -103,7 +103,7 @@ for (stage_pair in rownames(df_stage_pairs))
 	  xlab(expression("log2FoldChange")) + 
 	  ylab(expression("-log(padj)")) +
 	  scale_color_manual(values = c("dodgerblue3", "gray50", "firebrick3")) +
-	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes", first_stage, "vs.",second_stage,  "\n10.0% of top up-regulated\n",paste(sum(Normal_Tumor_sort_stages$Categories=="Up-regulated"), "selected genes")))
+	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes", first_stage, "vs.",second_stage))
 	
 	# Add treshold lines
 	p2 <- p2 + geom_hline(yintercept=threshold_padj ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_up ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_down ,linetype = 'dashed')
@@ -112,15 +112,15 @@ for (stage_pair in rownames(df_stage_pairs))
 	selected_genes<-rownames(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories=="Up-regulated",])
 	 
 	# Obtain differential expression numbers
-	pca_normal_stageIII<-plotPCA(vst_stages_sub[selected_genes,], intgroup="stages") + theme_bw() + ggtitle("DE Genes of Stage I vs. Stages III") + theme(legend.position='bottom')
+	pca_normal_stageIII<-plotPCA(vst_stages_sub[selected_genes,], intgroup="stages") + theme_bw() + ggtitle(paste("DE Genes", first_stage, "vs.",second_stage))
 	
 	Normal_Tumor_sort_stages<-Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories=="Up-regulated",]
 	
 	# Change histogram plot fill colors by groups
-	padj_histogram_stages<-ggplot(Normal_Tumor_sort_stages, aes(x=-log(padj), fill=Categories, color=Categories)) +  geom_histogram(position="identity") + scale_fill_manual(values = c("dodgerblue3", "firebrick3"))  + theme_bw() 
+	padj_histogram_stages<-ggplot(Normal_Tumor_sort_stages, aes(x=-log(padj), fill=Categories, color=Categories)) +  geom_histogram(position="identity") + scale_fill_manual(values = c("dodgerblue3", "firebrick3"))  + theme_bw()  + ggtitle(paste("DE Genes", first_stage, "vs.",second_stage,  "\nOnly 10.0% of top up-regulated genes\n",paste(sum(Normal_Tumor_sort_stages$Categories=="Up-regulated"), "selected genes")))
 	#######################################################################################################################
 	# Remove samples from Stage III and plot again
-	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup="stages") + theme_bw() + ggtitle("DE Genes of Stage I vs. Stage III") + theme(legend.position='bottom')
+	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup="stages") + theme_bw() 	+ ggtitle(paste("DE Genes", first_stage, "vs.",second_stage,  "\nOnly 10.0% of top up-regulated genes\n",paste(sum(Normal_Tumor_sort_stages$Categories=="Up-regulated"), "selected genes")))+ theme(legend.position='bottom')
 	#######################################################################################################################
 	# FindClusters_resolution
 	png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage",stage_pair,".png",sep=""), width = 28, height = 24, res=600, units = "cm")
@@ -129,5 +129,5 @@ for (stage_pair in rownames(df_stage_pairs))
 	
 	# Save TSV file with genes from Stage1
 	# Save TSV file with genes from Stage1
-	write_tsv(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories!="Uncategorized",], paste(output_dir,"selected_genes_Stage",stage_pair,".tsv",sep=""))
+	write_tsv(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories=="Up-regulated",], paste(output_dir,"selected_genes_Stage_pos",stage_pair,".tsv",sep=""))
 }

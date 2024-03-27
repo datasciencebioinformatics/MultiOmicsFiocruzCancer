@@ -18,19 +18,19 @@ selected_genes_Stage_III_pos<-selected_genes_Stage_III_data[which(selected_genes
 selected_genes_Stage_I_III_pos<-selected_genes_Stage_I_III_data[which(selected_genes_Stage_I_III_data[,"log2FoldChange"]>0),]
 
 # Calculate unique genes
-unique_genes_Stage_I <-setdiff(selected_genes_Stage_I_data$Gene,   c(selected_genes_Stage_II_data$Gene,selected_genes_Stage_III_data$Gene))
-unique_genes_Stage_II <-setdiff(selected_genes_Stage_II_data$Gene,  c(selected_genes_Stage_I_data$Gene,selected_genes_Stage_III_data$Gene))
-unique_genes_Stage_III<-setdiff(selected_genes_Stage_III_data$Gene, c(selected_genes_Stage_I_data$Gene,selected_genes_Stage_II_data$Gene))
+unique_genes_Stage_I <-setdiff(selected_genes_Stage_I_pos$Gene,   c(selected_genes_Stage_II_pos$Gene,selected_genes_Stage_III_pos$Gene))
+unique_genes_Stage_II <-setdiff(selected_genes_Stage_II_pos$Gene,  c(selected_genes_Stage_I_pos$Gene,selected_genes_Stage_III_pos$Gene))
+unique_genes_Stage_III<-setdiff(selected_genes_Stage_III_pos$Gene, c(selected_genes_Stage_I_pos$Gene,selected_genes_Stage_II_pos$Gene))
 
 # Set rownames
-rownames(selected_genes_Stage_I_data)<-selected_genes_Stage_I_data$Gene
-rownames(selected_genes_Stage_II_data)<-selected_genes_Stage_II_data$Gene
-rownames(selected_genes_Stage_III_data)<-selected_genes_Stage_III_data$Gene
-rownames(selected_genes_Stage_I_III_data)<-selected_genes_Stage_I_III_data$Gene
+rownames(selected_genes_Stage_I_pos)<-selected_genes_Stage_I_pos$Gene
+rownames(selected_genes_Stage_II_pos)<-selected_genes_Stage_II_pos$Gene
+rownames(selected_genes_Stage_III_pos)<-selected_genes_Stage_III_pos$Gene
+rownames(selected_genes_Stage_I_III_pos)<-selected_genes_Stage_I_III_pos$Gene
 ###################################################################################################################################################################################################################################################################################################
-write_tsv(selected_genes_Stage_I_pos,     "/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stage_I.tsv")
-write_tsv(selected_genes_Stage_II_pos,   "/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stage_II.tsv")
-write_tsv(selected_genes_Stage_III_pos,  "/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stage_III.tsv")
+write_tsv(selected_genes_Stage_I_pos[unique_genes_Stage_I,],     "/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stage_I.tsv")
+write_tsv(selected_genes_Stage_II_pos[unique_genes_Stage_II,],   "/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stage_II.tsv")
+write_tsv(selected_genes_Stage_III_pos[unique_genes_Stage_III,],  "/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stage_III.tsv")
 write_tsv(selected_genes_Stage_I_III_pos, "/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stages_I_III.tsv")
 ###################################################################################################################################################################################################################################################################################################
 selected_genes_Stage_I_data       <- selected_genes_Stage_I_pos

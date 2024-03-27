@@ -11,6 +11,12 @@ selected_genes_Stage_II_data      <-read.table(file = selected_genes_Stage_II_fi
 selected_genes_Stage_III_data     <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)             #
 selected_genes_Stage_I_III_data   <-read.table(file = selected_genes_Stage_I_III_file, sep = '\t', header = TRUE,fill=TRUE)           #
 #######################################################################################################################################
+# Select only positive genes
+selected_genes_Stage_I_pos<-selected_genes_Stage_I_data[which(selected_genes_Stage_I_data[,"log2FoldChange"]>0),]
+selected_genes_Stage_II_pos<-selected_genes_Stage_II_data[which(selected_genes_Stage_II_data[,"log2FoldChange"]>0),]
+selected_genes_Stage_III_pos<-selected_genes_Stage_III_data[which(selected_genes_Stage_III_data[,"log2FoldChange"]>0),]
+selected_genes_Stage_I_III_pos<-selected_genes_Stage_I_III_data[which(selected_genes_Stage_I_III_data[,"log2FoldChange"]>0),]
+
 # Calculate unique genes
 unique_genes_Stage_I <-setdiff(selected_genes_Stage_I_data$Gene,   c(selected_genes_Stage_II_data$Gene,selected_genes_Stage_III_data$Gene))
 unique_genes_Stage_II <-setdiff(selected_genes_Stage_II_data$Gene,  c(selected_genes_Stage_I_data$Gene,selected_genes_Stage_III_data$Gene))
@@ -21,12 +27,6 @@ rownames(selected_genes_Stage_I_data)<-selected_genes_Stage_I_data$Gene
 rownames(selected_genes_Stage_II_data)<-selected_genes_Stage_II_data$Gene
 rownames(selected_genes_Stage_III_data)<-selected_genes_Stage_III_data$Gene
 rownames(selected_genes_Stage_I_III_data)<-selected_genes_Stage_I_III_data$Gene
-###################################################################################################################################################################################################################################################################################################
-# Select only positive genes
-selected_genes_Stage_I_pos<-selected_genes_Stage_I_data[which(selected_genes_Stage_I_data[unique_genes_Stage_I,"log2FoldChange"]>0),]
-selected_genes_Stage_II_pos<-selected_genes_Stage_II_data[which(selected_genes_Stage_II_data[unique_genes_Stage_II,"log2FoldChange"]>0),]
-selected_genes_Stage_III_pos<-selected_genes_Stage_III_data[which(selected_genes_Stage_III_data[unique_genes_Stage_III,"log2FoldChange"]>0),]
-selected_genes_Stage_I_III_pos<-selected_genes_Stage_I_III_data[which(selected_genes_Stage_I_III_data[,"log2FoldChange"]>0),]
 ###################################################################################################################################################################################################################################################################################################
 write_tsv(selected_genes_Stage_I_pos,     "/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stage_I.tsv")
 write_tsv(selected_genes_Stage_II_pos,   "/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stage_II.tsv")

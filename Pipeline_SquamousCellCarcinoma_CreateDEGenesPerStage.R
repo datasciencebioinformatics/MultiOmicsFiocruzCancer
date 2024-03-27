@@ -27,7 +27,7 @@ for (stage_pair in rownames(df_stages))
 	colData_bck$stages<-factor(colData_bck$stages)
 			
 	# Run DESeq2
-	dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data[,colData_bck$patient_id], colData_bck=colData_bck, design = ~ age_at_index +  gender +stages  )
+	dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data[,colData_bck$patient_id], colData=colData_bck, design = ~ age_at_index +  gender +stages  )
 
 	# Run DESeq2
 	dds_stages <- DESeq(dds_stages)

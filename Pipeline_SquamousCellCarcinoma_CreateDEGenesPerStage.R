@@ -129,5 +129,6 @@ for (stage_pair in rownames(df_stage_pairs))
 	
 	# Save TSV file with genes from Stage1
 	# Save TSV file with genes from Stage1
+	Normal_Tumor_sort_stages$Gene<-rownames(Normal_Tumor_sort_stages)
 	write_tsv(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories=="Up-regulated",], paste(output_dir,"selected_genes_Stage_pos",stage_pair,".tsv",sep=""))
 }

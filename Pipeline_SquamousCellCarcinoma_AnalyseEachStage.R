@@ -91,6 +91,7 @@ Normal_Tumor_sort_Stage_I[which(Normal_Tumor_sort_Stage_I$Expression==1),"Catego
 Normal_Tumor_sort_Stage_I[which(Normal_Tumor_sort_Stage_I$Expression==-1),"Categories"]<-"Down-regulated"
 ####################################################################################################################
 # Save TSV file with genes from Stage1
+Normal_Tumor_sort_Stage_I$Gene<-rownames(Normal_Tumor_sort_Stage_I)
 write_tsv(Normal_Tumor_sort_Stage_I, "/home/felipe/Documentos/LungPortal/output/genes_StageI.tsv")
 ####################################################################################################################
 # Create volcano plot
@@ -177,6 +178,7 @@ Normal_Tumor_sort_stage_II[which(Normal_Tumor_sort_stage_II$Expression==1),"Cate
 Normal_Tumor_sort_stage_II[which(Normal_Tumor_sort_stage_II$Expression==-1),"Categories"]<-"Down-regulated"
 ####################################################################################################################
 # Save TSV file with genes from Stage1
+Normal_Tumor_sort_stage_II$Gene<-rownames(Normal_Tumor_sort_stage_II)
 write_tsv(Normal_Tumor_sort_stage_II, "/home/felipe/Documentos/LungPortal/output/genes_StageII.tsv")
 ####################################################################################################################
 # Create volcano plot
@@ -263,6 +265,7 @@ Normal_Tumor_sort_stage_III[which(Normal_Tumor_sort_stage_III$Expression==1),"Ca
 Normal_Tumor_sort_stage_III[which(Normal_Tumor_sort_stage_III$Expression==-1),"Categories"]<-"Down-regulated"
 ####################################################################################################################
 # Save TSV file with genes from Stage3
+Normal_Tumor_sort_stage_III$Gene<-rownames(Normal_Tumor_sort_stage_III)
 write_tsv(Normal_Tumor_sort_stage_III, "/home/felipe/Documentos/LungPortal/output/genes_StageIII.tsv")
 ####################################################################################################################
 # Create volcano plot

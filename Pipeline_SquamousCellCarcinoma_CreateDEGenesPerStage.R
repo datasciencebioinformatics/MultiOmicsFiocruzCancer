@@ -1,5 +1,5 @@
 ####################################################################################################################
-# Filter down colData:
+# Filter down colData_bck:
 # First,  only stages I and III
 # Second, only stages II and III
 # Third,  only stages II and III
@@ -7,8 +7,8 @@
 # Aalysed pairs
 df_stages<-data.frame(First=c("Stage I","Stage I","Stage II"),Second=c("Stage II","Stage III","Stage III"))
 ####################################################################################################################
-# Create bck for colData
-colData_bck<-colData
+# Create bck for colData_bck
+colData_bck<-colData_bck
 
 # for each pair of stage.
 for (stage_pair in rownames(df_stages))
@@ -17,17 +17,17 @@ for (stage_pair in rownames(df_stages))
 	first_stage<-df_stages[stage_pair,"First"]
 	second_stage<-df_stages[stage_pair,"Second"]
 	
-	# Copy colData
-	colData<-colData_bck
+	# Create bck for colData_bck
+	colData_bck<-colData_bck
 
 	# Filter col data
-	colData<-colData[union(which(colData$stages==first_stage), which(colData$stages==second_stage)),]
+	colData_bck<-colData_bck[union(which(colData_bck$stages==first_stage), which(colData_bck$stages==second_stage)),]
 
 	# Re-factor stages
-	colData$stages<-factor(colData$stages)
+	colData_bck$stages<-factor(colData_bck$stages)
 			
 	# Run DESeq2
-	dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data[,colData$patient_id], colData=colData, design = ~  age_at_index +  gender +stages  )
+	dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data[,colData_bck$patient_id], colData_bck=colData_bck, design = ~ age_at_index +  gender +stages  )
 
 	# Run DESeq2
 	dds_stages <- DESeq(dds_stages)
@@ -76,8 +76,8 @@ for (stage_pair in rownames(df_stages))
 	####################################################################################################################
 	# Set expression up
 	# First, stageI
-	Normal_Tumor_sort_stages[intersect(which(Normal_Tumor_sort_stages$Normal_Tumor_sort_20.0), which(Normal_Tumor_sort_stages$log2FoldChange < 0)),"Expression"]<--1
-	Normal_Tumor_sort_stages[intersect(which(Normal_Tumor_sort_stages$Normal_Tumor_sort_20.0), which(Normal_Tumor_sort_stages$log2FoldChange >= 0)),"Expression"]<-1
+	Normal_Tumor_sort_stages[intersect(which(Normal_Tumor_sort_stages$Normal_Tumor_sort_20.0), which(Normal_Tumor_sort_stages$log2FoldChange < 1.0)),"Expression"]<--1
+	Normal_Tumor_sort_stages[intersect(which(Normal_Tumor_sort_stages$Normal_Tumor_sort_20.0), which(Normal_Tumor_sort_stages$log2FoldChange >= 1.0)),"Expression"]<-1
 	####################################################################################################################
 	# First, stageI
 	Normal_Tumor_sort_stages$Categories<-""
@@ -117,9 +117,8 @@ for (stage_pair in rownames(df_stages))
 	# Change histogram plot fill colors by groups
 	padj_histogram_stages<-ggplot(Normal_Tumor_sort_stages, aes(x=-log(padj), fill=Categories, color=Categories)) +  geom_histogram(position="identity") + scale_fill_manual(values = c("dodgerblue3", "firebrick3"))  + theme_bw() 
 	#######################################################################################################################
-
 	# Remove samples from Stage III and plot again
-	pca_normal_stages_I_III<-plotPCA(vst_stages_sub[selected_genes,colData[colData$stages!="Stage II","patient_id"]], intgroup="stages") + theme_bw() + ggtitle("DE Genes of Stage I vs. Stage III") + theme(legend.position='bottom')
+	pca_normal_stages_I_III<-plotPCA(vst_stages_sub[selected_genes,colData_bck[colData_bck$stages!="Stage II","patient_id"]], intgroup="stages") + theme_bw() + ggtitle("DE Genes of Stage I vs. Stage III") + theme(legend.position='bottom')
 	#######################################################################################################################
 	# FindClusters_resolution
 	png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage",stage_pair,".png",sep=""), width = 28, height = 24, res=600, units = "cm")

@@ -11,7 +11,7 @@ df_stage_pairs<-data.frame(First=c("Stage I","Stage I","Stage II"),Second=c("Sta
 colData_bck<-colData
 
 # for each pair of stage.
-for (stage_pair in rownames(df_stages))
+for (stage_pair in rownames(df_stage_pairs))
 {
 	# First and second stages
 	first_stage<-df_stage_pairs[stage_pair,"First"]

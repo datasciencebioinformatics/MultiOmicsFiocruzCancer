@@ -23,6 +23,12 @@ stages_I_vs_III<-ggVennDiagram(list(Stages_I    =selected_genes_Stage_I_data$Gen
 png(filename=paste(output_dir,"Veen_diagrams.png",sep=""), width = 14, height = 28, res=600, units = "cm")
   pca_plots<-grid.arrange( stages_I_II_III, stages_I_vs_III,  ncol = 1)
 dev.off()
+###################################################################################################################################################################################################################################################################################################
+# Calculate unique genes
+unique_genes_Stage_I <-setdiff(selected_genes_Stage_I_data$Gene,   c(selected_genes_Stage_II_data$Gene,selected_genes_Stage_III_data$Gene))
+unique_genes_Stage_II <-setdiff(selected_genes_Stage_II_data$Gene,  c(selected_genes_Stage_I_data$Gene,selected_genes_Stage_III_data$Gene))
+unique_genes_Stage_III<-setdiff(selected_genes_Stage_III_data$Gene, c(selected_genes_Stage_I_data$Gene,selected_genes_Stage_II_data$Gene))
+###################################################################################################################################################################################################################################################################################################
 
 
 

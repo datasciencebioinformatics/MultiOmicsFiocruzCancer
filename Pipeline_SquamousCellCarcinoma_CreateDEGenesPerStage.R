@@ -109,7 +109,7 @@ for (stage_pair in rownames(df_stage_pairs))
 	# Selected genes
 	
 	# Obtain differential expression numbers
-	selected_genes<-rownames(Normal_Tumor_sort_stages[which(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories=="Up-regulated",]),])
+	selected_genes<-rownames(Normal_Tumor_sort_stages[which(Normal_Tumor_sort_stages$Categories=="Up-regulated"),])
 	 
 	# Obtain differential expression numbers
 	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup="stages") + theme_bw() + ggtitle(paste("DE Genes", first_stage, "vs.",second_stage))

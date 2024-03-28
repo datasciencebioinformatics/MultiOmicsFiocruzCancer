@@ -117,7 +117,7 @@ for (stage_pair in rownames(df_stage_pairs))
 	Normal_Tumor_sort_stages<-Normal_Tumor_sort_stages[selected_genes,]
 	
 	# Change histogram plot fill colors by groups
-	padj_histogram_stages<-ggplot(Normal_Tumor_sort_stages, aes(x=-log(padj), fill=Categories, color=Categories)) +  geom_histogram(position="identity") + scale_fill_manual(values = c("dodgerblue3", "firebrick3"))  + theme_bw()  + theme_bw() + ggtitle(paste("DE Genes", first_stage, " vs.",second_stage,"\n",paste(sum(Normal_Tumor_sort_stages$Categories=="Up-regulated"), "genes\n10% of genes sorted by padj with log2FoldChange>1\nselected up-regulated genes"),sep=""))+ theme(legend.position='bottom')
+	padj_histogram_stages<-ggplot(Normal_Tumor_sort_stages, aes(x=-log(padj), fill=Categories, color=Categories)) +  geom_histogram(position="identity") + theme_bw()  + theme_bw() + ggtitle(paste("DE Genes", first_stage, " vs.",second_stage,"\n",paste(sum(Normal_Tumor_sort_stages$Categories=="Up-regulated"), "genes\n10% of genes sorted by padj with log2FoldChange>1\nselected up-regulated genes"),sep=""))+ theme(legend.position='bottom')
 	#######################################################################################################################
 	# Remove samples from Stage III and plot again
 	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup="stages") + theme_bw() + ggtitle(paste("DE Genes", first_stage, " vs.",second_stage,"\n",paste(sum(Normal_Tumor_sort_stages$Categories=="Up-regulated"), "genes\n10% of genes sorted by padj with log2FoldChange>1\nselected up-regulated genes"),sep=""))+ theme(legend.position='bottom')

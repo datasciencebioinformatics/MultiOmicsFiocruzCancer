@@ -58,15 +58,15 @@ for (stage_pair in rownames(df_stage_pairs))
 	####################################################################################################################
 	# Field for top 10 percent of sorted sample
 	# First, stageI
-	Normal_Tumor_up_sort_df_stages$Normal_Tumor_sort_20.0<-FALSE
-	Normal_Tumor_down_sort_df_stages$Normal_Tumor_sort_20.0<-FALSE
+	Normal_Tumor_up_sort_df_stages$Normal_Tumor_sort_10.0<-FALSE
+	Normal_Tumor_down_sort_df_stages$Normal_Tumor_sort_10.0<-FALSE
 	Normal_Tumor_up_sort_df_stages$up_down<-"up"
 	Normal_Tumor_down_sort_df_stages$up_down<-"down"
 	####################################################################################################################
 	# First, stageI
 	# Field for top 10 percent of sorted sample
-	Normal_Tumor_up_sort_df_stages[1:(dim(Normal_Tumor_up_sort_df_stages)[1]*0.10),"Normal_Tumor_sort_20.0"]<-TRUE
-	Normal_Tumor_down_sort_df_stages[1:(dim(Normal_Tumor_down_sort_df_stages)[1]*0.10),"Normal_Tumor_sort_20.0"]<-TRUE
+	Normal_Tumor_up_sort_df_stages[1:(dim(Normal_Tumor_up_sort_df_stages)[1]*0.10),"Normal_Tumor_sort_10.0"]<-TRUE
+	Normal_Tumor_down_sort_df_stages[1:(dim(Normal_Tumor_down_sort_df_stages)[1]*0.10),"Normal_Tumor_sort_10.0"]<-TRUE
 	####################################################################################################################
 	Normal_Tumor_sort_stages<-rbind(Normal_Tumor_up_sort_df_stages,Normal_Tumor_down_sort_df_stages)
 	####################################################################################################################
@@ -76,8 +76,8 @@ for (stage_pair in rownames(df_stage_pairs))
 	####################################################################################################################
 	# Set expression up
 	# First, stageI
-	Normal_Tumor_sort_stages[intersect(which(Normal_Tumor_sort_stages$Normal_Tumor_sort_20.0), which(Normal_Tumor_sort_stages$log2FoldChange < 0)),"Expression"]<--1
-	Normal_Tumor_sort_stages[intersect(which(Normal_Tumor_sort_stages$Normal_Tumor_sort_20.0), which(Normal_Tumor_sort_stages$log2FoldChange >= 0)),"Expression"]<-1
+	Normal_Tumor_sort_stages[intersect(which(Normal_Tumor_sort_stages$Normal_Tumor_sort_10.0), which(Normal_Tumor_sort_stages$log2FoldChange < 0)),"Expression"]<--1
+	Normal_Tumor_sort_stages[intersect(which(Normal_Tumor_sort_stages$Normal_Tumor_sort_10.0), which(Normal_Tumor_sort_stages$log2FoldChange >= 0)),"Expression"]<-1
 	####################################################################################################################
 	# First, stageI
 	Normal_Tumor_sort_stages$Categories<-""
@@ -107,7 +107,9 @@ for (stage_pair in rownames(df_stage_pairs))
 	p2 <- p2 + geom_hline(yintercept=threshold_padj ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_up ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_down ,linetype = 'dashed')
 	
 	# Selected genes
-	selected_genes<-rownames(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories=="Up-regulated",])
+	
+	# Obtain differential expression numbers
+	selected_genes<-rownames(Normal_Tumor_sort_stages[which(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories=="Up-regulated",]),])
 	 
 	# Obtain differential expression numbers
 	pca_normal_stageIII<-plotPCA(vst_stages_sub[selected_genes,], intgroup="stages") + theme_bw() + ggtitle(paste("DE Genes", first_stage, "vs.",second_stage))

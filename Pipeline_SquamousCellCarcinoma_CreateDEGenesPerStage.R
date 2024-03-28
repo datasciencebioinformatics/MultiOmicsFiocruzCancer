@@ -50,8 +50,6 @@ for (stage_pair in rownames(df_stage_pairs))
 	# Sort table by abs(log2FoldChange) and -log(padj)
 	Normal_Tumor_up_sort_df_stages<- up_regulated_df_stages[order(up_regulated_df_stages$padj), ]
 	Normal_Tumor_down_sort_df_stages<- down_regulated_df_stage[order(down_regulated_df_stage$padj), ]
-	Normal_Tumor_up_sort_df_stages<- up_regulated_df_stages[order(up_regulated_df_stages$padj), ]
-	Normal_Tumor_down_sort_df_stages<- down_regulated_df_stage[order(down_regulated_df_stage$padj), ]
 	####################################################################################################################
 	# Remove NA rows
 	# First, stageI

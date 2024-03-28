@@ -9,3 +9,15 @@ selected_genes_Stage_I_data       <-read.table(file = selected_genes_Stage_I_fil
 selected_genes_Stage_II_data      <-read.table(file = selected_genes_Stage_II_file, sep = '\t', header = TRUE,fill=TRUE)              #
 selected_genes_Stage_III_data     <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)             #
 #######################################################################################################################################
+library("rrvgo")
+stage_I_sim_matrix <- calculateSimMatrix(selected_genes_Stage_I_data$Gene,orgdb="org.Hs.eg.db",ont="BP", method="Rel")
+stage_II_sim_matrix <- calculateSimMatrix(selected_genes_Stage_II_data$Gene,orgdb="org.Hs.eg.db",ont="BP", method="Rel")
+stage_III_sim_matrix <- calculateSimMatrix(selected_genes_Stage_III_data$Gene,orgdb="org.Hs.eg.db",ont="BP", method="Rel")
+#######################################################################################################################################
+# https://bioconductor.org/packages/release/bioc/vignettes/rrvgo/inst/doc/rrvgo.html
+scores <- setNames(-log10(stage_I_sim_matrix$qvalue), stage_I_sim_matrix$ID)
+reducedTerms <- reduceSimMatrix(stage_I_sim_matrix,
+                                scores,
+                                threshold=0.7,
+                                orgdb="org.Hs.eg.db")
+#######################################################################################################################################

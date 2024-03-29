@@ -33,15 +33,15 @@ library("topGO")
 library("hgu95av2.db")
 
 # Vectors for the pvalue of selected genes
-vector_Stage_I <-selected_genes_Stage_I_data$pvalue
-vector_Stage_II <-selected_genes_Stage_II_data$pvalue
-vector_Stage_III <-selected_genes_Stage_III_data$pvalue
+vector_Stage_I <-selected_genes_Stage_I_data$padj
+vector_Stage_II <-selected_genes_Stage_II_data$padj
+vector_Stage_III <-selected_genes_Stage_III_data$padj
 vector_all <- df_stages$pvalue
 
 # Names of genes
-names(vector_Stage_I)<-selected_genes_Stage_I_data$Gene
-names(vector_Stage_II)<-selected_genes_Stage_II_data$Gene
-names(vector_Stage_III)<-selected_genes_Stage_III_data$Gene
+names(vector_Stage_I)<-gsub("\\.\\d+", "", selected_genes_Stage_I_data$Gene)
+names(vector_Stage_II)<-gsub("\\.\\d+", "", selected_genes_Stage_II_data$Gene)
+names(vector_Stage_III)<-gsub("\\.\\d+", "", selected_genes_Stage_III_data$Gene)
 names(vector_all) <- rownames(df_stages)
 
 ## To do:
@@ -56,12 +56,9 @@ names(vector_all) <- rownames(df_stages)
 topDiffGenes <- function(padj) {return (padj < 0.05)}
 
 # Check how to use Ensemble transcripts ID in topgo
-topGO = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_I, geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "GeneName")
-
-gsub("\\.\\d+", "", rownames(dds_stages))
-
-
-sampleGOdata <- new("topGOdata",description = "Simple session", ontology = "BP",allGenes = geneList, geneSel = topDiffGenes, nodeSize = 10,annot = annFUN.db, affyLib = affyLib)
+topGO_vector_Stage_I   = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_I,   geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_II  = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_II,  geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_III = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_III, geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
 #######################################################################################################################################
 # https://bioconductor.org/packages/release/bioc/vignettes/rrvgo/inst/doc/rrvgo.html
 scores <- setNames(-log10(stage_I_sim_matrix$qvalue), stage_I_sim_matrix$ID)

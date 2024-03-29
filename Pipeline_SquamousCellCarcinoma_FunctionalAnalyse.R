@@ -58,6 +58,9 @@ topDiffGenes <- function(padj) {return (padj < 0.05)}
 # Check how to use Ensemble transcripts ID in topgo
 topGO = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_I, geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "GeneName")
 
+gsub("\\.\\d+", "", rownames(dds_stages))
+
+
 sampleGOdata <- new("topGOdata",description = "Simple session", ontology = "BP",allGenes = geneList, geneSel = topDiffGenes, nodeSize = 10,annot = annFUN.db, affyLib = affyLib)
 #######################################################################################################################################
 # https://bioconductor.org/packages/release/bioc/vignettes/rrvgo/inst/doc/rrvgo.html

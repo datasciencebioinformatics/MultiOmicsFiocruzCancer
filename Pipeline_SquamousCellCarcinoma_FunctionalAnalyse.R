@@ -1,4 +1,11 @@
 #######################################################################################################################################
+To DO:
+# Here 1 : try extremes of padj threshold range (0.001 - 0.05)
+# Here 2 : try extremes of topNodes 10-100
+# Here 3 : check if KS classiKS can be used as score instead of fisher qvalue
+# Here 4 : change threshold parameter
+# Important is to improve legibility of plot
+#######################################################################################################################################
 # Path to files of selected_genes                                                                                                     # 
 selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/output/genes_Stage1.tsv"                                      #
 selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/output/genes_Stage2.tsv"                                      #
@@ -53,6 +60,7 @@ names(vector_all) <- rownames(df_stages)
 # I can use all DE genes padj < 0.05
 
 ## create a gene selection function to select significant genes
+# Here 1 : try extremes of padj threshold range (0.001 - 0.05)
 topDiffGenes <- function(padj) {return (padj < 0.01)}
 
 # Check how to use Ensemble transcripts ID in topgo
@@ -64,6 +72,7 @@ result_topGO_vector_Stage_I <- runTest(topGO_vector_Stage_I, algorithm = "classi
 result_topGO_vector_Stage_II <- runTest(topGO_vector_Stage_II, algorithm = "classic", statistic = "ks") # statistic = "fisher"
 result_topGO_vector_Stage_III <- runTest(topGO_vector_Stage_III, algorithm = "classic", statistic = "ks") # statistic = "fisher"
 
+# Here 2 : try extremes of topNodes 10-100
 table_topGO_vector_Stage_I   <- GenTable(topGO_vector_Stage_I,   classicKS = result_topGO_vector_Stage_I, topNodes = 100)
 table_topGO_vector_Stage_II  <- GenTable(topGO_vector_Stage_II,  classicKS = result_topGO_vector_Stage_II, topNodes = 100)
 table_topGO_vector_Stage_III <- GenTable(topGO_vector_Stage_III, classicKS = result_topGO_vector_Stage_III, topNodes = 100)
@@ -73,11 +82,13 @@ simMatrix_stage_I <- calculateSimMatrix(table_topGO_vector_Stage_I$GO.ID, orgdb=
 simMatrix_stage_II <- calculateSimMatrix(table_topGO_vector_Stage_II$GO.ID, orgdb="org.Hs.eg.db",ont="BP",method="Rel")
 simMatrix_stage_III <- calculateSimMatrix(table_topGO_vector_Stage_III$GO.ID, orgdb="org.Hs.eg.db",ont="BP",method="Rel")
 
+# Here 3 : check if KS classiKS can be used as score instead of fisher qvalue
 # Scores of Stage I
 scores_stage_I    <- setNames(-log10(as.numeric(table_topGO_vector_Stage_I$classicKS)), table_topGO_vector_Stage_I$GO.ID)
 scores_stage_II   <- setNames(-log10(as.numeric(table_topGO_vector_Stage_II$classicKS)), table_topGO_vector_Stage_II$GO.ID)
 scores_stage_III  <- setNames(-log10(as.numeric(table_topGO_vector_Stage_III$classicKS)), table_topGO_vector_Stage_III$GO.ID)
 
+# Here 4 : change threshold parameter
 # Compute reduce terms
 reducedTerms_stage_I <- reduceSimMatrix(simMatrix_stage_I, scores_stage_I, threshold=0.9,  orgdb="org.Hs.eg.db")
 reducedTerms_stage_II <- reduceSimMatrix(simMatrix_stage_II, scores_stage_II, threshold=0.9,  orgdb="org.Hs.eg.db")

@@ -1,5 +1,5 @@
 #######################################################################################################################################
-To DO:
+# To DO:
 # Here 1 : try extremes of padj threshold range (0.001 - 0.05)
 # Here 2 : try extremes of topNodes 10-100
 # Here 3 : check if KS classiKS can be used as score instead of fisher qvalue

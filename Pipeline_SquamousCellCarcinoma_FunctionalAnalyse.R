@@ -1,8 +1,8 @@
 #######################################################################################################################################
 # Path to files of selected_genes                                                                                                     # 
-selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stage_I.tsv"                         #
-selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stage_II.tsv"                        #
-selected_genes_Stage_III_file     <-"/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stage_III.tsv"                       #
+selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/output/genes_Stage1.tsv"                                      #
+selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/output/genes_Stage2.tsv"                                      #
+selected_genes_Stage_III_file     <-"/home/felipe/Documentos/LungPortal/output/genes_Stage3.tsv"                                      #
 unstranded_file                   <- "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tsv"   #
 #######################################################################################################################################
 # Load data                                                                                                                           #
@@ -53,17 +53,50 @@ names(vector_all) <- rownames(df_stages)
 # I can use all DE genes padj < 0.05
 
 ## create a gene selection function to select significant genes
-topDiffGenes <- function(padj) {return (padj < 0.05)}
+topDiffGenes <- function(padj) {return (padj < 0.01)}
 
 # Check how to use Ensemble transcripts ID in topgo
-topGO_vector_Stage_I   = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_I,   geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
-topGO_vector_Stage_II  = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_II,  geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
-topGO_vector_Stage_III = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_III, geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_I   = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_I,   geneSel = topDiffGenes, nodeSize = 20, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_II  = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_II,  geneSel = topDiffGenes, nodeSize = 20, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_III = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_III, geneSel = topDiffGenes, nodeSize = 20, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
 #######################################################################################################################################
+result_topGO_vector_Stage_I <- runTest(topGO_vector_Stage_I, algorithm = "classic", statistic = "ks") # statistic = "fisher"
+result_topGO_vector_Stage_II <- runTest(topGO_vector_Stage_II, algorithm = "classic", statistic = "ks") # statistic = "fisher"
+result_topGO_vector_Stage_III <- runTest(topGO_vector_Stage_III, algorithm = "classic", statistic = "ks") # statistic = "fisher"
+
+table_topGO_vector_Stage_I   <- GenTable(topGO_vector_Stage_I,   classicKS = result_topGO_vector_Stage_I, topNodes = 100)
+table_topGO_vector_Stage_II  <- GenTable(topGO_vector_Stage_II,  classicKS = result_topGO_vector_Stage_II, topNodes = 100)
+table_topGO_vector_Stage_III <- GenTable(topGO_vector_Stage_III, classicKS = result_topGO_vector_Stage_III, topNodes = 100)
+
 # https://bioconductor.org/packages/release/bioc/vignettes/rrvgo/inst/doc/rrvgo.html
-scores <- setNames(-log10(stage_I_sim_matrix$qvalue), stage_I_sim_matrix$ID)
-reducedTerms <- reduceSimMatrix(stage_I_sim_matrix,
-                                scores,
-                                threshold=0.7,
-                                orgdb="org.Hs.eg.db")
+simMatrix_stage_I <- calculateSimMatrix(table_topGO_vector_Stage_I$GO.ID, orgdb="org.Hs.eg.db",ont="BP",method="Rel")
+simMatrix_stage_II <- calculateSimMatrix(table_topGO_vector_Stage_II$GO.ID, orgdb="org.Hs.eg.db",ont="BP",method="Rel")
+simMatrix_stage_III <- calculateSimMatrix(table_topGO_vector_Stage_III$GO.ID, orgdb="org.Hs.eg.db",ont="BP",method="Rel")
+
+# Scores of Stage I
+scores_stage_I    <- setNames(-log10(as.numeric(table_topGO_vector_Stage_I$classicKS)), table_topGO_vector_Stage_I$GO.ID)
+scores_stage_II   <- setNames(-log10(as.numeric(table_topGO_vector_Stage_II$classicKS)), table_topGO_vector_Stage_II$GO.ID)
+scores_stage_III  <- setNames(-log10(as.numeric(table_topGO_vector_Stage_III$classicKS)), table_topGO_vector_Stage_III$GO.ID)
+
+# Compute reduce terms
+reducedTerms_stage_I <- reduceSimMatrix(simMatrix_stage_I, scores_stage_I, threshold=0.9,  orgdb="org.Hs.eg.db")
+reducedTerms_stage_II <- reduceSimMatrix(simMatrix_stage_II, scores_stage_II, threshold=0.9,  orgdb="org.Hs.eg.db")
+reducedTerms_stage_III <- reduceSimMatrix(simMatrix_stage_III, scores_stage_III, threshold=0.9,  orgdb="org.Hs.eg.db")
+#######################################################################################################################################
+
+treemapPlot(reducedTerms_stage_II)
+treemapPlot(reducedTerms_stage_III)
+#######################################################################################################################################
+# FindClusters_resolution
+png(filename=paste(output_dir,"reducedTerms_stage_I.png",sep=""), width = 16, height = 14, res=600, units = "cm")
+	treemapPlot(reducedTerms_stage_I)
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_dir,"reducedTerms_stage_II.png",sep=""), width = 16, height = 14, res=600, units = "cm")
+	treemapPlot(reducedTerms_stage_II)
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_dir,"reducedTerms_stage_III.png",sep=""), width = 16, height = 14, res=600, units = "cm")
+	treemapPlot(reducedTerms_stage_III)
+dev.off()
 #######################################################################################################################################

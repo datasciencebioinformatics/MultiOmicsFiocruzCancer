@@ -34,8 +34,11 @@ stage_I_sim_matrix <- calculateSimMatrix(selected_genes_Stage_I_data$Gene,orgdb=
 stage_II_sim_matrix <- calculateSimMatrix(selected_genes_Stage_II_data$Gene,orgdb="org.Hs.eg.db",ont="BP", method="Rel")
 stage_III_sim_matrix <- calculateSimMatrix(selected_genes_Stage_III_data$Gene,orgdb="org.Hs.eg.db",ont="BP", method="Rel")
 #######################################################################################################################################
-# Fist take 
+# Second, use rrvgo to plot the go terms and reduced go tems
+# Try dotplot ggplot2 for comparative Stages I, II, III
+# https://forum.posit.co/t/trying-to-plot-go-in-ggplot/126952
 #######################################################################################################################################
+
 library("topGO")
 library("hgu95av2.db")
 
@@ -94,7 +97,6 @@ reducedTerms_stage_I <- reduceSimMatrix(simMatrix_stage_I, scores_stage_I, thres
 reducedTerms_stage_II <- reduceSimMatrix(simMatrix_stage_II, scores_stage_II, threshold=0.9,  orgdb="org.Hs.eg.db")
 reducedTerms_stage_III <- reduceSimMatrix(simMatrix_stage_III, scores_stage_III, threshold=0.9,  orgdb="org.Hs.eg.db")
 #######################################################################################################################################
-
 treemapPlot(reducedTerms_stage_II)
 treemapPlot(reducedTerms_stage_III)
 #######################################################################################################################################

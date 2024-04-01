@@ -10,12 +10,13 @@
 selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/output/pos_unique_genes_Stage_I.tsv"                         #
 selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/output/pos_unique_genes_Stage_II.tsv"                         #
 selected_genes_Stage_III_file     <-"/home/felipe/Documentos/LungPortal/output/pos_unique_genes_Stage_III.tsv"                         #
-unstranded_file                   <- "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tsv"   #
+unstranded_file                   <-"/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tsv"   #
 #######################################################################################################################################
 # Load data                                                                                                                           #
 selected_genes_Stage_I_data       <-read.table(file = selected_genes_Stage_I_file, sep = '\t', header = TRUE,fill=TRUE)               #
 selected_genes_Stage_II_data      <-read.table(file = selected_genes_Stage_II_file, sep = '\t', header = TRUE,fill=TRUE)              #
 selected_genes_Stage_III_data     <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)             #
+unstranded_data                   <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)             #
 #######################################################################################################################################
 # Run DESeq2
 dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData[colnames(unstranded_data),], design = ~  age_at_index +  gender +stages)
@@ -127,3 +128,4 @@ png(filename=paste(output_dir,"GOTerms_reducedTerms.png",sep=""), width = 20, he
 	ggplot(data = reducedTerms_stages, aes(y = parentTerm, x = Stage, color = score)) +  geom_point(size=6) + scale_color_gradient(low = "red", high = "blue") +  theme_bw() +   ylab("") +  xlab("") +   ggtitle("GO enrichment analysis for Stages I, II and III") + scale_alpha(guide = "none")
 dev.off()
 #######################################################################################################################################
+Entropy(x, y = NULL, base = 2, ...)

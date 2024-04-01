@@ -79,6 +79,8 @@ for (stage_pair in rownames(df_stage_pairs))
 	Normal_Tumor_sort_stages[intersect(which(Normal_Tumor_sort_stages$Normal_Tumor_sort_percent), which(Normal_Tumor_sort_stages$log2FoldChange < 0)),"Expression"]<--1
 	Normal_Tumor_sort_stages[intersect(which(Normal_Tumor_sort_stages$Normal_Tumor_sort_percent), which(Normal_Tumor_sort_stages$log2FoldChange >= 0)),"Expression"]<-1
 	####################################################################################################################
+	Normal_Tumor_sort_stages$Gene<-rownames(Normal_Tumor_sort_stages)
+	####################################################################################################################
 	# First, stageI
 	Normal_Tumor_sort_stages$Categories<-""
 	Normal_Tumor_sort_stages[which(Normal_Tumor_sort_stages$Expression==0),"Categories"]<-"Uncategorized"

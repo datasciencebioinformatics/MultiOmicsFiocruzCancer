@@ -24,9 +24,9 @@ rownames(selected_genes_Stage_I_pos)<-selected_genes_Stage_I_pos$Gene
 rownames(selected_genes_Stage_II_pos)<-selected_genes_Stage_II_pos$Gene
 rownames(selected_genes_Stage_III_pos)<-selected_genes_Stage_III_pos$Gene
 ###################################################################################################################################################################################################################################################################################################
-write_tsv(selected_genes_Stage_I_pos[unique_genes_Stage_I,],     "/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stage_I.tsv")
-write_tsv(selected_genes_Stage_II_pos[unique_genes_Stage_II,],   "/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stage_II.tsv")
-write_tsv(selected_genes_Stage_III_pos[unique_genes_Stage_III,],  "/home/felipe/Documentos/LungPortal/samples/pos_unique_genes_Stage_III.tsv")
+write_tsv(selected_genes_Stage_I_pos[unique_genes_Stage_I,],     "/home/felipe/Documentos/LungPortal/output/pos_unique_genes_Stage_I.tsv")
+write_tsv(selected_genes_Stage_II_pos[unique_genes_Stage_II,],   "/home/felipe/Documentos/LungPortal/output/pos_unique_genes_Stage_II.tsv")
+write_tsv(selected_genes_Stage_III_pos[unique_genes_Stage_III,],  "/home/felipe/Documentos/LungPortal/output/pos_unique_genes_Stage_III.tsv")
 ###################################################################################################################################################################################################################################################################################################
 selected_genes_Stage_I_data       <- selected_genes_Stage_I_pos
 selected_genes_Stage_II_data      <- selected_genes_Stage_II_pos

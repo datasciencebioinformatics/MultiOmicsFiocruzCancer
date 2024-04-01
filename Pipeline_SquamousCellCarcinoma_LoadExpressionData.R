@@ -122,4 +122,6 @@ unstranded_data<-unstranded_data[selected_gene_id,]
 merged_data_patient_info$patient_id<-paste("patient_",1:length(merged_data_patient_info$sample_id),sep="")
 write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.gene_counts.tsv")
 write_tsv(merged_data_patient_info[,c("patient_id","case_id","sample_id","age_at_index","gender","tumor_normal","stages")], "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv")
+write_tsv(colData,         "/home/felipe/Documentos/LungPortal/samples/colData.tsv")
+write_tsv(unstranded_data, "/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv")
 #####################################################################################################################

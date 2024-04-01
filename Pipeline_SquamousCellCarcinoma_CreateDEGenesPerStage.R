@@ -106,14 +106,14 @@ for (stage_index in stages_str)
 	# The thresholds
 	threshold_padj<-min(-log(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories!="Uncategorized","padj"]))
 	threshold_log2fc_up<-min(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories=="Up-regulated","log2FoldChange"])
-	#threshold_log2fc_down<-max(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories=="Down-regulated","log2FoldChange"])
+	threshold_log2fc_down<-max(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories=="Down-regulated","log2FoldChange"])
 
 	# Adding color to differentially expressed genes (DEGs)
 	p2 <- ggplot(Normal_Tumor_sort_stages, aes(log2FoldChange, -log(padj),color = Categories)) + geom_point(size = 2/5,aes(color = Categories))  +
 	  xlab(expression("log2FoldChange")) + 
 	  ylab(expression("-log(padj)")) +
 	  scale_color_manual(values = c("dodgerblue3", "gray50", "firebrick3")) +
-	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes", first_stage, "vs.",second_stage))
+	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes", stages_str[stage_index]))
 	
 	# Add treshold lines
 	p2 <- p2 + geom_hline(yintercept=threshold_padj ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_up ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_down ,linetype = 'dashed')
@@ -124,7 +124,7 @@ for (stage_index in stages_str)
 	selected_genes<-rownames(Normal_Tumor_sort_stages[which(Normal_Tumor_sort_stages[which(Normal_Tumor_sort_stages$Categories=="Up-regulated"),"Normal_Tumor_sort_percent"]),])		
 	 
 	# Obtain differential expression numbers
-	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup="stages") + theme_bw() + ggtitle(paste("DE Genes", first_stage, "vs.",second_stage))
+	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup="stages") + theme_bw() + ggtitle(paste("DE Genes", stages_str[stage_index]))
 	
 	Normal_Tumor_sort_stages<-Normal_Tumor_sort_stages[selected_genes,]
 	
@@ -132,7 +132,7 @@ for (stage_index in stages_str)
 	padj_histogram_stages<-ggplot(Normal_Tumor_sort_stages, aes(x=-log(padj), fill=Categories, color=Categories)) +  geom_histogram(position="identity") + theme_bw()  + theme_bw() + ggtitle(paste("DE Genes", first_stage, " vs.",second_stage,"\n",paste(sum(Normal_Tumor_sort_stages$Categories=="Up-regulated"), "genes\n10% of genes sorted by padj\nselected up-regulated genes"),sep=""))+ theme(legend.position='bottom')
 	#######################################################################################################################
 	# Remove samples from Stage III and plot again
-	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup="stages") + theme_bw() + ggtitle(paste("DE Genes", first_stage, " vs.",second_stage,"\n",paste(sum(Normal_Tumor_sort_stages$Categories=="Up-regulated"), "genes\n10% of genes sorted by padj\nselected up-regulated genes"),sep=""))+ theme(legend.position='bottom')
+	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup="stages") + theme_bw() + ggtitle(paste("DE Genes", stages_str[stage_index],"\n",paste(sum(Normal_Tumor_sort_stages$Categories=="Up-regulated"), "genes\n10% of genes sorted by padj\nselected up-regulated genes"),sep=""))+ theme(legend.position='bottom')
 	#######################################################################################################################
 	# FindClusters_resolution
 	png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage",stage_pair,".png",sep=""), width = 28, height = 24, res=600, units = "cm")

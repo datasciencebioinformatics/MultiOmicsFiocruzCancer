@@ -7,9 +7,9 @@
 # Important is to improve legibility of plot
 #######################################################################################################################################
 # Path to files of selected_genes                                                                                                     # 
-selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/output/selected_genes_Stage1.tsv"                             #
-selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/output/selected_genes_Stage2.tsv"                             #
-selected_genes_Stage_III_file     <-"/home/felipe/Documentos/LungPortal/output/selected_genes_Stage3.tsv"                             #
+selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/output/pos_unique_genes_Stage_I.tsv"                         #
+selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/output/pos_unique_genes_Stage_II.tsv"                         #
+selected_genes_Stage_III_file     <-"/home/felipe/Documentos/LungPortal/output/pos_unique_genes_Stage_III.tsv"                         #
 unstranded_file                   <- "/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tsv"   #
 #######################################################################################################################################
 # Load data                                                                                                                           #

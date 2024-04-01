@@ -1,6 +1,17 @@
 #######################################################################################################################
 # Reload colData from file
 # Reload unstranded_data from file
+###########################################################################################################################
+unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                #
+merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
+colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
+###########################################################################################################################
+unstranded_data_data               <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
+merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#
+colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
+rownames(colData)                  <-colData$patient_id
+###########################################################################################################################
+# Filter to use only Primary_Tumor data
 ########################################################################################################################
 # A panel to analyse differential expression comparing samples of each stage against all others stages.
 ########################################################################################################################

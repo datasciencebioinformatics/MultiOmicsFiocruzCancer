@@ -67,18 +67,18 @@ names(vector_all) <- rownames(df_stages)
 topDiffGenes <- function(padj) {return (padj < 0.01)}
 
 # Check how to use Ensemble transcripts ID in topgo
-topGO_vector_Stage_I   = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_I,   geneSel = topDiffGenes, nodeSize = 20, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
-topGO_vector_Stage_II  = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_II,  geneSel = topDiffGenes, nodeSize = 20, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
-topGO_vector_Stage_III = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_III, geneSel = topDiffGenes, nodeSize = 20, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_I   = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_I,   geneSel = topDiffGenes, nodeSize = 100, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_II  = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_II,  geneSel = topDiffGenes, nodeSize = 100, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_III = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_III, geneSel = topDiffGenes, nodeSize = 100, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
 #######################################################################################################################################
 result_topGO_vector_Stage_I <- runTest(topGO_vector_Stage_I, algorithm = "classic", statistic = "ks") # statistic = "fisher"
 result_topGO_vector_Stage_II <- runTest(topGO_vector_Stage_II, algorithm = "classic", statistic = "ks") # statistic = "fisher"
 result_topGO_vector_Stage_III <- runTest(topGO_vector_Stage_III, algorithm = "classic", statistic = "ks") # statistic = "fisher"
 
 # Here 2 : try extremes of topNodes 10-100
-table_topGO_vector_Stage_I   <- GenTable(topGO_vector_Stage_I,   classicKS = result_topGO_vector_Stage_I, topNodes = 100)
-table_topGO_vector_Stage_II  <- GenTable(topGO_vector_Stage_II,  classicKS = result_topGO_vector_Stage_II, topNodes = 100)
-table_topGO_vector_Stage_III <- GenTable(topGO_vector_Stage_III, classicKS = result_topGO_vector_Stage_III, topNodes = 100)
+table_topGO_vector_Stage_I   <- GenTable(topGO_vector_Stage_I,   classicKS = result_topGO_vector_Stage_I, topNodes = 25)
+table_topGO_vector_Stage_II  <- GenTable(topGO_vector_Stage_II,  classicKS = result_topGO_vector_Stage_II, topNodes = 25)
+table_topGO_vector_Stage_III <- GenTable(topGO_vector_Stage_III, classicKS = result_topGO_vector_Stage_III, topNodes = 25)
 
 # https://bioconductor.org/packages/release/bioc/vignettes/rrvgo/inst/doc/rrvgo.html
 simMatrix_stage_I <- calculateSimMatrix(table_topGO_vector_Stage_I$GO.ID, orgdb="org.Hs.eg.db",ont="BP",method="Rel")
@@ -93,10 +93,11 @@ scores_stage_III  <- setNames(-log10(as.numeric(table_topGO_vector_Stage_III$cla
 
 # Here 4 : change threshold parameter
 # Compute reduce terms
-reducedTerms_stage_I <- reduceSimMatrix(simMatrix_stage_I, scores_stage_I, threshold=0.9,  orgdb="org.Hs.eg.db")
-reducedTerms_stage_II <- reduceSimMatrix(simMatrix_stage_II, scores_stage_II, threshold=0.9,  orgdb="org.Hs.eg.db")
-reducedTerms_stage_III <- reduceSimMatrix(simMatrix_stage_III, scores_stage_III, threshold=0.9,  orgdb="org.Hs.eg.db")
+reducedTerms_stage_I <- reduceSimMatrix(simMatrix_stage_I, scores_stage_I, threshold=0.7,  orgdb="org.Hs.eg.db")
+reducedTerms_stage_II <- reduceSimMatrix(simMatrix_stage_II, scores_stage_II, threshold=0.7,  orgdb="org.Hs.eg.db")
+reducedTerms_stage_III <- reduceSimMatrix(simMatrix_stage_III, scores_stage_III, threshold=0.7,  orgdb="org.Hs.eg.db")
 #######################################################################################################################################
+treemapPlot(reducedTerms_stage_I)
 treemapPlot(reducedTerms_stage_II)
 treemapPlot(reducedTerms_stage_III)
 #######################################################################################################################################
@@ -113,3 +114,15 @@ png(filename=paste(output_dir,"reducedTerms_stage_III.png",sep=""), width = 16, 
 	treemapPlot(reducedTerms_stage_III)
 dev.off()
 #######################################################################################################################################
+reducedTerms_stage_I$Stage<-"Stage I"
+reducedTerms_stage_II$Stage<-"Stage II"
+reducedTerms_stage_III$Stage<-"Stage III"
+
+reducedTerms_stages<-rbind(reducedTerms_stage_I,reducedTerms_stage_II)
+reducedTerms_stages<-rbind(reducedTerms_stages,reducedTerms_stage_III)
+#######################################################################################################################################
+# plot: dot plot
+# FindClusters_resolution
+png(filename=paste(output_dir,"GOTerms_reducedTerms.png",sep=""), width = 20, height = 20, res=600, units = "cm")
+	ggplot(data = reducedTerms_stages, aes(y = parentTerm, x = Stage, color = score)) +  geom_point(size=6) + scale_color_gradient(low = "red", high = "blue") +  theme_bw() +   ylab("") +  xlab("") +   ggtitle("GO enrichment analysis for Stages I, II and III") + scale_alpha(guide = "none")
+dev.off()

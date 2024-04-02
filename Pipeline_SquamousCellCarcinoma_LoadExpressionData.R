@@ -119,11 +119,9 @@ selected_gene_id<-df_gene_id_symbol[df_gene_id_symbol$gene_symbol %in% Table1_da
 unstranded_data<-unstranded_data[selected_gene_id,]
 #####################################################################################################################
 merged_data_patient_info$patient_id<-paste("patient_",1:length(merged_data_patient_info$sample_id),sep="")
-merged_data_patient_info_filtered<-merged_data_patient_info[merged_data_patient_info$sample_id %in% colnames(unstranded_data),]
 
 # Writing mtcars data
 write.table(colData, file = "/home/felipe/Documentos/LungPortal/samples/colData.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
 write.table(merged_data_patient_info[,c("patient_id","case_id","sample_id","age_at_index","gender","tumor_normal","stages","tissue_type")], file ="/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv" , sep = "\t", row.names = TRUE, col.names = TRUE)
 write.table(unstranded_data, file = "/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
-write.table(merged_data_patient_info_filtered[,c("patient_id","case_id","sample_id","age_at_index","gender","tumor_normal","stages","tissue_type")], file ="/home/felipe/Documentos/LungPortal/samples/patient.metadata.filtered.tsv" , sep = "\t", row.names = TRUE, col.names = TRUE)
 #####################################################################################################################

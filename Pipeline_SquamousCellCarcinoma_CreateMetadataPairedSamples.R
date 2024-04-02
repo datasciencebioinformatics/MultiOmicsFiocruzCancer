@@ -24,5 +24,16 @@ rownames(colData)                  <-colData$patient_id                         
 # For each case, find the pairs
 for (case in unique(merged_data_patient_info_data$case))
 {
-    print(case)
+    # Take the samples of this case (normal and tumor)
+    case_samples<-merged_data_patient_info_data[merged_data_patient_info_data$case==case,]
+
+    # Take the tumor samples
+    tumor_sampĺes <-case_samples[case_samples$tissue_type=="Tumor",]
+    normal_sampĺes<-case_samples[case_samples$tissue_type=="Normal",]
+
+    # For each tumor sample
+    for (tumor_sample in unique(tumor_sampĺes$sample_id))
+    {
+        
+    }        
 }

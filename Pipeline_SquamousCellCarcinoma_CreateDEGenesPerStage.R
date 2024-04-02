@@ -65,8 +65,6 @@ for (stage_index in stages_str)
 	df_stages[intersect(which(df_stages$log2FoldChange >= 0),which(df_stages$padj<padj_threshold)),"Category"]<-"Up-regulated"
 	df_stages[intersect(which(df_stages$log2FoldChange < 0),which(df_stages$padj<padj_threshold)),"Category"] <-"Down-regulated"
   	####################################################################################################################
-	df_stages$Gene<-rownames(Normal_Tumor_sort_stages)
-	####################################################################################################################
 	# Save TSV file with genes from Stage3
 	write_tsv(cbind(data.frame(Gene=rownames(df_stages)),df_stages), paste(output_dir,"genes_Stage_",stage_index,".tsv",sep=""))
 	####################################################################################################################

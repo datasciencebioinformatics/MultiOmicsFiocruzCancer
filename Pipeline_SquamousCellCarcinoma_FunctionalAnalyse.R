@@ -128,4 +128,3 @@ png(filename=paste(output_dir,"GOTerms_reducedTerms.png",sep=""), width = 20, he
 	ggplot(data = reducedTerms_stages, aes(y = parentTerm, x = Stage, color = score)) +  geom_point(size=6) + scale_color_gradient(low = "red", high = "blue") +  theme_bw() +   ylab("") +  xlab("") +   ggtitle("GO enrichment analysis for Stages I, II and III") + scale_alpha(guide = "none")
 dev.off()
 #######################################################################################################################################
-Entropy(x, y = NULL, base = 2, ...)

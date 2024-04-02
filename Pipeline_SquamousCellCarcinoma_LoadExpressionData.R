@@ -56,10 +56,10 @@ merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$samp
 merged_data_patient_info<-merged_data_patient_info[,c("case_id","sample_id","age_at_index","gender","Sample.Type","stages","race","tissue_type")]
 
 # Rename collumns
-colnames(merged_data_patient_info)<-c("case_id","sample_id","age_at_index","gender","tumor_normal","stages","race","tissue_type")
+colnames(merged_data_patient_info)<-c("case_id","sample_id","age_at_index","gender","tumor_normal","stages","race","tissue_type","tissue_type")
 #####################################################################################################################
 # Set colData
-colData<-unique(merged_data_patient_info[,c("sample_id","age_at_index","gender","tumor_normal","stages","race")])
+colData<-unique(merged_data_patient_info[,c("sample_id","age_at_index","gender","tumor_normal","stages","race","tissue_type")])
 
 # Set colnames
 rownames(colData)<-colData$sample_id

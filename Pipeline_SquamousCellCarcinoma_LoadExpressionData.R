@@ -53,10 +53,10 @@ merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$samp
 # There are 238 cases, 285 samples, 570 pairs
 
 # Filter collumns that are used for age_at_index, gender, stages, Sample.ID
-merged_data_patient_info<-merged_data_patient_info[,c("case_id","sample_id","age_at_index","gender","Sample.Type","stages","race")]
+merged_data_patient_info<-merged_data_patient_info[,c("case_id","sample_id","age_at_index","gender","Sample.Type","stages","race","tissue_type")]
 
 # Rename collumns
-colnames(merged_data_patient_info)<-c("case_id","sample_id","age_at_index","gender","tumor_normal","stages","race")
+colnames(merged_data_patient_info)<-c("case_id","sample_id","age_at_index","gender","tumor_normal","stages","race","tissue_type")
 #####################################################################################################################
 # Set colData
 colData<-unique(merged_data_patient_info[,c("sample_id","age_at_index","gender","tumor_normal","stages","race")])

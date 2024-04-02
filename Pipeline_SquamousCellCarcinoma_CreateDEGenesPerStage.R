@@ -88,7 +88,7 @@ for (stage_index in stages_str)
 	
 	# Selected genes	
 	# Obtain differential Category numbers
-	selected_genes<-df_stages[which(df_stages$Category!="Uncategorized"),"Gene"]
+	selected_genes<-rownames(df_stages[which(df_stages$Category!="Uncategorized"),])
 	 
 	# Obtain differential Category numbers
 	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes", stage_index))

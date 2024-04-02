@@ -12,11 +12,11 @@ library(ggplot2)
 ##########################################################################################################################################################################################################
 output_dir="/home/felipe/Documentos/LungPortal/output/"                                                                   #
 ###########################################################################################################################
-unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                #
+unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded.tsv"                        #
 merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
 colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
 ###########################################################################################################################
-unstranded_data               <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
+unstranded_data                    <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
 merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#
 colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
 rownames(colData)                  <-colData$patient_id                                                                   #
@@ -58,4 +58,23 @@ for (case in unique(merged_data_patient_info_data$case))
             }                
     }
 }
+# For each pair, we subtracted gene expression values of control samples
+for (case in paired_sample_df$case)
+{    
+    # Take samples from the case
+    cases_samples<-merged_data_patient_info_data[which(merged_data_patient_info_data$case==case),]
+   
+    # Take tumor and normal
+    tumor_sample <-paired_sample_df[paired_sample_df$case==case,"tumor"]
+    normal_sample<-paired_sample_df[paired_sample_df$case==case,"normal"]
+
+    # Take tumor and normal
+    tumor_id <-cases_samples[which(cases_samples$sample_id==tumor_sample),"patient_id"]
+    normal_id<-cases_samples[which(cases_samples$sample_id==normal_sample),"patient_id"]
+    
+    unstranded_data[,tumor_id]
+
+    unstranded_data[,]
+}
+
 

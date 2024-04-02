@@ -64,17 +64,28 @@ for (case in paired_sample_df$case)
     # Take samples from the case
     cases_samples<-merged_data_patient_info_data[which(merged_data_patient_info_data$case==case),]
    
-    # Take tumor and normal
-    tumor_sample <-paired_sample_df[paired_sample_df$case==case,"tumor"]
+    # Take tumor and normal    
     normal_sample<-paired_sample_df[paired_sample_df$case==case,"normal"]
+    tumor_sample <-paired_sample_df[paired_sample_df$case==case,"tumor"]
 
-    # Take tumor and normal
-    tumor_id <-cases_samples[which(cases_samples$sample_id==tumor_sample),"patient_id"]
-    normal_id<-cases_samples[which(cases_samples$sample_id==normal_sample),"patient_id"]
-    
-    unstranded_data[,tumor_id]
+    # Take tumor and normal    
+    normal_ids<-cases_samples[which(cases_samples$sample_id==normal_sample),"patient_id"]
 
-    unstranded_data[,]
+    # For each normal samples
+    for (normal_id in normal_ids)
+    {
+        # Take tumor samples
+        tumor_sample <-paired_sample_df[paired_sample_df$case==case,"tumor"]
+
+        # Take tumor ids
+        tumor_ids <-cases_samples[which(cases_samples$sample_id==tumor_sample),"patient_id"]
+
+        # For each normal samples
+        for (tumor_id in tumor_ids)
+        {
+            print(paste(normal_id,tumor_id) )
+        }        
+    }    
 }
 
 

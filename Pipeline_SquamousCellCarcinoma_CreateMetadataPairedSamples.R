@@ -14,13 +14,16 @@ output_dir="/home/felipe/Documentos/LungPortal/output/"                         
 ###########################################################################################################################
 unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                #
 merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
-colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
+colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData_normal_tumor.tsv"              #
 ###########################################################################################################################
-unstranded_data_data               <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
+unstranded_data               <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
 merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#
 colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
 rownames(colData)                  <-colData$patient_id                                                                   #
 ###########################################################################################################################
+dds_stages_tissue_type <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData_data[colnames(unstranded_data),], design = ~  age_at_index +  gender +tissue_type  )
+###########################################################################################################################
+
 # Paired samples
 paired_sample_df<-data.frame(normal=c(normal_samples_id),tumor=c(tumor_solid_sample_id),case=case)
 

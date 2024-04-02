@@ -68,7 +68,7 @@ for (stage_index in stages_str)
 	df_stages$Gene<-rownames(Normal_Tumor_sort_stages)
 	####################################################################################################################
 	# Save TSV file with genes from Stage3
-	write_tsv(df_stages, paste(output_dir,"genes_Stage_",stage_index,".tsv",sep=""))
+	write_tsv(cbind(data.frame(Gene=rownames(df_stages)),df_stages), paste(output_dir,"genes_Stage_",stage_index,".tsv",sep=""))
 	####################################################################################################################
 	# Create volcano plot
 	p1 <- ggplot(df_stages, aes(log2FoldChange, -log(padj,2))) +  geom_point(size = 2/5) +  theme_bw()
@@ -108,7 +108,7 @@ for (stage_index in stages_str)
 	png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage_",stage_index,".png",sep=""), width = 28, height = 24, res=600, units = "cm")
 		pca_plots<-grid.arrange( p2, padj_histogram_stages,pca_normal_stages_first_second,  ncol = 2)
 	dev.off()		
-	
+	#######################################################################################################################	
 	# Save TSV file with genes from Stage1
-	write_tsv(df_stages, paste(output_dir,"selected_genes_Stage_pos_",stage_index,".tsv",sep=""))
+	write_tsv(cbind(data.frame(Gene=rownames(df_stages)),df_stages), paste(output_dir,"selected_genes_Stage_pos_",stage_index,".tsv",sep=""))
 }

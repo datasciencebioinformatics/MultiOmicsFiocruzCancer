@@ -14,7 +14,7 @@ output_dir="/home/felipe/Documentos/LungPortal/output/"                         
 ###########################################################################################################################
 unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                #
 merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
-colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData_normal_tumor.tsv"              #
+colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
 ###########################################################################################################################
 unstranded_data               <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
 merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#

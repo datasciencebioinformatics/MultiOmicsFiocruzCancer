@@ -68,7 +68,7 @@ for (stage_index in stages_str)
 	df_stages$Gene<-rownames(Normal_Tumor_sort_stages)
 	####################################################################################################################
 	# Save TSV file with genes from Stage3
-	write_tsv(df_stages, paste(output_dir,"genes_Stage",stage_index,".tsv",sep=""))
+	write_tsv(df_stages, paste(output_dir,"genes_Stage_",stage_index,".tsv",sep=""))
 	####################################################################################################################
 	# Create volcano plot
 	p1 <- ggplot(df_stages, aes(log2FoldChange, -log(padj,2))) +  geom_point(size = 2/5) +  theme_bw()
@@ -83,7 +83,7 @@ for (stage_index in stages_str)
 	  xlab("log2FoldChange") + 
 	  ylab("-log(padj)") +
 	  scale_color_manual(values = c("dodgerblue3", "gray50", "firebrick3")) +
-	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes", stage_index,"\n",resultsNames(dds_stages)[4],sep=""))
+	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",resultsNames(dds_stages)[4],sep=""))
 	
 	# Add treshold lines
 	p2 <- p2 + geom_hline(yintercept=threshold_padj ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_up ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_down ,linetype = 'dashed')
@@ -105,10 +105,10 @@ for (stage_index in stages_str)
 	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(sum(df_stages$Category!="Uncategorized"), "genes padj<0.05"),sep=""))+ theme(legend.position='bottom')
 	#######################################################################################################################
 	# FindClusters_resolution
-	png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage",stage_index,".png",sep=""), width = 28, height = 24, res=600, units = "cm")
+	png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage_",stage_index,".png",sep=""), width = 28, height = 24, res=600, units = "cm")
 		pca_plots<-grid.arrange( p2, padj_histogram_stages,pca_normal_stages_first_second,  ncol = 2)
 	dev.off()		
 	
 	# Save TSV file with genes from Stage1
-	write_tsv(df_stages, paste(output_dir,"selected_genes_Stage_pos",stage_index,".tsv",sep=""))
+	write_tsv(df_stages, paste(output_dir,"selected_genes_Stage_pos_",stage_index,".tsv",sep=""))
 }

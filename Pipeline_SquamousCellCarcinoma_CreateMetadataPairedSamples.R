@@ -21,6 +21,9 @@ merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_
 colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
 rownames(colData)                  <-colData$patient_id                                                                   #
 ###########################################################################################################################
+# Paired samples
+paired_sample_df<-data.frame(normal=c(normal_samples_id),tumor=c(tumor_solid_sample_id),case=case)
+
 # For each case, find the pairs
 for (case in unique(merged_data_patient_info_data$case))
 {
@@ -31,9 +34,18 @@ for (case in unique(merged_data_patient_info_data$case))
     tumor_sampĺes <-case_samples[case_samples$tissue_type=="Tumor",]
     normal_sampĺes<-case_samples[case_samples$tissue_type=="Normal",]
 
-    # For each tumor sample
-    for (tumor_sample in unique(tumor_sampĺes$sample_id))
+    # if vector contains at least one tumor and one normal
+    if(length(unique(normal_sampĺes$sample_id))>0 && length(unique(tumor_sampĺes$sample_id))>0)
     {
-        
-    }        
+            # For each tumor sample
+            for (tumor_solid_sample_id in tumor_sampĺes$sample_id)
+            {
+                # for each normal sample, compile a paired samples
+                for (normal_samples_id in normal_sampĺes$sample_id)
+                {
+                    # Contatenate                     
+                    paired_sample_df<-rbind(data.frame(normal=c(normal_samples_id),tumor=c(tumor_solid_sample_id),case=case),paired_sample_df)
+                }
+            }                
+    }
 }

@@ -10,5 +10,19 @@ library(readr)
 library("xlsx")
 library(ggplot2)
 ##########################################################################################################################################################################################################
-output_dir="/home/felipe/Documentos/LungPortal/output/"                                                             #
-#####################################################################################################################
+output_dir="/home/felipe/Documentos/LungPortal/output/"                                                                   #
+###########################################################################################################################
+unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                #
+merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
+colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
+###########################################################################################################################
+unstranded_data_data               <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
+merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#
+colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
+rownames(colData)                  <-colData$patient_id                                                                   #
+###########################################################################################################################
+# For each case, find the pairs
+for (case in unique(merged_data_patient_info_data$case))
+{
+    print(case)
+}

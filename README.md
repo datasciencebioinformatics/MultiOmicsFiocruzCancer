@@ -6,14 +6,13 @@ A manifest data for transcriptome profiling using RNA-Seq of TCGA lung data was 
 ## A command line to download the samples from the portal cancer database
 gdc-client download -m /home/felipe/Documentos/LungPortal/gdc_manifest.2024-03-08.txt
 
-## R scripts to create metadata from gdc files. 
+## A R scripts to create metadata from gdc files. 
 #### Inputs:
 
 gdc_sample_sheet.2024-03-08.tsv, clinical.txt, sample.txt, exposure.txt, merged_data_patient_info.tsv
 
 #### Script:
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataFromGDCFiles.R")
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamples.R")
 
 ## A bash script to create a single table for all samples.
 #### Output folder :
@@ -37,6 +36,9 @@ gene_name.txt
 
 ## A R scripts to load expression files
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadExpressionData.R")
+
+## A R scripts to load paired sample
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamples.R")
 
 ## A R script to create metadata
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataFromGDCFiles.R")

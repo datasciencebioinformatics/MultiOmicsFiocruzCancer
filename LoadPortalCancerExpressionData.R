@@ -84,6 +84,8 @@ colnames(unstranded_data) <- colData[colnames(unstranded_data),"patient_id"]
 # Set colnames
 rownames(colData)<-colData$patient_id
 #####################################################################################################################
+write_tsv(colData, "/home/felipe/Documentos/LungPortal/samples/colData.tsv")
+#####################################################################################################################
 # https://www.frontiersin.org/journals/genetics/articles/10.3389/fgene.2019.00930/full#h3
 # The gene expression data were obtained as RNA-seq files in their version 2 (Illumina Hi-Seq) available for tissues affected by cancer or not (paired tissues), 
 # from TCGA (https://cancergenome.nih.gov/) accessed in February 2016. Version 2 gives gene expression values for 20,532 genes referred to as GeneSymbol, 

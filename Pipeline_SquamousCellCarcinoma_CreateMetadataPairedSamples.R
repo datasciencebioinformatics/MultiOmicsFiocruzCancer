@@ -23,6 +23,12 @@ rownames(colData)                  <-colData$patient_id                         
 ###########################################################################################################################
 dds_stages_tissue_type <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData_data[colnames(unstranded_data),], design = ~  age_at_index +  gender +tissue_type  )
 ###########################################################################################################################
+# Estimate size factor
+dds_stages_tissue_type <- estimateSizeFactors(dds_stages_tissue_type)
+
+# Obtain normalized coutns
+norm_counts<-counts(dds_stages_tissue_type, normalized = TRUE)
+###########################################################################################################################
 
 # Paired samples
 paired_sample_df<-data.frame(normal=c(normal_samples_id),tumor=c(tumor_solid_sample_id),case=case)
@@ -52,3 +58,4 @@ for (case in unique(merged_data_patient_info_data$case))
             }                
     }
 }
+

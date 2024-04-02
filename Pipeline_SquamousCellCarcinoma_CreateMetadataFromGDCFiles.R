@@ -43,9 +43,6 @@ merged_data_patient_info<-merge(merged_sample_clinical_data,gdc_sample_sheet_dat
 # Set file name variable 
 # From the File.ID, only the ID is kept in the variable sample_id
 merged_data_patient_info$sample_id<-gsub(".rna_seq.augmented_star_gene_counts.tsv", "", merged_data_patient_info$File.Name)
-
-# Organize how to send to Carles
-write_tsv(merged_data_patient_info, "/home/felipe/Documentos/LungPortal/samples/merged_data_patient_info.tsv")
 #####################################################################################################################
 # length(unique(merged_data_patient_info$case_id)) # Number of cases
 # length(unique(merged_data_patient_info$sample_id)) # Number of samples
@@ -75,3 +72,5 @@ merged_data_patient_info<-rbind(primary_tumor,solid_tissue)
 # min(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
 # max(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
 # mean(merged_data_patient_info[!is.na(merged_data_patient_info$age_at_index),"age_at_index"])
+# Organize how to send to Carles
+write_tsv(merged_data_patient_info, "/home/felipe/Documentos/LungPortal/samples/merged_data_patient_info.tsv")

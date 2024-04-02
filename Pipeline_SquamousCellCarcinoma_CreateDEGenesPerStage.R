@@ -68,7 +68,7 @@ for (stage_index in stages_str)
 	df_stages$Gene<-rownames(Normal_Tumor_sort_stages)
 	####################################################################################################################
 	# Save TSV file with genes from Stage3
-	write_tsv(df_stages, paste(output_dir,"genes_Stage",stage_pair,".tsv",sep=""))
+	write_tsv(df_stages, paste(output_dir,"genes_Stage",stage_index,".tsv",sep=""))
 	####################################################################################################################
 	# Create volcano plot
 	p1 <- ggplot(df_stages, aes(log2FoldChange, -log(padj,2))) +  geom_point(size = 2/5) +  theme_bw()
@@ -105,12 +105,10 @@ for (stage_index in stages_str)
 	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(sum(df_stages$Category!="Uncategorized"), "genes padj<0.05"),sep=""))+ theme(legend.position='bottom')
 	#######################################################################################################################
 	# FindClusters_resolution
-	png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage",stage_pair,".png",sep=""), width = 28, height = 24, res=600, units = "cm")
+	png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage",stage_index,".png",sep=""), width = 28, height = 24, res=600, units = "cm")
 		pca_plots<-grid.arrange( p2, padj_histogram_stages,pca_normal_stages_first_second,  ncol = 2)
 	dev.off()		
 	
 	# Save TSV file with genes from Stage1
-	# Save TSV file with genes from Stage1
-	Normal_Tumor_sort_stages$Gene<-rownames(Normal_Tumor_sort_stages)
-	write_tsv(Normal_Tumor_sort_stages[Normal_Tumor_sort_stages$Categories=="Up-regulated",], paste(output_dir,"selected_genes_Stage_pos",stage_pair,".tsv",sep=""))
+	write_tsv(df_stages, paste(output_dir,"selected_genes_Stage_pos",stage_index,".tsv",sep=""))
 }

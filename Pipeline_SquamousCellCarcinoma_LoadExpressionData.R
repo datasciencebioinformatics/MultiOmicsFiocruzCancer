@@ -123,6 +123,6 @@ merged_data_patient_info$patient_id<-paste("patient_",1:length(merged_data_patie
 
 # Writing mtcars data
 write.table(colData, file = "/home/felipe/Documentos/LungPortal/samples/colData.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
-write.table(merged_data_patient_info[,c("patient_id","case_id","sample_id","age_at_index","gender","tumor_normal","stages")], file ="/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv" , sep = "\t", row.names = TRUE, col.names = TRUE)
+write.table(merged_data_patient_info[,c("patient_id","case_id","sample_id","age_at_index","gender","tumor_normal","stages","tissue_type")], file ="/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv" , sep = "\t", row.names = TRUE, col.names = TRUE)
 write.table(unstranded_data, file = "/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
 #####################################################################################################################

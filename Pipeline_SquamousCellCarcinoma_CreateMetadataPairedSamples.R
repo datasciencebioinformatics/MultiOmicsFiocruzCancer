@@ -69,7 +69,7 @@ for (case in paired_sample_df$case)
     tumor_sample <-paired_sample_df[paired_sample_df$case==case,"tumor"]
 
     # Take tumor and normal    
-    normal_ids<-cases_samples[which(cases_samples$sample_id==normal_sample),"patient_id"]
+    cases_samples<-merged_data_patient_info_data[which(merged_data_patient_info_data$sample_id==normal_sample),"patient_id"]
 
     # For each normal samples
     for (normal_id in normal_ids)

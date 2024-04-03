@@ -77,9 +77,9 @@ result_topGO_vector_Stage_II <- runTest(topGO_vector_Stage_II, algorithm = "clas
 result_topGO_vector_Stage_III <- runTest(topGO_vector_Stage_III, algorithm = "classic", statistic = "ks") # statistic = "fisher"
 
 # Here 2 : try extremes of topNodes 10-100
-table_topGO_vector_Stage_I   <- GenTable(topGO_vector_Stage_I,   classicKS = result_topGO_vector_Stage_I, topNodes = 10)
-table_topGO_vector_Stage_II  <- GenTable(topGO_vector_Stage_II,  classicKS = result_topGO_vector_Stage_II, topNodes = 25)
-table_topGO_vector_Stage_III <- GenTable(topGO_vector_Stage_III, classicKS = result_topGO_vector_Stage_III, topNodes = 25)
+table_topGO_vector_Stage_I   <- GenTable(topGO_vector_Stage_I,   classicKS = result_topGO_vector_Stage_I, topNodes = 50)
+table_topGO_vector_Stage_II  <- GenTable(topGO_vector_Stage_II,  classicKS = result_topGO_vector_Stage_II, topNodes = 50)
+table_topGO_vector_Stage_III <- GenTable(topGO_vector_Stage_III, classicKS = result_topGO_vector_Stage_III, topNodes = 50)
 
 # https://bioconductor.org/packages/release/bioc/vignettes/rrvgo/inst/doc/rrvgo.html
 simMatrix_stage_I <- calculateSimMatrix(table_topGO_vector_Stage_I$GO.ID, orgdb="org.Hs.eg.db",ont="BP",method="Rel")

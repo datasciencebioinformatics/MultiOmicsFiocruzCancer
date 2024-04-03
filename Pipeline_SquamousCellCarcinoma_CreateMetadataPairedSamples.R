@@ -93,3 +93,13 @@ df_diff_expression<-df_diff_expression[,-1]
 # Take average expression
 avg_expression<-data.frame(rowMeans(df_diff_expression))
 
+# Take average expression of positive sample
+avg_expression_pos<-data.frame(Gene=rownames(avg_expression)[which(avg_expression>0)],Expression=avg_expression[which(avg_expression>0),])
+
+# Take average expression of positive sample
+rownames(avg_expression_pos)<-avg_expression_pos$Gene
+
+# Write table
+write.table(avg_expression_pos, file = "/home/felipe/Documentos/LungPortal/samples/avg_expression_pos.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
+
+

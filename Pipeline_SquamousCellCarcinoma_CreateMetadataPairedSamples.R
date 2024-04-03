@@ -90,10 +90,12 @@ for (case in rownames(paired_sample_df))
 # create dictionary for patient_id and case_id
 df_patient_case_id<-data.frame(case=merged_data_patient_info_data$case,patient_id=merged_data_patient_info_data$patient_id)
 
-# Rename colnames()
-df_patient_case_id
+# Remove gene expression
+df_diff_expression<-df_diff_expression[,-1]
 
-colnames(df_diff_expression) %in% df_patient_case_id$case
+# Rename colnames()
+colnames(df_diff_expression)<-df_patient_case_id[which(df_patient_case_id$case %in% colnames(df_diff_expression)),]
+
 
 
 

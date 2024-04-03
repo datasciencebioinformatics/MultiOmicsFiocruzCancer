@@ -52,14 +52,25 @@ merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$samp
 # Save table with samples and metatada
 # There are 238 cases, 285 samples, 570 pairs
 
+# Abril 03 00:31
+# Here I created the field patient_id
+# I called as such, the world patient is used
+# but what I meant is, some cases have more than one sample.
+# it can be what I call patient_id is one one entry for the sample (with the file)
+# Check what it is this of samples_ids that cannot be used
+# How : check the field /home/felipe/Documentos/LungPortal/samples/merged_data_patient_info.tsv
+# I suspect the inconsistence is not incosistence
+# Create field patient_id
+merged_data_patient_info$patient_id<-paste("patient_",1:length(colData$sample_id),sep="")
+
 # Filter collumns that are used for age_at_index, gender, stages, Sample.ID
-merged_data_patient_info<-merged_data_patient_info[,c("case_id","sample_id","age_at_index","gender","Sample.Type","stages","race","tissue_type")]
+merged_data_patient_info<-merged_data_patient_info[,c("patient_id","case_id","sample_id","age_at_index","gender","Sample.Type","stages","race","tissue_type")]
 
 # Rename collumns
-colnames(merged_data_patient_info)<-c("case_id","sample_id","age_at_index","gender","tumor_normal","stages","race","tissue_type")
+colnames(merged_data_patient_info)<-c("patient_id","case_id","sample_id","age_at_index","gender","tumor_normal","stages","race","tissue_type")
 #####################################################################################################################
 # Set colData
-colData<-unique(merged_data_patient_info[,c("sample_id","age_at_index","gender","tumor_normal","stages","race","tissue_type")])
+colData<-unique(merged_data_patient_info[,c("patient_id","sample_id","age_at_index","gender","tumor_normal","stages","race","tissue_type")])
 
 # Set colnames
 rownames(colData)<-colData$sample_id
@@ -76,9 +87,6 @@ colData<-colData[unique(merged_data_patient_info$sample_id),]
 
 # Filter DESeq2 steps
 #####################################################################################################################
-# Add columns for patient ID
-colData$patient_id<-paste("patient_",1:length(colData$sample_id),sep="")
-
 # Set colnames
 rownames(colData)<-colData$sample_id
 

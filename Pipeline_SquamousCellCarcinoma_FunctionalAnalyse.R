@@ -30,16 +30,10 @@ resultsNames(dds_stages)
 # Df s6tages I
 df_stages<-data.frame(results(dds_stages,name=resultsNames(dds_stages)[4]))
 #######################################################################################################################################
-library("rrvgo")
-stage_I_sim_matrix <- calculateSimMatrix(selected_genes_Stage_I_data$Gene,orgdb="org.Hs.eg.db",ont="BP", method="Rel", keytype = "ENSEMBL")
-stage_II_sim_matrix <- calculateSimMatrix(substr(selected_genes_Stage_II_data$Gene, 1, 15),orgdb="org.Hs.eg.db",ont="BP", method="Rel")
-stage_III_sim_matrix <- calculateSimMatrix(ssubstr(selected_genes_Stage_III_data$Gene, 1, 15),orgdb="org.Hs.eg.db",ont="BP", method="Rel")
-#######################################################################################################################################
 # Second, use rrvgo to plot the go terms and reduced go tems
 # Try dotplot ggplot2 for comparative Stages I, II, III
 # https://forum.posit.co/t/trying-to-plot-go-in-ggplot/126952
 #######################################################################################################################################
-
 library("topGO")
 library("hgu95av2.db")
 
@@ -68,9 +62,9 @@ names(vector_all) <- rownames(df_stages)
 topDiffGenes <- function(padj) {return (padj < 0.05)}
 
 # Check how to use Ensemble transcripts ID in topgo
-topGO_vector_Stage_I   = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_I,   geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
-topGO_vector_Stage_II  = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_II,  geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
-topGO_vector_Stage_III = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_III, geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_I   = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_I,   geneSel = topDiffGenes, nodeSize = 5, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_II  = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_II,  geneSel = topDiffGenes, nodeSize = 5, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_III = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_III, geneSel = topDiffGenes, nodeSize = 5, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
 #######################################################################################################################################
 result_topGO_vector_Stage_I <- runTest(topGO_vector_Stage_I, algorithm = "classic", statistic = "ks") # statistic = "fisher"
 result_topGO_vector_Stage_II <- runTest(topGO_vector_Stage_II, algorithm = "classic", statistic = "ks") # statistic = "fisher"
@@ -94,9 +88,9 @@ scores_stage_III  <- setNames(-log10(as.numeric(table_topGO_vector_Stage_III$cla
 
 # Here 4 : change threshold parameter
 # Compute reduce terms
-reducedTerms_stage_I <- reduceSimMatrix(simMatrix_stage_I, scores_stage_I, threshold=0.7,  orgdb="org.Hs.eg.db")
-reducedTerms_stage_II <- reduceSimMatrix(simMatrix_stage_II, scores_stage_II, threshold=0.7,  orgdb="org.Hs.eg.db")
-reducedTerms_stage_III <- reduceSimMatrix(simMatrix_stage_III, scores_stage_III, threshold=0.7,  orgdb="org.Hs.eg.db")
+reducedTerms_stage_I <- reduceSimMatrix(simMatrix_stage_I, scores_stage_I, threshold=0.5,  orgdb="org.Hs.eg.db")
+reducedTerms_stage_II <- reduceSimMatrix(simMatrix_stage_II, scores_stage_II, threshold=0.5,  orgdb="org.Hs.eg.db")
+reducedTerms_stage_III <- reduceSimMatrix(simMatrix_stage_III, scores_stage_III, threshold=0.5,  orgdb="org.Hs.eg.db")
 #######################################################################################################################################
 treemapPlot(reducedTerms_stage_I)
 treemapPlot(reducedTerms_stage_II)

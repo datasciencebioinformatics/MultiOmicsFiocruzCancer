@@ -70,10 +70,19 @@ merged_data_patient_info<-merged_data_patient_info[,c("patient_id","case_id","sa
 colnames(merged_data_patient_info)<-c("patient_id","case_id","sample_id","age_at_index","gender","tumor_normal","stages","race","tissue_type")
 #####################################################################################################################
 # Set colData
-colData<-unique(merged_data_patient_info[,c("patient_id","sample_id","age_at_index","gender","tumor_normal","stages","race","tissue_type")])
+colData<-unique(merged_data_patient_info[,c("sample_id","age_at_index","gender","tumor_normal","stages","race","tissue_type")])
+
+# Patient and sample
+patient_sample<-merged_data_patient_info[which(merged_data_patient_info$sample_id %in% colData$sample_id),c("patient_id","sample_id")]
+
+# Take firtst occurance
+patient_sample_first <- patient_sample[match(unique(patient_sample$sample_id), patient_sample$sample_id),]
+
+patient_sample_first
+colData$patient_id<-patient_sample_first[which(patient_sample_first$sample_id %in% colData$sample_id),"patient_id"]
 
 # Set colnames
-rownames(colData)<-colData$sample_id
+rownames(colData)<-colData$patient_id
 #####################################################################################################################
 # To DO:
 # Filter merged_data_patient_info stages with N>30

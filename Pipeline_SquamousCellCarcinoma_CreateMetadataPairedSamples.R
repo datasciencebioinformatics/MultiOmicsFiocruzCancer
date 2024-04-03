@@ -66,12 +66,17 @@ for (case in paired_sample_df$case)
     # it must e consistent in the data.frames merged_data_patient_info_data and colData 
     cases_samples<-merged_data_patient_info_data[which(merged_data_patient_info_data$case==case),]
    
-    # Take tumor and normal    
+    # Take tumor and normal
+    # Here I take the id of normal samples and the id of the tumor samples
     normal_sample<-paired_sample_df[paired_sample_df$case==case,"normal"]
     tumor_sample <-paired_sample_df[paired_sample_df$case==case,"tumor"]
 
-    # Take tumor and normal    
-    cases_samples<-merged_data_patient_info_data[which(merged_data_patient_info_data$sample_id==normal_sample),"patient_id"]
+    # Take tumor and normal
+    # Here I must take the the field patient_id from normal samples
+    cases_samples_normal<-merged_data_patient_info_data[which(merged_data_patient_info_data$sample_id==normal_sample),"patient_id"]
+
+    # Here I must take the the field patient_id from normal samples
+    cases_samples_tumor<-merged_data_patient_info_data[which(merged_data_patient_info_data$sample_id==tumor_sample),"patient_id"]
 
     # For each normal samples
     for (normal_id in normal_ids)

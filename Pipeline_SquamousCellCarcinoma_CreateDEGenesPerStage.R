@@ -5,13 +5,16 @@
 unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                #
 merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
 colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
+avg_expression_pos_file             <- "/home/felipe/Documentos/LungPortal/samples/avg_expression_pos.tsv"                #
 ###########################################################################################################################
-unstranded_data_data               <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
+unstranded_data                    <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
 merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#
 colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
-rownames(colData)                  <-colData$patient_id
+avg_expression_pos                 <-read.table(file = avg_expression_pos_file, sep = '\t', header = TRUE,fill=TRUE)      #
+rownames(colData)                  <-colData$patient_id                                                                   #
 ###########################################################################################################################
-# Filter to use only Primary_Tumor data
+# Filter to only positive tumor/normal samples.
+unstranded_data<-unstranded_data[avg_expression_pos$Gene,]
 ########################################################################################################################
 # A panel to analyse differential Category comparing samples of each stage against all others stages.
 ########################################################################################################################

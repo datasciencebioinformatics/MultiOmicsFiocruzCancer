@@ -82,7 +82,7 @@ patient_sample_first
 colData$patient_id<-patient_sample_first[which(patient_sample_first$sample_id %in% colData$sample_id),"patient_id"]
 
 # Set colnames
-rownames(colData)<-colData$patient_id
+rownames(colData)<-colData$sample_id
 #####################################################################################################################
 # To DO:
 # Filter merged_data_patient_info stages with N>30

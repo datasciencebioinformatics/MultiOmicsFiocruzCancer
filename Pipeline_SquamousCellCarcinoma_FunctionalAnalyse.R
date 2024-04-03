@@ -7,10 +7,10 @@
 # Important is to improve legibility of plot
 #######################################################################################################################################
 # Path to files of selected_genes                                                                                                     # 
-selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/output/pos_unique_genes_Stage_I.tsv"                         #
-selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/output/pos_unique_genes_Stage_II.tsv"                         #
-selected_genes_Stage_III_file     <-"/home/felipe/Documentos/LungPortal/output/pos_unique_genes_Stage_III.tsv"                         #
-unstranded_file                   <-"/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tsv"   #
+selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/output/selected_genes_Stage_pos_stage_I.tsv"                  #
+selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/output/selected_genes_Stage_pos_stage_II.tsv"                 #
+selected_genes_Stage_III_file     <-"/home/felipe/Documentos/LungPortal/output/selected_genes_Stage_pos_stage_III.tsv"                #
+unstranded_file                   <-"/home/felipe/Documentos/LungPortal/samples/unstranded.rna_seq.augmented_star_gene_counts.tsv"    #
 #######################################################################################################################################
 # Load data                                                                                                                           #
 selected_genes_Stage_I_data       <-read.table(file = selected_genes_Stage_I_file, sep = '\t', header = TRUE,fill=TRUE)               #
@@ -28,7 +28,7 @@ dds_stages <- DESeq(dds_stages)
 resultsNames(dds_stages)
 
 # Df s6tages I
-df_stages<-data.frame(results(dds_stages,name="stages_Stage.II_vs_Stage.I"))
+df_stages<-data.frame(results(dds_stages,name=resultsNames(dds_stages)[4]))
 #######################################################################################################################################
 library("rrvgo")
 stage_I_sim_matrix <- calculateSimMatrix(selected_genes_Stage_I_data$Gene,orgdb="org.Hs.eg.db",ont="BP", method="Rel")

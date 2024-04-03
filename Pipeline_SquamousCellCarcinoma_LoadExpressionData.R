@@ -104,6 +104,9 @@ colnames(unstranded_data) <- colData[colnames(unstranded_data),"patient_id"]
 
 # Set colnames
 rownames(colData)<-colData$patient_id
+
+# Filter colData
+colData <- colData[colnames(unstranded_data),]
 #####################################################################################################################
 # https://www.frontiersin.org/journals/genetics/articles/10.3389/fgene.2019.00930/full#h3
 # The gene expression data were obtained as RNA-seq files in their version 2 (Illumina Hi-Seq) available for tissues affected by cancer or not (paired tissues), 
@@ -131,7 +134,7 @@ Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_1.tsv",
 
 # Genes in conforte et al data
 selected_gene_id<-df_gene_id_symbol[df_gene_id_symbol$gene_symbol %in% Table1_data$GeneSymbol,"gene_id"]
-#####################################################################################################################
+
 write.table(unstranded_data, file = "/home/felipe/Documentos/LungPortal/samples/unstranded.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
 #####################################################################################################################
 # Filter RNA-seq data to contain only data from Conforte et.al
@@ -139,8 +142,13 @@ unstranded_data<-unstranded_data[selected_gene_id,]
 #####################################################################################################################
 merged_data_patient_info$patient_id<-paste("patient_",1:length(merged_data_patient_info$sample_id),sep="")
 
+#####################################################################################################################
+# Filter merged_data_patient_info
+merged_data_patient_filtered<-merged_data_patient_info[merged_data_patient_info$patient_id %in% colnames(unstranded_data),]
+#####################################################################################################################
 # Writing mtcars data
 write.table(colData, file = "/home/felipe/Documentos/LungPortal/samples/colData.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
 write.table(merged_data_patient_info[,c("patient_id","case_id","sample_id","age_at_index","gender","tumor_normal","stages","tissue_type")], file ="/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv" , sep = "\t", row.names = TRUE, col.names = TRUE)
 write.table(unstranded_data, file = "/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
+write.table(merged_data_patient_filtered[,c("patient_id","case_id","sample_id","age_at_index","gender","tumor_normal","stages","tissue_type")], file ="/home/felipe/Documentos/LungPortal/samples/patient.metadata.filetered.tsv" , sep = "\t", row.names = TRUE, col.names = TRUE)
 #####################################################################################################################

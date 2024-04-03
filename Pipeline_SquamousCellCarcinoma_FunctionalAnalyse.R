@@ -31,9 +31,9 @@ resultsNames(dds_stages)
 df_stages<-data.frame(results(dds_stages,name=resultsNames(dds_stages)[4]))
 #######################################################################################################################################
 library("rrvgo")
-stage_I_sim_matrix <- calculateSimMatrix(selected_genes_Stage_I_data$Gene,orgdb="org.Hs.eg.db",ont="BP", method="Rel")
-stage_II_sim_matrix <- calculateSimMatrix(selected_genes_Stage_II_data$Gene,orgdb="org.Hs.eg.db",ont="BP", method="Rel")
-stage_III_sim_matrix <- calculateSimMatrix(selected_genes_Stage_III_data$Gene,orgdb="org.Hs.eg.db",ont="BP", method="Rel")
+stage_I_sim_matrix <- calculateSimMatrix(selected_genes_Stage_I_data$Gene,orgdb="org.Hs.eg.db",ont="BP", method="Rel", keytype = "ENSEMBL")
+stage_II_sim_matrix <- calculateSimMatrix(substr(selected_genes_Stage_II_data$Gene, 1, 15),orgdb="org.Hs.eg.db",ont="BP", method="Rel")
+stage_III_sim_matrix <- calculateSimMatrix(ssubstr(selected_genes_Stage_III_data$Gene, 1, 15),orgdb="org.Hs.eg.db",ont="BP", method="Rel")
 #######################################################################################################################################
 # Second, use rrvgo to plot the go terms and reduced go tems
 # Try dotplot ggplot2 for comparative Stages I, II, III
@@ -65,19 +65,19 @@ names(vector_all) <- rownames(df_stages)
 
 ## create a gene selection function to select significant genes
 # Here 1 : try extremes of padj threshold range (0.001 - 0.05)
-topDiffGenes <- function(padj) {return (padj < 0.01)}
+topDiffGenes <- function(padj) {return (padj < 0.05)}
 
 # Check how to use Ensemble transcripts ID in topgo
-topGO_vector_Stage_I   = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_I,   geneSel = topDiffGenes, nodeSize = 20, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
-topGO_vector_Stage_II  = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_II,  geneSel = topDiffGenes, nodeSize = 20, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
-topGO_vector_Stage_III = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_III, geneSel = topDiffGenes, nodeSize = 20, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_I   = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_I,   geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_II  = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_II,  geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_III = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_III, geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
 #######################################################################################################################################
 result_topGO_vector_Stage_I <- runTest(topGO_vector_Stage_I, algorithm = "classic", statistic = "ks") # statistic = "fisher"
 result_topGO_vector_Stage_II <- runTest(topGO_vector_Stage_II, algorithm = "classic", statistic = "ks") # statistic = "fisher"
 result_topGO_vector_Stage_III <- runTest(topGO_vector_Stage_III, algorithm = "classic", statistic = "ks") # statistic = "fisher"
 
 # Here 2 : try extremes of topNodes 10-100
-table_topGO_vector_Stage_I   <- GenTable(topGO_vector_Stage_I,   classicKS = result_topGO_vector_Stage_I, topNodes = 25)
+table_topGO_vector_Stage_I   <- GenTable(topGO_vector_Stage_I,   classicKS = result_topGO_vector_Stage_I, topNodes = 10)
 table_topGO_vector_Stage_II  <- GenTable(topGO_vector_Stage_II,  classicKS = result_topGO_vector_Stage_II, topNodes = 25)
 table_topGO_vector_Stage_III <- GenTable(topGO_vector_Stage_III, classicKS = result_topGO_vector_Stage_III, topNodes = 25)
 

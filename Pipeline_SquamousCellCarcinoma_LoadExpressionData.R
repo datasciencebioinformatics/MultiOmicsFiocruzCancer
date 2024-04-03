@@ -145,6 +145,9 @@ merged_data_patient_info$patient_id<-paste("patient_",1:length(merged_data_patie
 #####################################################################################################################
 # Filter merged_data_patient_info
 merged_data_patient_filtered<-merged_data_patient_info[merged_data_patient_info$patient_id %in% colnames(unstranded_data),]
+
+# Filter merged_data_patient_info stages with N>30
+unstranded_data_filtered<-unstranded_data[,colnames(unstranded_data) %in% merged_data_patient_filtered$patient_id]
 #####################################################################################################################
 # Writing mtcars data
 write.table(colData, file = "/home/felipe/Documentos/LungPortal/samples/colData.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)

@@ -61,7 +61,7 @@ merged_data_patient_info<-merged_data_patient_info[merged_data_patient_info$samp
 # How : check the field /home/felipe/Documentos/LungPortal/samples/merged_data_patient_info.tsv
 # I suspect the inconsistence is not incosistence
 # Create field patient_id
-merged_data_patient_info$patient_id<-paste("patient_",1:length(colData$sample_id),sep="")
+merged_data_patient_info$patient_id<-paste("patient_",1:length(merged_data_patient_info$sample_id),sep="")
 
 # Filter collumns that are used for age_at_index, gender, stages, Sample.ID
 merged_data_patient_info<-merged_data_patient_info[,c("patient_id","case_id","sample_id","age_at_index","gender","Sample.Type","stages","race","tissue_type")]

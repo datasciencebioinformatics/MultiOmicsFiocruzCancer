@@ -62,6 +62,8 @@ for (case in unique(merged_data_patient_info_data$case))
 for (case in paired_sample_df$case)
 {    
     # Take samples from the case
+    # Important here is to check patiend_id field
+    # it must e consistent in the data.frames merged_data_patient_info_data and colData 
     cases_samples<-merged_data_patient_info_data[which(merged_data_patient_info_data$case==case),]
    
     # Take tumor and normal    

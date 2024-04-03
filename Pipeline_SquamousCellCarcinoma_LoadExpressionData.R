@@ -132,6 +132,8 @@ Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_1.tsv",
 # Genes in conforte et al data
 selected_gene_id<-df_gene_id_symbol[df_gene_id_symbol$gene_symbol %in% Table1_data$GeneSymbol,"gene_id"]
 #####################################################################################################################
+write.table(unstranded_data, file = "/home/felipe/Documentos/LungPortal/samples/unstranded.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
+#####################################################################################################################
 # Filter RNA-seq data to contain only data from Conforte et.al
 unstranded_data<-unstranded_data[selected_gene_id,]
 #####################################################################################################################

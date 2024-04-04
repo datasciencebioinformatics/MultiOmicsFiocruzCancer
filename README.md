@@ -5,6 +5,7 @@ Primary Diagnosis=Squamous cell carcinoma, NOS
 Tissue or Organ of Origin=lower lobe, lung; lung, nos; middle lobe, lung; overlapping lesion of lung; upper lobe, lung
 Experimental Strategy=RNA-Seq
 Data Format=tsv
+Program=TCGA
 
 
 ## A command line to download the samples from the portal cancer database

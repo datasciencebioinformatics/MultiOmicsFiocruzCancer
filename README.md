@@ -2,9 +2,13 @@ A manifest data for transcriptome profiling using RNA-Seq of TCGA lung data was 
 
 gdc_manifest.2024-03-08.txt parameters:
 Primary Diagnosis=Squamous cell carcinoma, NOS
+
 Tissue or Organ of Origin=lower lobe, lung; lung, nos; middle lobe, lung; overlapping lesion of lung; upper lobe, lung
+
 Experimental Strategy=RNA-Seq
+
 Data Format=tsv
+
 Program=TCGA
 
 

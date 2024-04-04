@@ -12,15 +12,18 @@ library(ggplot2)
 ##########################################################################################################################################################################################################
 output_dir="/home/felipe/Documentos/LungPortal/output/"                                                                   #
 ###########################################################################################################################
-unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded_data_filtered.tsv"          #
-merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.filetered.tsv"        #
+unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded.tsv"                        #
+merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
 colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
 ###########################################################################################################################
 unstranded_data                    <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
 merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#
 colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
 rownames(colData)                  <-colData$patient_id                                                                   #
+colData<-na.omit(colData)
 ###########################################################################################################################
+
+
 dds_stages_tissue_type <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData_data[colnames(unstranded_data),], design = ~  age_at_index +  gender +tissue_type  )
 ###########################################################################################################################
 # Estimate size factor

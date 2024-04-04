@@ -56,6 +56,7 @@ for (stage_index in stages_str)
 	####################################################################################################################
 	# First by padj
 	padj_threshold<-1
+	log2fc_threshold<-0.5
 	
 	# First, stageI
 	#df_stages<-df_stages[df_stages$padj<=padj_threshold,]
@@ -65,8 +66,8 @@ for (stage_index in stages_str)
 	df_stages$Category<-"Uncategorized"
 	
 	# First, stageI
-	df_stages[intersect(which(df_stages$log2FoldChange >= 0),which(df_stages$padj<padj_threshold)),"Category"]<-"Up-regulated"
-	df_stages[intersect(which(df_stages$log2FoldChange < 0),which(df_stages$padj<padj_threshold)),"Category"] <-"Down-regulated"
+	df_stages[intersect(which(df_stages$log2FoldChange >= 0),which(abs(df_stages$log2FoldChange)>=log2fc_threshold)),"Category"] <-"Up-regulated"
+	df_stages[intersect(which(df_stages$log2FoldChange <0  ),which(abs(df_stages$log2FoldChange)>=log2fc_threshold)),"Category"] <-"Down-regulated"
   	####################################################################################################################
 	# Save TSV file with genes from Stage3
 	write_tsv(cbind(data.frame(Gene=rownames(df_stages)),df_stages), paste(output_dir,"genes_Stage_",stage_index,".tsv",sep=""))
@@ -103,7 +104,7 @@ for (stage_index in stages_str)
 	padj_histogram_stages<-ggplot(df_stages, aes(x=-log(padj), fill=Category, color=Category)) +  geom_histogram(position="identity",bins = 20) + theme_bw() + ggtitle(paste("DE Genes", stage_index))+ theme(legend.position='bottom')
 	#######################################################################################################################
 	# Remove samples from Stage III and plot again
-	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(sum(df_stages$Category!="Uncategorized"), "genes padj<0.05"),sep=""))+ theme(legend.position='bottom')
+	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(sum(df_stages$Category!="Uncategorized"), "genes"),sep=""))+ theme(legend.position='bottom')
 	#######################################################################################################################
 	# FindClusters_resolution
 	png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage_",stage_index,".png",sep=""), width = 28, height = 24, res=600, units = "cm")

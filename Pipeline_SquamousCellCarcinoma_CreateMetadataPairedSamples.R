@@ -19,7 +19,11 @@ colData_file                        <- "/home/felipe/Documentos/LungPortal/sampl
 unstranded_data                    <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
 merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#
 colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
-rownames(colData)                  <-colData$patient_id                                                                   #
+rownames(colData)                  <-colData$patient_id                 
+############################################################################################################################
+colData<-na.omit(colData)
+unstranded_data<-unstranded_data[,colData$patient_id]
+merged_data_patient_info_data<-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id %in% colData$patient_id),]
 ###########################################################################################################################
 dds_stages_tissue_type <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData_data[colnames(unstranded_data),], design = ~  age_at_index +  gender +tissue_type  )
 ###########################################################################################################################

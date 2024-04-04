@@ -1,14 +1,11 @@
 A manifest data for transcriptome profiling using RNA-Seq of TCGA lung data was created in GDC portal (https://portal.gdc.cancer.gov/) at 08-03-2024. A total of M cases and N sample is listed in the manifest file. Among these, the numbers of cases from primary tumor and normal solid tissue are respectively XX and YY; while the respective numbers of samples are  ZZ and KK. From all primary diagnosis, only entries from Squamous cell carcinoma, (not otherwise specified) were kept, K cases for primary tumor and normal solid tissue, respectively; whilst XX and YY samples.
 
-
-
-
 ## A command line to download the samples from the portal cancer database
 gdc-client download -m /home/felipe/Documentos/LungPortal/gdc_manifest.2024-03-08.txt
 
 ## A R scripts to create metadata from gdc files. 
 #### Inputs:
-
+Pipeline_SquamousCellCarcinoma_CreateMetadataFromGDCFiles.R
 gdc_sample_sheet.2024-03-08.tsv, clinical.txt, sample.txt, exposure.txt, merged_data_patient_info.tsv
 
 #### Script:
@@ -39,9 +36,6 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 
 ## A R scripts to load paired sample
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamples.R")
-
-## A R script to create metadata
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataFromGDCFiles.R")
 
 ## A R script to analise metadata and expression data of selected samples and cases, In progress
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_AnalyseExpressionData.R")

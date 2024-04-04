@@ -30,6 +30,8 @@ gdc_sample_sheet.2024-03-08.tsv, clinical.txt, sample.txt, exposure.txt, merged_
 #### Script:
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataFromGDCFiles.R")
 
+506 unique sample_id's
+
 ## A bash script to create a single table for all samples.
 #### Output folder :
 

@@ -18,7 +18,10 @@ gdc-client download -m /home/felipe/Documentos/LungPortal/gdc_manifest.2024-04-0
 
 ## A R scripts to create metadata from gdc files. 
 Data Category=Transcriptome Profiling
+
 File Name    = *rna_seq.augmented_star_gene_counts.tsv
+
+Sample.Type  = Primary Tumor or Solid Tissue Normal
 
 #### Inputs:
 Pipeline_SquamousCellCarcinoma_CreateMetadataFromGDCFiles.R

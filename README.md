@@ -17,6 +17,9 @@ Program=TCGA
 gdc-client download -m /home/felipe/Documentos/LungPortal/gdc_manifest.2024-04-04.txt
 
 ## A R scripts to create metadata from gdc files. 
+Data Category=Transcriptome Profiling
+File Name    = *rna_seq.augmented_star_gene_counts.tsv
+
 #### Inputs:
 Pipeline_SquamousCellCarcinoma_CreateMetadataFromGDCFiles.R
 gdc_sample_sheet.2024-03-08.tsv, clinical.txt, sample.txt, exposure.txt, merged_data_patient_info.tsv

@@ -139,6 +139,10 @@ write.table(unstranded_data, file = "/home/felipe/Documentos/LungPortal/samples/
 #####################################################################################################################
 # Filter RNA-seq data to contain only data from Conforte et.al
 unstranded_data<-unstranded_data[selected_gene_id,]
+###########################################################################################################################
+colData<-na.omit(colData)
+unstranded_data<-unstranded_data[,colData$patient_id]
+merged_data_patient_info_data<-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id %in% colData$patient_id),]
 #####################################################################################################################
 # Writing mtcars data
 write.table(colData, file = "/home/felipe/Documentos/LungPortal/samples/colData.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)

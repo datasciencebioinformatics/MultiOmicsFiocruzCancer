@@ -26,6 +26,7 @@ do
     folder_name=$(echo $file  | sed 's/\// /g' | awk '{print "/"$1"/"$2"/"$3"/"$4"/"$5"/"$6"/"}')
     file_name=$(echo $file  | sed 's/\// /g' | awk '{print $7}')
     file_path=$(echo $folder_name"/"$file_name)
+    echo $file_name >> /home/felipe/Documentos/LungPortal/samples/samples.names.txt
     echo $file_path
     cat $file_path | grep -v GENCODE | grep -v gene_id | grep -v N_unmapped | grep -v N_multimapping | grep -v N_noFeature | grep -v N_ambiguous | awk '{print $1}' > $folder_name$file_name".gene_id.txt"
     cat $file_path | grep -v GENCODE | grep -v gene_id | grep -v N_unmapped | grep -v N_multimapping | grep -v N_noFeature | grep -v N_ambiguous | awk '{print $2}' > $folder_name$file_name".gene_name.txt"
@@ -34,8 +35,7 @@ do
     cat $file_path | grep -v GENCODE | grep -v gene_id | grep -v N_unmapped | grep -v N_multimapping | grep -v N_noFeature | grep -v N_ambiguous | awk '{print $5}' > $folder_name$file_name".stranded_first.txt"
     cat $file_path | grep -v GENCODE | grep -v gene_id | grep -v N_unmapped | grep -v N_multimapping | grep -v N_noFeature | grep -v N_ambiguous | awk '{print $6}' > $folder_name$file_name".stranded_second.txt"
     cat $file_path | grep -v GENCODE | grep -v gene_id | grep -v N_unmapped | grep -v N_multimapping | grep -v N_noFeature | grep -v N_ambiguous | awk '{print $7}' > $folder_name$file_name".tpm_unstranded.txt"
-    cat $file_path | grep -v GENCODE | grep -v gene_id | grep -v N_unmapped | grep -v N_multimapping | grep -v N_noFeature | grep -v N_ambiguous | awk '{print $8}' > $folder_name$file_name".fpkm_unstranded.txt"
-
+    cat $file_path | grep -v GENCODE | grep -v gene_id | grep -v N_unmapped | grep -v N_multimapping | grep -v N_noFeature | grep -v N_ambiguous | awk '{print $8}' > $folder_name$file_name".fpkm_unstranded.txt"    
 done
 # Finish here, to do
 # Add collumn to the table
@@ -53,3 +53,4 @@ paste /home/felipe/Documentos/LungPortal/samples/*/*."stranded_first.txt"  > /ho
 paste /home/felipe/Documentos/LungPortal/samples/*/*."stranded_second.txt"  > /home/felipe/Documentos/LungPortal/samples/stranded_second.rna_seq.augmented_star_gene_counts.tsv
 paste /home/felipe/Documentos/LungPortal/samples/*/*."tpm_unstranded.txt"  > /home/felipe/Documentos/LungPortal/samples/tpm_unstranded.rna_seq.augmented_star_gene_counts.tsv
 paste /home/felipe/Documentos/LungPortal/samples/*/*."fpkm_unstranded.txt" > /home/felipe/Documentos/LungPortal/samples/fpkm_unstranded.rna_seq.augmented_star_gene_counts.tsv
+

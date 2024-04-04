@@ -25,8 +25,7 @@ ls /home/felipe/Documentos/LungPortal/samples/*/*.rna_seq.augmented_star_gene_co
 do
     folder_name=$(echo $file  | sed 's/\// /g' | awk '{print "/"$1"/"$2"/"$3"/"$4"/"$5"/"$6"/"}')
     file_name=$(echo $file  | sed 's/\// /g' | awk '{print $7}')
-    file_path=$(echo $folder_name"/"$file_name)
-    echo $file_name >> /home/felipe/Documentos/LungPortal/samples/samples.names.txt
+    file_path=$(echo $folder_name"/"$file_name)    
     echo $file_path
     cat $file_path | grep -v GENCODE | grep -v gene_id | grep -v N_unmapped | grep -v N_multimapping | grep -v N_noFeature | grep -v N_ambiguous | awk '{print $1}' > $folder_name$file_name".gene_id.txt"
     cat $file_path | grep -v GENCODE | grep -v gene_id | grep -v N_unmapped | grep -v N_multimapping | grep -v N_noFeature | grep -v N_ambiguous | awk '{print $2}' > $folder_name$file_name".gene_name.txt"

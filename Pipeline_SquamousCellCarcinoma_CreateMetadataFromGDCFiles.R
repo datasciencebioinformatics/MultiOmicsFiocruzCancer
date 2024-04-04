@@ -11,7 +11,7 @@ library("xlsx")
 library(ggplot2)
 ##########################################################################################################################################################################################################
 # Reading the contents of TSV file using read_tsv() method
-gdc_sample_sheet_file<-"/home/felipe/Documentos/LungPortal/gdc_sample_sheet.2024-03-08.tsv"
+gdc_sample_sheet_file<-"/home/felipe/Documentos/LungPortal/gdc_manifest.2024-04-04.txt"
 
 # Read data
 gdc_sample_sheet_data<-read.table(file = gdc_sample_sheet_file, sep = '\t', header = TRUE,fill=TRUE)  

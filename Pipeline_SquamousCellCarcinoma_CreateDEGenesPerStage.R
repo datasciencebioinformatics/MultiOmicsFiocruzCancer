@@ -85,7 +85,7 @@ for (stage_index in stages_str)
 	p2 <- ggplot(df_stages, aes(log2FoldChange, -log(padj),color = Category)) + geom_point(size = 2/5,aes(color = Category))  +
 	  xlab("log2FoldChange") + 
 	  ylab("-log(padj)") +
-	  scale_color_manual(values = c("dodgerblue3", "gray50", "firebrick3")) +
+	  scale_color_manual(values = c("gray50", "firebrick3")) +
 	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",resultsNames(dds_stages)[4],sep=""))
 	
 	# Add treshold lines
@@ -102,10 +102,10 @@ for (stage_index in stages_str)
 	df_stages<-df_stages[which(df_stages$Category!="Uncategorized"),]
 	
 	# Change histogram plot fill colors by groups
-	padj_histogram_stages<-ggplot(df_stages, aes(x=-log(padj), fill=Category, color=Category)) +  geom_histogram(position="identity",bins = 20) + theme_bw() + ggtitle(paste("DE Genes", stage_index))+ theme(legend.position='bottom')
+	padj_histogram_stages<-ggplot(df_stages, aes(x=-log(padj), fill=Category, color=Category)) +  geom_histogram(position="identity",bins = 30) + theme_bw() + ggtitle(paste("DE Genes", stage_index))+ theme(legend.position='bottom')
 	#######################################################################################################################
 	# Remove samples from Stage III and plot again
-	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(sum(df_stages$Category!="Uncategorized"), "genes"),sep=""))+ theme(legend.position='bottom')
+	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom')
 	#######################################################################################################################
 	# FindClusters_resolution
 	png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage_",stage_index,".png",sep=""), width = 28, height = 24, res=600, units = "cm")

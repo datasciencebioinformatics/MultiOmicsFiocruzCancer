@@ -15,6 +15,7 @@ Program=TCGA
 
 ## A command line to download the samples from the portal cancer database
 gdc-client download -m /home/felipe/Documentos/LungPortal/gdc_manifest.2024-04-04.txt
+
 gdc-client download -m /home/felipe/Documentos/LungPortal/gdc_manifest.2024-03-08.txt
 
 ## A R scripts to create metadata from gdc files. 

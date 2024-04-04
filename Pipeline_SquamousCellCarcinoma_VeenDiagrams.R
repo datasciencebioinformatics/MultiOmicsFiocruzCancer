@@ -12,21 +12,21 @@ selected_genes_Stage_II_data      <-read.table(file = selected_genes_Stage_II_fi
 selected_genes_Stage_III_data     <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)             #
 
 # Set rownames
-rownames(selected_genes_Stage_I_pos)<-selected_genes_Stage_I_pos$Gene
-rownames(selected_genes_Stage_II_pos)<-selected_genes_Stage_II_pos$Gene
-rownames(selected_genes_Stage_III_pos)<-selected_genes_Stage_III_pos$Gene
+rownames(selected_genes_Stage_I_data)<-selected_genes_Stage_I_data$Gene
+rownames(selected_genes_Stage_II_data)<-selected_genes_Stage_II_data$Gene
+rownames(selected_genes_Stage_III_data)<-selected_genes_Stage_III_data$Gene
 #######################################################################################################################################
 # Select stages 
 stages_I_II_III<-ggVennDiagram(list(Stage_I    =selected_genes_Stage_I_data$Gene,Stage_II  =selected_genes_Stage_II_data$Gene,Stage_III  =selected_genes_Stage_III_data$Gene), label_alpha = 0) + scale_fill_viridis() + theme_bw() + ggtitle("Stages I, II and III")
 #######################################################################################################################################
 # Calculate unique genes
-unique_genes_Stage_I <-setdiff(selected_genes_Stage_I_pos$Gene,   c(selected_genes_Stage_II_pos$Gene,selected_genes_Stage_III_pos$Gene))
-unique_genes_Stage_II <-setdiff(selected_genes_Stage_II_pos$Gene,  c(selected_genes_Stage_I_pos$Gene,selected_genes_Stage_III_pos$Gene))
-unique_genes_Stage_III<-setdiff(selected_genes_Stage_III_pos$Gene, c(selected_genes_Stage_I_pos$Gene,selected_genes_Stage_II_pos$Gene))
+unique_genes_Stage_I <-setdiff(selected_genes_Stage_I_data$Gene,   c(selected_genes_Stage_II_data$Gene,selected_genes_Stage_III_data$Gene))
+unique_genes_Stage_II <-setdiff(selected_genes_Stage_II_data$Gene,   c(selected_genes_Stage_I_data$Gene,selected_genes_Stage_III_data$Gene))
+unique_genes_Stage_III<-setdiff(selected_genes_Stage_III_data$Gene, c(selected_genes_Stage_I_data$Gene,selected_genes_Stage_II_data$Gene))
 ###################################################################################################################################################################################################################################################################################################
-write_tsv(selected_genes_Stage_I_pos[unique_genes_Stage_I,],     "/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_I.tsv")
-write_tsv(selected_genes_Stage_II_pos[unique_genes_Stage_II,],   "/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_II.tsv")
-write_tsv(selected_genes_Stage_III_pos[unique_genes_Stage_III,],  "/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_III.tsv")
+write_tsv(selected_genes_Stage_I_data[unique_genes_Stage_I,],     "/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_I.tsv")
+write_tsv(selected_genes_Stage_II_data[unique_genes_Stage_II,],     "/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_II.tsv")
+write_tsv(selected_genes_Stage_III_data[unique_genes_Stage_III,],     "/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_III.tsv")
 ###################################################################################################################################################################################################################################################################################################
 selected_genes_Stage_I_data       <- unique_genes_Stage_I
 selected_genes_Stage_II_data      <- unique_genes_Stage_II

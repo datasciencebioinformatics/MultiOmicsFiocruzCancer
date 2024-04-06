@@ -149,8 +149,6 @@ for (gene_id in rownames(unstranded_data))
     selected_gene_id<-c(selected_gene_id,gene_id)
   }
 }
-# Genes in conforte et al data
-selected_gene_id<-df_gene_id_symbol[df_gene_id_symbol$gene_symbol %in% Table1_data$GeneSymbol,"gene_id"]
 #####################################################################################################################
 # Filter RNA-seq data to contain only data from Conforte et.al
 unstranded_data<-unstranded_data[selected_gene_id,]

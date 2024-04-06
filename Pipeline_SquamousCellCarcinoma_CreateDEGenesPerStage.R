@@ -15,6 +15,9 @@ rownames(colData)                  <-colData$patient_id                         
 ###########################################################################################################################
 # Filter to only positive tumor/normal samples.
 unstranded_data<-unstranded_data[avg_expression_pos$Gene,]
+
+#omit NA values from vector
+unstranded_data <- na.omit(unstranded_data)
 ########################################################################################################################
 # A panel to analyse differential Category comparing samples of each stage against all others stages.
 ########################################################################################################################

@@ -131,6 +131,7 @@ colnames(df_gene_id_symbol)<-c("gene_id","gene_symbol")
 
 library("readxl")
 Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_1.tsv", sep = '\t', header = TRUE,fill=TRUE)      
+Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_2.tsv", sep = '\t', header = TRUE,fill=TRUE)     
 
 # Genes in conforte et al data
 selected_gene_id<-df_gene_id_symbol[df_gene_id_symbol$gene_symbol %in% Table1_data$GeneSymbol,"gene_id"]

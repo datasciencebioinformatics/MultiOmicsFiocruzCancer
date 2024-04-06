@@ -98,7 +98,7 @@ df_diff_expression<-df_diff_expression[,-1]
 avg_expression<-data.frame(rowMeans(df_diff_expression))
 
 # Take average expression of positive sample
-avg_expression_pos<-data.frame(Gene=rownames(avg_expression)[which(avg_expression>=1)],Expression=avg_expression[which(avg_expression>=1),])
+avg_expression_pos<-data.frame(Gene=rownames(avg_expression)[which(avg_expression>=0.5)],Expression=avg_expression[which(avg_expression>=0.5),])
 
 # Take average expression of positive sample
 rownames(avg_expression_pos)<-avg_expression_pos$Gene

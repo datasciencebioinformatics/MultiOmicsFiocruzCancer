@@ -63,18 +63,18 @@ names(vector_all) <- rownames(df_stages)
 topDiffGenes <- function(padj) {return (padj < 0.05)}
 
 # Check how to use Ensemble transcripts ID in topgo
-topGO_vector_Stage_I   = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_I,   geneSel = topDiffGenes, nodeSize = 5, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
-topGO_vector_Stage_II  = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_II,  geneSel = topDiffGenes, nodeSize = 5, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
-topGO_vector_Stage_III = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_III, geneSel = topDiffGenes, nodeSize = 5, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_I   = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_I,   geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_II  = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_II,  geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
+topGO_vector_Stage_III = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_III, geneSel = topDiffGenes, nodeSize = 10, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
 #######################################################################################################################################
 result_topGO_vector_Stage_I <- runTest(topGO_vector_Stage_I, algorithm = "classic", statistic = "ks") # statistic = "fisher"
 result_topGO_vector_Stage_II <- runTest(topGO_vector_Stage_II, algorithm = "classic", statistic = "ks") # statistic = "fisher"
 result_topGO_vector_Stage_III <- runTest(topGO_vector_Stage_III, algorithm = "classic", statistic = "ks") # statistic = "fisher"
 
 # Here 2 : try extremes of topNodes 10-100
-table_topGO_vector_Stage_I   <- GenTable(topGO_vector_Stage_I,   classicKS = result_topGO_vector_Stage_I, topNodes = 50)
-table_topGO_vector_Stage_II  <- GenTable(topGO_vector_Stage_II,  classicKS = result_topGO_vector_Stage_II, topNodes = 50)
-table_topGO_vector_Stage_III <- GenTable(topGO_vector_Stage_III, classicKS = result_topGO_vector_Stage_III, topNodes = 50)
+table_topGO_vector_Stage_I   <- GenTable(topGO_vector_Stage_I,   classicKS = result_topGO_vector_Stage_I, topNodes = 5)
+table_topGO_vector_Stage_II  <- GenTable(topGO_vector_Stage_II,  classicKS = result_topGO_vector_Stage_II, topNodes = 5)
+table_topGO_vector_Stage_III <- GenTable(topGO_vector_Stage_III, classicKS = result_topGO_vector_Stage_III, topNodes = 5)
 
 # https://bioconductor.org/packages/release/bioc/vignettes/rrvgo/inst/doc/rrvgo.html
 simMatrix_stage_I <- calculateSimMatrix(table_topGO_vector_Stage_I$GO.ID, orgdb="org.Hs.eg.db",ont="BP",method="Rel")

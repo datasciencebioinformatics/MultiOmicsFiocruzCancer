@@ -108,7 +108,7 @@ log2fc_expression<-data.frame(rowMeans(df_diff_expression))
 
 # "positive differential gene expression values indicated higher gene expression in tumor samples"
 # Take average expression of positive sample
-log2fc_expression_pos<-data.frame(Gene=rownames(log2fc_expression)[which(log2fc_expression>=0.58)],Expression=log2fc_expression[which(log2fc_expression>=0.58),])
+log2fc_expression_pos<-data.frame(Gene=rownames(log2fc_expression)[which(log2fc_expression>=1.584963)],Expression=log2fc_expression[which(log2fc_expression>=1.584963),])
 
 # log2fc_expression_pos
 log2fc_expression_pos <- log2fc_expression_pos[!is.infinite(log2fc_expression_pos$Expression),]

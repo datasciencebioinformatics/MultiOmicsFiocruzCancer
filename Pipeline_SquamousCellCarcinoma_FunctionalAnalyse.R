@@ -67,14 +67,14 @@ topGO_vector_Stage_I   = new("topGOdata", description="stages", ontology= "BP", 
 topGO_vector_Stage_II  = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_II,  geneSel = topDiffGenes, nodeSize = 5, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
 topGO_vector_Stage_III = new("topGOdata", description="stages", ontology= "BP",  allGenes = vector_Stage_III, geneSel = topDiffGenes, nodeSize = 5, annot=annFUN.org, mapping="org.Hs.eg.db", ID = "ENSEMBL")
 #######################################################################################################################################
-result_topGO_vector_Stage_I <- runTest(topGO_vector_Stage_I, algorithm = "classic", statistic = "fisher") # statistic = "fisher"
-result_topGO_vector_Stage_II <- runTest(topGO_vector_Stage_II, algorithm = "classic", statistic = "fisher") # statistic = "fisher"
-result_topGO_vector_Stage_III <- runTest(topGO_vector_Stage_III, algorithm = "classic", statistic = "fisher") # statistic = "fisher"
+result_topGO_vector_Stage_I <- runTest(topGO_vector_Stage_I, algorithm = "classic", statistic = "ks") # statistic = "fisher"
+result_topGO_vector_Stage_II <- runTest(topGO_vector_Stage_II, algorithm = "classic", statistic = "ks") # statistic = "fisher"
+result_topGO_vector_Stage_III <- runTest(topGO_vector_Stage_III, algorithm = "classic", statistic = "ks") # statistic = "fisher"
 
 # Here 2 : try extremes of topNodes 10-100
-table_topGO_vector_Stage_I   <- GenTable(topGO_vector_Stage_I,   Fis = result_topGO_vector_Stage_I, topNodes = 5)
-table_topGO_vector_Stage_II  <- GenTable(topGO_vector_Stage_II,  Fis = result_topGO_vector_Stage_II, topNodes = 5)
-table_topGO_vector_Stage_III <- GenTable(topGO_vector_Stage_III, Fis = result_topGO_vector_Stage_III, topNodes = 5)
+table_topGO_vector_Stage_I   <- GenTable(topGO_vector_Stage_I,   Fis = result_topGO_vector_Stage_I, topNodes = 25)
+table_topGO_vector_Stage_II  <- GenTable(topGO_vector_Stage_II,  Fis = result_topGO_vector_Stage_II, topNodes = 25)
+table_topGO_vector_Stage_III <- GenTable(topGO_vector_Stage_III, Fis = result_topGO_vector_Stage_III, topNodes = 25)
 
 # https://bioconductor.org/packages/release/bioc/vignettes/rrvgo/inst/doc/rrvgo.html
 simMatrix_stage_I <- calculateSimMatrix(table_topGO_vector_Stage_I$GO.ID, orgdb="org.Hs.eg.db",ont="BP",method="Rel")
@@ -83,9 +83,9 @@ simMatrix_stage_III <- calculateSimMatrix(table_topGO_vector_Stage_III$GO.ID, or
 
 # Here 3 : check if KS classiKS can be used as score instead of fisher qvalue
 # Scores of Stage I
-scores_stage_I    <- setNames(-log10(as.numeric(table_topGO_vector_Stage_I$classicKS)), table_topGO_vector_Stage_I$GO.ID)
-scores_stage_II   <- setNames(-log10(as.numeric(table_topGO_vector_Stage_II$classicKS)), table_topGO_vector_Stage_II$GO.ID)
-scores_stage_III  <- setNames(-log10(as.numeric(table_topGO_vector_Stage_III$classicKS)), table_topGO_vector_Stage_III$GO.ID)
+scores_stage_I    <- setNames(-log10(as.numeric(table_topGO_vector_Stage_I$Fis)), table_topGO_vector_Stage_I$GO.ID)
+scores_stage_II   <- setNames(-log10(as.numeric(table_topGO_vector_Stage_II$Fis)), table_topGO_vector_Stage_II$GO.ID)
+scores_stage_III  <- setNames(-log10(as.numeric(table_topGO_vector_Stage_III$Fis)), table_topGO_vector_Stage_III$GO.ID)
 
 # Here 4 : change threshold parameter
 # Compute reduce terms

@@ -1,0 +1,6 @@
+Ordem de grandeza entre estágios I e III:
+Gene	Estagio I	Estágio III	Ordem_Grandeza
+GENE_X	10 	100	10
+
+Evidências para significância dos genes em cada estágio: 
+PPI - connectividade vs. Grandeza vs. Entropia

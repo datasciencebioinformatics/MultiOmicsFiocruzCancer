@@ -59,7 +59,7 @@ for (stage_index in stages_str)
 	####################################################################################################################
 	# First by padj
 	padj_threshold<-1
-	log2fc_threshold<-0.58
+	log2fc_threshold<-0.30
 	
 	# First, stageI
 	#df_stages<-df_stages[df_stages$padj<=padj_threshold,]

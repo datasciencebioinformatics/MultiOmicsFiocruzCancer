@@ -83,7 +83,10 @@ for (case in rownames(paired_sample_df))
     # Store results for the case
     case_results_normal<-data.frame(case=norm_counts[,c(normal_sample$patient_id)])
     case_results_tumor <-data.frame(case=norm_counts[,c(tumor_sample$patient_id)])
-    diff_expression<-case_results_tumor-case_results_normal
+
+    # "We substracted gene expression values of control samples from their respective tumor samples"
+    # "the resulting values were called differential expression"
+    diff_expression<-case_results_normal-case_results_tumor
 
     # Rename collumns
     colnames(diff_expression)<-case_sample
@@ -97,8 +100,13 @@ df_diff_expression<-df_diff_expression[,-1]
 # Take average expression
 avg_expression<-data.frame(rowMeans(df_diff_expression))
 
+###########################################################################################################################
+# we analyzez the frequency distribution of differential gene expression of 14520 genes for each patient"
+# For each patient create the frequency distribution
+
+# "positive differential gene expression values indicated higher gene expression in tumor samples"
 # Take average expression of positive sample
-avg_expression_pos<-data.frame(Gene=rownames(avg_expression)[which(avg_expression>=1.0)],Expression=avg_expression[which(avg_expression>=1.0),])
+avg_expression_pos<-data.frame(Gene=rownames(avg_expression)[which(avg_expression>=1.5)],Expression=avg_expression[which(avg_expression>=1.5),])
 
 # Take average expression of positive sample
 rownames(avg_expression_pos)<-avg_expression_pos$Gene

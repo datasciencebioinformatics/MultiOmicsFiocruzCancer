@@ -106,7 +106,7 @@ avg_expression<-data.frame(rowMeans(df_diff_expression))
 
 # "positive differential gene expression values indicated higher gene expression in tumor samples"
 # Take average expression of positive sample
-avg_expression_pos<-data.frame(Gene=rownames(avg_expression)[which(avg_expression>=1.0)],Expression=avg_expression[which(avg_expression>=1.0),])
+avg_expression_pos<-data.frame(Gene=rownames(avg_expression)[which(avg_expression>=0.58)],Expression=avg_expression[which(avg_expression>=0.58),])
 
 # Take average expression of positive sample
 rownames(avg_expression_pos)<-avg_expression_pos$Gene

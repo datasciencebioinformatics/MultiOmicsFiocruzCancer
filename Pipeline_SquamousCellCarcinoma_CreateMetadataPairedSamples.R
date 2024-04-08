@@ -63,7 +63,7 @@ for (case in unique(merged_data_patient_info_data$case))
 }
 ###########################################################################################################################
 # Data.frame to store results for control samples
-df_diff_expression<-data.frame(Gene=rownames(unstranded_data))
+df_diff_expression<-data.frame(Gene=rownames(norm_counts))
 
 # set rownames
 rownames(df_diff_expression)<-df_diff_expression$Gene
@@ -88,6 +88,8 @@ for (case in rownames(paired_sample_df))
     # "the resulting values were called differential expression"
     diff_expression<-case_results_normal-case_results_tumor
 
+    diff_expression<-log(case_results_tumor/case_results_normal,2)
+
     # Rename collumns
     colnames(diff_expression)<-case_sample
 
@@ -98,7 +100,7 @@ for (case in rownames(paired_sample_df))
 df_diff_expression<-df_diff_expression[,-1]
 
 # Take average expression
-avg_expression<-data.frame(rowMeans(df_diff_expression))
+log2fc_expression<-data.frame(rowMeans(df_diff_expression))
 
 ###########################################################################################################################
 # we analyzez the frequency distribution of differential gene expression of 14520 genes for each patient"
@@ -106,10 +108,13 @@ avg_expression<-data.frame(rowMeans(df_diff_expression))
 
 # "positive differential gene expression values indicated higher gene expression in tumor samples"
 # Take average expression of positive sample
-avg_expression_pos<-data.frame(Gene=rownames(avg_expression)[which(avg_expression>=0.58)],Expression=avg_expression[which(avg_expression>=0.58),])
+log2fc_expression_pos<-data.frame(Gene=rownames(log2fc_expression)[which(log2fc_expression>=0.58)],Expression=log2fc_expression[which(log2fc_expression>=0.58),])
+
+# log2fc_expression_pos
+log2fc_expression_pos <- log2fc_expression_pos[!is.infinite(log2fc_expression_pos$Expression),]
 
 # Take average expression of positive sample
-rownames(avg_expression_pos)<-avg_expression_pos$Gene
+rownames(log2fc_expression_pos)<-log2fc_expression_pos$Gene
 
 # Write table
-write.table(avg_expression_pos, file = "/home/felipe/Documentos/LungPortal/samples/avg_expression_pos.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
+write.table(log2fc_expression_pos, file = "/home/felipe/Documentos/LungPortal/samples/log2fc_expression_pos.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)

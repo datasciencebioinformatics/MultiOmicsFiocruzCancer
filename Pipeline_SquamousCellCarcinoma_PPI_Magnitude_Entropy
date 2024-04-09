@@ -1,4 +1,4 @@
-table_ppi_meltlibrary("readxl")
+library("readxl")
 ###########################################################################################################################
 # Reload colData from file
 # Reload unstranded_data from file
@@ -145,7 +145,7 @@ table_ppi_melt_stage_III<-table_ppi_melt[which(table_ppi_melt$Gene %in% selected
 
 library("ggpubr")
 # plot
-p <- ggplot(v, aes(x=stages, y=log2_magnitude, fill=stages)) +
+p <- ggplot(table_ppi_melt_stage_I, aes(x=stages, y=log2_magnitude, fill=stages)) +
     geom_boxplot(alpha=0.7) +
     stat_summary(fun=mean, geom="point", shape=20, size=14, color="red", fill="red") +
     theme(legend.position="none") +

@@ -62,19 +62,21 @@ table_ppi$order_of_magnitude_Stages_1_and_3<-0
 # order_of_magnitude_Stages_2_and_3=7
 # order_of_magnitude_Stages_1_and_3=8
 store_col_name_index<-c(6,7,8)
-
-# col_Index 
-col_Index=6
-
 ########################################################################################################################
 # A panel to analyse differential Category comparing samples of each stage against all others stages.
 ########################################################################################################################
 # Set colData
 df_stage_pairs<-data.frame(stage_i=c("Stage I","Stage II","Stage I"),stage_ii=c("Stage II","Stage III","Stage III"))
 
+# col_Index 
+col_Index=6
+
 # for each pair of stage.
 for (stage_pair_index in rownames(df_stage_pairs))
 {	
+    # Back up 
+    colData_bck<-colData
+
     # Store the stages 
     stage_i<-df_stage_pairs[stage_pair_index,"stage_i"]
     stage_ii<-df_stage_pairs[stage_pair_index,"stage_ii"]
@@ -113,4 +115,9 @@ for (stage_pair_index in rownames(df_stage_pairs))
     # Store order og maniture
     table_ppi[ids_rows,col_Index]<-order_magniture
     table_ppi[ids_rows,col_Index]<-order_magniture
+
+    # Increment col_index
+    col_Index<-col_Index+1
 }
+
+

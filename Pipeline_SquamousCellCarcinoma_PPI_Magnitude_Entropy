@@ -1,6 +1,44 @@
-Ordem de grandeza entre estágios I e III:
-Gene	Estagio I	Estágio III	Ordem_Grandeza
-GENE_X	10 	100	10
+library("readxl")
+###########################################################################################################################
+# Reload colData from file
+# Reload unstranded_data from file
+###########################################################################################################################
+unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                #
+merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
+colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
+avg_expression_pos_file             <- "/home/felipe/Documentos/LungPortal/samples/avg_expression_pos.tsv"                #
+ListGenesInteratoma_file            <- "/home/felipe/Documentos/LungPortal/ListGenesInteratoma.tsv"                       #
+###########################################################################################################################
+unstranded_data                    <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
+merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#
+colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
+avg_expression_pos                 <-read.table(file = avg_expression_pos_file, sep = '\t', header = TRUE,fill=TRUE)      #
+table_ppi                          <-read.table(file = ListGenesInteratoma_file, sep = '\t', header = TRUE,fill=TRUE)     #
+rownames(colData)                  <-colData$patient_id                                                                   #
+###########################################################################################################################
+# Filter to only positive tumor/normal samples.
+unstranded_data<-unstranded_data[avg_expression_pos$Gene,]
 
-Evidências para significância dos genes em cada estágio: 
-PPI - connectividade vs. Grandeza vs. Entropia
+#omit NA values from vector
+unstranded_data <- na.omit(unstranded_data)
+###########################################################################################################################
+# Store selected genes
+selected_genes<-avg_expression_pos$Gene
+
+# Create field for ensembl id 
+table_ppi$ENSEMBL<-""
+
+# For each selected genes
+for (gene_id in selected_genes)
+{
+  # table_ppi
+  table_ppi[which(table_ppi$ENSG==strsplit(gene_id, split = "\\.")[[1]][1]),"ENSEMBL"]<-gene_id    
+}
+# Table PPI filtered
+table_ppi<-table_ppi[table_ppi$ENSEMBL %in% selected_genes,]
+########################################################################################################################
+table_ppi$order_of_magnitude_Stages_1_vs_2<-0
+table_ppi$order_of_magnitude_Stages_2_vs_3<-0
+
+
+# Stages_1_vs_2, Satages_2_vs_3, Stages_1_vs_3

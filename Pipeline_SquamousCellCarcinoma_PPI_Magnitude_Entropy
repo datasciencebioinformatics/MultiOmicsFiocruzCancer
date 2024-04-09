@@ -1,166 +1,3 @@
-library("readxl")
-###########################################################################################################################
-# Reload colData from file
-# Reload unstranded_data from file
-###########################################################################################################################
-unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                #
-merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
-colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
-avg_expression_pos_file             <- "/home/felipe/Documentos/LungPortal/samples/avg_expression_pos.tsv"                #
-ListGenesInteratoma_file            <- "/home/felipe/Documentos/LungPortal/ListGenesInteratoma.tsv"                       #
-###########################################################################################################################
-unstranded_data                    <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
-merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#
-colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
-avg_expression_pos                 <-read.table(file = avg_expression_pos_file, sep = '\t', header = TRUE,fill=TRUE)      #
-table_ppi                          <-read.table(file = ListGenesInteratoma_file, sep = '\t', header = TRUE,fill=TRUE)     #
-rownames(colData)                  <-colData$patient_id                                                                   #
-###########################################################################################################################
-# Filter to only positive tumor/normal samples.
-unstranded_data<-unstranded_data[avg_expression_pos$Gene,]
-
-#omit NA values from vector
-unstranded_data <- na.omit(unstranded_data)
-
-#omit NA values from vector
-colData_data<-colData_data[colnames(unstranded_data),]
-###########################################################################################################################
-# Keep only the first occurance of the ENSG
-table_ppi <- table_ppi[match(unique(table_ppi$ENSG), table_ppi$ENSG),]
-###########################################################################################################################
-# Store selected genes
-selected_genes<-avg_expression_pos$Gene
-
-# Create field for ensembl id 
-table_ppi$ENSEMBL<-""
-
-# Data frame to store gencode gencode_ensembl
-df_gencode_ensembl<-data.frame(gene_id=c(), gencode=c())
-
-# For each selected genes
-for (gene_id in selected_genes)
-{
-    # df_gencode_ensembl
-    df_gencode_ensembl<-rbind(df_gencode_ensembl,data.frame(gene_id=gene_id, gencode=strsplit(gene_id, split = "\\.")[[1]][1]))
-
-    # table_ppi
-    table_ppi[which(table_ppi$ENSG==strsplit(gene_id, split = "\\.")[[1]][1]),"ENSEMBL"]<-gene_id    
-}
-# Table ppi
-table_ppi<-table_ppi[which(table_ppi$ENSEMBL!=""),]
-
-# Rownames
-rownames(table_ppi)<-table_ppi$ENSEMBL
-###########################################################################################################################
-library("org.Hs.eg.db")
-
-# Add order of magniture
-table_ppi$order_of_magnitude_Stages_1_and_2<-0
-table_ppi$order_of_magnitude_Stages_2_and_3<-0
-table_ppi$order_of_magnitude_Stages_1_and_3<-0
-
-table_ppi$pvalue_magnitude_Stages_1_and_2<-0
-table_ppi$pvalue_magnitude_Stages_2_and_3<-0
-table_ppi$pvalue_magnitude_Stages_1_and_3<-0
-
-# Stotre indexes of cols
-# order_of_magnitude_Stages_1_and_2=6
-# order_of_magnitude_Stages_2_and_3=7
-# order_of_magnitude_Stages_1_and_3=8
-
-# pvalue_magnitude_Stages_1_and_2=9
-# pvalue_magnitude_Stages_2_and_3=10
-# pvalue_magnitude_Stages_1_and_3=11
-
-store_col_name_index<-c(6,7,8)
-########################################################################################################################
-# A panel to analyse differential Category comparing samples of each stage against all others stages.
-########################################################################################################################
-# Set colData
-df_stage_pairs<-data.frame(stage_i=c("Stage I","Stage II","Stage I"),stage_ii=c("Stage II","Stage III","Stage III"))
-
-# col_Index 
-col_Index=6
-
-# for each pair of stage.
-for (stage_pair_index in rownames(df_stage_pairs))
-{	
-    # Back up 
-    colData_bck<-colData
-
-    # Store the stages 
-    stage_i<-df_stage_pairs[stage_pair_index,"stage_i"]
-    stage_ii<-df_stage_pairs[stage_pair_index,"stage_ii"]
-
-    # Selecte samples from stage_i and stage_ii
-    samples_stage_i<-rownames(colData_bck[which(colData_bck$stages==stage_i),])
-    samples_stage_ii<-rownames(colData_bck[which(colData_bck$stages==stage_ii),])
-
-    samples_stage_i<-intersect(samples_stage_i,colnames(unstranded_data))
-    samples_stage_ii<-intersect(samples_stage_ii,colnames(unstranded_data))
-
-    # Selecte samples from stage_i and stage_ii
-    samples_stage_i_ii<-c(rownames(colData_bck[which(colData_bck$stages==stage_i),]),rownames(colData_bck[which(colData_bck$stages==stage_ii),]))
-
-    # DESeqDataSetFromMatrix
-    unstranded_data_bck<-unstranded_data[,which(colnames(unstranded_data) %in% samples_stage_i_ii)]
-
-    # Create bck for colData_bck
-    colData_bck<-colData[colnames(unstranded_data_bck),]
-
-    # dds_stages
-    dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data_bck, colData=colData_bck, design = ~  age_at_index +  gender +tissue_type  )
-  
-    # Estimate size factor
-    dds_stages <- estimateSizeFactors(dds_stages)
-
-    # Obtain normalized coutns
-    norm_counts<-counts(dds_stages, normalized = TRUE)
-
-    # Order of the ids
-    ids_rows<-names(rowMeans(norm_counts[,samples_stage_ii])/rowMeans(norm_counts[,samples_stage_i]))
-
-    # Order of magniture Stage ii / stage i
-    order_magniture<-rowMeans(norm_counts[,samples_stage_ii])/rowMeans(norm_counts[,samples_stage_i])
-
-    # Store pvalue
-    # Store order og maniture
-    table_ppi[ids_rows,col_Index]<-order_magniture
-
-    # Increment col_index
-    col_Index<-col_Index+1
-    pvalue_index<-pvalue_index+1
-}
-# Melt ppi data
-table_ppi_melt<-rbind(data.frame(Gene=rownames(table_ppi),order_magniture=table_ppi[,6],stages="Stages_1_and_2"),
-data.frame(Gene=rownames(table_ppi),order_magniture=table_ppi[,7],stages="Stages_2_and_3"),
-data.frame(Gene=rownames(table_ppi),order_magniture=table_ppi[,8],stages="Stages_1_and_3"))
-
-# Save log2 order_magniture
-table_ppi_melt$log2_magnitude<-log(order_magniture,2)
-
-table_ppi_melt_stage_I<-table_ppi_melt[which(table_ppi_melt$Gene %in% selected_genes_Stage_I_data$Gene),]
-table_ppi_melt_stage_II<-table_ppi_melt[which(table_ppi_melt$Gene %in% selected_genes_Stage_II_data$Gene),]
-table_ppi_melt_stage_III<-table_ppi_melt[which(table_ppi_melt$Gene %in% selected_genes_Stage_III_data$Gene),]
-
-library("ggpubr")
-# plot
-p <- ggplot(table_ppi_melt_stage_I, aes(x=stages, y=log2_magnitude, fill=stages)) +
-    geom_boxplot(alpha=0.7) +
-    stat_summary(fun=mean, geom="point", shape=20, size=14, color="red", fill="red") +
-    theme(legend.position="none") +
-    scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) +
-    ggtitle("Order of magniture mean(stage ii) / mean(stage i)") 
-
-# For each gene add PPI value
-for (gene in table_ppi_melt$Gene)
-{
-    print()
-    table_ppi$Gene
-}
-    
-
-
 #######################################################################################################################################
 # To DO:
 # Here 1 : try extremes of padj threshold range (0.001 - 0.05)
@@ -221,20 +58,20 @@ sample_stage_I  <-rownames(colData[colData$stage=="Stage I",])
 sample_stage_II <-rownames(colData[colData$stage=="Stage II",])
 sample_stage_III<-rownames(colData[colData$stage=="Stage III",])
 #######################################################################################################################################
-melt_combined_table<-rbind(rbind(data.frame(DE_genes_stage="Stage I",samples="Stage I", 
+melt_combined_table<-rbind(rbind(data.frame(DE_genes_stage="DE genes from stage I",samples="Samples from stage I", 
 Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_I])),
-data.frame(DE_genes_stage="Stage I",samples="Stage II", Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_II])),
-data.frame(DE_genes_stage="Stage I",samples="Stage III", Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_III]))),
-rbind(data.frame(DE_genes_stage="Stage II",samples="Stage I", Expr=melt(norm_counts[selected_genes_Stage_II_data$Gene,sample_stage_I])),
-data.frame(DE_genes_stage="Stage II",samples="Stage II", Expr=melt(norm_counts[selected_genes_Stage_II_data$Gene,sample_stage_II])),
-data.frame(DE_genes_stage="Stage II",samples="Stage III", Expr=melt(norm_counts[selected_genes_Stage_II_data$Gene,sample_stage_III]))),
-rbind(data.frame(DE_genes_stage="Stage III",samples="Stage I", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_I])),
-data.frame(DE_genes_stage="Stage III",samples="Stage II", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_II])),
-data.frame(DE_genes_stage="Stage III",samples="Stage III", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_III]))))
+data.frame(DE_genes_stage="DE genes from stage I",samples="Samples from stage II", Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_II])),
+data.frame(DE_genes_stage="DE genes from stage I",samples="Samples from stage III", Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_III]))),
+rbind(data.frame(DE_genes_stage="DE genes from stage II",samples="Samples from stage I", Expr=melt(norm_counts[selected_genes_Stage_II_data$Gene,sample_stage_I])),
+data.frame(DE_genes_stage="DE genes from stage II",samples="Samples from stage II", Expr=melt(norm_counts[selected_genes_Stage_II_data$Gene,sample_stage_II])),
+data.frame(DE_genes_stage="DE genes from stage II",samples="Samples from stage III", Expr=melt(norm_counts[selected_genes_Stage_II_data$Gene,sample_stage_III]))),
+rbind(data.frame(DE_genes_stage="DE genes from stage III",samples="Samples from stage I", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_I])),
+data.frame(DE_genes_stage="DE genes from stage III",samples="Samples from stage II", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_II])),
+data.frame(DE_genes_stage="DE genes from stage III",samples="Samples from stage III", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_III]))))
 
 # plot
-p <- ggplot(melt_combined_table, aes(x=DE_genes_stage, y=Expr.value, fill=samples)) +
-    geom_boxplot() + facet_grid(~samples) +
+p <- ggplot(melt_combined_table, aes(x=DE_genes_stage, y=log(Expr.value), fill=samples)) +
+    geom_boxplot(varwidth = TRUE) + facet_grid(~samples) +
     theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Expressio of genes per stage") 
 
 

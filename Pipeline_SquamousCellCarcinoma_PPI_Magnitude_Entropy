@@ -1,4 +1,4 @@
-library("readxl")
+table_ppi_meltlibrary("readxl")
 ###########################################################################################################################
 # Reload colData from file
 # Reload unstranded_data from file
@@ -131,9 +131,6 @@ for (stage_pair_index in rownames(df_stage_pairs))
     col_Index<-col_Index+1
     pvalue_index<-pvalue_index+1
 }
-
-table_ppi$pvalue_magnitude_Stages_1_and_2
-
 # Melt ppi data
 table_ppi_melt<-rbind(data.frame(Gene=rownames(table_ppi),order_magniture=table_ppi[,6],stages="Stages_1_and_2"),
 data.frame(Gene=rownames(table_ppi),order_magniture=table_ppi[,7],stages="Stages_2_and_3"),
@@ -142,14 +139,23 @@ data.frame(Gene=rownames(table_ppi),order_magniture=table_ppi[,8],stages="Stages
 # Save log2 order_magniture
 table_ppi_melt$log2_magnitude<-log(order_magniture,2)
 
-# Take example genes
-example_genes<-unique(rownames(table_ppi))[1:32]
+table_ppi_melt_stage_I<-table_ppi_melt[which(table_ppi_melt$Gene %in% selected_genes_Stage_I_data$Gene),]
+table_ppi_melt_stage_II<-table_ppi_melt[which(table_ppi_melt$Gene %in% selected_genes_Stage_II_data$Gene),]
+table_ppi_melt_stage_III<-table_ppi_melt[which(table_ppi_melt$Gene %in% selected_genes_Stage_III_data$Gene),]
 
 library("ggpubr")
-ggplot(table_ppi_melt[table_ppi_melt$Gene %in% example_genes,], aes(x = stages, y = log2_magnitude)) +  geom_boxplot() + facet_grid(~Gene) + theme_bw()
+# plot
+p <- ggplot(v, aes(x=stages, y=log2_magnitude, fill=stages)) +
+    geom_boxplot(alpha=0.7) +
+    stat_summary(fun=mean, geom="point", shape=20, size=14, color="red", fill="red") +
+    theme(legend.position="none") +
+    scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) +
+    ggtitle("Order of magniture mean(stage ii) / mean(stage i)") 
 
-
-
-
-
-ggpaired(table_ppi_melt, x = "stages", y = "log2_magnitude", color = "stages", line.color = "gray", line.size = 0.4,  palette = "jco")+  stat_compare_means(paired = TRUE)
+# For each gene add PPI value
+for (gene in table_ppi_melt$Gene)
+{
+    print()
+    table_ppi$Gene
+}
+    

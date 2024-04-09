@@ -128,7 +128,7 @@ df_gene_id_symbol<-data.frame(gene_id=gene_ids_data,gene_symbol=gene_name_data)
 colnames(df_gene_id_symbol)<-c("gene_id","gene_symbol")
 
 #####################################################################################################################
-library("readxl")
+#library("readxl")
 #Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_1.tsv", sep = '\t', header = TRUE,fill=TRUE)      
 #Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_2.tsv", sep = '\t', header = TRUE,fill=TRUE)     
 

@@ -42,3 +42,44 @@ table_ppi$order_of_magnitude_Stages_2_vs_3<-0
 table_ppi$order_of_magnitude_Stages_1_vs_3<-0
 ########################################################################################################################
 
+########################################################################################################################
+# A panel to analyse differential Category comparing samples of each stage against all others stages.
+########################################################################################################################
+# Set colData
+df_stage_pairs<-data.frame(stage_i=c("Stage I","Stage II","Stage I"),stage_ii=c("Stage II","Stage III","Stage III"))
+
+# for each pair of stage.
+for (stage_pair_index in rownames(df_stage_pairs))
+{	
+    # Create bck for colData_bck
+    colData_bck<-colData
+
+    # Store the stages 
+    stage_i<-df_stage_pairs[stage_pair_index,"stage_i"]
+    stage_ii<-df_stage_pairs[stage_pair_index,"stage_ii"]
+
+    # Selecte samples from stage_i and stage_ii
+    samples_stage_i<-rownames(colData_bck[which(colData_bck$stages==stage_i),])
+    samples_stage_ii<-rownames(colData_bck[which(colData_bck$stages==stage_ii),])
+
+    # Run DESeq2
+    unstranded_data[selected_genes,samples_stage_i]
+    unstranded_data[selected_genes,samples_stage_ii]
+
+    dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data[,colData_bck$patient_id], colData=colData_bck, design = as.formula(paste("~ age_at_index +  gender + ",stage_index))  )
+
+}
+  
+  
+  # Run DESeq2
+  dds_stages <- DESeq(dds_stages)
+  
+  print(resultsNames(dds_stages)[4])		
+  
+  # Df s6tages I
+  df_stages<-data.frame(results(dds_stages,name=resultsNames(dds_stages)[4]))
+  ####################################################################################################################
+  
+}
+
+

@@ -22,26 +22,26 @@ unstranded_data<-unstranded_data[avg_expression_pos$Gene,]
 #omit NA values from vector
 unstranded_data <- na.omit(unstranded_data)
 ###########################################################################################################################
-# Store selected genes
-selected_genes<-avg_expression_pos$Gene
+library("org.Hs.eg.db")
+symbols <- mapIds(org.Hs.eg.db, keys = "ENSG00000130720", keytype = "ENSEMBL", column="SYMBOL")
 
-# Create field for ensembl id 
-table_ppi$ENSEMBL<-""
 
-# For each selected genes
-for (gene_id in selected_genes)
-{
-  # table_ppi
-  table_ppi[which(table_ppi$ENSG==strsplit(gene_id, split = "\\.")[[1]][1]),"ENSEMBL"]<-gene_id    
-}
-# Table PPI filtered
-table_ppi<-table_ppi[which(table_ppi$ENSEMBL!=""),]
-########################################################################################################################
 table_ppi$order_of_magnitude_Stages_1_and_2<-0
 table_ppi$order_of_magnitude_Stages_2_and_3<-0
 table_ppi$order_of_magnitude_Stages_1_and_3<-0
 
-store_col_names<-c()
+# Stotre indexes of cols
+# order_of_magnitude_Stages_1_and_2=6
+# order_of_magnitude_Stages_2_and_3=7
+# order_of_magnitude_Stages_1_and_3=8
+store_col_name_index<-c(6,7,8)
+
+# col_Index 
+col_Index=6
+
+
+
+
 ########################################################################################################################
 # A panel to analyse differential Category comparing samples of each stage against all others stages.
 ########################################################################################################################
@@ -81,10 +81,9 @@ for (stage_pair_index in rownames(df_stage_pairs))
     # Obtain normalized coutns
     norm_counts<-counts(dds_stages_tissue_type, normalized = TRUE)
 
-    rowMeans(norm_counts[,samples_stage_ii])/rowMeans(norm_counts[,samples_stage_i])
-    
-    ) 
+    names(rowMeans(norm_counts[,samples_stage_ii])/rowMeans(norm_counts[,samples_stage_i]))
 
+    table_ppi[,]
 }
   
   

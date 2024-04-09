@@ -35,10 +35,10 @@ for (gene_id in selected_genes)
   table_ppi[which(table_ppi$ENSG==strsplit(gene_id, split = "\\.")[[1]][1]),"ENSEMBL"]<-gene_id    
 }
 # Table PPI filtered
-table_ppi<-table_ppi[table_ppi$ENSEMBL %in% selected_genes,]
+table_ppi<-table_ppi[which(table_ppi$ENSEMBL!=""),]
 ########################################################################################################################
 table_ppi$order_of_magnitude_Stages_1_vs_2<-0
 table_ppi$order_of_magnitude_Stages_2_vs_3<-0
+table_ppi$order_of_magnitude_Stages_1_vs_3<-0
+########################################################################################################################
 
-
-# Stages_1_vs_2, Satages_2_vs_3, Stages_1_vs_3

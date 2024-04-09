@@ -159,3 +159,83 @@ for (gene in table_ppi_melt$Gene)
     table_ppi$Gene
 }
     
+
+
+#######################################################################################################################################
+# To DO:
+# Here 1 : try extremes of padj threshold range (0.001 - 0.05)
+# Here 2 : try extremes of topNodes 10-100
+# Here 3 : check if KS classiKS can be used as score instead of fisher qvalue
+# Here 4 : change threshold parameter
+# Important is to improve legibility of plot
+#######################################################################################################################################
+# Path to files of selected_genes                                                                                                     # 
+selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_I.tsv"             #
+selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_II.tsv"            #
+selected_genes_Stage_III_file     <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_III.tsv"           #
+unstranded_file                   <-"/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                               #
+#######################################################################################################################################
+# Load data                                                                                                                           #
+selected_genes_Stage_I_data       <-read.table(file = selected_genes_Stage_I_file, sep = '\t', header = TRUE,fill=TRUE)               #
+selected_genes_Stage_II_data      <-read.table(file = selected_genes_Stage_II_file, sep = '\t', header = TRUE,fill=TRUE)              #
+selected_genes_Stage_III_data     <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)             #
+unstranded_data                   <-read.table(file = unstranded_file, sep = '\t', header = TRUE,fill=TRUE)                           #
+#######################################################################################################################################
+# Filter to only positive tumor/normal samples.
+unstranded_data<-unstranded_data[avg_expression_pos$Gene,]
+
+#omit NA values from vector
+unstranded_data <- na.omit(unstranded_data)
+
+#omit NA values from vector
+colData_data<-colData_data[colnames(unstranded_data),]
+
+# dds_stages
+dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData, design = ~  age_at_index +  gender +tissue_type  )
+
+# Estimate size factor
+dds_stages <- estimateSizeFactors(dds_stages)
+
+# Obtain normalized coutns
+norm_counts<-counts(dds_stages, normalized = TRUE)
+#######################################################################################################################################
+# Path to files of selected_genes                                                                                                     # 
+selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_I.tsv"             #
+selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_II.tsv"            #
+selected_genes_Stage_III_file     <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_III.tsv"           #
+unstranded_file                   <-"/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                               #
+#######################################################################################################################################
+# Load data                                                                                                                           #
+selected_genes_Stage_I_data       <-read.table(file = selected_genes_Stage_I_file, sep = '\t', header = TRUE,fill=TRUE)               #
+selected_genes_Stage_II_data      <-read.table(file = selected_genes_Stage_II_file, sep = '\t', header = TRUE,fill=TRUE)              #
+selected_genes_Stage_III_data     <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)             #
+unstranded_data                   <-read.table(file = unstranded_file, sep = '\t', header = TRUE,fill=TRUE)                           #
+#######################################################################################################################################
+# Genes of each stage
+sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"]
+sample_stage_II <-colData[colData$stages=="Stage II","patient_id"]
+sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]
+#######################################################################################################################################
+# Samples of each
+sample_stage_I  <-rownames(colData[colData$stage=="Stage I",])
+sample_stage_II <-rownames(colData[colData$stage=="Stage II",])
+sample_stage_III<-rownames(colData[colData$stage=="Stage III",])
+#######################################################################################################################################
+melt_combined_table<-rbind(rbind(data.frame(DE_genes_stage="Stage I",samples="Stage I", 
+Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_I])),
+data.frame(DE_genes_stage="Stage I",samples="Stage II", Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_II])),
+data.frame(DE_genes_stage="Stage I",samples="Stage III", Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_III]))),
+rbind(data.frame(DE_genes_stage="Stage II",samples="Stage I", Expr=melt(norm_counts[selected_genes_Stage_II_data$Gene,sample_stage_I])),
+data.frame(DE_genes_stage="Stage II",samples="Stage II", Expr=melt(norm_counts[selected_genes_Stage_II_data$Gene,sample_stage_II])),
+data.frame(DE_genes_stage="Stage II",samples="Stage III", Expr=melt(norm_counts[selected_genes_Stage_II_data$Gene,sample_stage_III]))),
+rbind(data.frame(DE_genes_stage="Stage III",samples="Stage I", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_I])),
+data.frame(DE_genes_stage="Stage III",samples="Stage II", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_II])),
+data.frame(DE_genes_stage="Stage III",samples="Stage III", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_III]))))
+
+# plot
+p <- ggplot(melt_combined_table, aes(x=DE_genes_stage, y=Expr.value, fill=samples)) +
+    geom_boxplot() + facet_grid(~samples) +
+    theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Expressio of genes per stage") 
+
+
+    

@@ -66,7 +66,6 @@ for (stage_pair_index in rownames(df_stage_pairs))
     unstranded_data[selected_genes,samples_stage_i]
     unstranded_data[selected_genes,samples_stage_ii]
 
-    dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data[,colData_bck$patient_id], colData=colData_bck, design = as.formula(paste("~ age_at_index +  gender + ",stage_index))  )
 
 }
   

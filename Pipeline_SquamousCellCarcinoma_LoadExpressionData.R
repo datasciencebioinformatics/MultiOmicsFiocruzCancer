@@ -93,8 +93,6 @@ unstranded_data<-unstranded_data[,colnames(unstranded_data) %in% merged_data_pat
 
 # Filter colData
 colData<-colData[unique(merged_data_patient_info$sample_id),]
-
-# Filter DESeq2 steps
 #####################################################################################################################
 # Set colnames
 rownames(colData)<-colData$sample_id
@@ -129,14 +127,14 @@ df_gene_id_symbol<-data.frame(gene_id=gene_ids_data,gene_symbol=gene_name_data)
 # Rename collumns
 colnames(df_gene_id_symbol)<-c("gene_id","gene_symbol")
 
+#####################################################################################################################
 library("readxl")
-Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_1.tsv", sep = '\t', header = TRUE,fill=TRUE)      
-Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_2.tsv", sep = '\t', header = TRUE,fill=TRUE)     
+#Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_1.tsv", sep = '\t', header = TRUE,fill=TRUE)      
+#Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_2.tsv", sep = '\t', header = TRUE,fill=TRUE)     
 
 # Selected gene_ids
-selected_gene_id<-c()
+#selected_gene_id<-c()
 
-#####################################################################################################################
 # For each gene_id, take the rtownames that it is on the table1_data
 #for (gene_id in rownames(unstranded_data))
 #{  

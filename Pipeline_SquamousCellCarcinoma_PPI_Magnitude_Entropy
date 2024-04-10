@@ -201,7 +201,11 @@ for (entrie in rownames(melt_combined_table))
 {
     if(!identical(which(Table1_data$EMSEMBL == as.vector(melt_combined_table[entrie,"Expr.Var1"])), integer(0)))
     {
-        #
+        print(entrie)
+        # print(entrie)
         melt_combined_table[entrie,"PPI"]<-Table1_data[which(Table1_data$EMSEMBL == as.vector(melt_combined_table[entrie,"Expr.Var1"])),"PPI"][1]
     }
 }
+
+# Scatter plot by group
+ggplot(melt_combined_table, aes(x = PPI, y = log2Expr)) +  geom_point()

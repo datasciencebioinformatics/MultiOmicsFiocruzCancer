@@ -56,8 +56,8 @@ intersect_II  <-intersect(selected_genes_Stage_I_data$Gene,selected_genes_Stage_
 intersect_III <-intersect(selected_genes_Stage_I_data$Gene,selected_genes_Stage_III_data$Gene)
 intersect_IV  <-intersect(selected_genes_Stage_II_data$Gene,selected_genes_Stage_III_data$Gene)
 
-write_tsv(data.frame(intersect_I),      "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II_III.tsv")
-write_tsv(data.frame(intersect_II),     "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II.tsv")
-write_tsv(data.frame(intersect_III),    "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_III.tsv")
-write_tsv(data.frame(intersect_IV,     "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_II_III.tsv")
+write_tsv(data.frame(Gene=intersect_I),      "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II_III.tsv")
+write_tsv(data.frame(Gene=intersect_II),     "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II.tsv")
+write_tsv(data.frame(Gene=intersect_III),    "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_III.tsv")
+write_tsv(data.frame(Gene=intersect_IV),     "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_II_III.tsv")
 ###################################################################################################################################################################################################################################################################################################

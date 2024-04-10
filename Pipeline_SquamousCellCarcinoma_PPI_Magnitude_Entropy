@@ -77,6 +77,11 @@ p1 <- ggplot(melt_combined_table, aes(x=DE_genes_stage, y=log2Expr, fill=samples
     geom_boxplot(varwidth = TRUE) + facet_grid(~samples) +
     theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Expression of genes per stage") 
 
+# FindClusters_resolution
+png(filename=paste(output_dir,"Expression_of_genes_per_stage.png",sep=""), width = 18, height = 18, res=600, units = "cm")
+  p1
+dev.off()
+
 #######################################################################################################################################
 intersection_genes_pos_Stages_I_II_III_file <- "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II_III.tsv" #
 intersection_genes_pos_Stages_I_II_file     <- "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II.tsv"     #
@@ -110,4 +115,7 @@ p2 <- ggplot(melt_combined_table_intersection, aes(x=DE_genes_stage, y=log2Expr,
     geom_boxplot(varwidth = TRUE) + facet_grid(~samples) +
     theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Expression of genes per stage") 
 ######################################################################################################################################################
-
+# FindClusters_resolution
+png(filename=paste(output_dir,"Expression_of_genes_per_intersaction.png",sep=""), width = 18, height = 18, res=600, units = "cm")
+  p2
+dev.off()

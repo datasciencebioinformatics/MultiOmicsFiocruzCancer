@@ -128,26 +128,6 @@ df_gene_id_symbol<-data.frame(gene_id=gene_ids_data,gene_symbol=gene_name_data)
 colnames(df_gene_id_symbol)<-c("gene_id","gene_symbol")
 
 #####################################################################################################################
-#library("readxl")
-#Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_1.tsv", sep = '\t', header = TRUE,fill=TRUE)      
-#Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_2.tsv", sep = '\t', header = TRUE,fill=TRUE)     
-
-# Selected gene_ids
-#selected_gene_id<-c()
-
-# For each gene_id, take the rtownames that it is on the table1_data
-#for (gene_id in rownames(unstranded_data))
-#{  
-#  # ENSEML gene id alone
-#  ENSEML_gene_id<-strsplit(gsub("\\.", " ", gene_id)," ", fixed=T)[[1]][1]
-#
-#  if(ENSEML_gene_id %in% Table1_data$ENSG)
-#  {
-#    # Verifiy if ENSEML_gene_id is on the selected table genes
-#    selected_gene_id<-c(selected_gene_id,gene_id)
-#  }
-#}
-#####################################################################################################################
 library("readxl")
 Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_1.tsv", sep = '\t', header = TRUE,fill=TRUE)      
 

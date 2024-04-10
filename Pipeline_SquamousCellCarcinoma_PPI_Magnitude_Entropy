@@ -69,10 +69,13 @@ rbind(data.frame(DE_genes_stage="DE genes from stage III",samples="Samples from 
 data.frame(DE_genes_stage="DE genes from stage III",samples="Samples from stage II", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_II])),
 data.frame(DE_genes_stage="DE genes from stage III",samples="Samples from stage III", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_III]))))
 
+# Add combined table intersection 
+melt_combined_table$log2Expr<-log(melt_combined_table$Expr.value)
+
 # plot
-p <- ggplot(melt_combined_table, aes(x=DE_genes_stage, y=log(Expr.value), fill=samples)) +
+p1 <- ggplot(melt_combined_table, aes(x=DE_genes_stage, y=log2Expr, fill=samples)) +
     geom_boxplot(varwidth = TRUE) + facet_grid(~samples) +
-    theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Expressio of genes per stage") 
+    theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Expression of genes per stage") 
 
 #######################################################################################################################################
 intersection_genes_pos_Stages_I_II_III_file <- "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II_III.tsv" #
@@ -84,7 +87,7 @@ intersection_genes_pos_Stages_II_III_file    <- "/home/felipe/Documentos/LungPor
 intersection_genes_pos_Stages_I_II_III       <-read.table(file = intersection_genes_pos_Stages_I_II_III_file, sep = '\t', header = TRUE,fill=TRUE)   #
 intersection_genes_pos_Stages_I_II           <-read.table(file = intersection_genes_pos_Stages_I_II_file, sep = '\t', header = TRUE,fill=TRUE)       #
 intersection_genes_pos_Stages_II_III         <-read.table(file = intersection_genes_pos_Stages_II_III_file, sep = '\t', header = TRUE,fill=TRUE)     #
-intersection_genes_pos_Stages_I_III          <-read.table(file = intersection_genes_pos_Stages_I_III_file, sep = '\t', header = TRUE,fill=TRUE)       #
+intersection_genes_pos_Stages_I_III          <-read.table(file = intersection_genes_pos_Stages_I_III_file, sep = '\t', header = TRUE,fill=TRUE)      #
 ######################################################################################################################################################
 melt_combined_table_intersection<-rbind(data.frame(DE_genes_stage="Intersection stages I, II, III",samples="Samples from stage I", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_I])),
 data.frame(DE_genes_stage="Intersection stages I, II",samples="Samples from stage I", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_I])),
@@ -99,10 +102,12 @@ data.frame(DE_genes_stage="Intersection stages I, II",samples="Samples from stag
 data.frame(DE_genes_stage="Intersection stages I, III",samples="Samples from stage III", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_III])),
 data.frame(DE_genes_stage="Intersection stages II, III",samples="Samples from stage III", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_III])))
 
-
+# Add combined table intersection 
+melt_combined_table_intersection$log2Expr<-log(melt_combined_table_intersection$Expr.value)
 
 # plot
-p <- ggplot(melt_combined_table_intersection, aes(x=DE_genes_stage, y=log(Expr.value), fill=samples)) +
+p2 <- ggplot(melt_combined_table_intersection, aes(x=DE_genes_stage, y=log2Expr, fill=samples)) +
     geom_boxplot(varwidth = TRUE) + facet_grid(~samples) +
-    theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Expressio of genes per stage") 
+    theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Expression of genes per stage") 
+######################################################################################################################################################
 

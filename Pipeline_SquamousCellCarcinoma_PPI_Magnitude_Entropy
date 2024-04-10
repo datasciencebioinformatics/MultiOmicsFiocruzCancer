@@ -167,3 +167,41 @@ png(filename=paste(output_dir,"Order_of_magnitude.png",sep=""), width = 16, heig
   ggpaired(df_order_of_magnitude, x = "stage_pair", y = "log2_order_of_magnitude", line.color = "gray", line.size = 0.4, palette = "jco")+ stat_compare_means(paired = TRUE) + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Order of magnitude per gene") + stat_compare_means(comparisons = my_comparisons) 
 dev.off()
 
+#####################################################################################################################
+library("readxl")
+Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_2.tsv", sep = '\t', header = TRUE,fill=TRUE)     
+
+# Create field Table1_data$EMSEMBL
+Table1_data$EMSEMBL<-""
+
+# Selected gene_ids
+selected_gene_id<-c()
+
+# For each gene_id, take the rtownames that it is on the table1_data
+for (gene_id in Table1_data$ENSG)
+{ 
+    # Store gene_index
+    gene_index<-which(grepl(gene_id, rownames(unstranded_data)))
+
+    if(!identical(gene_index, integer(0)))
+    {
+        # Store reslts    
+        Table1_data[which(Table1_data$ENSG == gene_id),"EMSEMBL"]<-rownames(unstranded_data)[gene_index[1]]
+    }
+}
+# Filter up image
+Table1_data<-Table1_data[Table1_data$EMSEMBL!="",]
+
+#####################################################################################################################
+#for each rown, add the number of connections
+melt_combined_table$PPI<-0
+
+# for each row
+for (entrie in rownames(melt_combined_table))
+{
+    if(!identical(which(Table1_data$EMSEMBL == as.vector(melt_combined_table[entrie,"Expr.Var1"])), integer(0)))
+    {
+        #
+        melt_combined_table[entrie,"PPI"]<-Table1_data[which(Table1_data$EMSEMBL == as.vector(melt_combined_table[entrie,"Expr.Var1"])),"PPI"][1]
+    }
+}

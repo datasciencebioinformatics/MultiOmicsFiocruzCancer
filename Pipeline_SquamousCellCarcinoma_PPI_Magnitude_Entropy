@@ -124,14 +124,46 @@ png(filename=paste(output_dir,"Expression_of_genes_per_intersaction.png",sep="")
   p2
 dev.off()
 ######################################################################################################################################################
-# For each stage, compute order of magnitude
-for (stage in vector_stages)
+# Paired stages
+stages_pairs=data.frame(stage_i=c("stageI","stageI","stageII"),stage_ii=c("stageII","stageIII","stageIII"))
+
+# Data frame results
+df_order_of_magnitude<-data.frame(Genes=c(),stage_pair=c(),order_of_magnitude=c())
+
+# For each stage pair
+for (stage_pair in rownames(stages_pairs))
 {
+    # Store pairs
+    stage_i <- stages_pairs[stage_pair,"stage_i"]
+    stage_ii<- stages_pairs[stage_pair,"stage_ii"]
+
+    # Store pairs
+    genes_stage_i  <- list_genes[[stage_i]]
+    genes_stage_ii <- list_genes[[stage_ii]]
+
     # Take the samples and genes of stages 
-    samples <-list_samples[[stage]]    
-    genes   <-list_genes[[stage]]
+    samples_stage_i  <-list_samples[[stage_i]]    
+    samples_stage_ii <-list_samples[[stage_ii]]    
 
-
+    # Paste Star pairs
+    df_order_of_magnitude<-rbind(df_order_of_magnitude,data.frame(Genes=names(rowMeans(norm_counts[,samples_stage_ii])/rowMeans(norm_counts[,samples_stage_i])),stage_pair=paste(stage_ii,stage_i,sep="_over_"),order_of_magnitude=rowMeans(norm_counts[,samples_stage_ii])/rowMeans(norm_counts[,samples_stage_i])))
 }
+######################################################################################################################################################
+p <- ggplot(df_order_of_magnitude, aes(class, hwy))
+p + geom_boxplot()
 
+# plot
+p2 <- ggplot(df_order_of_magnitude, aes(x=stage_pair, y=log(order_of_magnitude))) +
+    geom_boxplot(varwidth = TRUE) +
+    theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Order of magnitude per gene") 
+
+df_order_of_magnitude$log2_order_of_magnitude<-log(df_order_of_magnitude$order_of_magnitude)
+
+# Pairwise comparisons: Specify the comparisons you want
+my_comparisons <- list( c("stageII_over_stageI", "stageIII_over_stageI"), c("stageIII_over_stageII", "stageIII_over_stageI"), c("stageIII_over_stageII", "stageII_over_stageI") )
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"Order_of_magnitude.png",sep=""), width = 16, height = 16, res=600, units = "cm")
+  ggpaired(df_order_of_magnitude, x = "stage_pair", y = "log2_order_of_magnitude", line.color = "gray", line.size = 0.4, palette = "jco")+ stat_compare_means(paired = TRUE) + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Order of magnitude per gene") + stat_compare_means(comparisons = my_comparisons) 
+dev.off()
 

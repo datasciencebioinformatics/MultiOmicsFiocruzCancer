@@ -44,11 +44,11 @@ dev.off()
 selected_genes_Stage_I_data       <-read.table(file = selected_genes_Stage_I_file, sep = '\t', header = TRUE,fill=TRUE)               #
 selected_genes_Stage_II_data      <-read.table(file = selected_genes_Stage_II_file, sep = '\t', header = TRUE,fill=TRUE)              #
 selected_genes_Stage_III_data     <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)             #
-
-# Set rownames
-rownames(selected_genes_Stage_I_data)<-selected_genes_Stage_I_data$Gene
-rownames(selected_genes_Stage_II_data)<-selected_genes_Stage_II_data$Gene
-rownames(selected_genes_Stage_III_data)<-selected_genes_Stage_III_data$Gene
+                                                                                                                                      #
+# Set rownames                                                                                                                        #
+rownames(selected_genes_Stage_I_data)<-selected_genes_Stage_I_data$Gene                                                               #
+rownames(selected_genes_Stage_II_data)<-selected_genes_Stage_II_data$Gene                                                             #
+rownames(selected_genes_Stage_III_data)<-selected_genes_Stage_III_data$Gene                                                           # 
 
 # Calculate unique genes
 intersect_I   <-intersect(intersect(selected_genes_Stage_I_data$Gene,selected_genes_Stage_I_data$Gene),selected_genes_Stage_III_data$Gene)

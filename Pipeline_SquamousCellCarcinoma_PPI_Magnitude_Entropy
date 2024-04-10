@@ -149,9 +149,6 @@ for (stage_pair in rownames(stages_pairs))
     df_order_of_magnitude<-rbind(df_order_of_magnitude,data.frame(Genes=names(rowMeans(norm_counts[,samples_stage_ii])/rowMeans(norm_counts[,samples_stage_i])),stage_pair=paste(stage_ii,stage_i,sep="_over_"),order_of_magnitude=rowMeans(norm_counts[,samples_stage_ii])/rowMeans(norm_counts[,samples_stage_i])))
 }
 ######################################################################################################################################################
-p <- ggplot(df_order_of_magnitude, aes(class, hwy))
-p + geom_boxplot()
-
 # plot
 p2 <- ggplot(df_order_of_magnitude, aes(x=stage_pair, y=log(order_of_magnitude))) +
     geom_boxplot(varwidth = TRUE) +
@@ -193,19 +190,18 @@ for (gene_id in Table1_data$ENSG)
 Table1_data<-Table1_data[Table1_data$EMSEMBL!="",]
 
 #####################################################################################################################
+# df_order_of_magnitude
+df_order_of_magnitude<-df_order_of_magnitude[df_order_of_magnitude$Gene %in% Table1_data$EMSEMBL,]
+Table1_data<-Table1_data[Table1_data$EMSEMBL %in% df_order_of_magnitude$Gene,]
+
 #for each rown, add the number of connections
-melt_combined_table$PPI<-0
+df_order_of_magnitude$PPI<-0
 
 # for each row
-for (entrie in rownames(melt_combined_table))
-{
-    if(!identical(which(Table1_data$EMSEMBL == as.vector(melt_combined_table[entrie,"Expr.Var1"])), integer(0)))
-    {
-        print(entrie)
-        # print(entrie)
-        melt_combined_table[entrie,"PPI"]<-Table1_data[which(Table1_data$EMSEMBL == as.vector(melt_combined_table[entrie,"Expr.Var1"])),"PPI"][1]
-    }
+for (gene in rownames(df_order_of_magnitude))
+{    
+    df_order_of_magnitude[gene,"PPI"]<-Table1_data[Table1_data$EMSEMBL==gene,"PPI"][1]
 }
 
 # Scatter plot by group
-ggplot(melt_combined_table, aes(x = PPI, y = log2Expr)) +  geom_point()
+ggplot(melt_combined_table, aes(x = PPI, y = log2Expr)) +  geom_point() facet_grid(~samples) 

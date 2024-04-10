@@ -39,3 +39,25 @@ stages_I_II_III_unique<-ggVennDiagram(list(Stage_I    =selected_genes_Stage_I_da
 png(filename=paste(output_dir,"Veen_diagrams.png",sep=""), width = 28, height = 14, res=600, units = "cm")
   pca_plots<-grid.arrange( stages_I_II_III,stages_I_II_III_unique,  ncol = 2)
 dev.off()
+###################################################################################################################################################################################################################################################################################################
+# Load data                                                                                                                           #
+selected_genes_Stage_I_data       <-read.table(file = selected_genes_Stage_I_file, sep = '\t', header = TRUE,fill=TRUE)               #
+selected_genes_Stage_II_data      <-read.table(file = selected_genes_Stage_II_file, sep = '\t', header = TRUE,fill=TRUE)              #
+selected_genes_Stage_III_data     <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)             #
+
+# Set rownames
+rownames(selected_genes_Stage_I_data)<-selected_genes_Stage_I_data$Gene
+rownames(selected_genes_Stage_II_data)<-selected_genes_Stage_II_data$Gene
+rownames(selected_genes_Stage_III_data)<-selected_genes_Stage_III_data$Gene
+
+# Calculate unique genes
+intersect_I   <-intersect(intersect(selected_genes_Stage_I_data$Gene,selected_genes_Stage_I_data$Gene),selected_genes_Stage_III_data$Gene)
+intersect_II  <-intersect(selected_genes_Stage_I_data$Gene,selected_genes_Stage_II_data$Gene)
+intersect_III <-intersect(selected_genes_Stage_I_data$Gene,selected_genes_Stage_III_data$Gene)
+intersect_IV  <-intersect(selected_genes_Stage_II_data$Gene,selected_genes_Stage_III_data$Gene)
+
+write_tsv(data.frame(intersect_I),      "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II_III.tsv")
+write_tsv(data.frame(intersect_II),     "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II.tsv")
+write_tsv(data.frame(intersect_III),    "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_III.tsv")
+write_tsv(data.frame(intersect_IV,     "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_II_III.tsv")
+###################################################################################################################################################################################################################################################################################################

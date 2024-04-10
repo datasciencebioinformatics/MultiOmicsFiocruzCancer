@@ -58,6 +58,10 @@ sample_stage_I  <-rownames(colData[colData$stage=="Stage I",])
 sample_stage_II <-rownames(colData[colData$stage=="Stage II",])
 sample_stage_III<-rownames(colData[colData$stage=="Stage III",])
 #######################################################################################################################################
+vector_stages   <- c("stageI","stageII","stageIII")
+list_samples    <- list(stageI=sample_stage_I,stageII=sample_stage_II,stageII=sample_stage_III)
+list_gened      <- list(stageI=selected_genes_Stage_I_data$Gene,stageII=selected_genes_Stage_II_data$Gene,stageII=selected_genes_Stage_III_data$Gene)
+#######################################################################################################################################
 melt_combined_table<-rbind(rbind(data.frame(DE_genes_stage="DE genes from stage I",samples="Samples from stage I", 
 Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_I])),
 data.frame(DE_genes_stage="DE genes from stage I",samples="Samples from stage II", Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_II])),
@@ -119,3 +123,18 @@ p2 <- ggplot(melt_combined_table_intersection, aes(x=DE_genes_stage, y=log2Expr,
 png(filename=paste(output_dir,"Expression_of_genes_per_intersaction.png",sep=""), width = 18, height = 18, res=600, units = "cm")
   p2
 dev.off()
+######################################################################################################################################################
+# list of de genes
+
+# list of samples
+
+
+
+# For each stage, compute order of magnitude
+for (stage in levels(factor(colData$stages)))
+{
+    # Take the samples of 
+
+}
+
+

@@ -19,16 +19,16 @@ selected_genes_Stage_II_data      <-read.table(file = selected_genes_Stage_II_fi
 selected_genes_Stage_III_data     <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)             #
 unstranded_data                   <-read.table(file = unstranded_file, sep = '\t', header = TRUE,fill=TRUE)                           #
 #######################################################################################################################################
-# Filter to only positive tumor/normal samples.
+# Filter to keep only positive tumor/normal samples from unstranded_data.
 unstranded_data<-unstranded_data[avg_expression_pos$Gene,]
 
-#omit NA values from vector
+# omit NA values from vector
 unstranded_data <- na.omit(unstranded_data)
 
-#omit NA values from vector
+# Filter to keep only positive tumor/normal samples from colData_data.
 colData_data<-colData_data[colnames(unstranded_data),]
 
-# dds_stages
+# Create dds_stages with selected for the purpose of getting normalized counts
 dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData, design = ~  age_at_index +  gender +tissue_type  )
 
 # Estimate size factor
@@ -37,40 +37,45 @@ dds_stages <- estimateSizeFactors(dds_stages)
 # Obtain normalized coutns
 norm_counts<-counts(dds_stages, normalized = TRUE)
 #######################################################################################################################################
-# Genes of each stage
+# Genes of each stage stored in colData
 sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"]
 sample_stage_II <-colData[colData$stages=="Stage II","patient_id"]
 sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]
-#######################################################################################################################################
-# Samples of each
-sample_stage_I  <-rownames(colData[colData$stage=="Stage I",])
-sample_stage_II <-rownames(colData[colData$stage=="Stage II",])
-sample_stage_III<-rownames(colData[colData$stage=="Stage III",])
 #######################################################################################################################################
 # Lists for stage names,samples, and genes.
 vector_stages   <- c("stageI","stageII","stageIII")
 list_samples    <- list(stageI=sample_stage_I,stageII=sample_stage_II,stageIII=sample_stage_III)
 list_genes      <- list(stageI=selected_genes_Stage_I_data$Gene,stageII=selected_genes_Stage_II_data$Gene,stageIII=selected_genes_Stage_III_data$Gene)
 #######################################################################################################################################
-# A table with DE genes stage
-melt_combined_table<-rbind(rbind(data.frame(DE_genes_stage="DE genes from stage I",samples="Samples from stage I", 
-Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_I])),
-data.frame(DE_genes_stage="DE genes from stage I",samples="Samples from stage II", Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_II])),
-data.frame(DE_genes_stage="DE genes from stage I",samples="Samples from stage III", Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_III]))),
-rbind(data.frame(DE_genes_stage="DE genes from stage II",samples="Samples from stage I", Expr=melt(norm_counts[selected_genes_Stage_II_data$Gene,sample_stage_I])),
-data.frame(DE_genes_stage="DE genes from stage II",samples="Samples from stage II", Expr=melt(norm_counts[selected_genes_Stage_II_data$Gene,sample_stage_II])),
-data.frame(DE_genes_stage="DE genes from stage II",samples="Samples from stage III", Expr=melt(norm_counts[selected_genes_Stage_II_data$Gene,sample_stage_III]))),
-rbind(data.frame(DE_genes_stage="DE genes from stage III",samples="Samples from stage I", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_I])),
-data.frame(DE_genes_stage="DE genes from stage III",samples="Samples from stage II", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_II])),
-data.frame(DE_genes_stage="DE genes from stage III",samples="Samples from stage III", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_III]))))
+# A table with DE genes from each stage (e.g. Stage I vs. Steges II and III) using smples of each Stage (e.g. Samples from Stage I)
+# DE Genes Stage I
+DE_genes_from_stage_I_vs_Samples_from_stage_I   <- data.frame(DE_genes_stage="DE genes from stage I",samples="Samples from stage I", Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_I]))
+DE_genes_from_stage_I_vs_Samples_from_stage_II  <- data.frame(DE_genes_stage="DE genes from stage I",samples="Samples from stage II", Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_II]))
+DE_genes_from_stage_I_vs_Samples_from_stage_III <- data.frame(DE_genes_stage="DE genes from stage I",samples="Samples from stage III", Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_III]))
 
-# Add combined table intersection 
-melt_combined_table$log2Expr<-log(melt_combined_table$Expr.value)
+# DE Genes Stage II
+DE_genes_from_stage_II_vs_Samples_from_stage_I   <- data.frame(DE_genes_stage="DE genes from stage II",samples="Samples from stage I", Expr=melt(norm_counts[selected_genes_Stage_II_data$Gene,sample_stage_I]))
+DE_genes_from_stage_II_vs_Samples_from_stage_II  <- data.frame(DE_genes_stage="DE genes from stage II",samples="Samples from stage II", Expr=melt(norm_counts[selected_genes_Stage_II_data$Gene,sample_stage_II]))
+DE_genes_from_stage_II_vs_Samples_from_stage_III <- data.frame(DE_genes_stage="DE genes from stage II",samples="Samples from stage III", Expr=melt(norm_counts[selected_genes_Stage_II_data$Gene,sample_stage_III]))
+
+# DE Genes Stage III
+DE_genes_from_stage_III_vs_Samples_from_stage_I   <- data.frame(DE_genes_stage="DE genes from stage III",samples="Samples from stage I", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_I]))
+DE_genes_from_stage_III_vs_Samples_from_stage_II  <- data.frame(DE_genes_stage="DE genes from stage III",samples="Samples from stage II", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_II]))
+DE_genes_from_stage_III_vs_Samples_from_stage_III <- data.frame(DE_genes_stage="DE genes from stage III",samples="Samples from stage III", Expr=melt(norm_counts[selected_genes_Stage_III_data$Gene,sample_stage_III]))
+
+# Combine rbind tables in single table
+melt_combined_table<-rbind(DE_genes_from_stage_I_vs_Samples_from_stage_I,DE_genes_from_stage_I_vs_Samples_from_stage_II,DE_genes_from_stage_I_vs_Samples_from_stage_III,DE_genes_from_stage_II_vs_Samples_from_stage_I,DE_genes_from_stage_II_vs_Samples_from_stage_II, DE_genes_from_stage_II_vs_Samples_from_stage_III, DE_genes_from_stage_III_vs_Samples_from_stage_I,DE_genes_from_stage_III_vs_Samples_from_stage_II, DE_genes_from_stage_III_vs_Samples_from_stage_III )
+
+# Create log Expr.value
+melt_combined_table$log2Expr<-log(melt_combined_table$Expr.value,2)
+
+# Rename collumns
+colnames(melt_combined_table)<-c("DE_genes_stage", "samples", "Genes", "Patients", "log2Expr")
 
 # plot
 p1 <- ggplot(melt_combined_table, aes(x=DE_genes_stage, y=log2Expr, fill=samples)) +
     geom_boxplot(varwidth = TRUE) + facet_grid(~samples) +
-    theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Expression of genes per stage") 
+    theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Expression of genes per stage") + ylim(0, 10)
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"Expression_of_genes_per_stage.png",sep=""), width = 18, height = 18, res=600, units = "cm")

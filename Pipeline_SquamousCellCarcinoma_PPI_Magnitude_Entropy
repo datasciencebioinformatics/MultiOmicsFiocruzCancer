@@ -233,36 +233,38 @@ df_order_of_magnitude<-na.omit(df_order_of_magnitude)                           
 png(filename=paste(output_dir,"PPI_Order_Magnitude.png",sep=""), width = 14, height = 14, res=600, units = "cm")     ########################################################################################################
   ggplot(df_order_of_magnitude, aes(x = PPI, y = log(order_of_magnitude))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("PPI vs. Order of magnitude")           #
 dev.off()                                                                                                            ########################################################################################################
-######################################################################################################################
-# Set rownames                                                                                                                        #
-combined_genes_intersection<-unique(c(rownames(sele_genes_uniq_pos_stages_I_data),rownames(sele_genes_uniq_pos_stages_II_data),rownames(sele_genes_uniq_pos_stages_III_data)))
-
-# Combine all intersections
-#combined_genes_intersection<-unique(c(intersection_genes_pos_Stages_I_II_III$Gene,intersection_genes_pos_Stages_I_II$Gene,intersection_genes_pos_Stages_II_III$Gene,intersection_genes_pos_Stages_I_III$Gene))
-
-# Comb_genes_from_Intersections_vs_Samples_from_stage
-Comb_genes_from_Intersections_vs_Samples_from_stage_I     <-  data.frame(DE_genes_stage="Intersection stages I, II, III",stages="Stage I", Expr=melt(norm_counts[combined_genes_intersection,sample_stage_I]))           #
-Comb_genes_from_Intersections_vs_Samples_from_stage_II    <-  data.frame(DE_genes_stage="Intersection stages I, II, III",stages="Stage II", Expr=melt(norm_counts[combined_genes_intersection,sample_stage_II]))         #
-Comb_genes_from_Intersections_vs_Samples_from_stage_III   <-  data.frame(DE_genes_stage="Intersection stages I, II, III",stages="Stage III", Expr=melt(norm_counts[combined_genes_intersection,sample_stage_III]))       #
-
-# melt_comb_genes
-melt_comb_genes_from_Intersections<-rbind(Comb_genes_from_Intersections_vs_Samples_from_stage_I,Comb_genes_from_Intersections_vs_Samples_from_stage_II,Comb_genes_from_Intersections_vs_Samples_from_stage_III)
-
-                                                                                                                                                                                                                       #
-# Create log Expr.value                                                                                                                                                                                                #
-melt_comb_genes_from_Intersections$log2Expr<-log(melt_comb_genes_from_Intersections$Expr.value,2)                                                                                                                                                    #
-                                                                                                                                                                                                                       #
-# Rename collumns                                                                                                                                                                                                      #
-colnames(melt_comb_genes_from_Intersections)<-c("DE_genes_stage", "stages", "Genes", "Patients", "log2Expr")    
-
-# plot                                 
+######################################################################################################################                                                                                                      #
+# Set rownames                                                                                                                                                                                                              #
+combined_genes_intersection<-unique(c(rownames(sele_genes_uniq_pos_stages_I_data),rownames(sele_genes_uniq_pos_stages_II_data),rownames(sele_genes_uniq_pos_stages_III_data)))                                              #
+                                                                                                                                                                                                                            #
+# Combine all intersections                                                                                                                                                                                                 #
+#combined_genes_intersection<-unique(c(intersection_genes_pos_Stages_I_II_III$Gene,intersection_genes_pos_Stages_I_II$Gene,intersection_genes_pos_Stages_II_III$Gene,intersection_genes_pos_Stages_I_III$Gene))             #
+                                                                                                                                                                                                                            #
+# Comb_genes_from_Intersections_vs_Samples_from_stage                                                                                                                                                                       #
+Comb_genes_from_Intersections_vs_Samples_from_stage_I     <-  data.frame(DE_genes_stage="Intersection stages I, II, III",stages="Stage I", Expr=melt(norm_counts[combined_genes_intersection,sample_stage_I]))              #
+Comb_genes_from_Intersections_vs_Samples_from_stage_II    <-  data.frame(DE_genes_stage="Intersection stages I, II, III",stages="Stage II", Expr=melt(norm_counts[combined_genes_intersection,sample_stage_II]))            #
+Comb_genes_from_Intersections_vs_Samples_from_stage_III   <-  data.frame(DE_genes_stage="Intersection stages I, II, III",stages="Stage III", Expr=melt(norm_counts[combined_genes_intersection,sample_stage_III]))          #
+                                                                                                                                                                                                                            #
+# melt_comb_genes                                                                                                                                                                                                           #
+melt_comb_genes_from_Intersections<-rbind(Comb_genes_from_Intersections_vs_Samples_from_stage_I,Comb_genes_from_Intersections_vs_Samples_from_stage_II,Comb_genes_from_Intersections_vs_Samples_from_stage_III)             #
+                                                                                                                                                                                                                            #
+                                                                                                                                                                                                                            #
+# Create log Expr.value                                                                                                                                                                                                     #
+melt_comb_genes_from_Intersections$log2Expr<-log(melt_comb_genes_from_Intersections$Expr.value,2)                                                                                                                           #                               #
+                                                                                                                                                                                                                            #
+# Rename collumns                                                                                                                                                                                                           #
+colnames(melt_comb_genes_from_Intersections)<-c("DE_genes_stage", "stages", "Genes", "Patients", "log2Expr")                                                                                                                #
+                                                                                                                                                                                                                            #
+# plot                                                                                                                                                                                                                      #
 p4 <- ggplot(melt_comb_genes_from_Intersections, aes(x=stages, y=log2Expr, fill=stages)) + geom_boxplot(varwidth = TRUE) +  theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Expression of DE genes from all genes combined")    + ylim(0, 5)    
+                                                                                                                                                                                                                            #
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Combined_dE_genes_per_stage.png",sep=""), width = 18, height = 18, res=600, units = "cm")                                                                                                    #
+  p4                                                                                                                                                                                                                        #
+dev.off()                                                                                                                                                                                                                   #
+#############################################################################################################################################################################################################################
+# To do : to check samples in the intesctons of the stage I would have to cck for patient ids with samples samples fom more than one stage                                                                                  #
+# To do : to select top 10 genes and plot paired overview, boxplot and individually.                                                                                                                                        #
+#############################################################################################################################################################################################################################
 
-# FindClusters_resolution                                                                                            #
-png(filename=paste(output_dir,"Combined_dE_genes_per_stage.png",sep=""), width = 18, height = 18, res=600, units = "cm")     
-  p4
-dev.off() 
-######################################################################################################################
-# To do : to check samples in the intesctons of the stage I would have to cck for patient ids with samples samples fom more than one stage
-# To do : to select top 10 genes and plot paired overview, boxplot and individually. 
-
+                                                                                 

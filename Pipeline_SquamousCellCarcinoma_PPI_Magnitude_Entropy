@@ -71,6 +71,9 @@ norm_counts<-counts(dds_stages, normalized = TRUE)                              
 sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"]                                                                     #
 sample_stage_II <-colData[colData$stages=="Stage II","patient_id"]                                                                    #
 sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]                                                                   #
+#######################################################################################################################################
+merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                              #
+merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)            #
 ########################################################################################################################################################
 # Lists for stage names,samples, and genes.                                                                                                            #
 vector_stages   <- c("stageI","stageII","stageIII")                                                                                                    #

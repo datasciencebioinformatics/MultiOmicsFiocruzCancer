@@ -19,6 +19,17 @@ selected_genes_Stage_II_data      <-read.table(file = selected_genes_Stage_II_fi
 selected_genes_Stage_III_data     <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)             #
 unstranded_data                   <-read.table(file = unstranded_file, sep = '\t', header = TRUE,fill=TRUE)                           #
 #######################################################################################################################################
+intersection_genes_pos_Stages_I_II_III_file <- "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II_III.tsv" #
+intersection_genes_pos_Stages_I_II_file     <- "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II.tsv"     #
+intersection_genes_pos_Stages_I_III_file    <- "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_III.tsv"    #
+intersection_genes_pos_Stages_II_III_file    <- "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_II_III.tsv"  #
+######################################################################################################################################################
+# Load data                                                                                                                                          #
+intersection_genes_pos_Stages_I_II_III       <-read.table(file = intersection_genes_pos_Stages_I_II_III_file, sep = '\t', header = TRUE,fill=TRUE)   #
+intersection_genes_pos_Stages_I_II           <-read.table(file = intersection_genes_pos_Stages_I_II_file, sep = '\t', header = TRUE,fill=TRUE)       #
+intersection_genes_pos_Stages_II_III         <-read.table(file = intersection_genes_pos_Stages_II_III_file, sep = '\t', header = TRUE,fill=TRUE)     #
+intersection_genes_pos_Stages_I_III          <-read.table(file = intersection_genes_pos_Stages_I_III_file, sep = '\t', header = TRUE,fill=TRUE)      #
+######################################################################################################################################################
 # Filter to keep only positive tumor/normal samples from unstranded_data.                                                             #
 unstranded_data<-unstranded_data[avg_expression_pos$Gene,]                                                                            #
                                                                                                                                       #
@@ -48,8 +59,7 @@ vector_stages   <- c("stageI","stageII","stageIII")                             
 list_samples    <- list(stageI=sample_stage_I,stageII=sample_stage_II,stageIII=sample_stage_III)                                                       #
 list_genes      <- list(stageI=selected_genes_Stage_I_data$Gene,stageII=selected_genes_Stage_II_data$Gene,stageIII=selected_genes_Stage_III_data$Gene) #
 ########################################################################################################################################################################################################################
-# A table with DE genes from each stage (e.g. Stage I vs. Steges II and III) using smples of each Stage (e.g. Samples from Stage I)                                                                                    #   
-                                                                                                                                                                                                                       #
+# A table with DE genes from each stage (e.g. Stage I vs. Steges II and III) using smples of each Stage (e.g. Samples from Stage I)                                                                                    #                                                                                                                     #
 # DE Genes Stage I                                                                                                                                                                                                     #
 DE_genes_from_stage_I_vs_Samples_from_stage_I   <- data.frame(DE_genes_stage="DE genes from stage I",samples="Samples from stage I", Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_I]))          #
 DE_genes_from_stage_I_vs_Samples_from_stage_II  <- data.frame(DE_genes_stage="DE genes from stage I",samples="Samples from stage II", Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_II]))        #
@@ -84,131 +94,126 @@ p1 <- ggplot(melt_combined_table, aes(x=DE_genes_stage, y=log2Expr, fill=samples
                                                                                                                                                                                                                        # 
 # FindClusters_resolution                                                                                                                                                                                              #
 png(filename=paste(output_dir,"Expression_of_genes_per_stage.png",sep=""), width = 18, height = 18, res=600, units = "cm")                                                                                             #
-  p1                                                                                                                                                                                                                   #
+  p1 
 dev.off()                                                                                                                                                                                                              #
-                                                                                                                                                                                                                       #
-########################################################################################################################################################################################################################
-intersection_genes_pos_Stages_I_II_III_file <- "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II_III.tsv" #
-intersection_genes_pos_Stages_I_II_file     <- "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II.tsv"     #
-intersection_genes_pos_Stages_I_III_file    <- "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_III.tsv"    #
-intersection_genes_pos_Stages_II_III_file    <- "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_II_III.tsv"  #
-######################################################################################################################################################
-# Load data                                                                                                                                          #
-intersection_genes_pos_Stages_I_II_III       <-read.table(file = intersection_genes_pos_Stages_I_II_III_file, sep = '\t', header = TRUE,fill=TRUE)   #
-intersection_genes_pos_Stages_I_II           <-read.table(file = intersection_genes_pos_Stages_I_II_file, sep = '\t', header = TRUE,fill=TRUE)       #
-intersection_genes_pos_Stages_II_III         <-read.table(file = intersection_genes_pos_Stages_II_III_file, sep = '\t', header = TRUE,fill=TRUE)     #
-intersection_genes_pos_Stages_I_III          <-read.table(file = intersection_genes_pos_Stages_I_III_file, sep = '\t', header = TRUE,fill=TRUE)      #
-######################################################################################################################################################
-melt_combined_table_intersection<-rbind(data.frame(DE_genes_stage="Intersection stages I, II, III",samples="Samples from stage I", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_I])),
-data.frame(DE_genes_stage="Intersection stages I, II",samples="Samples from stage I", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_I])),
-data.frame(DE_genes_stage="Intersection stages I, III",samples="Samples from stage I", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_I])),
-data.frame(DE_genes_stage="Intersection stages II, III",samples="Samples from stage I", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_I])),
-data.frame(DE_genes_stage="Intersection stages I, II, III",samples="Samples from stage II", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_II])),
-data.frame(DE_genes_stage="Intersection stages I, II",samples="Samples from stage II", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_II])),
-data.frame(DE_genes_stage="Intersection stages I, III",samples="Samples from stage II", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_II])),
-data.frame(DE_genes_stage="Intersection stages II, III",samples="Samples from stage II", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_II])),
-data.frame(DE_genes_stage="Intersection stages I, II, III",samples="Samples from stage III", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_III])),
-data.frame(DE_genes_stage="Intersection stages I, II",samples="Samples from stage III", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_III])),
-data.frame(DE_genes_stage="Intersection stages I, III",samples="Samples from stage III", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_III])),
-data.frame(DE_genes_stage="Intersection stages II, III",samples="Samples from stage III", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_III])))
-
-# Add combined table intersection 
-melt_combined_table_intersection$log2Expr<-log(melt_combined_table_intersection$Expr.value)
-
-# plot
-p2 <- ggplot(melt_combined_table_intersection, aes(x=DE_genes_stage, y=log2Expr, fill=samples)) +
-    geom_boxplot(varwidth = TRUE) + facet_grid(~samples) +
-    theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Expression of genes per stage") 
-######################################################################################################################################################
-# FindClusters_resolution
-png(filename=paste(output_dir,"Expression_of_genes_per_intersaction.png",sep=""), width = 18, height = 18, res=600, units = "cm")
-  p2
-dev.off()
-######################################################################################################################################################
-# Paired stages
-stages_pairs=data.frame(stage_i=c("stageI","stageI","stageII"),stage_ii=c("stageII","stageIII","stageIII"))
-
-# Data frame results
-df_order_of_magnitude<-data.frame(Genes=c(),stage_pair=c(),order_of_magnitude=c())
-
-# For each stage pair
-for (stage_pair in rownames(stages_pairs))
-{
-    # Store pairs
-    stage_i <- stages_pairs[stage_pair,"stage_i"]
-    stage_ii<- stages_pairs[stage_pair,"stage_ii"]
-
-    # Store pairs
-    genes_stage_i  <- list_genes[[stage_i]]
-    genes_stage_ii <- list_genes[[stage_ii]]
-
-    # Take the samples and genes of stages 
-    samples_stage_i  <-list_samples[[stage_i]]    
-    samples_stage_ii <-list_samples[[stage_ii]]    
-
-    # Paste Star pairs
-    df_order_of_magnitude<-rbind(df_order_of_magnitude,data.frame(Genes=names(rowMeans(norm_counts[,samples_stage_ii])/rowMeans(norm_counts[,samples_stage_i])),stage_pair=paste(stage_ii,stage_i,sep="_over_"),order_of_magnitude=rowMeans(norm_counts[,samples_stage_ii])/rowMeans(norm_counts[,samples_stage_i])))
-}
-######################################################################################################################################################
-# plot
-p2 <- ggplot(df_order_of_magnitude, aes(x=stage_pair, y=log(order_of_magnitude))) +
-    geom_boxplot(varwidth = TRUE) +
-    theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Order of magnitude per gene") 
-
-df_order_of_magnitude$log2_order_of_magnitude<-log(df_order_of_magnitude$order_of_magnitude)
-
-# Pairwise comparisons: Specify the comparisons you want
-my_comparisons <- list( c("stageII_over_stageI", "stageIII_over_stageI"), c("stageIII_over_stageII", "stageIII_over_stageI"), c("stageIII_over_stageII", "stageII_over_stageI") )
-
-# FindClusters_resolution
-png(filename=paste(output_dir,"Order_of_magnitude.png",sep=""), width = 16, height = 16, res=600, units = "cm")
-  ggpaired(df_order_of_magnitude, x = "stage_pair", y = "log2_order_of_magnitude", line.color = "gray", line.size = 0.4, palette = "jco")+ stat_compare_means(paired = TRUE) + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Order of magnitude per gene") + stat_compare_means(comparisons = my_comparisons) 
-dev.off()
-
-#####################################################################################################################
-library("readxl")
-Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_2.tsv", sep = '\t', header = TRUE,fill=TRUE)     
-
-# Create field Table1_data$EMSEMBL
-Table1_data$EMSEMBL<-""
-
-# Selected gene_ids
-selected_gene_id<-c()
-
-# For each gene_id, take the rtownames that it is on the table1_data
-for (gene_id in Table1_data$ENSG)
-{ 
-    # Store gene_index
-    gene_index<-which(grepl(gene_id, rownames(unstranded_data)))
-
-    if(!identical(gene_index, integer(0)))
-    {
-        # Store reslts    
-        Table1_data[which(Table1_data$ENSG == gene_id),"EMSEMBL"]<-rownames(unstranded_data)[gene_index[1]]
-    }
-}
-# Filter up image
-Table1_data<-Table1_data[Table1_data$EMSEMBL!="",]
-
-#####################################################################################################################
-# df_order_of_magnitude
-df_order_of_magnitude<-df_order_of_magnitude[df_order_of_magnitude$Gene %in% Table1_data$EMSEMBL,]
-Table1_data<-Table1_data[Table1_data$EMSEMBL %in% df_order_of_magnitude$Gene,]
-
-#for each rown, add the number of connections
-df_order_of_magnitude$PPI<-0
-
-# for each row
-for (gene in rownames(df_order_of_magnitude))
-{    
-    df_order_of_magnitude[gene,"PPI"]<-Table1_data[Table1_data$EMSEMBL==gene,"PPI"][1]
-}
-
-# PPI
-df_order_of_magnitude[!is.na(df_order_of_magnitude$PPI),]
-df_order_of_magnitude<-na.omit(df_order_of_magnitude)
-
-# FindClusters_resolution
-png(filename=paste(output_dir,"PPI_Order_Magnitude.png",sep=""), width = 14, height = 14, res=600, units = "cm")
-  ggplot(df_order_of_magnitude, aes(x = PPI, y = log(order_of_magnitude))) +  geom_point() + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("PPI vs. Order of magnitude")
-dev.off()
+############################################################################################################################################################################################################################################################
+# Samples from stage I                                                                                                                                                                                                                                     #
+DE_genes_from_Intersection_I_II_III_vs_Samples_from_stage_I   <-  data.frame(DE_genes_stage="Intersection stages I, II, III",samples="Samples from stage I", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_I]))           #
+DE_genes_from_Intersection_I_II_vs_Samples_from_stage_I       <-  data.frame(DE_genes_stage="Intersection stages I, II",samples="Samples from stage I", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_I]))                #
+DE_genes_from_Intersection_II_III_vs_Samples_from_stage_I     <-  data.frame(DE_genes_stage="Intersection stages II, III",samples="Samples from stage I", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_I]))              #
+                                                                                                                                                                                                                                                           #
+# Samples from stage II                                                                                                                                                                                                                                    #
+DE_genes_from_Intersection_I_II_III_vs_Samples_from_stage_II   <-  data.frame(DE_genes_stage="Intersection stages I, II, III",samples="Samples from stage II", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_II]))        #
+DE_genes_from_Intersection_I_II_vs_Samples_from_stage_II       <-  data.frame(DE_genes_stage="Intersection stages I, II",samples="Samples from stage II", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_II]))             #
+DE_genes_from_Intersection_II_III_vs_Samples_from_stage_II     <-  data.frame(DE_genes_stage="Intersection stages II, III",samples="Samples from stage II", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_II]))           #
+                                                                                                                                                                                                                                                           #
+# Samples from stage III                                                                                                                                                                                                                                   #
+DE_genes_from_Intersection_I_II_III_vs_Samples_from_stage_III  <-  data.frame(DE_genes_stage="Intersection stages I, II, III",samples="Samples from stage III", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_III]))      #
+DE_genes_from_Intersection_I_II_vs_Samples_from_stage_III      <-  data.frame(DE_genes_stage="Intersection stages I, II",samples="Samples from stage III", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_III]))           #
+DE_genes_from_Intersection_II_II_vs_Samples_from_stage_III     <-  data.frame(DE_genes_stage="Intersection stages II, III",samples="Samples from stage III", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_III]))         #
+                                                                                                                                                                                                                                                           #
+# Combine rbind tables in single table                                                                                                                                                                                                                     #
+melt_combined_table_intersection<-rbind(DE_genes_from_Intersection_I_II_III_vs_Samples_from_stage_I,DE_genes_from_Intersection_I_II_vs_Samples_from_stage_I,DE_genes_from_Intersection_II_III_vs_Samples_from_stage_I,                                     #
+DE_genes_from_Intersection_I_II_III_vs_Samples_from_stage_II,DE_genes_from_Intersection_I_II_vs_Samples_from_stage_II,DE_genes_from_Intersection_II_III_vs_Samples_from_stage_II,DE_genes_from_Intersection_I_II_III_vs_Samples_from_stage_III,            #
+DE_genes_from_Intersection_I_II_vs_Samples_from_stage_III,DE_genes_from_Intersection_II_II_vs_Samples_from_stage_III)                                                                                                                                      #
+                                                                                                                                                                                                                                                           #
+# Add combined table intersection                                                                                                                                                                                                                          #
+melt_combined_table_intersection$log2Expr<-log(melt_combined_table_intersection$Expr.value)                                                                                                                                                                #
+                                                                                                                                                                                                                                                           #
+# plot                                                                                                                                                                                                                                                     #
+p2 <- ggplot(melt_combined_table_intersection, aes(x=DE_genes_stage, y=log2Expr, fill=samples)) +                                                                                                                                                          #
+    geom_boxplot(varwidth = TRUE) + facet_grid(~samples) +                                                                                                                                                                                                 #
+    theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Expression of genes per stage")                                            #
+############################################################################################################################################################################################################################################################                                                                                                     #
+# FindClusters_resolution                                                                                                                                                                                                                                  #
+png(filename=paste(output_dir,"Expression_of_genes_per_intersaction.png",sep=""), width = 18, height = 18, res=600, units = "cm")                                                                                                                          #
+  p2                                                                                                                                                                                                                                                       #
+dev.off()                                                                                                                                                                                                                                                  #
+############################################################################################################################################################################################################################################################
+# Paired stages                                                                                                                                                                                                                                            #
+stages_pairs=data.frame(stage_i=c("stageI","stageI","stageII"),stage_ii=c("stageII","stageIII","stageIII"))                                                                                                                                                #
+                                                                                                                                                                                                                                                           #
+# Data frame results                                                                                                                                                                                                                                       #
+df_order_of_magnitude<-data.frame(Genes=c(),stage_pair=c(),order_of_magnitude=c())                                                                                                                                                                         #
+                                                                                                                                                                                                                                                           #
+# For each stage pair                                                                                                                                                                                                                                      #
+for (stage_pair in rownames(stages_pairs))                                                                                                                                                                                                                 #
+{                                                                                                                                                                                                                                                          #
+    # Store pairs                                                                                                                                                                                                                                          #
+    stage_i <- stages_pairs[stage_pair,"stage_i"]                                                                                                                                                                                                          #
+    stage_ii<- stages_pairs[stage_pair,"stage_ii"]                                                                                                                                                                                                         #
+                                                                                                                                                                                                                                                           #
+    # Store pairs                                                                                                                                                                                                                                          #
+    genes_stage_i  <- list_genes[[stage_i]]                                                                                                                                                                                                                #
+    genes_stage_ii <- list_genes[[stage_ii]]                                                                                                                                                                                                               #
+                                                                                                                                                                                                                                                           # 
+    # Take the samples and genes of stages                                                                                                                                                                                                                 #
+    samples_stage_i  <-list_samples[[stage_i]]                                                                                                                                                                                                             #
+    samples_stage_ii <-list_samples[[stage_ii]]                                                                                                                                                                                                            #
+                                                                                                                                                                                                                                                           #
+    # Paste Star pairs                                                                                                                                                                                                                                     ############################################################
+    df_order_of_magnitude<-rbind(df_order_of_magnitude,data.frame(Genes=names(rowMeans(norm_counts[,samples_stage_ii])/rowMeans(norm_counts[,samples_stage_i])),stage_pair=paste(stage_ii,stage_i,sep="_over_"),order_of_magnitude=rowMeans(norm_counts[,samples_stage_ii])/rowMeans(norm_counts[,samples_stage_i]))) #
+}                                                                                                                                                                                                                                                          ############################################################
+############################################################################################################################################################################################################################################################
+# Create log2 order of magnitude                                                                                                                                                                                                                           #
+df_order_of_magnitude$log2_order_of_magnitude<-log(df_order_of_magnitude$order_of_magnitude,2)                                                                                                                                                             #
+                                                                                                                                                                                                                                                           #
+# Pairwise comparisons: Specify the comparisons you want                                                                                                                                                                                                   #
+my_comparisons <- list( c("stageII_over_stageI", "stageIII_over_stageI"), c("stageIII_over_stageII", "stageIII_over_stageI"), c("stageIII_over_stageII", "stageII_over_stageI") )                                                                          #
+                                                                                                                                                                                                                                                           #
+# FindClusters_resolution                                                                                                                                                                                                                                  #
+png(filename=paste(output_dir,"Order_of_magnitude.png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                                                            #
+  ggpaired(df_order_of_magnitude, x = "stage_pair", y = "log2_order_of_magnitude", line.color = "gray", line.size = 0.4, palette = "jco")+ stat_compare_means(paired = TRUE) + scale_fill_brewer(palette="Set1") +                                         #
+    theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Order of magnitude per gene") + stat_compare_means(comparisons = my_comparisons)                                                                                #
+dev.off()                                                                                                                                                                                                                                                  #
+############################################################################################################################################################################################################################################################
+library("readxl")                                                                                                                                                                                                                                          #
+Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_2.tsv", sep = '\t', header = TRUE,fill=TRUE)                                                                                                                                      #
+                                                                                                                                                                                                                                                           #
+# Create field Table1_data$EMSEMBL                                                                                                                                                                                                                         #
+Table1_data$EMSEMBL<-""                                                                                                                                                                                                                                    #
+                                                                                                                                                                                                                                                           #
+# Selected gene_ids                                                                                                                                                                                                                                        #
+selected_gene_id<-c()                                                                                                                                                                                                                                      #
+                                                                                                                                                                                                                                                           #
+# For each gene_id, take the rtownames that it is on the table1_data                                                                                                                                                                                       #
+for (gene_id in Table1_data$ENSG)                                                                                                                                                                                                                          #
+{                                                                                                                                                                                                                                                          #
+    # Store gene_index                                                                                                                                                                                                                                     #
+    gene_index<-which(grepl(gene_id, rownames(unstranded_data)))                                                                                                                                                                                           #
+                                                                                                                                                                                                                                                           #
+    if(!identical(gene_index, integer(0)))                                                                                                                                                                                                                 #
+    {                                                                                                                                                                                                                                                      #
+        # Store reslts                                                                                                                                                                                                                                     #
+        Table1_data[which(Table1_data$ENSG == gene_id),"EMSEMBL"]<-rownames(unstranded_data)[gene_index[1]]                                                                                                                                                #
+    }                                                                                                                                                                                                                                                      #
+}                                                                                                                                                                                                                                                          #
+# Filter up image                                                                                                                                                                                                                                          #
+Table1_data<-Table1_data[Table1_data$EMSEMBL!="",]                                                                                                                                                                                                         #
+                                                                                                                                                                                                                                                           #
+############################################################################################################################################################################################################################################################
+# df_order_of_magnitude                                                                                              #
+# Selcted only gennes that can converted in the table of PPI                                                         #
+df_order_of_magnitude<-df_order_of_magnitude[df_order_of_magnitude$Gene %in% Table1_data$EMSEMBL,]                   #
+                                                                                                                     #
+# Filter both tables                                                                                                 #
+Table1_data<-Table1_data[Table1_data$EMSEMBL %in% df_order_of_magnitude$Gene,]                                       #
+                                                                                                                     #
+#for each rown, add the number of connections                                                                        #
+df_order_of_magnitude$PPI<-0                                                                                         #
+                                                                                                                     #
+# for each row                                                                                                       #
+for (gene in rownames(df_order_of_magnitude))                                                                        #
+{                                                                                                                    #
+    df_order_of_magnitude[gene,"PPI"]<-Table1_data[Table1_data$EMSEMBL==gene,"PPI"][1]                               #
+}                                                                                                                    #
+                                                                                                                     #
+# PPI                                                                                                                #
+df_order_of_magnitude[!is.na(df_order_of_magnitude$PPI),]                                                            #
+df_order_of_magnitude<-na.omit(df_order_of_magnitude)                                                                #
+                                                                                                                     #
+# FindClusters_resolution                                                                                            #
+png(filename=paste(output_dir,"PPI_Order_Magnitude.png",sep=""), width = 14, height = 14, res=600, units = "cm")     ########################################################################################################
+  ggplot(df_order_of_magnitude, aes(x = PPI, y = log(order_of_magnitude))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("PPI vs. Order of magnitude")           #
+dev.off()                                                                                                            ########################################################################################################
+######################################################################################################################

@@ -259,7 +259,7 @@ colnames(melt_comb_genes_from_Intersections)<-c("DE_genes_stage", "stages", "Gen
 p3 <- ggplot(melt_comb_genes_from_Intersections, aes(x=stages, y=log2Expr, fill=stages)) + geom_boxplot(varwidth = TRUE) +  theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Expression of DE genes")    + ylim(0, 5)    
 
 # FindClusters_resolution                                                                                            #
-png(filename=paste(output_dir,"DE_genes_per_stage.png",sep=""), width = 18, height = 18, res=600, units = "cm")     
+png(filename=paste(output_dir,"Combined_dE_genes_per_stage.png",sep=""), width = 18, height = 18, res=600, units = "cm")     
   p3
 dev.off() 
 

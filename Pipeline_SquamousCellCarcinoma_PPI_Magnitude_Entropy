@@ -263,5 +263,6 @@ png(filename=paste(output_dir,"Combined_dE_genes_per_stage.png",sep=""), width =
   p4
 dev.off() 
 ######################################################################################################################
+# To do : to check samples in the intesctons of the stage I would have to cck for patient ids with samples samples fom more than one stage
+# To do : to select top 10 genes and plot paired overview, boxplot and individually. 
 
-    

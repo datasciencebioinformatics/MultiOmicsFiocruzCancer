@@ -72,7 +72,7 @@ sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"]               
 sample_stage_II <-colData[colData$stages=="Stage II","patient_id"]                                                                    #
 sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]                                                                   #
 #######################################################################################################################################
-merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                              #
+merged_data_patient_info_file      <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                              #
 merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)            #
 ########################################################################################################################################################
 # Lists for stage names,samples, and genes.                                                                                                            #
@@ -241,7 +241,7 @@ dev.off()                                                                       
 combined_genes_intersection<-unique(c(rownames(sele_genes_uniq_pos_stages_I_data),rownames(sele_genes_uniq_pos_stages_II_data),rownames(sele_genes_uniq_pos_stages_III_data)))                                              #
                                                                                                                                                                                                                             #
 # Combine all intersections                                                                                                                                                                                                 #
-#combined_genes_intersection<-unique(c(intersection_genes_pos_Stages_I_II_III$Gene,intersection_genes_pos_Stages_I_II$Gene,intersection_genes_pos_Stages_II_III$Gene,intersection_genes_pos_Stages_I_III$Gene))             #
+combined_genes_intersection<-unique(c(intersection_genes_pos_Stages_I_II_III$Gene,intersection_genes_pos_Stages_I_II$Gene,intersection_genes_pos_Stages_II_III$Gene,intersection_genes_pos_Stages_I_III$Gene))             #
                                                                                                                                                                                                                             #
 # Comb_genes_from_Intersections_vs_Samples_from_stage                                                                                                                                                                       #
 Comb_genes_from_Intersections_vs_Samples_from_stage_I     <-  data.frame(DE_genes_stage="Intersection stages I, II, III",stages="Stage I", Expr=melt(norm_counts[combined_genes_intersection,sample_stage_I]))              #
@@ -269,22 +269,31 @@ dev.off()                                                                       
 # To do : to check samples in the intesctons of the stage I would have to cck for patient ids with samples samples fom more than one stage                                              #                    
 # To do : to select top 10 genes and plot paired overview, boxplot and individually.                                                                                                    # 
 #########################################################################################################################################################################################
-# A table with DE genes from each stage (e.g. Stage I vs. Steges II and III) using smples of each Stage (e.g. Samples from Stage I)                                                                                    #                                                                                                                     #
-# Take top genes of each table
-top_genes<-as.vector(c(DE_genes_from_stage_I_vs_Samples_from_stage_I$Expr.Var1[1:3],
-DE_genes_from_stage_I_vs_Samples_from_stage_II$Expr.Var1[1:3],
-DE_genes_from_stage_I_vs_Samples_from_stage_III$Expr.Var1[1:3],                                                                                                                                                        #                                                                                                                                                                        #
-DE_genes_from_stage_II_vs_Samples_from_stage_I$Expr.Var1[1:3],
-DE_genes_from_stage_II_vs_Samples_from_stage_II$Expr.Var1[1:3],
-DE_genes_from_stage_II_vs_Samples_from_stage_III$Expr.Var1[1:3]))
-                                                                                                                                                                                                                       #
+# merged_data_patient_info_sub
+merged_data_patient_info_sub<-merged_data_patient_info_data[,-(1)]
+
+merged_data_patient_info_sub<-
+
+cases_id_stageI<-unique(merged_data_patient_info_sub[merged_data_patient_info_sub$stages=="Stage I","case_id"])
+cases_id_stageII<-unique(merged_data_patient_info_sub[merged_data_patient_info_sub$stages=="Stage II","case_id"])
+cases_id_stageIII<-unique(merged_data_patient_info_sub[merged_data_patient_info_sub$stages=="Stage III","case_id"])
+
+# Combine gnes from each estage
+df_StageI_Samples<-rbind(data.frame(Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_I]),Stage="Stage I", Samples="Stage I"),
+data.frame(Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_II]),Stage="Stage I", Samples="Stage II"),
+data.frame(Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II_III$Gene,sample_stage_III]),Stage="Stage I", Samples="Stage III"))
+
+# Rename collumns                                                                                                                                                                                                           #
+colnames(df_StageI_Samples)<-c("Gene", "Patient", "Expr", "Stage","Samples")  
+
 # Organize only top genes
-melt_comb_genes_from_Intersections<-melt_comb_genes_from_Intersections[melt_comb_genes_from_Intersections$Genes %in% top_genes,]
+df_StageI_Samples$log2Expr<-log(df_StageI_Samples$Expr)
 
 # Basic barplot
-p5<-ggplot(data=melt_comb_genes_from_Intersections, aes(x=stages, y=log2Expr)) +  geom_bar(stat="identity") + facet_wrap(~Genes, ncol = 3) + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Expression of DE genes for selected genes")   
+p5<-ggplot(data=df_StageI_Samples, aes(x=Samples, y=log2Expr)) +  geom_bar(stat="identity") + facet_wrap(~Gene, ncol = 3) + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("DE genes for selected genes present in samples from stage I, II and III")   
 
 # FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"melt_comb_genes_from_Intersections.png",sep=""), width = 18, height = 18, res=600, units = "cm")                                                                                                    #
+png(filename=paste(output_dir,"melt_comb_genes_from_Intersection_I_II_II.png",sep=""), width = 18, height = 18, res=600, units = "cm")                                                                                                    #
   p5
 dev.off() 
+#########################################################################################################################################################################################

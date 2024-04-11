@@ -1,11 +1,12 @@
-#######################################################################################################################################
-# To DO:
-# Here 1 : try extremes of padj threshold range (0.001 - 0.05)
-# Here 2 : try extremes of topNodes 10-100
-# Here 3 : check if KS classiKS can be used as score instead of fisher qvalue
-# Here 4 : change threshold parameter
-# Important is to improve legibility of plot
-#######################################################################################################################################
+##########################################################################################################################################################
+# A scrtpt to calculate                                                                                                                                  #
+# 1) boxplots for DE genes from each stage (e.g. Stage I vs. Steges II and III) using smples of each Stage (e.g. Samples from Stage I),                  #
+# and also from the genes in the intersection of the stages                                                                                              #
+# 2) order of magnitudes among any two stages norm_counts(stage_ii)/norm_counts(stage_i)                                                                 #
+# 3) correlation among order of magniture and number of connections from interactome                                                                     #
+# obs: one positive genes selected from both DE normal/tumor and DE stages are used                                                                      #
+#                                                                                                                                                        #
+##########################################################################################################################################################
 # Path to files of selected_genes                                                                                                     # 
 selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_I.tsv"             #
 selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_II.tsv"            #
@@ -36,18 +37,6 @@ dds_stages <- estimateSizeFactors(dds_stages)
 # Obtain normalized coutns
 norm_counts<-counts(dds_stages, normalized = TRUE)
 #######################################################################################################################################
-# Path to files of selected_genes                                                                                                     # 
-selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_I.tsv"             #
-selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_II.tsv"            #
-selected_genes_Stage_III_file     <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_III.tsv"           #
-unstranded_file                   <-"/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                               #
-#######################################################################################################################################
-# Load data                                                                                                                           #
-selected_genes_Stage_I_data       <-read.table(file = selected_genes_Stage_I_file, sep = '\t', header = TRUE,fill=TRUE)               #
-selected_genes_Stage_II_data      <-read.table(file = selected_genes_Stage_II_file, sep = '\t', header = TRUE,fill=TRUE)              #
-selected_genes_Stage_III_data     <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)             #
-unstranded_data                   <-read.table(file = unstranded_file, sep = '\t', header = TRUE,fill=TRUE)                           #
-#######################################################################################################################################
 # Genes of each stage
 sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"]
 sample_stage_II <-colData[colData$stages=="Stage II","patient_id"]
@@ -58,10 +47,12 @@ sample_stage_I  <-rownames(colData[colData$stage=="Stage I",])
 sample_stage_II <-rownames(colData[colData$stage=="Stage II",])
 sample_stage_III<-rownames(colData[colData$stage=="Stage III",])
 #######################################################################################################################################
+# Lists for stage names,samples, and genes.
 vector_stages   <- c("stageI","stageII","stageIII")
 list_samples    <- list(stageI=sample_stage_I,stageII=sample_stage_II,stageIII=sample_stage_III)
 list_genes      <- list(stageI=selected_genes_Stage_I_data$Gene,stageII=selected_genes_Stage_II_data$Gene,stageIII=selected_genes_Stage_III_data$Gene)
 #######################################################################################################################################
+# A table with DE genes stage
 melt_combined_table<-rbind(rbind(data.frame(DE_genes_stage="DE genes from stage I",samples="Samples from stage I", 
 Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_I])),
 data.frame(DE_genes_stage="DE genes from stage I",samples="Samples from stage II", Expr=melt(norm_counts[selected_genes_Stage_I_data$Gene,sample_stage_II])),

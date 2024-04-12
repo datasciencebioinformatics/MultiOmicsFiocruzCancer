@@ -71,7 +71,7 @@ for (gene in rownames(unstranded_data))
       df_log2foldchange[gene,"Gene"]              <-gene  
 
       # index_log2foldchange and index_pvalue
-      index_log2foldchange   <- index_log2foldchange+1
-      index_pvalue           <- index_pvalue+1    
+      index_log2foldchange   <- index_log2foldchange+2
+      index_pvalue           <- index_pvalue+2    
   }  
 }

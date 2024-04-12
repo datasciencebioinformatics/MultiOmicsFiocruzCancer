@@ -41,12 +41,14 @@ for (gene in rownames(unstranded_data))
   for (stage_pair in rownames(stages_pairs))                                                                                                                                                                                                                 #
   {                                                                                                                                                                                                                                                          #
       # Store pairs                                                                                                                                                                                                                                          #
-      stage_i <- stages_pairs[stage_pair,"stage_i"]                                                                                                                                                                                                          #
-      stage_ii<- stages_pairs[stage_pair,"stage_ii"]      
+      stage_i  <- list_samples[stages_pairs[stage_pair,"stage_i"]]
+      stage_ii <- list_samples[stages_pairs[stage_pair,"stage_ii"]]
 
-    
+      # Take gene expresion in each group
+      gene_expression_stage_i <-unstranded_data[,as.vector(unlist(stage_i))]
+      gene_expression_stage_ii<-unstranded_data[,as.vector(unlist(stage_ii))]
 
-      unstranded_data[,]
+      
   }
     
   

@@ -56,11 +56,14 @@ for (gene in rownames(unstranded_data))
       stage_ii <- list_samples[stages_pairs[stage_pair,"stage_ii"]]
 
       # Take gene expresion in each group
-      gene_expression_stage_i <-unstranded_data[,as.vector(unlist(stage_i))]
-      gene_expression_stage_ii<-unstranded_data[,as.vector(unlist(stage_ii))]
+      gene_expression_stage_i <-unstranded_data[gene,as.vector(unlist(stage_i))]
+      gene_expression_stage_ii<-unstranded_data[gene,as.vector(unlist(stage_ii))]
 
       # Calculate log2foldchange
-      log(gene_expression_stage_i,2) - log(gene_expression_stage_ii,2)
+      #calulate the average values in each group
+      mean_stage_i  = rowMeans(gene_expression_stage_i)
+      mean_stage_ii = rowMeans(gene_expression_stage_ii)
+      logFC=log2(mean_stage_i/mean_stage_ii)
 
       
   }

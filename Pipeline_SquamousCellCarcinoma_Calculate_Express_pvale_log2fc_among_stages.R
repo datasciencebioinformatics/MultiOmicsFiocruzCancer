@@ -32,10 +32,6 @@ list_samples    <- list(stageI=sample_stage_I,stageII=sample_stage_II,stageIII=s
 # # 1-Gene  2-StageI_StageII_log2foldchange  3-StageI_StageII_pvalue 4-StageI_StageIII_log2foldchange  5-StageI_StageIII_pvalue  6-StageII_StageIII_log2foldchange  7-StageII_StageIII_pvalue
 # log2foldchange = log2(expression value in condition A) - log2(expression value in condition B)
 
-# index_log2foldchange and index_pvalue
-index_log2foldchange   <- 2
-index_pvalue           <- 3
-
 # Data.frame df_log2foldchange
 df_log2foldchange<-data.frame(Gene=rownames(unstranded_data),StageI_StageII_log2foldchange=0,StageI_StageII_pvalue=0,StageI_StageIII_log2foldchange=0,StageI_StageIII_pvalue=0,StageII_StageIII_log2foldchange=0,StageII_StageIII_pvalue=0)
 
@@ -45,6 +41,10 @@ rownames(df_log2foldchange)<-df_log2foldchange$Gene
 # For each genes, complete the t.test pvalue and log2foldchange for any pair of stages
 for (gene in rownames(unstranded_data))
 {
+
+  # index_log2foldchange and index_pvalue
+  index_log2foldchange   <- 2
+  index_pvalue           <- 3
 
   # For each stage pair                                                                                                                                                                                                                                      #
   for (stage_pair in rownames(stages_pairs))                                                                                                                                                                                                                 #

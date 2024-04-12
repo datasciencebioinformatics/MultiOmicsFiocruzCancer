@@ -1,23 +1,31 @@
-########################################################################################################################################
-# Caclulate Gene expression pvalue and log2fc among samples of each group                                                              #
-########################################################################################################################################
-colData_file                            <-"/home/felipe/Documentos/LungPortal/samples/colData.tsv"                                     #
-unstranded_file                         <-"/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                          #
-log2fc_expression_pos_file              <-"/home/felipe/Documentos/LungPortal/samples/log2fc_expression_pos.tsv"                       #
-########################################################################################################################################
-colData_data                            <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                         #
-unstranded_data                         <-read.table(file = unstranded_file, sep = '\t', header = TRUE,fill=TRUE)                      #
-log2fc_expression_pos_data              <-read.table(file = unstranded_file, sep = '\t', header = TRUE,fill=TRUE)                      #
-########################################################################################################################################
-# Filter up genes                                                                                                                      #
-unstranded_data<-unstranded_data[rownames(log2fc_expression_pos),colData_data$patient_id]                                              #
-                                                                                                                                       #
-# Filter up patientt                                                                                                                   #
-colData_data<-colData_data[colnames(unstranded_data),]                                                                                 #
-########################################################################################################################################
+#######################################################################################################################################
+# Caclulate Gene expression pvalue and log2fc among samples of each group                                                             #
+#######################################################################################################################################
+colData_file                            <-"/home/felipe/Documentos/LungPortal/samples/colData.tsv"                                    #
+unstranded_file                         <-"/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                         #
+log2fc_expression_pos_file              <-"/home/felipe/Documentos/LungPortal/samples/log2fc_expression_pos.tsv"                      #
+#######################################################################################################################################
+colData_data                            <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                        #
+unstranded_data                         <-read.table(file = unstranded_file, sep = '\t', header = TRUE,fill=TRUE)                     #
+log2fc_expression_pos_data              <-read.table(file = unstranded_file, sep = '\t', header = TRUE,fill=TRUE)                     #
+#######################################################################################################################################
+# Filter up genes                                                                                                                     #
+unstranded_data<-unstranded_data[rownames(log2fc_expression_pos),colData_data$patient_id]                                             #
+                                                                                                                                      #
+# Filter up patientt                                                                                                                  #
+colData_data<-colData_data[colnames(unstranded_data),]                                                                                #
+                                                                                                                                      #
+# Define all stage pairs                                                                                                              #
+# Paired stages                                                                                                                       #                                                                                                                    #
+stages_pairs=data.frame(stage_i=c("stageI","stageI","stageII"),stage_ii=c("stageII","stageIII","stageIII"))                           #
+#######################################################################################################################################
+# Genes of each stage stored in colData                                                                                               #
+sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"]                                                                     #
+sample_stage_II <-colData[colData$stages=="Stage II","patient_id"]                                                                    #
+sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]                                                                   #
+#######################################################################################################################################
+# A table for each gene, with the following columns:
+# # 1-Gene  2-StageI_StageII_log2foldchange  3-StageI_StageII_pvalue 4-StageI_StageIII_log2foldchange  5-StageI_StageIII_pvalue  6-StageII_StageIII_log2foldchange  7-StageII_StageIII_pvalue
 
-# Define all stage pairs 
-
-# Take the samples of each stage ()
 
 # For each genes, complete the t.test pvalue and log2foldchange for any pair of stages

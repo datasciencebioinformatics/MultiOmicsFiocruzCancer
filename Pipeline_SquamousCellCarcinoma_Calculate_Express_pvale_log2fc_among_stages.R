@@ -26,6 +26,6 @@ sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]             
 #######################################################################################################################################
 # A table for each gene, with the following columns:
 # # 1-Gene  2-StageI_StageII_log2foldchange  3-StageI_StageII_pvalue 4-StageI_StageIII_log2foldchange  5-StageI_StageIII_pvalue  6-StageII_StageIII_log2foldchange  7-StageII_StageIII_pvalue
-
+# log2foldchange = log2(expression value in condition A) - log2(expression value in condition B)
 
 # For each genes, complete the t.test pvalue and log2foldchange for any pair of stages

@@ -70,3 +70,7 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 ## A R script to compute GO terms analysis
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_FunctionalAnalyse.R")
 
+## A R script to compute Pipeline_SquamousCellCarcinoma_PPI_Magnitude_Entropy R
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_PPI_Magnitude_Entropy.R")
+
+

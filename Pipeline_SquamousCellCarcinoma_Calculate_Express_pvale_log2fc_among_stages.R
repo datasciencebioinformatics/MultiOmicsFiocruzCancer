@@ -33,6 +33,17 @@ list_samples    <- list(stageI=sample_stage_I,stageII=sample_stage_II,stageIII=s
 # # 1-Gene  2-StageI_StageII_log2foldchange  3-StageI_StageII_pvalue 4-StageI_StageIII_log2foldchange  5-StageI_StageIII_pvalue  6-StageII_StageIII_log2foldchange  7-StageII_StageIII_pvalue
 # log2foldchange = log2(expression value in condition A) - log2(expression value in condition B)
 
+# index for StageI_StageII_log2foldchange collumn
+index_StageI_StageII_log2foldchange   <- 2
+index_StageI_StageIII_log2foldchange  <- 4
+index_StageII_StageIII_log2foldchange <- 6
+
+# index for StageI_StageIII_pvalue collumn
+index_StageI_StageII_pvalue   <- 3
+index_StageI_StageIII_pvalue  <- 5
+index_StageII_StageIII_pvalue <- 7
+
+
 # For each genes, complete the t.test pvalue and log2foldchange for any pair of stages
 for (gene in rownames(unstranded_data))
 {
@@ -47,6 +58,9 @@ for (gene in rownames(unstranded_data))
       # Take gene expresion in each group
       gene_expression_stage_i <-unstranded_data[,as.vector(unlist(stage_i))]
       gene_expression_stage_ii<-unstranded_data[,as.vector(unlist(stage_ii))]
+
+      # Calculate log2foldchange
+      log(gene_expression_stage_i,2) - log(gene_expression_stage_ii,2)
 
       
   }

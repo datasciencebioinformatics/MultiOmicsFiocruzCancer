@@ -12,12 +12,14 @@ sele_genes_uniq_pos_stages_I_file       <-"/home/felipe/Documentos/LungPortal/ou
 sele_genes_uniq_pos_stages_II_file      <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_II.tsv"       #
 sele_genes_uniq_pos_stages_III_file     <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_III.tsv"      #
 unstranded_file                         <"/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                           #
+colData_file                            <-"/home/felipe/Documentos/LungPortal/samples/colData.tsv"                                     #
 ########################################################################################################################################
 # Load data                                                                                                                           #
 sele_genes_uniq_pos_stages_I_data       <-read.table(file = sele_genes_uniq_pos_stages_I_file, sep = '\t', header = TRUE,fill=TRUE)   #
 sele_genes_uniq_pos_stages_II_data      <-read.table(file = sele_genes_uniq_pos_stages_II_file, sep = '\t', header = TRUE,fill=TRUE)  #
 sele_genes_uniq_pos_stages_III_data     <-read.table(file = sele_genes_uniq_pos_stages_III_file, sep = '\t', header = TRUE,fill=TRUE) #
 unstranded_data                         <-read.table(file = unstranded_file, sep = '\t', header = TRUE,fill=TRUE)                     #
+colData_data                            <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                        #
                                                                                                                                       #
 # Set rownames                                                                                                                        #
 rownames(sele_genes_uniq_pos_stages_I_data)<-sele_genes_uniq_pos_stages_I_data$Gene                                                   #

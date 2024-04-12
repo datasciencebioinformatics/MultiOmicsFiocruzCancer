@@ -5,11 +5,11 @@
 # /home/felipe/Documentos/LungPortal/sample.txt
 # /home/felipe/Documentos/LungPortal/exposure.txt
 # Output : merged_data_patient_info.tsv
-##########################################################################################################################################################################################################
-library(readr)
-library("xlsx")
-library(ggplot2)
-##########################################################################################################################################################################################################
+###########################################################################################################################
+library(readr)                                                                                                            #
+library("xlsx")                                                                                                           #
+library(ggplot2)                                                                                                          #
+###########################################################################################################################
 output_dir="/home/felipe/Documentos/LungPortal/output/"                                                                   #
 ###########################################################################################################################
 unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded.tsv"                        #
@@ -19,30 +19,30 @@ colData_file                        <- "/home/felipe/Documentos/LungPortal/sampl
 unstranded_data                    <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
 merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#
 colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
-rownames(colData)                  <-colData$patient_id                 
-############################################################################################################################
-colData<-na.omit(colData)
-unstranded_data<-unstranded_data[,colData$patient_id]
-merged_data_patient_info_data<-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id %in% colData$patient_id),]
-###########################################################################################################################
-dds_stages_tissue_type <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData_data[colnames(unstranded_data),], design = ~  age_at_index +  gender +tissue_type  )
-###########################################################################################################################
-# Estimate size factor
-dds_stages_tissue_type <- estimateSizeFactors(dds_stages_tissue_type)
-
-# Obtain normalized coutns
-norm_counts<-counts(dds_stages_tissue_type, normalized = TRUE)
-###########################################################################################################################
-# Paired samples
-paired_sample_df<-data.frame(normal=c(),tumor=c(),case=c())
-
-# For each case, find the pairs
-for (case in unique(merged_data_patient_info_data$case))
-{
-    # All samples for case id = "case"
-    case_samples<-merged_data_patient_info_data[merged_data_patient_info_data$case==case,]
-
-    # Take the tumor samples
+rownames(colData)                  <-colData$patient_id                                                                   #
+#######################################################################################################################################
+colData<-na.omit(colData)                                                                                                             #
+unstranded_data<-unstranded_data[,colData$patient_id]                                                                                 #
+merged_data_patient_info_data<-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id %in% colData$patient_id),]#
+#####################################################################################################################################################################################
+dds_stages_tissue_type <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData_data[colnames(unstranded_data),], design = ~  age_at_index +  gender +tissue_type  )  #
+#####################################################################################################################################################################################
+# Estimate size factor                                                                                                   #
+dds_stages_tissue_type <- estimateSizeFactors(dds_stages_tissue_type)                                                    #
+                                                                                                                         #
+# Obtain normalized coutns                                                                                               #
+norm_counts<-counts(dds_stages_tissue_type, normalized = TRUE)                                                           #
+##########################################################################################################################
+# Paired samples                                                                                                         
+paired_sample_df<-data.frame(normal=c(),tumor=c(),case=c())                                                              
+                                                                                                                         
+# For each case, find the pairs                                                                                          
+for (case in unique(merged_data_patient_info_data$case))                                                                 
+{                                                                                                                        
+    # All samples for case id = "case"                                                                                   
+    case_samples<-merged_data_patient_info_data[merged_data_patient_info_data$case==case,]                               
+                                                                                                                         
+    # Take the tumor samples                                                                                           
     tumor_sampĺes <-case_samples[case_samples$tissue_type=="Tumor",]
     normal_sampĺes<-case_samples[case_samples$tissue_type=="Normal",]
 

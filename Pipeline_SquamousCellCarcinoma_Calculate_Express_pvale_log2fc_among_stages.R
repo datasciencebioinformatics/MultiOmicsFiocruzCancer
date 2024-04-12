@@ -24,8 +24,30 @@ sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"]               
 sample_stage_II <-colData[colData$stages=="Stage II","patient_id"]                                                                    #
 sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]                                                                   #
 #######################################################################################################################################
+# Lists for stage names,samples, and genes.                                                                                           #
+vector_stages   <- c("stageI","stageII","stageIII")                                                                                   #
+list_samples    <- list(stageI=sample_stage_I,stageII=sample_stage_II,stageIII=sample_stage_III)                                      #
+#######################################################################################################################################
+
 # A table for each gene, with the following columns:
 # # 1-Gene  2-StageI_StageII_log2foldchange  3-StageI_StageII_pvalue 4-StageI_StageIII_log2foldchange  5-StageI_StageIII_pvalue  6-StageII_StageIII_log2foldchange  7-StageII_StageIII_pvalue
 # log2foldchange = log2(expression value in condition A) - log2(expression value in condition B)
 
 # For each genes, complete the t.test pvalue and log2foldchange for any pair of stages
+for (gene in rownames(unstranded_data))
+{
+
+  # For each stage pair                                                                                                                                                                                                                                      #
+  for (stage_pair in rownames(stages_pairs))                                                                                                                                                                                                                 #
+  {                                                                                                                                                                                                                                                          #
+      # Store pairs                                                                                                                                                                                                                                          #
+      stage_i <- stages_pairs[stage_pair,"stage_i"]                                                                                                                                                                                                          #
+      stage_ii<- stages_pairs[stage_pair,"stage_ii"]      
+
+    
+
+      unstranded_data[,]
+  }
+    
+  
+}

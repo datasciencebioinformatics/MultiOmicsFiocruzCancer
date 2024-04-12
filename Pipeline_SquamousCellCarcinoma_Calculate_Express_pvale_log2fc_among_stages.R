@@ -28,21 +28,19 @@ sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]             
 vector_stages   <- c("stageI","stageII","stageIII")                                                                                   #
 list_samples    <- list(stageI=sample_stage_I,stageII=sample_stage_II,stageIII=sample_stage_III)                                      #
 #######################################################################################################################################
-
 # A table for each gene, with the following columns:
 # # 1-Gene  2-StageI_StageII_log2foldchange  3-StageI_StageII_pvalue 4-StageI_StageIII_log2foldchange  5-StageI_StageIII_pvalue  6-StageII_StageIII_log2foldchange  7-StageII_StageIII_pvalue
 # log2foldchange = log2(expression value in condition A) - log2(expression value in condition B)
 
-# index for StageI_StageII_log2foldchange collumn
-index_StageI_StageII_log2foldchange   <- 2
-index_StageI_StageIII_log2foldchange  <- 4
-index_StageII_StageIII_log2foldchange <- 6
+# index_log2foldchange and index_pvalue
+index_log2foldchange   <- 2
+index_pvalue           <- 3
 
-# index for StageI_StageIII_pvalue collumn
-index_StageI_StageII_pvalue   <- 3
-index_StageI_StageIII_pvalue  <- 5
-index_StageII_StageIII_pvalue <- 7
+# Data.frame df_log2foldchange
+df_log2foldchange<-data.frame(Gene=rownames(unstranded_data),StageI_StageII_log2foldchange=0,StageI_StageII_pvalue=0,StageI_StageIII_log2foldchange=0,StageI_StageIII_pvalue=0,StageII_StageIII_log2foldchange=0,StageII_StageIII_pvalue=0)
 
+# Set rownames
+rownames(df_log2foldchange)<-df_log2foldchange$Gene
 
 # For each genes, complete the t.test pvalue and log2foldchange for any pair of stages
 for (gene in rownames(unstranded_data))
@@ -63,10 +61,17 @@ for (gene in rownames(unstranded_data))
       #calulate the average values in each group
       mean_stage_i  = rowMeans(gene_expression_stage_i)
       mean_stage_ii = rowMeans(gene_expression_stage_ii)
-      logFC=log2(mean_stage_i/mean_stage_ii)
 
-      
-  }
-    
-  
+      # logFC and pvalue
+      logFC=log2(mean_stage_i/mean_stage_ii)
+      pvalue=t.test(gene_expression_stage_i, gene_expression_stage_ii, alternative = "two.sided", var.equal = FALSE)$p.value
+
+      df_log2foldchange[gene,index_log2foldchange]<-logFC
+      df_log2foldchange[gene,index_pvalue]        <-pvalue
+      df_log2foldchange[gene,"Gene"]              <-gene  
+
+      # index_log2foldchange and index_pvalue
+      index_log2foldchange   <- index_log2foldchange+1
+      index_pvalue           <- index_pvalue+1    
+  }  
 }

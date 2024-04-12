@@ -1,0 +1,32 @@
+#####################################################################
+# Panel with gene expression per stage$                             #
+# One gene specific to stage I in samples of Stage I, II and III    #
+## This should show decressing progression from Stages I to III.    #
+                                                                    #
+# One gene specific to stage II in samples of Stage I, II and III   #
+## This should show greatest expression in Stage II                 #
+                                                                    # 
+# One gene specific to stage III in samples of Stage I, II and III  #
+## This should show greatest expression in Stage III.               #
+                                                                    #
+# One gene specific to intersection of Stages I and II              #
+## This should show greatest expressions in Stage I and II          #
+#####################################################################
+# Criterias for selection of genes                                  #
+/home/felipe/Documentos/LungPortal/samples/df_log2foldchange.tsv    #
+logfoldchange>=2                                                    #
+pvalue       <=0.05                                                 #
+                                                                    # 
+# Check how to perform t.test RNA-Seq data                          #
+# raw counts/normalized counts/trasformed counts                    ###########
+                                                                              #
+# tamanho amostral n : verify number of samples per stage in each comparisson #
+# verify number of genes per stage for the t.test comparisson                 #
+###############################################################################
+Use control samples in the Panel with gene expression per stage               #
+Plot heatmap and perform clustering                                           #
+Investigate sub-stages (Stage IA,ib,IIA,iib,etc) with pca using DE genes      #
+vv#############################################################################
+Tools specific for annotating lung cancer genes, pathways, go terms, stages   #
+(e.g. metastase, chaperone-related functions, etc)                            #
+vv#############################################################################

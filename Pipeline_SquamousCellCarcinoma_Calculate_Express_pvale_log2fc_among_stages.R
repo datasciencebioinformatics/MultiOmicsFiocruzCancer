@@ -75,3 +75,5 @@ for (gene in rownames(unstranded_data))
       index_pvalue           <- index_pvalue+2    
   }  
 }
+# Writing mtcars data
+write.table(df_log2foldchange, file = "/home/felipe/Documentos/LungPortal/samples/df_log2foldchange.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)

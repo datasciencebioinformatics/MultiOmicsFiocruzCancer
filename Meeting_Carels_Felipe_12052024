@@ -29,4 +29,7 @@ Investigate sub-stages (Stage IA,ib,IIA,iib,etc) with pca using DE genes      #
 vv#############################################################################
 Tools specific for annotating lung cancer genes, pathways, go terms, stages   #
 (e.g. metastase, chaperone-related functions, etc)                            #
-vv#############################################################################
+###############################################################################
+# Data safety                                                                 #
+mount google driver to backup github daily                                    #
+###############################################################################

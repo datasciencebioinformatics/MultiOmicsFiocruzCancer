@@ -1,0 +1,32 @@
+########################################################################
+Planning for the article                                              #
+########################################################################
+1- Introduction
+- Addressing Heterogeniety of lung cancer accross stages;
+- Exploring DGC cancer data for lung cancer accross stages;
+2- Lung cancer data
+- Squamous Cell Carcinoma
+- Stage, Stage II, Stage III
+3 - Methods
+- Trascritptome [Differential expression stage_x VS. stage_y_z]
+- Gene entropy [per stage]
+- Order of magnitude [stage_x/stage_y]
+- PPI conectivity [per gene]
+- Gene functions [per gene set]
+4-Expected conclusions
+- Biomarkers candidates for lung cancer diagnosis
+- Biomarkers candidates for cancer stage classification
+- Biomarkers candidates for lung cancer therapy
+5-Hypotheses
+- Cancer progression accorss stages can be measured by transcriptome
+- Lung cancer heterogeniety can be addressed to detect stage-specific biomarkers
+########################################################################
+Planning
+########################################################################
+Goal
+- Scientific     : Lung cancer paper publication as promissed in the cnpq proposal
+- Bioinformatics : divulgation of the pipeline to detect biomarkers candidates for lung cancer (presentation, trainning, github, etc)
+- Jornal       : to be defined after results are collected
+- Deadline     : July a draft of the paper
+- Expectations : renewal of Felipe's contract
+########################################################################

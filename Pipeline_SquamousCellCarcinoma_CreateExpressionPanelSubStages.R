@@ -23,17 +23,15 @@ sel_genes_stage_II  <-selected_genes_Stage_II_data[order(-selected_genes_Stage_I
 sel_genes_stage_III <-selected_genes_Stage_III_data[order(-selected_genes_Stage_III_data$log2FoldChange),][1:3,]                      #
 #######################################################################################################################################
 # Genes of each stage stored in colData                                                                                               #
-sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"] 
-sample_stage_IA  <-colData[colData$stages=="Stage IA","patient_id"] 
-sample_stage_IB  <-colData[colData$stages=="Stage IB","patient_id"] 
-sample_stage_II  <-colData[colData$stages=="Stage II","patient_id"] 
-sample_stage_IIA  <-colData[colData$stages=="Stage IIA","patient_id"] 
-sample_stage_IIB  <-colData[colData$stages=="Stage IIB","patient_id"] 
-sample_stage_III  <-colData[colData$stages=="Stage III","patient_id"] 
-sample_stage_IIIA  <-colData[colData$stages=="Stage IIIA","patient_id"] 
-sample_stage_IIIB  <-colData[colData$stages=="Stage IIIB","patient_id"] 
-
-subStages=colData[colnames(unstranded_data),"sub_stages"]
+sample_stage_I  <-colData[colData$sub_stages=="Stage I","patient_id"] 
+sample_stage_IA  <-colData[colData$sub_stages=="Stage IA","patient_id"] 
+sample_stage_IB  <-colData[colData$sub_stages=="Stage IB","patient_id"] 
+sample_stage_II  <-colData[colData$sub_stages=="Stage II","patient_id"] 
+sample_stage_IIA  <-colData[colData$sub_stages=="Stage IIA","patient_id"] 
+sample_stage_IIB  <-colData[colData$sub_stages=="Stage IIB","patient_id"] 
+sample_stage_III  <-colData[colData$sub_stages=="Stage III","patient_id"] 
+sample_stage_IIIA  <-colData[colData$sub_stages=="Stage IIIA","patient_id"] 
+sample_stage_IIIB  <-colData[colData$sub_stages=="Stage IIIB","patient_id"] 
 #######################################################################################################################################
 # Filter to keep only positive tumor/normal samples from unstranded_data.                                                             #
 #unstranded_data<-unstranded_data[avg_expression_pos$Gene,]                                                                           #
@@ -73,24 +71,19 @@ df_log2foldchange_data_stage_III_vs_I_II<-df_log2foldchange_data_stage_III_vs_I_
 # Set rownames                                                                                                                                                     #
 # One gene specific to stage I in samples of Stage I, II and III                                                                                                   #
 # Comb_genes_from_Intersections_vs_Samples_from_stage                                                                                                              #
-sel_genes_stage_I_sample_stage_I      <-  data.frame(DE_genes_stage="Stage I",stages="Stage I", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_I]))     #
-sel_genes_stage_I_sample_stage_II     <-  data.frame(DE_genes_stage="Stage I",stages="Stage II", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_II]))   #
-sel_genes_stage_I_sample_stage_III    <-  data.frame(DE_genes_stage="Stage I",stages="Stage III", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_III])) #
+sel_genes_stage_I_sample_stage_I        <-  data.frame(DE_genes_stage="Stage I",stages="Stage I", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_I]))       #
+sel_genes_stage_I_sample_stage_IA       <-  data.frame(DE_genes_stage="Stage I",stages="Stage IA", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_IA]))     #
+sel_genes_stage_I_sample_stage_IB       <-  data.frame(DE_genes_stage="Stage I",stages="Stage IB", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_IB]))     #
+sel_genes_stage_I_sample_stage_II       <-  data.frame(DE_genes_stage="Stage I",stages="Stage II", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_II]))     #
+sel_genes_stage_I_sample_stage_IIA      <-  data.frame(DE_genes_stage="Stage I",stages="Stage IIA", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_IIA]))   #
+sel_genes_stage_I_sample_stage_IIB      <-  data.frame(DE_genes_stage="Stage I",stages="Stage IIB", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_IIB]))   #
+sel_genes_stage_I_sample_stage_III      <-  data.frame(DE_genes_stage="Stage I",stages="Stage III", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_III]))   #
+sel_genes_stage_I_sample_stage_IIIA     <-  data.frame(DE_genes_stage="Stage I",stages="Stage IIIA", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_IIIA])) #
+sel_genes_stage_I_sample_stage_IIIB     <-  data.frame(DE_genes_stage="Stage I",stages="Stage IIIB", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_IIIB])) #
+
                                                                                                                                                                    #
-# Comb_genes_from_Intersections_vs_Samples_from_stage                                                                                                              #
-sel_genes_stage_II_sample_stage_I      <-  data.frame(DE_genes_stage="Stage II",stages="Stage I", Expr=melt(norm_counts[df_log2foldchange_data_stage_II_vs_I_III$Gene,sample_stage_I]))     #
-sel_genes_stage_II_sample_stage_II     <-  data.frame(DE_genes_stage="Stage II",stages="Stage II", Expr=melt(norm_counts[df_log2foldchange_data_stage_II_vs_I_III$Gene,sample_stage_II]))   #
-sel_genes_stage_II_sample_stage_III    <-  data.frame(DE_genes_stage="Stage II",stages="Stage III", Expr=melt(norm_counts[df_log2foldchange_data_stage_II_vs_I_III$Gene,sample_stage_III])) #
-
-# Comb_genes_from_Intersections_vs_Samples_from_stage                                                                                                              #
-sel_genes_stage_III_sample_stage_I      <-  data.frame(DE_genes_stage="Stage II",stages="Stage I", Expr=melt(norm_counts[df_log2foldchange_data_stage_III_vs_I_II$Gene,sample_stage_I]))     #
-sel_genes_stage_III_sample_stage_II     <-  data.frame(DE_genes_stage="Stage II",stages="Stage II", Expr=melt(norm_counts[df_log2foldchange_data_stage_III_vs_I_II$Gene,sample_stage_II]))   #
-sel_genes_stage_III_sample_stage_III    <-  data.frame(DE_genes_stage="Stage II",stages="Stage III", Expr=melt(norm_counts[df_log2foldchange_data_stage_III_vs_I_II$Gene,sample_stage_III])) #
-
 # Select genes from stage I                                                                                                                                        #
-sel_genes_stageI<-rbind(sel_genes_stage_I_sample_stage_I,sel_genes_stage_I_sample_stage_II,sel_genes_stage_I_sample_stage_III)                                     #
-sel_genes_stageII<-rbind(sel_genes_stage_II_sample_stage_I,sel_genes_stage_II_sample_stage_II,sel_genes_stage_II_sample_stage_III)                                     #
-sel_genes_stageIII<-rbind(sel_genes_stage_III_sample_stage_I,sel_genes_stage_III_sample_stage_II,sel_genes_stage_III_sample_stage_III)                                     #
+sel_genes_stage_I<-rbind(sel_genes_stage_I_sample_stage_I,sel_genes_stage_I_sample_stage_IA,sel_genes_stage_I_sample_stage_IB,sel_genes_stage_I_sample_stage_II,sel_genes_stage_I_sample_stage_IIA,sel_genes_stage_I_sample_stage_IIB,sel_genes_stage_I_sample_stage_III,sel_genes_stage_I_sample_stage_IIIA,sel_genes_stage_I_sample_stage_IIIB) #
 
 # Rename collumns
 colnames(sel_genes_stageI)<-c("DE_genes_stage","stages","Gene","Patient","Expression")

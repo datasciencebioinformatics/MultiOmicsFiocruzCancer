@@ -16,27 +16,27 @@ unstranded_data<-unstranded_data[rownames(log2fc_expression_pos),colData_data$pa
 colData_data<-colData_data[colnames(unstranded_data),]                                                                                #
                                                                                                                                       #
 # Define all stage pairs                                                                                                              #
-# Paired stages                                                                                                                       #                                                                                                                    #
-stages_pairs=data.frame(stage_i=c("stageI","stageI","stageII"),stage_ii=c("stageII","stageIII","stageIII"))                           #
-#######################################################################################################################################
+# Paired stages                                                                                                                       #####################################################                                                                                                                    #
+stages_pairs=data.frame(stage_i=c("stageI","stageI","stageII","stageI","stageII","stageIII"),stage_ii=c("stageII","stageIII","stageIII","stages_II_III","stages_I_III","stages_I_II"))    #
+###########################################################################################################################################################################################
 # Genes of each stage stored in colData                                                                                               #
 sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"]                                                                     #
 sample_stage_II <-colData[colData$stages=="Stage II","patient_id"]                                                                    #
 sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]                                                                   #
-sample_stage_II_III<-colData[colData$stages=="Stage II" | colData$stages=="Stage III",]                                               #
-sample_stage_I_III<-colData[colData$stages=="Stage I" | colData$stages=="Stage III",]                                                 #
-sample_stage_I_II<-colData[colData$stages=="Stage I" | colData$stages=="Stage II",]                                                   #
+sample_stages_II_III<-colData[colData$stages=="Stage II" | colData$stages=="Stage III","patient_id"]                                  #
+sample_stages_I_III<-colData[colData$stages=="Stage I" | colData$stages=="Stage III","patient_id"]                                    #
+sample_stages_I_II<-colData[colData$stages=="Stage I" | colData$stages=="Stage II","patient_id"]                                      #
 #######################################################################################################################################
 # Lists for stage names,samples, and genes.                                                                                           #
-vector_stages   <- c("stageI","stageII","stageIII")                                                                                   #
-list_samples    <- list(stageI=sample_stage_I,stageII=sample_stage_II,stageIII=sample_stage_III)                                      #
-#######################################################################################################################################
+vector_stages   <- c("stageI","stageII","stageIII","stages_I_II","stages_II_III","stages_I_III")                                      ######################################################################################
+list_samples    <- list(stageI=sample_stage_I,stageII=sample_stage_II,stageIII=sample_stage_III,stages_I_II=sample_stages_I_II,stages_I_III=sample_stages_I_III,sample_stages_II_III,stages_II_III=sample_stages_II_III )  #
+############################################################################################################################################################################################################################
 # A table for each gene, with the following columns:
 # # 1-Gene  2-StageI_StageII_log2foldchange  3-StageI_StageII_pvalue 4-StageI_StageIII_log2foldchange  5-StageI_StageIII_pvalue  6-StageII_StageIII_log2foldchange  7-StageII_StageIII_pvalue
 # log2foldchange = log2(expression value in condition A) - log2(expression value in condition B)
 
 # Data.frame df_log2foldchange
-df_log2foldchange<-data.frame(Gene=rownames(unstranded_data),StageI_StageII_log2foldchange=0,StageI_StageII_pvalue=0,StageI_StageIII_log2foldchange=0,StageI_StageIII_pvalue=0,StageII_StageIII_log2foldchange=0,StageII_StageIII_pvalue=0)
+df_log2foldchange<-data.frame(Gene=rownames(unstranded_data),StageI_StageII_log2foldchange=0,StageI_StageII_pvalue=0,StageI_StageIII_log2foldchange=0,StageI_StageIII_pvalue=0,StageII_StageIII_log2foldchange=0,StageII_StageIII_pvalue=0,StageI_StagesII_III_log2foldchange=0,StageI_StagesII_III_pvalue=0,StageII_StagesI_III_log2foldchange=0,StageII_StagesI_III_pvalue=0,StageIII_StagesI_II_log2foldchange=0,StageIII_StagesI_II_pvalue=0)
 
 # Set rownames
 rownames(df_log2foldchange)<-df_log2foldchange$Gene

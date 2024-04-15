@@ -23,9 +23,15 @@ sel_genes_stage_II  <-selected_genes_Stage_II_data[order(-selected_genes_Stage_I
 sel_genes_stage_III <-selected_genes_Stage_III_data[order(-selected_genes_Stage_III_data$log2FoldChange),][1:3,]                      #
 #######################################################################################################################################
 # Genes of each stage stored in colData                                                                                               #
-sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"]                                                                     #
-sample_stage_II <-colData[colData$stages=="Stage II","patient_id"]                                                                    #
-sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]                                                                   #
+sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"] 
+sample_stage_IA  <-colData[colData$stages=="Stage IA","patient_id"] 
+sample_stage_IB  <-colData[colData$stages=="Stage IB","patient_id"] 
+sample_stage_II  <-colData[colData$stages=="Stage II","patient_id"] 
+sample_stage_IIA  <-colData[colData$stages=="Stage IIA","patient_id"] 
+sample_stage_IIB  <-colData[colData$stages=="Stage IIB","patient_id"] 
+sample_stage_III  <-colData[colData$stages=="Stage III","patient_id"] 
+sample_stage_IIIA  <-colData[colData$stages=="Stage IIIA","patient_id"] 
+sample_stage_IIIB  <-colData[colData$stages=="Stage IIIB","patient_id"] 
 
 subStages=colData[colnames(unstranded_data),"sub_stages"]
 #######################################################################################################################################

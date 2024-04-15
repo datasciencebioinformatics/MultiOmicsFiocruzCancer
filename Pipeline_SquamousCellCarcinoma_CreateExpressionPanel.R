@@ -113,16 +113,16 @@ p3 <- ggplot(sel_genes_stageIII, aes(x=stages, y=Expression, fill=stages)) +    
     ggtitle("Expression of genes of Stage III") + stat_summary(fun.data="mean_sdl", fun.args = list(mult=1),geom="crossbar", width=0.5) + stat_compare_means(comparisons = my_comparisons) 
 
 # FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"Panel_genes_stage1",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
+png(filename=paste(output_dir,"Panel_genes_stage1.png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
   p1
 dev.off() 
 
 # FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"Panel_genes_stage2",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
+png(filename=paste(output_dir,"Panel_genes_stage2.png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
   p2
 dev.off() 
 
 # FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"Panel_genes_stage3",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
+png(filename=paste(output_dir,"Panel_genes_stage3.png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
   p3
 dev.off() 

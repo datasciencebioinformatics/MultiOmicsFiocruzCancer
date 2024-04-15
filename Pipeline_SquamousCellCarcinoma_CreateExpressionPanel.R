@@ -139,3 +139,77 @@ intersection_genes_pos_Stages_I_II           <-read.table(file = intersection_ge
 intersection_genes_pos_Stages_II_III         <-read.table(file = intersection_genes_pos_Stages_II_III_file, sep = '\t', header = TRUE,fill=TRUE)     #
 intersection_genes_pos_Stages_I_III          <-read.table(file = intersection_genes_pos_Stages_I_III_file, sep = '\t', header = TRUE,fill=TRUE)      #
 ######################################################################################################################################################
+# 3 genes specific to stage I in samples of Stage I, II and III                                                                            #
+# 3 genes specific to stage II in samples of Stage I, II and III                                                                           #
+# 3 genes specific to stage III in samples of Stage I, II and III                                                                          #
+intersection_genes_pos_Stages_I_II    <-selected_genes_Stage_I_data[order(-intersection_genes_pos_Stages_I_II$log2FoldChange),][1:3,]      #
+intersection_genes_pos_Stages_II_III  <-selected_genes_Stage_II_data[order(-intersection_genes_pos_Stages_II_III$log2FoldChange),][1:3,]   #
+intersection_genes_pos_Stages_I_III   <-selected_genes_Stage_III_data[order(-intersection_genes_pos_Stages_I_III$log2FoldChange),][1:3,]   #
+############################################################################################################################################
+# Set rownames                                                                                                                                                     #
+# One gene specific to stage I in samples of Stage I, II and III                                                                                                   #
+# Comb_genes_from_Intersections_vs_Samples_from_stage                                                                                                              #
+sele_intersection_genes_pos_Stages_I_II_stage_I      <-  data.frame(DE_genes_stage="Stages I and II",stages="Stage I", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II$Gene[1:3],sample_stage_I]))     #
+sele_intersection_genes_pos_Stages_I_II_stage_II     <-  data.frame(DE_genes_stage="Stages I and II",stages="Stage II", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II$Gene[1:3],sample_stage_II]))     #
+sele_intersection_genes_pos_Stages_I_II_stage_III    <-  data.frame(DE_genes_stage="Stages I and II",stages="Stage III", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_II$Gene[1:3],sample_stage_III]))     #
+
+# Comb_genes_from_Intersections_vs_Samples_from_stage                                                                                                              #
+sele_intersection_genes_pos_Stages_I_III_stage_I      <-  data.frame(DE_genes_stage="Stages I and III",stages="Stage I", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_III$Gene[1:3],sample_stage_I]))     #
+sele_intersection_genes_pos_Stages_I_III_stage_II     <-  data.frame(DE_genes_stage="Stages I and III",stages="Stage II", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_III$Gene[1:3],sample_stage_II]))     #
+sele_intersection_genes_pos_Stages_I_III_stage_III    <-  data.frame(DE_genes_stage="Stages I and III",stages="Stage III", Expr=melt(norm_counts[intersection_genes_pos_Stages_I_III$Gene[1:3],sample_stage_III]))     #
+
+# Comb_genes_from_Intersections_vs_Samples_from_stage                                                                                                              #
+sele_intersection_genes_pos_Stages_II_III_stage_I      <-  data.frame(DE_genes_stage="Stages II and III",stages="Stage I", Expr=melt(norm_counts[intersection_genes_pos_Stages_II_III$Gene[1:3],sample_stage_I]))     #
+sele_intersection_genes_pos_Stages_II_III_stage_II     <-  data.frame(DE_genes_stage="Stages II and III",stages="Stage II", Expr=melt(norm_counts[intersection_genes_pos_Stages_II_III$Gene[1:3],sample_stage_II]))     #
+sele_intersection_genes_pos_Stages_II_III_stage_III    <-  data.frame(DE_genes_stage="Stages II and III",stages="Stage III", Expr=melt(norm_counts[intersection_genes_pos_Stages_II_III$Gene[1:3],sample_stage_III]))     #
+
+# Select genes from stage I                                                                                                                                        #
+sele_intersection_genes_pos_Stages_I_II<-rbind(sele_intersection_genes_pos_Stages_I_II_stage_I,sele_intersection_genes_pos_Stages_I_II_stage_II,sele_intersection_genes_pos_Stages_I_II_stage_III)      
+sele_intersection_genes_pos_Stages_I_III<-rbind(sele_intersection_genes_pos_Stages_I_III_stage_I,sele_intersection_genes_pos_Stages_I_III_stage_II,sele_intersection_genes_pos_Stages_I_III_stage_III)      
+sele_intersection_genes_pos_Stages_II_III<-rbind(sele_intersection_genes_pos_Stages_II_III_stage_I,sele_intersection_genes_pos_Stages_II_III_stage_II,sele_intersection_genes_pos_Stages_II_III_stage_III)      
+
+# Pairwise comparisons: Specify the comparisons you want                                                                                                                                                                                                   #                                                                                                                                          #
+my_comparisons <- list( c("Stage I", "Stage II"), c("Stage II", "Stage III"),c("Stage I", "Stage III"))         
+
+# Rename collumns
+colnames(sele_intersection_genes_pos_Stages_I_II)<-c("DE_genes_stage","stages","Gene","Patient","Expression")
+colnames(sele_intersection_genes_pos_Stages_I_III)<-c("DE_genes_stage","stages","Gene","Patient","Expression")
+colnames(sele_intersection_genes_pos_Stages_II_III)<-c("DE_genes_stage","stages","Gene","Patient","Expression")
+
+sele_intersection_genes_pos_Stages_I_II<-sele_intersection_genes_pos_Stages_I_II[sele_intersection_genes_pos_Stages_I_II$Expression<5000,]
+sele_intersection_genes_pos_Stages_I_III<-sele_intersection_genes_pos_Stages_I_III[sele_intersection_genes_pos_Stages_I_III$Expression<5000,]
+sele_intersection_genes_pos_Stages_II_III<-sele_intersection_genes_pos_Stages_II_III[sele_intersection_genes_pos_Stages_II_III$Expression<5000,]
+
+#
+# plot smean.sdl computes the mean plus or minus a constant times the standard deviation.                                                                                                                                                                                                                 #
+p1 <- ggplot(sele_intersection_genes_pos_Stages_I_II, aes(x=stages, y=Expression, fill=stages)) +                                                                                                                                   #
+     facet_grid(~Gene, scales="free_y") +   
+    theme(legend.position="none") + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) +                                                 #
+    ggtitle("intersection genes pos Stages I II") + stat_summary(fun.data="mean_sdl", fun.args = list(mult=1),geom="crossbar", width=0.5) + stat_compare_means(comparisons = my_comparisons) 
+
+# plot smean.sdl computes the mean plus or minus a constant times the standard deviation.                                                                                                                                                                                                                 #
+p2 <- ggplot(sele_intersection_genes_pos_Stages_I_III, aes(x=stages, y=Expression, fill=stages)) +                                                                                                                                   #
+     facet_grid(~Gene, scales="free_y") +   
+    theme(legend.position="none") + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) +                                                 #
+    ggtitle("intersection genes pos Stages I III") + stat_summary(fun.data="mean_sdl", fun.args = list(mult=1),geom="crossbar", width=0.5) + stat_compare_means(comparisons = my_comparisons) 
+
+# plot smean.sdl computes the mean plus or minus a constant times the standard deviation.                                                                                                                                                                                                                 #
+p3 <- ggplot(sele_intersection_genes_pos_Stages_II_III, aes(x=stages, y=Expression, fill=stages)) +                                                                                                                                   #
+     facet_grid(~Gene, scales="free_y") +   
+    theme(legend.position="none") + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) +                                                 #
+    ggtitle("intersection genes pos Stages II III") + stat_summary(fun.data="mean_sdl", fun.args = list(mult=1),geom="crossbar", width=0.5) + stat_compare_means(comparisons = my_comparisons) 
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_genes_intersection_I_II.png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
+  p1
+dev.off() 
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_genes_intersection_I_III.png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
+  p2
+dev.off() 
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_genes_intersection_II_III.png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
+  p3
+dev.off() 

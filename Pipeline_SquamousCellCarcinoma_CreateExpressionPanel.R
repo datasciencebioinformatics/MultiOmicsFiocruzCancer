@@ -44,4 +44,19 @@ dds_stages <- estimateSizeFactors(dds_stages)                                   
                                                                                                                                       #
 # Obtain normalized coutns                                                                                                            #
 norm_counts<-counts(dds_stages, normalized = TRUE)                                                                                    #
-#######################################################################################################################################
+####################################################################################################################################################################
+# A data frame for gene expression, samples and stage                                                                                                              #
+# Set rownames                                                                                                                                                     #
+# One gene specific to stage I in samples of Stage I, II and III                                                                                                   #
+# Comb_genes_from_Intersections_vs_Samples_from_stage                                                                                                              #
+sel_genes_stage_I_sample_stage_I      <-  data.frame(DE_genes_stage="Stage I",stages="Stage I", Expr=melt(norm_counts[sel_genes_stage_I$Gene,sample_stage_I]))     #
+sel_genes_stage_I_sample_stage_II     <-  data.frame(DE_genes_stage="Stage I",stages="Stage II", Expr=melt(norm_counts[sel_genes_stage_I$Gene,sample_stage_II]))   #
+sel_genes_stage_I_sample_stage_III    <-  data.frame(DE_genes_stage="Stage I",stages="Stage III", Expr=melt(norm_counts[sel_genes_stage_I$Gene,sample_stage_III])) #
+                                                                                                                                                                   #
+# Select genes from stage I                                                                                                                                                                  #
+sel_genes_stageI<-rbind(sel_genes_stage_I_sample_stage_I,sel_genes_stage_I_sample_stage_II,sel_genes_stage_I_sample_stage_III)                                      #
+####################################################################################################################################################################
+                                                                                                                                                                                                                            #
+# melt_comb_genes                                                                                                                                                                                                           #
+melt_comb_genes_from_Intersections<-rbind(Comb_genes_from_Intersections_vs_Samples_from_stage_I,Comb_genes_from_Intersections_vs_Samples_from_stage_II,Comb_genes_from_Intersections_vs_Samples_from_stage_III)             #
+                                                                                                           

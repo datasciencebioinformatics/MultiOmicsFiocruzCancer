@@ -46,6 +46,9 @@ merged_data_patient_info$stages<-gsub("Stage IIIB", "Stage III", merged_data_pat
 merged_data_patient_info$stages<-gsub("Stage IVA", "Stage IV", merged_data_patient_info$stages)
 merged_data_patient_info$stages<-gsub("Stage IVB", "Stage IV", merged_data_patient_info$stages)
 
+# A field to store 
+merged_data_patient_info$sub_stages<-merged_data_patient_info$ajcc_pathologic_stage
+
 # Filter the table to contain only samples in the dataset
 merged_data_patient_info<-merged_data_patient_info[which(merged_data_patient_info$sample_id %in% colnames(unstranded_data)),]
 

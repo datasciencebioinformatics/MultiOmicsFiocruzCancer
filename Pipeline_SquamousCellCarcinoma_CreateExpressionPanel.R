@@ -1,5 +1,5 @@
 #######################################################################################################################################
-
+# Panel with gene expression per stage                                                                                                #
 #######################################################################################################################################
 # Path to files of selected_genes                                                                                                     # 
 selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_I.tsv"             #
@@ -12,4 +12,8 @@ selected_genes_Stage_I_data       <-read.table(file = selected_genes_Stage_I_fil
 selected_genes_Stage_II_data      <-read.table(file = selected_genes_Stage_II_file, sep = '\t', header = TRUE,fill=TRUE)              #
 selected_genes_Stage_III_data     <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)             #
 unstranded_data                   <-read.table(file = unstranded_file, sep = '\t', header = TRUE,fill=TRUE)                           #
+#######################################################################################################################################
+# 3 genes specific to stage I in samples of Stage I, II and III 
+# 3 genes specific to stage II in samples of Stage I, II and III
+# 3 genes specific to stage III in samples of Stage I, II and III
 #######################################################################################################################################

@@ -67,13 +67,13 @@ merged_data_patient_info<-merged_data_patient_info[which(merged_data_patient_inf
 merged_data_patient_info$patient_id<-paste("patient_",1:length(merged_data_patient_info$sample_id),sep="")
 
 # Filter collumns that are used for age_at_index, gender, stages, Sample.ID
-merged_data_patient_info<-merged_data_patient_info[,c("patient_id","case_id","sample_id","age_at_index","gender","Sample.Type","stages","race","tissue_type")]
+merged_data_patient_info<-merged_data_patient_info[,c("patient_id","case_id","sample_id","age_at_index","gender","Sample.Type","stages","sub_stages","race","tissue_type")]
 
 # Rename collumns
-colnames(merged_data_patient_info)<-c("patient_id","case_id","sample_id","age_at_index","gender","tumor_normal","stages","race","tissue_type")
+colnames(merged_data_patient_info)<-c("patient_id","case_id","sample_id","age_at_index","gender","tumor_normal","stages","sub_stages","race","tissue_type")
 #####################################################################################################################
 # Set colData
-colData<-unique(merged_data_patient_info[,c("sample_id","age_at_index","gender","tumor_normal","stages","race","tissue_type")])
+colData<-unique(merged_data_patient_info[,c("sample_id","age_at_index","gender","tumor_normal","stages","sub_stages","race","tissue_type")])
 
 # Patient and sample
 patient_sample<-merged_data_patient_info[which(merged_data_patient_info$sample_id %in% colData$sample_id),c("patient_id","sample_id")]

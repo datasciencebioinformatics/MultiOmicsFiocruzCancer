@@ -23,6 +23,9 @@ stages_pairs=data.frame(stage_i=c("stageI","stageI","stageII"),stage_ii=c("stage
 sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"]                                                                     #
 sample_stage_II <-colData[colData$stages=="Stage II","patient_id"]                                                                    #
 sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]                                                                   #
+sample_stage_II_III<-colData[colData$stages=="Stage II" | colData$stages=="Stage III",]                                               #
+sample_stage_I_III<-colData[colData$stages=="Stage I" | colData$stages=="Stage III",]                                                 #
+sample_stage_I_II<-colData[colData$stages=="Stage I" | colData$stages=="Stage II",]                                                   #
 #######################################################################################################################################
 # Lists for stage names,samples, and genes.                                                                                           #
 vector_stages   <- c("stageI","stageII","stageIII")                                                                                   #

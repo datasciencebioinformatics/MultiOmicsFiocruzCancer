@@ -44,7 +44,8 @@ dds_stages <- estimateSizeFactors(dds_stages)                                   
                                                                                                                                       #
 # Obtain normalized coutns                                                                                                            #
 norm_counts<-counts(dds_stages, normalized = TRUE)                                                                                    #
-####################################################################################################################################################################
+#######################################################################################################################################
+# First, table for the gene selction is stored.
 # genes from Stage I, pvalue <0.05
 df_log2foldchange_data_stage_I_vs_II_III<-df_log2foldchange_data[df_log2foldchange_data$StageI_StagesII_III_pvalue<0.05,]
 df_log2foldchange_data_stage_II_vs_I_III<-df_log2foldchange_data[df_log2foldchange_data$StageII_StagesI_III_pvalue<0.05,]
@@ -126,3 +127,15 @@ dev.off()
 png(filename=paste(output_dir,"Panel_genes_stage3.png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
   p3
 dev.off() 
+#######################################################################################################################################
+# First, table for the gene selction is stored.
+#######################################################################################################################################
+intersection_genes_pos_Stages_I_II_file     <- "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II.tsv"     #
+intersection_genes_pos_Stages_I_III_file    <- "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_III.tsv"    #
+intersection_genes_pos_Stages_II_III_file   <- "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_II_III.tsv"   #
+######################################################################################################################################################
+# Load data                                                                                                                                          #
+intersection_genes_pos_Stages_I_II           <-read.table(file = intersection_genes_pos_Stages_I_II_file, sep = '\t', header = TRUE,fill=TRUE)       #
+intersection_genes_pos_Stages_II_III         <-read.table(file = intersection_genes_pos_Stages_II_III_file, sep = '\t', header = TRUE,fill=TRUE)     #
+intersection_genes_pos_Stages_I_III          <-read.table(file = intersection_genes_pos_Stages_I_III_file, sep = '\t', header = TRUE,fill=TRUE)      #
+######################################################################################################################################################

@@ -13,7 +13,10 @@ selected_genes_Stage_II_data      <-read.table(file = selected_genes_Stage_II_fi
 selected_genes_Stage_III_data     <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)             #
 unstranded_data                   <-read.table(file = unstranded_file, sep = '\t', header = TRUE,fill=TRUE)                           #
 #######################################################################################################################################
-# 3 genes specific to stage I in samples of Stage I, II and III 
-# 3 genes specific to stage II in samples of Stage I, II and III
-# 3 genes specific to stage III in samples of Stage I, II and III
+# 3 genes specific to stage I in samples of Stage I, II and III                                                                       #
+# 3 genes specific to stage II in samples of Stage I, II and III                                                                      #
+# 3 genes specific to stage III in samples of Stage I, II and III                                                                     #
+sel_genes_stage_I   <-selected_genes_Stage_I_data[order(-selected_genes_Stage_I_data$log2FoldChange),][1:3]                           #
+sel_genes_stage_II  <-selected_genes_Stage_II_data[order(-selected_genes_Stage_II_data$log2FoldChange),][1:3]                         #
+sel_genes_stage_III <-selected_genes_Stage_III_data[order(-selected_genes_Stage_III_data$log2FoldChange),][1:3]                       #
 #######################################################################################################################################

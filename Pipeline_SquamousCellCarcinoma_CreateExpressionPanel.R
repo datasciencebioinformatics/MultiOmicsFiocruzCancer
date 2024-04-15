@@ -47,13 +47,18 @@ norm_counts<-counts(dds_stages, normalized = TRUE)                              
 ####################################################################################################################################################################
 # genes from Stage I, pvalue <0.05
 df_log2foldchange_data_stage_I_vs_II_III<-df_log2foldchange_data[df_log2foldchange_data$StageI_StagesII_III_pvalue<0.05,]
+df_log2foldchange_data_stage_II_vs_I_III<-df_log2foldchange_data[df_log2foldchange_data$StageII_StagesI_III_pvalue<0.05,]
+df_log2foldchange_data_stage_III_vs_I_II<-df_log2foldchange_data[df_log2foldchange_data$StageIII_StagesI_II_pvalue<0.05,]
 
 # genes from Stage I, positive
 df_log2foldchange_data_stage_I_vs_II_III<-df_log2foldchange_data_stage_I_vs_II_III[df_log2foldchange_data_stage_I_vs_II_III$StageI_StagesII_III_log2foldchange>0,]
+df_log2foldchange_data_stage_II_vs_I_III<-df_log2foldchange_data_stage_II_vs_I_III[df_log2foldchange_data_stage_II_vs_I_III$StageII_StagesI_III_log2foldchange>0,]
+df_log2foldchange_data_stage_III_vs_I_II<-df_log2foldchange_data_stage_III_vs_I_II[df_log2foldchange_data_stage_III_vs_I_II$StageIII_StagesI_II_log2foldchange>0,]
 
 # Order by StageI_StagesII_III_log2foldchange
 df_log2foldchange_data_stage_I_vs_II_III<-df_log2foldchange_data_stage_I_vs_II_III[order(-df_log2foldchange_data_stage_I_vs_II_III$StageI_StagesII_III_log2foldchange),c("Gene","StageI_StagesII_III_pvalue","StageI_StagesII_III_log2foldchange")][1:3,]
-
+df_log2foldchange_data_stage_II_vs_I_III<-df_log2foldchange_data_stage_II_vs_I_III[order(-df_log2foldchange_data_stage_II_vs_I_III$StageII_StagesI_III_log2foldchange),c("Gene","StageI_StagesII_III_pvalue","StageI_StagesII_III_log2foldchange")][1:3,]
+df_log2foldchange_data_stage_III_vs_I_II<-df_log2foldchange_data_stage_III_vs_I_II[order(-df_log2foldchange_data_stage_III_vs_I_II$StageIII_StagesI_II_log2foldchange),c("Gene","StageI_StagesII_III_pvalue","StageI_StagesII_III_log2foldchange")][1:3,]
 
 # A data frame for gene expression, samples and stage                                                                                                              #
 # Set rownames                                                                                                                                                     #
@@ -63,16 +68,61 @@ sel_genes_stage_I_sample_stage_I      <-  data.frame(DE_genes_stage="Stage I",st
 sel_genes_stage_I_sample_stage_II     <-  data.frame(DE_genes_stage="Stage I",stages="Stage II", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_II]))   #
 sel_genes_stage_I_sample_stage_III    <-  data.frame(DE_genes_stage="Stage I",stages="Stage III", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_III])) #
                                                                                                                                                                    #
+# Comb_genes_from_Intersections_vs_Samples_from_stage                                                                                                              #
+sel_genes_stage_II_sample_stage_I      <-  data.frame(DE_genes_stage="Stage II",stages="Stage I", Expr=melt(norm_counts[df_log2foldchange_data_stage_II_vs_I_III$Gene,sample_stage_I]))     #
+sel_genes_stage_II_sample_stage_II     <-  data.frame(DE_genes_stage="Stage II",stages="Stage II", Expr=melt(norm_counts[df_log2foldchange_data_stage_II_vs_I_III$Gene,sample_stage_II]))   #
+sel_genes_stage_II_sample_stage_III    <-  data.frame(DE_genes_stage="Stage II",stages="Stage III", Expr=melt(norm_counts[df_log2foldchange_data_stage_II_vs_I_III$Gene,sample_stage_III])) #
+
+# Comb_genes_from_Intersections_vs_Samples_from_stage                                                                                                              #
+sel_genes_stage_III_sample_stage_I      <-  data.frame(DE_genes_stage="Stage II",stages="Stage I", Expr=melt(norm_counts[df_log2foldchange_data_stage_III_vs_I_II$Gene,sample_stage_I]))     #
+sel_genes_stage_III_sample_stage_II     <-  data.frame(DE_genes_stage="Stage II",stages="Stage II", Expr=melt(norm_counts[df_log2foldchange_data_stage_III_vs_I_II$Gene,sample_stage_II]))   #
+sel_genes_stage_III_sample_stage_III    <-  data.frame(DE_genes_stage="Stage II",stages="Stage III", Expr=melt(norm_counts[df_log2foldchange_data_stage_III_vs_I_II$Gene,sample_stage_III])) #
+
 # Select genes from stage I                                                                                                                                        #
 sel_genes_stageI<-rbind(sel_genes_stage_I_sample_stage_I,sel_genes_stage_I_sample_stage_II,sel_genes_stage_I_sample_stage_III)                                     #
+sel_genes_stageII<-rbind(sel_genes_stage_II_sample_stage_I,sel_genes_stage_II_sample_stage_II,sel_genes_stage_II_sample_stage_III)                                     #
+sel_genes_stageIII<-rbind(sel_genes_stage_III_sample_stage_I,sel_genes_stage_III_sample_stage_II,sel_genes_stage_III_sample_stage_III)                                     #
 
 # Rename collumns
 colnames(sel_genes_stageI)<-c("DE_genes_stage","stages","Gene","Patient","Expression")
+colnames(sel_genes_stageII)<-c("DE_genes_stage","stages","Gene","Patient","Expression")
+colnames(sel_genes_stageIII)<-c("DE_genes_stage","stages","Gene","Patient","Expression")
 ####################################################################################################################################################################
-# plot                                                                                                                                                                                                                 #
-p1 <- ggplot(sel_genes_stageI, aes(x=stages, y=Expression, fill=stages)) +                                                                                                                                   #
-    geom_boxplot(varwidth = TRUE, outliers=FALSE) + facet_grid(~Gene) +                                                                                                                                                             #
-    theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) +                                                 #
-    ggtitle("Expression of genes of Stage I") + stat_summary(fun=mean, colour="darkred", geom="point",  shape=18, size=3, show.legend=FALSE)
+# Pairwise comparisons: Specify the comparisons you want                                                                                                                                                                                                   #                                                                                                                                          #
+my_comparisons <- list( c("Stage I", "Stage II"), c("Stage II", "Stage III"),c("Stage I", "Stage III"))         
 
-                                                                                                                                                                                                                            #
+#sel_genes_stageI<-sel_genes_stageI[sel_genes_stageI$Expression<5000,]
+#sel_genes_stageII<-sel_genes_stageII[sel_genes_stageII$Expression<5000,]
+#sel_genes_stageIII<-sel_genes_stageIII[sel_genes_stageIII$Expression<5000,]
+
+#
+# plot smean.sdl computes the mean plus or minus a constant times the standard deviation.                                                                                                                                                                                                                 #
+p1 <- ggplot(sel_genes_stageI, aes(x=stages, y=Expression, fill=stages)) +                                                                                                                                   #
+     facet_grid(~Gene, scales="free_y") +   
+    theme(legend.position="none") + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) +                                                 #
+    ggtitle("Expression of genes of Stage I") + stat_summary(fun.data="mean_sdl", fun.args = list(mult=1),geom="crossbar", width=0.5) + stat_compare_means(comparisons = my_comparisons) 
+
+p2 <- ggplot(sel_genes_stageII, aes(x=stages, y=Expression, fill=stages)) +                                                                                                                                   #
+     facet_grid(~Gene, scales="free") +   
+    theme(legend.position="none") + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) +                                                 #
+    ggtitle("Expression of genes of Stage II") + stat_summary(fun.data="mean_sdl", fun.args = list(mult=1),geom="crossbar", width=0.5) + stat_compare_means(comparisons = my_comparisons) 
+
+p3 <- ggplot(sel_genes_stageIII, aes(x=stages, y=Expression, fill=stages)) +                                                                                                                                   #
+     facet_grid(~Gene, scales="free") +   
+    theme(legend.position="none") + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) +                                                 #
+    ggtitle("Expression of genes of Stage III") + stat_summary(fun.data="mean_sdl", fun.args = list(mult=1),geom="crossbar", width=0.5) + stat_compare_means(comparisons = my_comparisons) 
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_genes_stage1",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
+  p1
+dev.off() 
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_genes_stage2",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
+  p2
+dev.off() 
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_genes_stage3",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
+  p3
+dev.off() 

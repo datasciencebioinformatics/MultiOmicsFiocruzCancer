@@ -28,7 +28,7 @@ sample_stage_II <-colData[colData$stages=="Stage II","patient_id"]              
 sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]                                                                   #
 #######################################################################################################################################
 # Filter to keep only positive tumor/normal samples from unstranded_data.                                                             #
-unstranded_data<-unstranded_data[avg_expression_pos$Gene,]                                                                            #
+#unstranded_data<-unstranded_data[avg_expression_pos$Gene,]                                                                            #
                                                                                                                                       #
 # omit NA values from vector                                                                                                          #
 unstranded_data <- na.omit(unstranded_data)                                                                                           #
@@ -45,18 +45,34 @@ dds_stages <- estimateSizeFactors(dds_stages)                                   
 # Obtain normalized coutns                                                                                                            #
 norm_counts<-counts(dds_stages, normalized = TRUE)                                                                                    #
 ####################################################################################################################################################################
+# genes from Stage I, pvalue <0.05
+df_log2foldchange_data_stage_I_vs_II_III<-df_log2foldchange_data[df_log2foldchange_data$StageI_StagesII_III_pvalue<0.05,]
+
+# genes from Stage I, positive
+df_log2foldchange_data_stage_I_vs_II_III<-df_log2foldchange_data_stage_I_vs_II_III[df_log2foldchange_data_stage_I_vs_II_III$StageI_StagesII_III_log2foldchange>0,]
+
+# Order by StageI_StagesII_III_log2foldchange
+df_log2foldchange_data_stage_I_vs_II_III<-df_log2foldchange_data_stage_I_vs_II_III[order(-df_log2foldchange_data_stage_I_vs_II_III$StageI_StagesII_III_log2foldchange),c("Gene","StageI_StagesII_III_pvalue","StageI_StagesII_III_log2foldchange")][1:3,]
+
+
 # A data frame for gene expression, samples and stage                                                                                                              #
 # Set rownames                                                                                                                                                     #
 # One gene specific to stage I in samples of Stage I, II and III                                                                                                   #
 # Comb_genes_from_Intersections_vs_Samples_from_stage                                                                                                              #
-sel_genes_stage_I_sample_stage_I      <-  data.frame(DE_genes_stage="Stage I",stages="Stage I", Expr=melt(norm_counts[sel_genes_stage_I$Gene,sample_stage_I]))     #
-sel_genes_stage_I_sample_stage_II     <-  data.frame(DE_genes_stage="Stage I",stages="Stage II", Expr=melt(norm_counts[sel_genes_stage_I$Gene,sample_stage_II]))   #
-sel_genes_stage_I_sample_stage_III    <-  data.frame(DE_genes_stage="Stage I",stages="Stage III", Expr=melt(norm_counts[sel_genes_stage_I$Gene,sample_stage_III])) #
+sel_genes_stage_I_sample_stage_I      <-  data.frame(DE_genes_stage="Stage I",stages="Stage I", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_I]))     #
+sel_genes_stage_I_sample_stage_II     <-  data.frame(DE_genes_stage="Stage I",stages="Stage II", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_II]))   #
+sel_genes_stage_I_sample_stage_III    <-  data.frame(DE_genes_stage="Stage I",stages="Stage III", Expr=melt(norm_counts[df_log2foldchange_data_stage_I_vs_II_III$Gene,sample_stage_III])) #
                                                                                                                                                                    #
-# Select genes from stage I                                                                                                                                                                  #
-sel_genes_stageI<-rbind(sel_genes_stage_I_sample_stage_I,sel_genes_stage_I_sample_stage_II,sel_genes_stage_I_sample_stage_III)                                      #
+# Select genes from stage I                                                                                                                                        #
+sel_genes_stageI<-rbind(sel_genes_stage_I_sample_stage_I,sel_genes_stage_I_sample_stage_II,sel_genes_stage_I_sample_stage_III)                                     #
+
+# Rename collumns
+colnames(sel_genes_stageI)<-c("DE_genes_stage","stages","Gene","Patient","Expression")
 ####################################################################################################################################################################
+# plot                                                                                                                                                                                                                 #
+p1 <- ggplot(sel_genes_stageI, aes(x=stages, y=Expression, fill=stages)) +                                                                                                                                   #
+    geom_boxplot(varwidth = TRUE, outliers=FALSE) + facet_grid(~Gene) +                                                                                                                                                             #
+    theme(legend.position="none") + geom_boxplot() + scale_fill_brewer(palette="Set1") + theme_bw() + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) +                                                 #
+    ggtitle("Expression of genes of Stage I") + stat_summary(fun=mean, colour="darkred", geom="point",  shape=18, size=3, show.legend=FALSE)
+
                                                                                                                                                                                                                             #
-# melt_comb_genes                                                                                                                                                                                                           #
-melt_comb_genes_from_Intersections<-rbind(Comb_genes_from_Intersections_vs_Samples_from_stage_I,Comb_genes_from_Intersections_vs_Samples_from_stage_II,Comb_genes_from_Intersections_vs_Samples_from_stage_III)             #
-                                                                                                           

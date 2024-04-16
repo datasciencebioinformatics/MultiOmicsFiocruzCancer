@@ -36,7 +36,7 @@ list_samples    <- list(stageI=sample_stage_I,stageII=sample_stage_II,stageIII=s
 # log2foldchange = log2(expression value in condition A) - log2(expression value in condition B)
 
 # Data.frame df_log2foldchange
-df_log2foldchange<-data.frame(Gene=rownames(unstranded_data),StageI_StageII_log2foldchange=0,StageI_StageII_pvalue=0,StageI_StageIII_log2foldchange=0,StageI_StageIII_pvalue=0,StageII_StageIII_log2foldchange=0,StageII_StageIII_pvalue=0,StageI_StagesII_III_log2foldchange=0,StageI_StagesII_III_pvalue=0,StageII_StagesI_III_log2foldchange=0,StageII_StagesI_III_pvalue=0,StageIII_StagesI_II_log2foldchange=0,StageIII_StagesI_II_pvalue=0)
+df_log2foldchange<-data.frame(Gene=rownames(unstranded_data),StageI_StageII_log2foldchange=0,StageI_StageII_log2foldchange2=0,StageI_StageIII_log2foldchange=0,StageI_StageIII_log2foldchange2=0,StageII_StageIII_log2foldchange=0,StageII_StageIII_log2foldchange2=0,StageI_StagesII_III_log2foldchange=0,StageI_StagesII_III_log2foldchange2=0,StageII_StagesI_III_log2foldchange=0,StageII_StagesI_III_log2foldchange2=0,StageIII_StagesI_II_log2foldchange=0,StageIII_StagesI_II_log2foldchange2=0)
 
 # Set rownames
 rownames(df_log2foldchange)<-df_log2foldchange$Gene
@@ -64,13 +64,14 @@ for (gene in rownames(unstranded_data))
       #calulate the average values in each group
       mean_stage_i  = rowMeans(gene_expression_stage_i)
       mean_stage_ii = rowMeans(gene_expression_stage_ii)
-
+      
       # logFC and pvalue
       logFC=log2(mean_stage_i/mean_stage_ii)
+      logFC_2=log2(rowMeans(gene_expression_stage_i)) - log2(rowMeans(gene_expression_stage_ii))
       pvalue=t.test(gene_expression_stage_i, gene_expression_stage_ii, alternative = "two.sided", var.equal = FALSE)$p.value
 
       df_log2foldchange[gene,index_log2foldchange]<-logFC
-      df_log2foldchange[gene,index_pvalue]        <-pvalue
+      df_log2foldchange[gene,index_pvalue]        <-logFC_2
       df_log2foldchange[gene,"Gene"]              <-gene  
 
       # index_log2foldchange and index_pvalue
@@ -81,9 +82,14 @@ for (gene in rownames(unstranded_data))
 # Writing mtcars data
 write.table(df_log2foldchange, file = "/home/felipe/Documentos/LungPortal/samples/df_log2foldchange.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
 #######################################################################################################################################
-df_log2foldchange_StageI   <-df_log2foldchange[which(df_log2foldchange$StageI_StagesII_III_log2foldchange>=0.58),c("StageI_StagesII_III_log2foldchange")]
-df_log2foldchange_StageII  <-df_log2foldchange[which(df_log2foldchange$StageII_StagesI_III_log2foldchange>=0.58),c("StageII_StagesI_III_log2foldchange")]
-df_log2foldchange_StageIII <-df_log2foldchange[which(df_log2foldchange$StageIII_StagesI_II_log2foldchange>=0.58),c("StageIII_StagesI_II_log2foldchange")]
+df_log2foldchange_StageI   <-df_log2foldchange[which(df_log2foldchange$StageI_StagesII_III_log2foldchange>=0.58),c("Gene","StageI_StagesII_III_log2foldchange")]
+df_log2foldchange_StageII  <-df_log2foldchange[which(df_log2foldchange$StageII_StagesI_III_log2foldchange>=0.58),c("Gene","StageII_StagesI_III_log2foldchange")]
+df_log2foldchange_StageIII <-df_log2foldchange[which(df_log2foldchange$StageIII_StagesI_II_log2foldchange>=0.58),c("Gene","StageIII_StagesI_II_log2foldchange")]
+
+df_log2foldchange_StageI   <-df_log2foldchange[which(df_log2foldchange$StageI_StagesII_III_log2foldchange>=0.58),c("Gene","StageI_StagesII_III_log2foldchange")]
+df_log2foldchange_StageII  <-df_log2foldchange[which(df_log2foldchange$StageII_StagesI_III_log2foldchange>=0.58),c("Gene","StageII_StagesI_III_log2foldchange")]
+df_log2foldchange_StageIII <-df_log2foldchange[which(df_log2foldchange$StageIII_StagesI_II_log2foldchange>=0.58),c("Gene","StageIII_StagesI_II_log2foldchange")]
+
 
 
 # Writing mtcars data

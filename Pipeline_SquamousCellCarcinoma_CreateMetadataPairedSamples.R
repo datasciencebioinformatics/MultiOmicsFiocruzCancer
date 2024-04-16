@@ -5,7 +5,7 @@
 # /home/felipe/Documentos/LungPortal/sample.txt
 # /home/felipe/Documentos/LungPortal/exposure.txt
 # Output : merged_data_patient_info.tsv
-###########################################################################################################################
+#############################################################################1##############################################
 library(readr)                                                                                                            #
 library("xlsx")                                                                                                           #
 library(ggplot2)                                                                                                          #
@@ -119,4 +119,3 @@ rownames(log2fc_expression_pos)<-log2fc_expression_pos$Gene
 
 # Write table
 write.table(log2fc_expression_pos, file = "/home/felipe/Documentos/LungPortal/samples/log2fc_expression_pos.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
-write.table(log2fc_expression_pos, file = "/home/felipe/Documentos/LungPortal/samples/log2fc_expression_pos2.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)

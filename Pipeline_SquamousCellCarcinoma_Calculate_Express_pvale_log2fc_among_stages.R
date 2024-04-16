@@ -81,3 +81,12 @@ for (gene in rownames(unstranded_data))
 # Writing mtcars data
 write.table(df_log2foldchange, file = "/home/felipe/Documentos/LungPortal/samples/df_log2foldchange.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
 #######################################################################################################################################
+df_log2foldchange_StageI<-df_log2foldchange[intersect(which(df_log2foldchange$StageI_StagesII_III_pvalue<=0.05),which(df_log2foldchange$StageI_StagesII_III_log2foldchange>=0)),c("StageI_StagesII_III_log2foldchange","StageI_StagesII_III_pvalue")]
+df_log2foldchange_StageII<-df_log2foldchange[intersect(which(df_log2foldchange$StageII_StagesI_III_pvalue<=0.05),which(df_log2foldchange$StageII_StagesI_III_log2foldchange>=0)),c("StageII_StagesI_III_log2foldchange","StageII_StagesI_III_pvalue")]
+df_log2foldchange_StageIII<-df_log2foldchange[intersect(which(df_log2foldchange$StageIII_StagesI_II_pvalue<=0.05),which(df_log2foldchange$StageIII_StagesI_II_log2foldchange>=0)),c("StageIII_StagesI_II_log2foldchange","StageIII_StagesI_II_pvalue")]
+
+
+# Writing mtcars data
+write.table(df_log2foldchange_StageI, file = "/home/felipe/Documentos/LungPortal/samples/df_log2foldchange_stageI.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
+write.table(df_log2foldchange_StageII, file = "/home/felipe/Documentos/LungPortal/samples/df_log2foldchange_stageII.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
+write.table(df_log2foldchange_StageIII, file = "/home/felipe/Documentos/LungPortal/samples/df_log2foldchange_stageIII.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)

@@ -133,26 +133,28 @@ colnames(df_gene_id_symbol)<-c("gene_id","gene_symbol")
 #####################################################################################################################
 library("readxl")
 Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_1.tsv", sep = '\t', header = TRUE,fill=TRUE)      
-#Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/EnsemblToUniprotKBconversionList.txt", sep = '\t', header = TRUE,fill=TRUE)    
+Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/EnsemblToUniprotKBconversionList.txt", sep = '\t', header = FALSE,fill=TRUE)    
+colnames(Table1_data)<-c("gene_id","gene_symbol")
 #####################################################################################################################
-#gene_vector_id<-c()
-#df_gene_id_symbol$Gene_id<-""
+gene_vector_id<-c()
+df_gene_id_symbol$Gene_id<-""
 
 # For each gene
-#for (gene in df_gene_id_symbol$gene_id)
-#{
-#  # Take the gene id
-#  gene_id<-substring(gene,1,last=15)
-#
-#  # df_gene_id_symbol
-#  df_gene_id_symbol[which(grepl( gene_id,df_gene_id_symbol$gene_id, fixed = TRUE)),"Gene_id"]<-gene_id
-#}
+for (gene in df_gene_id_symbol$gene_id)
+{
+  # Take the gene id
+  gene_id<-substring(gene,1,last=15)
+
+  # df_gene_id_symbol
+  df_gene_id_symbol[which(grepl( gene_id,df_gene_id_symbol$gene_id, fixed = TRUE)),"Gene_id"]<-gene_id
+}
 
 # Genes in conforte et al data
 #selected_gene_id<-df_gene_id_symbol[df_gene_id_symbol$gene_symbol %in% Table1_data$GeneSymbol,"gene_id"]
+selected_gene_id<-df_gene_id_symbol[df_gene_id_symbol$Gene_id %in% Table1_data$gene_id,"gene_id"]
 #####################################################################################################################
 # Filter RNA-seq data to contain only data from Conforte et.al
-#unstranded_data<-unstranded_data[selected_gene_id,]
+unstranded_data<-unstranded_data[selected_gene_id,]
 
 ############################################################################################################################
 colData<-na.omit(colData)

@@ -39,10 +39,6 @@ dds_stages <- estimateSizeFactors(dds_stages)                                   
 # Obtain normalized coutns                                                                                               #
 norm_counts<-counts(dds_stages, normalized = TRUE)     
 
-norm_counts<-fpm(dds_stages)
-
-fpkm(dds_stages)
-
 # A table for each gene, with the following columns:
 # # 1-Gene  2-StageI_StageII_log2foldchange  3-StageI_StageII_pvalue 4-StageI_StageIII_log2foldchange  5-StageI_StageIII_pvalue  6-StageII_StageIII_log2foldchange  7-StageII_StageIII_pvalue
 # log2foldchange = log2(expression value in condition A) - log2(expression value in condition B)
@@ -76,6 +72,7 @@ for (gene in rownames(unstranded_data))
       #calulate the average values in each group
       mean_stage_i  = mean(gene_expression_stage_i)
       mean_stage_ii = mean(gene_expression_stage_ii)
+  
       
       # logFC and pvalue
       logFC=log2(mean_stage_i/mean_stage_ii)
@@ -94,15 +91,9 @@ for (gene in rownames(unstranded_data))
 # Writing mtcars data
 write.table(df_log2foldchange, file = "/home/felipe/Documentos/LungPortal/samples/df_log2foldchange.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
 #######################################################################################################################################
-df_log2foldchange_StageI   <-df_log2foldchange[which(df_log2foldchange$StageI_StagesII_III_log2foldchange>=0.50),c("Gene","StageI_StagesII_III_log2foldchange")]
-df_log2foldchange_StageII  <-df_log2foldchange[which(df_log2foldchange$StageII_StagesI_III_log2foldchange>=0.50),c("Gene","StageII_StagesI_III_log2foldchange")]
-df_log2foldchange_StageIII <-df_log2foldchange[which(df_log2foldchange$StageIII_StagesI_II_log2foldchange>=0.50),c("Gene","StageIII_StagesI_II_log2foldchange")]
-
-df_log2foldchange_StageI   <-df_log2foldchange[which(df_log2foldchange$StageI_StagesII_III_log2foldchange>=0.58),c("Gene","StageI_StagesII_III_log2foldchange")]
-df_log2foldchange_StageII  <-df_log2foldchange[which(df_log2foldchange$StageII_StagesI_III_log2foldchange>=0.58),c("Gene","StageII_StagesI_III_log2foldchange")]
-df_log2foldchange_StageIII <-df_log2foldchange[which(df_log2foldchange$StageIII_StagesI_II_log2foldchange>=0.58),c("Gene","StageIII_StagesI_II_log2foldchange")]
-
-
+df_log2foldchange_StageI   <-df_log2foldchange[which(df_log2foldchange$StageI_StagesII_III_log2foldchange>=0.25),c("Gene","StageI_StagesII_III_log2foldchange")]
+df_log2foldchange_StageII  <-df_log2foldchange[which(df_log2foldchange$StageII_StagesI_III_log2foldchange>=0.25),c("Gene","StageII_StagesI_III_log2foldchange")]
+df_log2foldchange_StageIII <-df_log2foldchange[which(df_log2foldchange$StageIII_StagesI_II_log2foldchange>=0.25),c("Gene","StageIII_StagesI_II_log2foldchange")]
 
 # Writing mtcars data
 write.table(df_log2foldchange_StageI, file = "/home/felipe/Documentos/LungPortal/samples/df_log2foldchange_stageI.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)

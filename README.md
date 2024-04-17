@@ -81,6 +81,8 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 
 ![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEginiCcg98ILcyMjHjJmkkFkohgB7LPTxYltJrN28c3ZCo4Y8HUKIu5OgELK1YFu8TWuhRexU3Mc4JsBeMtuKTAuSeKyi6eGdPzM3AOoCgc5VcT1i8Cm0VyLEsb6-GO6MvUmlJtCMzwNWoWgDAFGPUc32dn38fGHe1zXNS53jHVDyr5ULMiy-Ab12a3J_My/w640-h448/WhatsApp%20Image%202024-04-17%20at%2011.46.09.jpeg)
 
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgQCqZ7cMW5Lm8uAuQvWxdkbD2wPR88bi65huo_KBPDPbfXKPqd3vZ5jwc3PVpoFiasG94LsnIvqIe9rYYpqrGZ9zjS5c98R59SIUgsBVdIUriIwf56Ytm-SL11kWI6UUQ8EzPYW4QWMVUlabKdTY6HP5stXOgfCB1u0qmqQy4rjTF-UHFY7fljkWNKP6TO/w640-h448/PPI_vs_log2foldchange.png)
+
 
 ## A R script to compute Create files for raw counts per stage
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateRawCountsPerStage.R")

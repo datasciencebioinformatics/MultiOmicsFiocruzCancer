@@ -8,10 +8,10 @@
 #                                                                                                                                                        #
 ##########################################################################################################################################################
 # Path to files of selected_genes                                                                                                      # 
-sele_genes_uniq_pos_stages_I_file       <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_I.tsv"        #
-sele_genes_uniq_pos_stages_II_file      <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_II.tsv"       #
-sele_genes_uniq_pos_stages_III_file     <-"/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_III.tsv"      #
-unstranded_file                         <-"/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                           #
+sele_genes_uniq_pos_stages_I_file       <-"/home/felipe/Documentos/LungPortal/output/selected_genes_Stage_pos_stage_I.tsv"             #
+sele_genes_uniq_pos_stages_II_file      <-"/home/felipe/Documentos/LungPortal/output/selected_genes_Stage_pos_stage_II.tsv"            #
+sele_genes_uniq_pos_stages_III_file     <-"/home/felipe/Documentos/LungPortal/output/selected_genes_Stage_pos_stage_III.tsv"           #
+unstranded_file                         <-"/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                          #
 colData_file                            <-"/home/felipe/Documentos/LungPortal/samples/colData.tsv"                                     #
 ########################################################################################################################################
 # Load data                                                                                                                           #

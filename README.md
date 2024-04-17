@@ -64,7 +64,7 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 ## A R script to compute DE genes of each stage
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStage.R")
 
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgXa1QhEH9CX1_upuGzFWUswM4cpxefAFfrV6Kx7cm41r3ruwLZ_K-CwV3kfrJqw6aiIqw-ohJmY4RUZCXSeSzjeQPiXiFHm-UcuEwe995U8AxQJiv7vykRN22Xt9CCXLmUCxZGvuNJRFKRlZ7lX-JbL3QtUVxsz7ub4k287klv3imNjTyUWa_WxONE_uOn/s16000/Volcano_Plot_Normal_Tumor_Stage_stage_I.png)
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj0VKy-DEi9jI1hXrhOak8Flk8g8oYLa3VB_RV7QSxLAOOKUqXPLPl-65a8j2qb4zD690htSpZYqPv2TZruRoTsjl1QTMj3xUEo09NUu8m1StlSLQ8i6fJF-86uc9Emo1Ohff-hbFQqYvV1KBPC0cFQfIZNA8xNdNI2wOcPnZbxSiobps5wM_IXM6yVuJYy/w640-h548/Volcano_Plot_Normal_Tumor_Stage_stage_II.png)
 
 ![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhFM7z2mJa-KbtVaNSSptc6FTKCtbxJBeTtVfqzrzBJMDxADSGo248GaFVC6IEC9hKx8KtRPRUFxmGw3NE9u8RXoGEAZK4-HJnWo1eyiXSS0m9m4EY2_2u9X8MhM9hXvui3VUzTzt4rmb3HcMhxPG6F-kPiucTHBH9l1OAMYtLXDcKbpFXERCiMYhoEUoh8/s16000/Panel_genes_stage1.png)
 
@@ -89,6 +89,6 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 ## A R script to compute Create files for raw counts per stage
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateRawCountsPerStage.R")
 
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj0VKy-DEi9jI1hXrhOak8Flk8g8oYLa3VB_RV7QSxLAOOKUqXPLPl-65a8j2qb4zD690htSpZYqPv2TZruRoTsjl1QTMj3xUEo09NUu8m1StlSLQ8i6fJF-86uc9Emo1Ohff-hbFQqYvV1KBPC0cFQfIZNA8xNdNI2wOcPnZbxSiobps5wM_IXM6yVuJYy/w640-h548/Volcano_Plot_Normal_Tumor_Stage_stage_II.png)
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhpIf9fziVdehRwZ2o4YofXWbqcfqCqB3SXUsLQtF_dBu8YUB9b7Rc7ARXjl4Souxog5W6sNgFELulOFcuQsLVj7og1jb9iP1oVz4u8qReIeMFb_KYkEbn_OIDkTxxVO8UDQVZuE3hKP3ecTcSHU-pdf99wVMUVwaShIsp6qusmm9xt4CLk0apI_4vGzK70/w640-h640/Panel_genes_Substage1.png)
 
 

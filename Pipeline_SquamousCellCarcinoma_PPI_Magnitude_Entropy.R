@@ -180,13 +180,26 @@ my_comparisons <- list( c("stageII_over_stageI", "stageIII_over_stageI"), c("sta
 # df_order_of_magnitude                                                                                              #
 # Selcted only gennes that can converted in the table of PPI                                                         #
 df_order_of_magnitude<-df_order_of_magnitude[df_order_of_magnitude$Gene %in% merge_interactome_gene_symbol$gene_id,]                   #
-                                                                                                                     #
-# Filter both tables                                                                                                 #
-Table1_data<-Table1_data[Table1_data$EMSEMBL %in% df_order_of_magnitude$Gene,]                                       #
-                                                                                                                     #
+                                                                                                                     #                                                                                                                   #
 #for each rown, add the number of connections                                                                        #
 df_order_of_magnitude$PPI<-0                                                                                         #
-                                                                                                                     #
+
+# Subset gene_symbol and PPI
+df_interactome<-unique(data.frame(Gene=merge_interactome_gene_symbol$gene_id,PPI=merge_interactome_gene_symbol$PPI))
+
+# Set rownames()
+rownames(df_interactome)<-df_interactome$Gene
+
+# Take just the first occurance
+df_interactome<-df_interactome[!duplicated(df_interactome$Gene), ]
+
+# Assert rownames
+rownames(df_interactome)<-df_interactome$Gene
+
+# Assert PPI
+df_order_of_magnitude$PPI<-df_interactome[df_order_of_magnitude$Genes,"PPI"]
+
+                                                                                                     #
 # for each row                                                                                                       #
 for (gene in rownames(df_order_of_magnitude))                                                                        #
 {                                                                                                                    #
@@ -198,7 +211,7 @@ df_order_of_magnitude<-na.omit(df_order_of_magnitude)                           
                                                                                                                      #
 # FindClusters_resolution                                                                                            #
 png(filename=paste(output_dir,"PPI_Order_Magnitude.png",sep=""), width = 14, height = 14, res=600, units = "cm")     ########################################################################################################
-  ggplot(df_order_of_magnitude, aes(x = PPI, y = log(order_of_magnitude))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("PPI vs. Order of magnitude")           #
+  ggplot(df_order_of_magnitude, aes(x = log(PPI), y = log(order_of_magnitude))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("PPI vs. Order of magnitude")   + facet_wrap(~stage_pair, ncol = 3)          #
 dev.off()                                                                                                                                                                                                                   #
 #############################################################################################################################################################################################################################                                                                                                      
 # Set rownames                                                                                                                                                                                                              #

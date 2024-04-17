@@ -79,7 +79,8 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 ## A R script to compute Pipeline_SquamousCellCarcinoma_PPI_Magnitude_Entropy R
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_PPI_Magnitude_Entropy.R")
 
-![]([https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg-mysDFmd-EqHIEeV9UKjjeWBPr0XeZkHSPaGK67xX8epdNoPaJbQS70Yyl2Mv-b5Ke9YQeMNfbuM8BDnJrs1yR5Q69ZDBkrHwFdkZnsgDV6yA4yrZw0V4g5ADW8ipVFTX_oa0kP6-UsuWyCERLl64co-zX9-6_RNxAjsmesAV-dATr52NJrBJwiZzpmWB/s3779/reducedTerms_stage_I.png](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEginiCcg98ILcyMjHjJmkkFkohgB7LPTxYltJrN28c3ZCo4Y8HUKIu5OgELK1YFu8TWuhRexU3Mc4JsBeMtuKTAuSeKyi6eGdPzM3AOoCgc5VcT1i8Cm0VyLEsb6-GO6MvUmlJtCMzwNWoWgDAFGPUc32dn38fGHe1zXNS53jHVDyr5ULMiy-Ab12a3J_My/w640-h448/WhatsApp%20Image%202024-04-17%20at%2011.46.09.jpeg))
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEginiCcg98ILcyMjHjJmkkFkohgB7LPTxYltJrN28c3ZCo4Y8HUKIu5OgELK1YFu8TWuhRexU3Mc4JsBeMtuKTAuSeKyi6eGdPzM3AOoCgc5VcT1i8Cm0VyLEsb6-GO6MvUmlJtCMzwNWoWgDAFGPUc32dn38fGHe1zXNS53jHVDyr5ULMiy-Ab12a3J_My/w640-h448/WhatsApp%20Image%202024-04-17%20at%2011.46.09.jpeg)
+
 
 ## A R script to compute Create files for raw counts per stage
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateRawCountsPerStage.R")

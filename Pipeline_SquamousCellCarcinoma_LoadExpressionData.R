@@ -159,7 +159,7 @@ selected_gene_id<-df_gene_id_symbol[df_gene_id_symbol$Gene_id %in% Table1_data$g
 merge_interactome_gene_symbol<-merge(x=Table2_interactoma, y=df_gene_id_symbol, by = "gene_symbol")
 #####################################################################################################################
 # Filter RNA-seq data to contain only data from Conforte et.al
-unstranded_data<-unstranded_data[selected_gene_id,]
+unstranded_data<-unstranded_data[merge_interactome_gene_symbol$gene_id,]
 ############################################################################################################################
 colData<-na.omit(colData)
 unstranded_data<-unstranded_data[,colData$patient_id]

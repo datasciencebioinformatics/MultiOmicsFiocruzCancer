@@ -15,6 +15,7 @@ sele_genes_uniq_pos_stages_II_file      <-"/home/felipe/Documentos/LungPortal/ou
 sele_genes_uniq_pos_stages_III_file     <-"/home/felipe/Documentos/LungPortal/output/selected_genes_Stage_pos_stage_III.tsv"           #
 unstranded_file                         <-"/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                          #
 colData_file                            <-"/home/felipe/Documentos/LungPortal/samples/colData.tsv"                                     #
+df_log2foldchange_file                  <-"/home/felipe/Documentos/LungPortal/samples/df_log2foldchange.tsv"                           #
 ########################################################################################################################################
 # Load data                                                                                                                           #
 sele_genes_uniq_pos_stages_I_data       <-read.table(file = sele_genes_uniq_pos_stages_I_file, sep = '\t', header = TRUE,fill=TRUE)   #
@@ -22,6 +23,7 @@ sele_genes_uniq_pos_stages_II_data      <-read.table(file = sele_genes_uniq_pos_
 sele_genes_uniq_pos_stages_III_data     <-read.table(file = sele_genes_uniq_pos_stages_III_file, sep = '\t', header = TRUE,fill=TRUE) #
 unstranded_data                         <-read.table(file = unstranded_file, sep = '\t', header = TRUE,fill=TRUE)                     #
 colData_data                            <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                        #
+df_log2foldchange_data                  <-read.table(file = df_log2foldchange_file, sep = '\t', header = TRUE,fill=TRUE)              #
                                                                                                                                       #
 # Set rownames                                                                                                                        #
 rownames(sele_genes_uniq_pos_stages_I_data)<-sele_genes_uniq_pos_stages_I_data$Gene                                                   #
@@ -39,8 +41,7 @@ unstranded_data <- na.omit(unstranded_data)                                     
                                                                                                                                       #
 # Filter to keep only positive tumor/normal samples from colData_data.                                                                #
 colData_data<-colData_data[colnames(unstranded_data),]                                                                                #
-                                                                                                                                      #
-                                                                                                                                      #
+                                                                                                                                      #                                                                                                                                      #
 # Create dds_stages with selected for the purpose of getting normalized counts                                                        #
 dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData, design = ~  age_at_index +  gender +tissue_type  ) #
                                                                                                                                       #
@@ -115,9 +116,9 @@ rownames(df_interactome)<-df_interactome$Gene
 # Assert PPI
 df_order_of_magnitude$PPI<-df_interactome[df_order_of_magnitude$Genes,"PPI"]                                         
 
-df_magnitude_stageI<-cbind(df_order_of_magnitude,data.frame(Stage="Stage I",Epxr_Mean=rowMeans(norm_counts[df_order_of_magnitude$Genes,sample_stage_I])))
-df_magnitude_stageII<-cbind(df_order_of_magnitude,data.frame(Stage="Stage II",Epxr_Mean=rowMeans(norm_counts[df_order_of_magnitude$Genes,sample_stage_II])))
-df_magnitude_stageIII<-cbind(df_order_of_magnitude,data.frame(Stage="Stage III",Epxr_Mean=rowMeans(norm_counts[df_order_of_magnitude$Genes,sample_stage_III])))
+df_magnitude_stageI<-cbind(df_order_of_magnitude,data.frame(Stage="Stage I",log2foldchange=df_log2foldchange_data[as.vector(df_order_of_magnitude$Genes),"StageI_StagesII_III_log2foldchange2"]))
+df_magnitude_stageII<-cbind(df_order_of_magnitude,data.frame(Stage="Stage II",log2foldchange=df_log2foldchange_data[as.vector(df_order_of_magnitude$Genes),"StageII_StagesI_III_log2foldchange2"]))
+df_magnitude_stageIII<-cbind(df_order_of_magnitude,data.frame(Stage="Stage III",log2foldchange=df_log2foldchange_data[as.vector(df_order_of_magnitude$Genes),"StageIII_StagesI_II_log2foldchange"]))
                                                                                                
 # Assert Average Gene Expression
 df_order_of_magnitude_melt<-rbind(df_magnitude_stageI,df_magnitude_stageII,df_magnitude_stageIII)
@@ -133,11 +134,11 @@ cor(df_magnitude_stageIII$Epxr_Mean, df_magnitude_stageIII$PPI, method = c("pear
 
                                                                                                                      #
 # FindClusters_resolution                                                                                            #
-png(filename=paste(output_dir,"PPI_vs_Order_Magnitude.png",sep=""), width = 20, height = 14, res=600, units = "cm")     ########################################################################################################
-  ggplot(df_order_of_magnitude_melt, aes(x = log(PPI), y = log(order_of_magnitude))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Connectivity vs. Order of magnitude")   + facet_wrap(~stage_pair, ncol = 3)          +stat_cor(method = "pearson")  # Add correlation coefficient
+png(filename=paste(output_dir,"log2foldchange_vs_Order_Magnitude.png",sep=""), width = 20, height = 14, res=600, units = "cm")     ########################################################################################################
+  ggplot(df_order_of_magnitude_melt, aes(y =log(order_of_magnitude), x = log(log2foldchange))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("log2foldchange vs. Order of magnitude")   + facet_wrap(~stage_pair, ncol = 3)         
 dev.off()   
 
 # FindClusters_resolution                                                                                            #
-png(filename=paste(output_dir,"PPI_vs_Expression.png",sep=""), width = 20, height = 14, res=600, units = "cm")     ########################################################################################################
-  ggplot(df_order_of_magnitude_melt, aes(x = log(PPI), y = log(Epxr_Mean))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Connectivity vs. Epxr_Mean")   + facet_wrap(~Stage, ncol = 3)          +stat_cor(method = "pearson") 
+png(filename=paste(output_dir,"PPI_vs_log2foldchange.png",sep=""), width = 20, height = 14, res=600, units = "cm")     ########################################################################################################
+  ggplot(df_order_of_magnitude_melt, aes(x = log(PPI), y = log2foldchange)) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Connectivity vs. log2foldchange")   + facet_wrap(~Stage, ncol = 3)          +stat_cor(method = "pearson") 
 dev.off()   

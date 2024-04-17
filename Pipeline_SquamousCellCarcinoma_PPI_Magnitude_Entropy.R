@@ -197,22 +197,24 @@ df_interactome<-df_interactome[!duplicated(df_interactome$Gene), ]
 rownames(df_interactome)<-df_interactome$Gene
 
 # Assert PPI
-df_order_of_magnitude$PPI<-df_interactome[df_order_of_magnitude$Genes,"PPI"]
+df_order_of_magnitude$PPI<-df_interactome[df_order_of_magnitude$Genes,"PPI"]                                         
 
-                                                                                                     #
-# for each row                                                                                                       #
-for (gene in rownames(df_order_of_magnitude))                                                                        #
-{                                                                                                                    #
-    df_order_of_magnitude[gene,"PPI"]<-merge_interactome_gene_symbol[merge_interactome_gene_symbol$gene_id==gene,"PPI"][1]                               #
-}                                                                                                                    #
+# Assert Average Gene Expression
+df_order_of_magnitude$Epxr_Mean<-rowMeans(norm_counts[df_order_of_magnitude$Genes,])
                                                                                                                      #
 # PPI                                                                                                                #
 df_order_of_magnitude<-na.omit(df_order_of_magnitude)                                                                #
                                                                                                                      #
 # FindClusters_resolution                                                                                            #
-png(filename=paste(output_dir,"PPI_Order_Magnitude.png",sep=""), width = 14, height = 14, res=600, units = "cm")     ########################################################################################################
-  ggplot(df_order_of_magnitude, aes(x = log(PPI), y = log(order_of_magnitude))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("PPI vs. Order of magnitude")   + facet_wrap(~stage_pair, ncol = 3)          #
-dev.off()                                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"PPI_vs_Order_Magnitude.png",sep=""), width = 20, height = 14, res=600, units = "cm")     ########################################################################################################
+  ggplot(df_order_of_magnitude, aes(x = log(PPI), y = log(order_of_magnitude))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("PPI vs. Order of magnitude")   + facet_wrap(~stage_pair, ncol = 3)          +stat_cor(method = "pearson")  # Add correlation coefficient
+dev.off()   
+
+# FindClusters_resolution                                                                                            #
+png(filename=paste(output_dir,"PPI_vs_Expression.png",sep=""), width = 20, height = 14, res=600, units = "cm")     ########################################################################################################
+  ggplot(df_order_of_magnitude, aes(x = log(PPI), y = log(Epxr_Mean))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("PPI vs. Epxr_Mean")   + facet_wrap(~stage_pair, ncol = 3)          +stat_cor(method = "pearson") 
+dev.off()   
+
 #############################################################################################################################################################################################################################                                                                                                      
 # Set rownames                                                                                                                                                                                                              #
 combined_genes_intersection<-unique(c(rownames(sele_genes_uniq_pos_stages_I_data),rownames(sele_genes_uniq_pos_stages_II_data),rownames(sele_genes_uniq_pos_stages_III_data)))                                              #

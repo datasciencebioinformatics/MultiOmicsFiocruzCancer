@@ -74,7 +74,4 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_PPI_Magnitude_Entropy.R")
 
 ## A R script to compute Create files for raw counts per stage
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Create Pipeline_SquamousCellCarcinoma_CreateRawCountsPerStage.R")
-
-
-
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateRawCountsPerStage.R")

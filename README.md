@@ -88,3 +88,7 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 
 ## A R script to compute Create files for raw counts per stage
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateRawCountsPerStage.R")
+
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhpIf9fziVdehRwZ2o4YofXWbqcfqCqB3SXUsLQtF_dBu8YUB9b7Rc7ARXjl4Souxog5W6sNgFELulOFcuQsLVj7og1jb9iP1oVz4u8qReIeMFb_KYkEbn_OIDkTxxVO8UDQVZuE3hKP3ecTcSHU-pdf99wVMUVwaShIsp6qusmm9xt4CLk0apI_4vGzK70/w640-h640/Panel_genes_Substage1.png)
+
+

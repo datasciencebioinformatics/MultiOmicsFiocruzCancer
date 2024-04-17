@@ -64,14 +64,22 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 ## A R script to compute DE genes of each stage
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStage.R")
 
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgXa1QhEH9CX1_upuGzFWUswM4cpxefAFfrV6Kx7cm41r3ruwLZ_K-CwV3kfrJqw6aiIqw-ohJmY4RUZCXSeSzjeQPiXiFHm-UcuEwe995U8AxQJiv7vykRN22Xt9CCXLmUCxZGvuNJRFKRlZ7lX-JbL3QtUVxsz7ub4k287klv3imNjTyUWa_WxONE_uOn/s16000/Volcano_Plot_Normal_Tumor_Stage_stage_I.png)
+
 ## A R script to compute Ven Diagram for DE genes
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_VeenDiagrams.R")
+
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimixyTBHoL9OwUq68Bu5vY7FjPjshuawWQLc2WeYZ_oOU91aMm5RChh-6zVJP5daMuC0_ZhhT6TiJBmGBxTVqDFdybCqAKQ2UBZTDeOomNZRyfb_nT6cNx1Nvl-dsDj0mARnqgsTm46WxBmySrfQVp_Y540n0mw4GdPSyZEFawGL74HGnTg_wEw6mA_gpy/s320/Veen_diagrams.png)
 
 ## A R script to compute GO terms analysis
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_FunctionalAnalyse.R")
 
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiRKWY7JMqpSAl0u6oP3qb7NRjhmGSymTQnwh86JyHSPPf9tyFJSLFCNebvHMxdzjfImMDko_EEAJ85eEs9qhXfyREExte21UKpxb9lymPt2v2FUTuj4Rs2LTVjc1TcgORoOCiKv53rFIOWr_IVkbSh1WCoyUO7xbZFkP16JtinheziavDDAepAAiwuj2U/s4000/Figure_Hypothalamus_3.png)
+
 ## A R script to compute Pipeline_SquamousCellCarcinoma_PPI_Magnitude_Entropy R
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_PPI_Magnitude_Entropy.R")
+
+
 
 ## A R script to compute Create files for raw counts per stage
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateRawCountsPerStage.R")

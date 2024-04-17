@@ -1,4 +1,5 @@
 library("reshape2")
+library("ggVennDiagram")
 ##########################################################################################################################################################
 # A scrtpt to calculate                                                                                                                                  #
 # 1) boxplots for DE genes from each stage (e.g. Stage I vs. Steges II and III) using smples of each Stage (e.g. Samples from Stage I),                  #
@@ -39,7 +40,7 @@ intersection_genes_pos_Stages_II_III         <-read.table(file = intersection_ge
 intersection_genes_pos_Stages_I_III          <-read.table(file = intersection_genes_pos_Stages_I_III_file, sep = '\t', header = TRUE,fill=TRUE)      #
 #######################################################################################################################################
 # Select stages 
-stages_I_II_III<-ggVennDiagram(list(Stage_I    =selected_genes_Stage_I_data$Gene,Stage_II  =selected_genes_Stage_II_data$Gene,Stage_III  =selected_genes_Stage_III_data$Gene), label_alpha = 0) + scale_fill_viridis() + theme_bw() + ggtitle("Stages I, II and III")
+stages_I_II_III<-ggVennDiagram(list(Stage_I    =sele_genes_uniq_pos_stages_I_data$Gene,Stage_II  =sele_genes_uniq_pos_stages_II_data$Gene,Stage_III  =sele_genes_uniq_pos_stages_III_data$Gene), label_alpha = 0) + scale_fill_viridis() + theme_bw() + ggtitle("Stages I, II and III")
 #######################################################################################################################################
 # Filter to keep only positive tumor/normal samples from unstranded_data.                                                             #
 unstranded_data<-unstranded_data[avg_expression_pos$Gene,]                                                                            #
@@ -178,7 +179,7 @@ my_comparisons <- list( c("stageII_over_stageI", "stageIII_over_stageI"), c("sta
 ############################################################################################################################################################################################################################################################
 # df_order_of_magnitude                                                                                              #
 # Selcted only gennes that can converted in the table of PPI                                                         #
-df_order_of_magnitude<-df_order_of_magnitude[df_order_of_magnitude$Gene %in% Table1_data$EMSEMBL,]                   #
+df_order_of_magnitude<-df_order_of_magnitude[df_order_of_magnitude$Gene %in% merge_interactome_gene_symbol$gene_id,]                   #
                                                                                                                      #
 # Filter both tables                                                                                                 #
 Table1_data<-Table1_data[Table1_data$EMSEMBL %in% df_order_of_magnitude$Gene,]                                       #

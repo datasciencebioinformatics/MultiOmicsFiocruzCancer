@@ -163,8 +163,8 @@ for (stage_pair in rownames(stages_pairs))                                      
                                                                                                                                                                                                                                                            # 
     # Take the samples and genes of stages                                                                                                                                                                                                                 #
     samples_stage_i  <-list_samples[[stage_i]]                                                                                                                                                                                                             #
-    samples_stage_ii <-list_samples[[stage_ii]]                                                                                                                                                                                                            #
-                                                                                                                                                                                                                                                           #
+    samples_stage_ii <-list_samples[[stage_ii]]       
+                                                                                                                                                           #
     # Paste Star pairs                                                                                                                                                                                                                                     ############################################################
     df_order_of_magnitude<-rbind(df_order_of_magnitude,data.frame(Genes=names(rowMeans(norm_counts[,samples_stage_ii])/rowMeans(norm_counts[,samples_stage_i])),stage_pair=paste(stage_ii,stage_i,sep="_over_"),order_of_magnitude=rowMeans(norm_counts[,samples_stage_ii])/rowMeans(norm_counts[,samples_stage_i]))) #
 }                                                                                                                                                                                                                                                          ############################################################
@@ -187,32 +187,40 @@ df_order_of_magnitude$PPI<-0                                                    
 # Subset gene_symbol and PPI
 df_interactome<-unique(data.frame(Gene=merge_interactome_gene_symbol$gene_id,PPI=merge_interactome_gene_symbol$PPI))
 
-# Set rownames()
-rownames(df_interactome)<-df_interactome$Gene
-
 # Take just the first occurance
 df_interactome<-df_interactome[!duplicated(df_interactome$Gene), ]
 
-# Assert rownames
+# Set rownames()
 rownames(df_interactome)<-df_interactome$Gene
 
 # Assert PPI
 df_order_of_magnitude$PPI<-df_interactome[df_order_of_magnitude$Genes,"PPI"]                                         
 
+df_magnitude_stageI<-cbind(df_order_of_magnitude,data.frame(Stage="Stage I",Epxr_Mean=rowMeans(norm_counts[df_order_of_magnitude$Genes,sample_stage_I])))
+df_magnitude_stageII<-cbind(df_order_of_magnitude,data.frame(Stage="Stage II",Epxr_Mean=rowMeans(norm_counts[df_order_of_magnitude$Genes,sample_stage_II])))
+df_magnitude_stageIII<-cbind(df_order_of_magnitude,data.frame(Stage="Stage III",Epxr_Mean=rowMeans(norm_counts[df_order_of_magnitude$Genes,sample_stage_III])))
+                                                                                               
 # Assert Average Gene Expression
-df_order_of_magnitude$Epxr_Mean<-rowMeans(norm_counts[df_order_of_magnitude$Genes,])
-                                                                                                                     #
+df_order_of_magnitude_melt<-rbind(df_magnitude_stageI,df_magnitude_stageII,df_magnitude_stageIII)
+                                                                                                                   #
 # PPI                                                                                                                #
-df_order_of_magnitude<-na.omit(df_order_of_magnitude)                                                                #
+df_order_of_magnitude_melt<-na.omit(df_order_of_magnitude_melt)                                                                #
+
+cor(df_order_of_magnitude_melt$Epxr_Mean, df_order_of_magnitude_melt$PPI, method = c("pearson", "kendall", "spearman"))
+cor(df_magnitude_stageI$Epxr_Mean, df_magnitude_stageI$PPI, method = c("pearson", "kendall", "spearman"))
+cor(df_magnitude_stageII$Epxr_Mean, df_magnitude_stageII$PPI, method = c("pearson", "kendall", "spearman"))
+cor(df_magnitude_stageIII$Epxr_Mean, df_magnitude_stageIII$PPI, method = c("pearson", "kendall", "spearman"))
+
+
                                                                                                                      #
 # FindClusters_resolution                                                                                            #
 png(filename=paste(output_dir,"PPI_vs_Order_Magnitude.png",sep=""), width = 20, height = 14, res=600, units = "cm")     ########################################################################################################
-  ggplot(df_order_of_magnitude, aes(x = log(PPI), y = log(order_of_magnitude))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("PPI vs. Order of magnitude")   + facet_wrap(~stage_pair, ncol = 3)          +stat_cor(method = "pearson")  # Add correlation coefficient
+  ggplot(df_order_of_magnitude_melt, aes(x = log(PPI), y = log(order_of_magnitude))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("PPI vs. Order of magnitude")   + facet_wrap(~stage_pair, ncol = 3)          +stat_cor(method = "pearson")  # Add correlation coefficient
 dev.off()   
 
 # FindClusters_resolution                                                                                            #
 png(filename=paste(output_dir,"PPI_vs_Expression.png",sep=""), width = 20, height = 14, res=600, units = "cm")     ########################################################################################################
-  ggplot(df_order_of_magnitude, aes(x = log(PPI), y = log(Epxr_Mean))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("PPI vs. Epxr_Mean")   + facet_wrap(~stage_pair, ncol = 3)          +stat_cor(method = "pearson") 
+  ggplot(df_order_of_magnitude_melt, aes(x = log(PPI), y = log(Epxr_Mean))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("PPI vs. Epxr_Mean")   + facet_wrap(~Stage, ncol = 3)          +stat_cor(method = "pearson") 
 dev.off()   
 
 #############################################################################################################################################################################################################################                                                                                                      

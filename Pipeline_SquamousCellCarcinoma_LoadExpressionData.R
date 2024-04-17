@@ -136,6 +136,8 @@ Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_1.tsv",
 Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/EnsemblToUniprotKBconversionList.txt", sep = '\t', header = FALSE,fill=TRUE)    
 colnames(Table1_data)<-c("gene_id","gene_symbol")
 #####################################################################################################################
+Table2_interactoma<-read.table(file = "/home/felipe/Documentos/LungPortal/ListGenesInteratoma.tsv", sep = '\t', header = TRUE,fill=TRUE)    
+#####################################################################################################################
 gene_vector_id<-c()
 df_gene_id_symbol$Gene_id<-""
 
@@ -153,9 +155,14 @@ for (gene in df_gene_id_symbol$gene_id)
 #selected_gene_id<-df_gene_id_symbol[df_gene_id_symbol$gene_symbol %in% Table1_data$GeneSymbol,"gene_id"]
 selected_gene_id<-df_gene_id_symbol[df_gene_id_symbol$Gene_id %in% Table1_data$gene_id,"gene_id"]
 #####################################################################################################################
+# Merge Table2_interactoma and df_gene_id_symbol
+merge(x=Table2_interactoma, y=df_gene_id_symbol, by = "gene_symbol")
+
+, all.x = TRUE, all.y = FALSE
+
+#####################################################################################################################
 # Filter RNA-seq data to contain only data from Conforte et.al
 unstranded_data<-unstranded_data[selected_gene_id,]
-
 ############################################################################################################################
 colData<-na.omit(colData)
 unstranded_data<-unstranded_data[,colData$patient_id]

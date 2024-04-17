@@ -215,12 +215,12 @@ cor(df_magnitude_stageIII$Epxr_Mean, df_magnitude_stageIII$PPI, method = c("pear
                                                                                                                      #
 # FindClusters_resolution                                                                                            #
 png(filename=paste(output_dir,"PPI_vs_Order_Magnitude.png",sep=""), width = 20, height = 14, res=600, units = "cm")     ########################################################################################################
-  ggplot(df_order_of_magnitude_melt, aes(x = log(PPI), y = log(order_of_magnitude))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("PPI vs. Order of magnitude")   + facet_wrap(~stage_pair, ncol = 3)          +stat_cor(method = "pearson")  # Add correlation coefficient
+  ggplot(df_order_of_magnitude_melt, aes(x = log(PPI), y = log(order_of_magnitude))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Connectivity vs. Order of magnitude")   + facet_wrap(~stage_pair, ncol = 3)          +stat_cor(method = "pearson")  # Add correlation coefficient
 dev.off()   
 
 # FindClusters_resolution                                                                                            #
 png(filename=paste(output_dir,"PPI_vs_Expression.png",sep=""), width = 20, height = 14, res=600, units = "cm")     ########################################################################################################
-  ggplot(df_order_of_magnitude_melt, aes(x = log(PPI), y = log(Epxr_Mean))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("PPI vs. Epxr_Mean")   + facet_wrap(~Stage, ncol = 3)          +stat_cor(method = "pearson") 
+  ggplot(df_order_of_magnitude_melt, aes(x = log(PPI), y = log(Epxr_Mean))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("Connectivity vs. Epxr_Mean")   + facet_wrap(~Stage, ncol = 3)          +stat_cor(method = "pearson") 
 dev.off()   
 
 #############################################################################################################################################################################################################################                                                                                                      

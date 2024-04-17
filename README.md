@@ -66,6 +66,8 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 
 ![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgXa1QhEH9CX1_upuGzFWUswM4cpxefAFfrV6Kx7cm41r3ruwLZ_K-CwV3kfrJqw6aiIqw-ohJmY4RUZCXSeSzjeQPiXiFHm-UcuEwe995U8AxQJiv7vykRN22Xt9CCXLmUCxZGvuNJRFKRlZ7lX-JbL3QtUVxsz7ub4k287klv3imNjTyUWa_WxONE_uOn/s16000/Volcano_Plot_Normal_Tumor_Stage_stage_I.png)
 
+![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhFM7z2mJa-KbtVaNSSptc6FTKCtbxJBeTtVfqzrzBJMDxADSGo248GaFVC6IEC9hKx8KtRPRUFxmGw3NE9u8RXoGEAZK4-HJnWo1eyiXSS0m9m4EY2_2u9X8MhM9hXvui3VUzTzt4rmb3HcMhxPG6F-kPiucTHBH9l1OAMYtLXDcKbpFXERCiMYhoEUoh8/s16000/Panel_genes_stage1.png)
+
 ## A R script to compute Ven Diagram for DE genes
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_VeenDiagrams.R")
 

@@ -156,10 +156,7 @@ for (gene in df_gene_id_symbol$gene_id)
 selected_gene_id<-df_gene_id_symbol[df_gene_id_symbol$Gene_id %in% Table1_data$gene_id,"gene_id"]
 #####################################################################################################################
 # Merge Table2_interactoma and df_gene_id_symbol
-merge(x=Table2_interactoma, y=df_gene_id_symbol, by = "gene_symbol")
-
-, all.x = TRUE, all.y = FALSE
-
+merge_interactome_gene_symbol<-merge(x=Table2_interactoma, y=df_gene_id_symbol, by = "gene_symbol")
 #####################################################################################################################
 # Filter RNA-seq data to contain only data from Conforte et.al
 unstranded_data<-unstranded_data[selected_gene_id,]
@@ -169,6 +166,7 @@ unstranded_data<-unstranded_data[,colData$patient_id]
 merged_data_patient_info_data<-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id %in% colData$patient_id),]
 #####################################################################################################################
 # Writing mtcars data
+write.table(merge_interactome_gene_symbol, file = "/home/felipe/Documentos/LungPortal/samples/merge_interactome_gene_symbol", sep = "\t", row.names = TRUE, col.names = TRUE)
 write.table(colData, file = "/home/felipe/Documentos/LungPortal/samples/colData.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
 write.table(merged_data_patient_info[,c("patient_id","case_id","sample_id","age_at_index","gender","tumor_normal","stages","tissue_type")], file ="/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv" , sep = "\t", row.names = TRUE, col.names = TRUE)
 write.table(unstranded_data, file = "/home/felipe/Documentos/LungPortal/samples/unstranded.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)

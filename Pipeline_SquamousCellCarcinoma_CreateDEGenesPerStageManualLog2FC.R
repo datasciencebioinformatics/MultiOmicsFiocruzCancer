@@ -66,7 +66,7 @@ for (stage_index in stages_str)
 	# Df s6tages I
 	df_stages<-list_genes_per_stage[[stage_index]]
 	####################################################################################################################
-  colnames(df_stages)<-c("Gene","log2foldchange")	
+  	colnames(df_stages)<-c("Gene","log2foldchange")	
 	####################################################################################################################	
 	# First by padj
 	padj_threshold<-1
@@ -80,7 +80,7 @@ for (stage_index in stages_str)
 	df_stages$Category<-"Uncategorized"
 	
 	# First, stageI
-	df_stages[intersect(which(df_stages$log2foldchange >= 0),which(df_stages$log2foldchange>=log2fc_threshold)),"Category"] <-"Up-regulated"
+	df_stages[which(df_stages$log2foldchange>=log2fc_threshold),"Category"] <-"Up-regulated"
 
 	# df_stages
 	df_stages<-df_stages[rownames(df_stages) %in% avg_expression_pos$Gene,]

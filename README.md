@@ -64,31 +64,14 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 ## A R script to compute DE genes of each stage
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStage.R")
 
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj0VKy-DEi9jI1hXrhOak8Flk8g8oYLa3VB_RV7QSxLAOOKUqXPLPl-65a8j2qb4zD690htSpZYqPv2TZruRoTsjl1QTMj3xUEo09NUu8m1StlSLQ8i6fJF-86uc9Emo1Ohff-hbFQqYvV1KBPC0cFQfIZNA8xNdNI2wOcPnZbxSiobps5wM_IXM6yVuJYy/w640-h548/Volcano_Plot_Normal_Tumor_Stage_stage_II.png)
-
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhFM7z2mJa-KbtVaNSSptc6FTKCtbxJBeTtVfqzrzBJMDxADSGo248GaFVC6IEC9hKx8KtRPRUFxmGw3NE9u8RXoGEAZK4-HJnWo1eyiXSS0m9m4EY2_2u9X8MhM9hXvui3VUzTzt4rmb3HcMhxPG6F-kPiucTHBH9l1OAMYtLXDcKbpFXERCiMYhoEUoh8/s16000/Panel_genes_stage1.png)
-
 ## A R script to compute Ven Diagram for DE genes
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_VeenDiagrams.R")
-
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimixyTBHoL9OwUq68Bu5vY7FjPjshuawWQLc2WeYZ_oOU91aMm5RChh-6zVJP5daMuC0_ZhhT6TiJBmGBxTVqDFdybCqAKQ2UBZTDeOomNZRyfb_nT6cNx1Nvl-dsDj0mARnqgsTm46WxBmySrfQVp_Y540n0mw4GdPSyZEFawGL74HGnTg_wEw6mA_gpy/s320/Veen_diagrams.png)
 
 ## A R script to compute GO terms analysis
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_FunctionalAnalyse.R")
 
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg-mysDFmd-EqHIEeV9UKjjeWBPr0XeZkHSPaGK67xX8epdNoPaJbQS70Yyl2Mv-b5Ke9YQeMNfbuM8BDnJrs1yR5Q69ZDBkrHwFdkZnsgDV6yA4yrZw0V4g5ADW8ipVFTX_oa0kP6-UsuWyCERLl64co-zX9-6_RNxAjsmesAV-dATr52NJrBJwiZzpmWB/s3779/reducedTerms_stage_I.png)
-
 ## A R script to compute Pipeline_SquamousCellCarcinoma_PPI_Magnitude_Entropy R
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_PPI_Magnitude_Entropy.R")
 
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEginiCcg98ILcyMjHjJmkkFkohgB7LPTxYltJrN28c3ZCo4Y8HUKIu5OgELK1YFu8TWuhRexU3Mc4JsBeMtuKTAuSeKyi6eGdPzM3AOoCgc5VcT1i8Cm0VyLEsb6-GO6MvUmlJtCMzwNWoWgDAFGPUc32dn38fGHe1zXNS53jHVDyr5ULMiy-Ab12a3J_My/w640-h448/WhatsApp%20Image%202024-04-17%20at%2011.46.09.jpeg)
-
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgQCqZ7cMW5Lm8uAuQvWxdkbD2wPR88bi65huo_KBPDPbfXKPqd3vZ5jwc3PVpoFiasG94LsnIvqIe9rYYpqrGZ9zjS5c98R59SIUgsBVdIUriIwf56Ytm-SL11kWI6UUQ8EzPYW4QWMVUlabKdTY6HP5stXOgfCB1u0qmqQy4rjTF-UHFY7fljkWNKP6TO/w640-h448/PPI_vs_log2foldchange.png)
-
-
 ## A R script to compute Create files for raw counts per stage
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateRawCountsPerStage.R")
-
-![](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhpIf9fziVdehRwZ2o4YofXWbqcfqCqB3SXUsLQtF_dBu8YUB9b7Rc7ARXjl4Souxog5W6sNgFELulOFcuQsLVj7og1jb9iP1oVz4u8qReIeMFb_KYkEbn_OIDkTxxVO8UDQVZuE3hKP3ecTcSHU-pdf99wVMUVwaShIsp6qusmm9xt4CLk0apI_4vGzK70/w640-h640/Panel_genes_Substage1.png)
-
-

@@ -107,7 +107,7 @@ for (stage_index in stages_str)
 	#######################################################################################################################
 	# FindClusters_resolution
 	png(filename=paste(output_dir,"PCA_Plot_Normal_Tumor_Stage_",stage_index,".png",sep=""), width = 12, height = 12, res=600, units = "cm")
-		pca_normal_stages_first_second
+		plotPCA(vst_stages_sub[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom')
 	dev.off()		
 	#######################################################################################################################	
 	# Save TSV file with genes from Stage1

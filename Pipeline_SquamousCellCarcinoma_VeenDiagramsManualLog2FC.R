@@ -4,9 +4,9 @@ library(viridis)
 # Path to files of selected_genes                                                                                                     # 
 #######################################################################################################################################
 # Path to files of selected_genes                                                                                                     # 
-selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/samples/df_log2foldchange_stageI.tsv"                         #  
-selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/samples/df_log2foldchange_stageII.tsv"                        #
-selected_genes_Stage_III_file     <-"/home/felipe/Documentos/LungPortal/samples/df_log2foldchange_stageI.tsv"                         #
+selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/Manual_selected_genes_Stage_pos_1.tsv"                        #  
+selected_genes_Stage_II_file       <-"/home/felipe/Documentos/LungPortal/Manual_selected_genes_Stage_pos_2.tsv"                       #  
+selected_genes_Stage_III_file       <-"/home/felipe/Documentos/LungPortal/Manual_selected_genes_Stage_pos_3.tsv"                      #  
 unstranded_file                   <-"/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                               #
 #######################################################################################################################################
 # Load data                                                                                                                           #

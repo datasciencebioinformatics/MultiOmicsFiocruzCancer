@@ -11,7 +11,7 @@ log2fc_expression_pos_data              <-read.table(file = unstranded_file, sep
 #######################################################################################################################################
 # Filter up genes                                                                                                                     #
 #unstranded_data<-unstranded_data[rownames(log2fc_expression_pos),colData_data$patient_id]                                            #
-unstranded_data<-unstranded_data[,colData_data$patient_id]                                            #
+unstranded_data<-unstranded_data[rownames(log2fc_expression_pos_data),colData_data$patient_id]                                            #
 
                                                                                                                                       #
 # Filter up patientt                                                                                                                  #

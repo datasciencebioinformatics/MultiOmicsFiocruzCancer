@@ -70,7 +70,7 @@ for (stage_index in stages_str)
 	####################################################################################################################	
 	# First by padj
 	padj_threshold<-1
-	log2fc_threshold<-0.58
+	log2fc_threshold<-0
 	
 	# First, stage
 	df_stages<-df_stages[df_stages$log2foldchange>=log2fc_threshold,]

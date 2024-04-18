@@ -83,7 +83,7 @@ for (stage_index in stages_str)
 	df_stages[which(df_stages$log2foldchange>=log2fc_threshold),"Category"] <-"Up-regulated"
 
 	# df_stages
-	df_stages<-df_stages[rownames(df_stages) %in% avg_expression_pos$Gene,]
+	#df_stages<-df_stages[rownames(df_stages) %in% avg_expression_pos$Gene,]
   ####################################################################################################################	
 	# Save TSV file with genes from Stage3
 	write_tsv(cbind(data.frame(Gene=rownames(df_stages)),df_stages), paste(output_dir,"genes_Stage_manual_log2folchange",stage_index,".tsv",sep=""))

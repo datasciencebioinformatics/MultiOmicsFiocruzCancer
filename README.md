@@ -58,7 +58,7 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 ## A R scripts to load paired sample
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamples.R")
 
-## A R script to compute DE genes of each stage
+## A R script to compute DE genes of each stage DESeq2
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStage.R")
 
 ## A R script to compute DE genes of each stage ManualLog2FC
@@ -67,8 +67,11 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 ## A R script to compute Pipeline_SquamousCellCarcinoma_PPI_Magnitude_Entropy R
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_PPI_Magnitude_Entropy.R")
 
-## A R script to compute Ven Diagram for DE genes
+## A R script to compute Ven Diagram for DE genes DESeq2
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_VeenDiagrams.R")
 
-## A R script to compute GO terms analysis
+## A R script to compute GO terms analysis DESeq2
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_FunctionalAnalyse.R")
+
+## A R script to compute GO terms analysis ManualLog2FC
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_FunctionalAnalyseManualLog2FC.R")

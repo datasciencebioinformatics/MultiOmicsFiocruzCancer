@@ -52,16 +52,6 @@ colData_bck<-colData
 # for each pair of stage.
 for (stage_index in stages_str)
 {		
-	# Run DESeq2
-	dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data[,colData$patient_id], colData=colData, design = as.formula(paste("~ age_at_index +  gender + ",stage_index))  )
-
-	# Run DESeq2
-	dds_stages <- DESeq(dds_stages)
-
-	print(resultsNames(dds_stages)[4])		
-
-	# Df s6tages I
-	df_results<-data.frame(results(dds_stages,name=resultsNames(dds_stages)[4]))
 	####################################################################################################################
 	# Df s6tages I
 	df_stages<-list_genes_per_stage[[stage_index]]
@@ -91,23 +81,33 @@ for (stage_index in stages_str)
 	# Selected genes	
 	# Obtain differential Category numbers
 	selected_genes<-rownames(df_stages[which(df_stages$Category!="Uncategorized"),])
-
   ####################################################################################################################
+	# Run DESeq2
+	dds_stages <- DESeqDataSetFromMatrix(countData = na.omit(unstranded_data[selected_genes,colData$patient_id]) , colData=colData, design = as.formula(paste("~ age_at_index +  gender + ",stage_index))  )
+
+	# Run DESeq2
+	dds_stages <- DESeq(dds_stages)
+
+	print(resultsNames(dds_stages)[4])		
+
+	# Df s6tages I
+	df_results<-data.frame(results(dds_stages,name=resultsNames(dds_stages)[4]))
+	
 	# Run varianceStabilizingTransformation
 	vst_stages_sub<-varianceStabilizingTransformation(dds_stages, blind = TRUE, fitType = "parametric")
 	 
 	# Obtain differential Category numbers
-	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes", stage_index))
+	pca_normal_stages_first_second<-plotPCA(vst_stages_sub, intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes", stage_index))
 
 	# Filter table
 	df_stages<-df_stages[which(df_stages$Category!="Uncategorized"),]	
 	#######################################################################################################################
 	# Remove samples from Stage III and plot again
-	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom')
+	pca_normal_stages_first_second<-plotPCA(vst_stages_sub, intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom')
 	#######################################################################################################################
 	# FindClusters_resolution
-	png(filename=paste(output_dir,"PCA_Plot_Normal_Tumor_Stage_",stage_index,".png",sep=""), width = 12, height = 12, res=600, units = "cm")
-		plotPCA(vst_stages_sub[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom')
+	png(filename=paste(output_dir,"PCA_Plot_Normal_Tumor_Stage_",stage_index,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
+		plotPCA(vst_stages_sub, intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom')
 	dev.off()		
 	#######################################################################################################################	
 	# Save TSV file with genes from Stage1

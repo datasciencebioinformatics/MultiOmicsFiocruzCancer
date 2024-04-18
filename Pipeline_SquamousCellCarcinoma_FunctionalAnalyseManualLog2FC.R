@@ -39,10 +39,10 @@ library("topGO")
 library("hgu95av2.db")
 
 # Vectors for the pvalue of selected genes
-vector_Stage_I <-selected_genes_Stage_I_data$padj
-vector_Stage_II <-selected_genes_Stage_II_data$padj
-vector_Stage_III <-selected_genes_Stage_III_data$padj
-vector_all <- df_stages$pvalue
+vector_Stage_I <-selected_genes_Stage_I_data$log2foldchange
+vector_Stage_II <-selected_genes_Stage_II_data$log2foldchange
+vector_Stage_III <-selected_genes_Stage_III_data$log2foldchange
+vector_all <- df_stages$log2foldchange
 
 # Names of genes
 names(vector_Stage_I)<-gsub("\\.\\d+", "", selected_genes_Stage_I_data$Gene)

@@ -126,13 +126,7 @@ df_order_of_magnitude_melt<-rbind(df_magnitude_stageI,df_magnitude_stageII,df_ma
 # PPI                                                                                                                #
 df_order_of_magnitude_melt<-na.omit(df_order_of_magnitude_melt)                                                                #
 
-cor(df_order_of_magnitude_melt$Epxr_Mean, df_order_of_magnitude_melt$PPI, method = c("pearson", "kendall", "spearman"))
-cor(df_magnitude_stageI$Epxr_Mean, df_magnitude_stageI$PPI, method = c("pearson", "kendall", "spearman"))
-cor(df_magnitude_stageII$Epxr_Mean, df_magnitude_stageII$PPI, method = c("pearson", "kendall", "spearman"))
-cor(df_magnitude_stageIII$Epxr_Mean, df_magnitude_stageIII$PPI, method = c("pearson", "kendall", "spearman"))
-
-
-                                                                                                                     #
+                                                                                                                    #
 # FindClusters_resolution                                                                                            #
 png(filename=paste(output_dir,"log2foldchange_vs_Order_Magnitude.png",sep=""), width = 20, height = 14, res=600, units = "cm")     ########################################################################################################
   ggplot(df_order_of_magnitude_melt, aes(y =log(order_of_magnitude), x = log(log2foldchange))) +  geom_point() + theme_bw()  + theme(axis.text.x = element_text(angle=90, vjust=.5, hjust=1)) + ggtitle("log2foldchange vs. Order of magnitude")   + facet_wrap(~stage_pair, ncol = 3)         

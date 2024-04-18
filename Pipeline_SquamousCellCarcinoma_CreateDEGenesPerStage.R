@@ -119,5 +119,5 @@ for (stage_index in stages_str)
 	dev.off()		
 	#######################################################################################################################	
 	# Save TSV file with genes from Stage1
-	write_tsv(cbind(data.frame(Gene=rownames(df_stages)),df_stages), paste(output_dir,"selected_genes_Stage_pos_",stage_index,".tsv",sep=""))
+	write_tsv(cbind(data.frame(Gene=rownames(df_stages)),df_stages), paste(output_dir,"DESeq2_selected_genes_Stage_pos_",stage_index,".tsv",sep=""))
 }

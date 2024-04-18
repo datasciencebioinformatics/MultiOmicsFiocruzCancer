@@ -8,9 +8,9 @@ library("rrvgo")
 # Important is to improve legibility of plot
 #######################################################################################################################################
 # Path to files of selected_genes                                                                                                     # 
-selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/samples/df_log2foldchange_stageI.tsv"                         #  
-selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/samples/df_log2foldchange_stageII.tsv"                        #
-selected_genes_Stage_III_file     <-"/home/felipe/Documentos/LungPortal/samples/df_log2foldchange_stageI.tsv"                         #
+selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/Manual_selected_genes_Stage_pos_1.tsv"                         #  
+selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/Manual_selected_genes_Stage_pos_2.tsv"                        #
+selected_genes_Stage_III_file     <-"/home/felipe/Documentos/LungPortal/Manual_selected_genes_Stage_pos_3.tsv"                         #
 unstranded_file                   <-"/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                               #
 #######################################################################################################################################
 # Load data                                                                                                                           #
@@ -98,15 +98,15 @@ treemapPlot(reducedTerms_stage_II)
 treemapPlot(reducedTerms_stage_III)
 #######################################################################################################################################
 # FindClusters_resolution
-png(filename=paste(output_dir,"reducedTerms_stage_I.png",sep=""), width = 16, height = 14, res=600, units = "cm")
+png(filename=paste(output_dir,"Manual_reducedTerms_stage_I.png",sep=""), width = 16, height = 14, res=600, units = "cm")
 	treemapPlot(reducedTerms_stage_I)
 dev.off()
 # FindClusters_resolution
-png(filename=paste(output_dir,"reducedTerms_stage_II.png",sep=""), width = 16, height = 14, res=600, units = "cm")
+png(filename=paste(output_dir,"Manual_reducedTerms_stage_II.png",sep=""), width = 16, height = 14, res=600, units = "cm")
 	treemapPlot(reducedTerms_stage_II)
 dev.off()
 # FindClusters_resolution
-png(filename=paste(output_dir,"reducedTerms_stage_III.png",sep=""), width = 16, height = 14, res=600, units = "cm")
+png(filename=paste(output_dir,"Manual_reducedTerms_stage_III.png",sep=""), width = 16, height = 14, res=600, units = "cm")
 	treemapPlot(reducedTerms_stage_III)
 dev.off()
 #######################################################################################################################################
@@ -119,7 +119,7 @@ reducedTerms_stages<-rbind(reducedTerms_stages,reducedTerms_stage_III)
 #######################################################################################################################################
 # plot: dot plot
 # FindClusters_resolution
-png(filename=paste(output_dir,"GOTerms_reducedTerms.png",sep=""), width = 20, height = 20, res=600, units = "cm")
+png(filename=paste(output_dir,"Manual_GOTerms_reducedTerms.png",sep=""), width = 20, height = 20, res=600, units = "cm")
 	ggplot(data = reducedTerms_stages, aes(y = parentTerm, x = Stage, color = score)) +  geom_point(size=6) + scale_color_gradient(low = "red", high = "blue") +  theme_bw() +   ylab("") +  xlab("") +   ggtitle("GO enrichment analysis for Stages I, II and III") + scale_alpha(guide = "none")
 dev.off()
 #######################################################################################################################################

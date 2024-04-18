@@ -2,10 +2,10 @@
 # Reload colData from file
 # Reload unstranded_data from file
 ###########################################################################################################################
-unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded_data_id.tsv"                #
+unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded.tsv"                        #
 merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
 colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
-avg_expression_pos_file             <- "/home/felipe/Documentos/LungPortal/samples/avg_expression_pos.tsv"                #
+avg_expression_pos_file             <- "/home/felipe/Documentos/LungPortal/samples/log2fc_expression_pos.tsv"             #
 ###########################################################################################################################
 unstranded_data                    <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
 merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#

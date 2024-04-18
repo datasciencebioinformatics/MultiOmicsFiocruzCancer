@@ -93,9 +93,14 @@ for (gene in rownames(unstranded_data))
 # Writing mtcars data
 write.table(df_log2foldchange, file = "/home/felipe/Documentos/LungPortal/samples/df_log2foldchange.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
 #######################################################################################################################################
-df_log2foldchange_StageI   <-df_log2foldchange[which(df_log2foldchange$StageI_StagesII_III_log2foldchange>=0.25),c("Gene","StageI_StagesII_III_log2foldchange")]
-df_log2foldchange_StageII  <-df_log2foldchange[which(df_log2foldchange$StageII_StagesI_III_log2foldchange>=0.25),c("Gene","StageII_StagesI_III_log2foldchange")]
-df_log2foldchange_StageIII <-df_log2foldchange[which(df_log2foldchange$StageIII_StagesI_II_log2foldchange>=0.25),c("Gene","StageIII_StagesI_II_log2foldchange")]
+df_log2foldchange_StageI   <-df_log2foldchange[which(df_log2foldchange$StageI_StagesII_III_log2foldchange>=0.58),c("Gene","StageI_StagesII_III_log2foldchange")]
+df_log2foldchange_StageII  <-df_log2foldchange[which(df_log2foldchange$StageII_StagesI_III_log2foldchange>=0.58),c("Gene","StageII_StagesI_III_log2foldchange")]
+df_log2foldchange_StageIII <-df_log2foldchange[which(df_log2foldchange$StageIII_StagesI_II_log2foldchange>=0.58),c("Gene","StageIII_StagesI_II_log2foldchange")]
+
+# log2fc_expression_pos
+df_log2foldchange_StageI <- df_log2foldchange_StageI[!is.infinite(df_log2foldchange_StageI$StageI_StagesII_III_log2foldchange),]
+df_log2foldchange_StageII <- df_log2foldchange_StageII[!is.infinite(df_log2foldchange_StageII$StageII_StagesI_III_log2foldchange),]
+df_log2foldchange_StageIII <- df_log2foldchange_StageIII[!is.infinite(df_log2foldchange_StageIII$StageIII_StagesI_II_log2foldchange),]
 
 # Writing mtcars data
 write.table(df_log2foldchange_StageI, file = "/home/felipe/Documentos/LungPortal/samples/df_log2foldchange_stageI.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)

@@ -28,9 +28,9 @@ unique_genes_Stage_I <-setdiff(selected_genes_Stage_I_data$Gene,   c(selected_ge
 unique_genes_Stage_II <-setdiff(selected_genes_Stage_II_data$Gene,   c(selected_genes_Stage_I_data$Gene,selected_genes_Stage_III_data$Gene))
 unique_genes_Stage_III<-setdiff(selected_genes_Stage_III_data$Gene, c(selected_genes_Stage_I_data$Gene,selected_genes_Stage_II_data$Gene))
 ###################################################################################################################################################################################################################################################################################################
-write_tsv(selected_genes_Stage_I_data[unique_genes_Stage_I,],     "/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_I.tsv")
-write_tsv(selected_genes_Stage_II_data[unique_genes_Stage_II,],     "/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_II.tsv")
-write_tsv(selected_genes_Stage_III_data[unique_genes_Stage_III,],     "/home/felipe/Documentos/LungPortal/output/uniq_selected_genes_Stage_pos_stage_III.tsv")
+write_tsv(selected_genes_Stage_I_data[unique_genes_Stage_I,],     "/home/felipe/Documentos/LungPortal/output/Manual_uniq_selected_genes_Stage_pos_stage_I.tsv")
+write_tsv(selected_genes_Stage_II_data[unique_genes_Stage_II,],     "/home/felipe/Documentos/LungPortal/output/Manual_uniq_selected_genes_Stage_pos_stage_II.tsv")
+write_tsv(selected_genes_Stage_III_data[unique_genes_Stage_III,],     "/home/felipe/Documentos/LungPortal/output/Manual_uniq_selected_genes_Stage_pos_stage_III.tsv")
 ###################################################################################################################################################################################################################################################################################################
 selected_genes_Stage_I_data       <- unique_genes_Stage_I
 selected_genes_Stage_II_data      <- unique_genes_Stage_II
@@ -60,8 +60,8 @@ intersect_II  <-intersect(selected_genes_Stage_I_data$Gene,selected_genes_Stage_
 intersect_III <-intersect(selected_genes_Stage_I_data$Gene,selected_genes_Stage_III_data$Gene)                                               #
 intersect_IV  <-intersect(selected_genes_Stage_II_data$Gene,selected_genes_Stage_III_data$Gene)                                              #
                                                                                                                                              #
-write_tsv(data.frame(Gene=intersect_I),      "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II_III.tsv")         #
-write_tsv(data.frame(Gene=intersect_II),     "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_II.tsv")             #
-write_tsv(data.frame(Gene=intersect_III),    "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_I_III.tsv")            #
-write_tsv(data.frame(Gene=intersect_IV),     "/home/felipe/Documentos/LungPortal/output/intersection_genes_pos_Stages_II_III.tsv")           #
+write_tsv(data.frame(Gene=intersect_I),      "/home/felipe/Documentos/LungPortal/output/Manual_intersection_genes_pos_Stages_I_II_III.tsv")         #
+write_tsv(data.frame(Gene=intersect_II),     "/home/felipe/Documentos/LungPortal/output/Manual_intersection_genes_pos_Stages_I_II.tsv")             #
+write_tsv(data.frame(Gene=intersect_III),    "/home/felipe/Documentos/LungPortal/output/Manual_intersection_genes_pos_Stages_I_III.tsv")            #
+write_tsv(data.frame(Gene=intersect_IV),     "/home/felipe/Documentos/LungPortal/output/Manual_intersection_genes_pos_Stages_II_III.tsv")           #
 ###################################################################################################################################################################################################################################################################################################

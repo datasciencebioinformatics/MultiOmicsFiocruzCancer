@@ -71,7 +71,7 @@ for (stage_index in stages_str)
 	df_stages[which(df_stages$Avg_log2folchange>=Avg_log2folchange_threshold),"Category"] <-"Up-regulated"
   	####################################################################################################################	
 	# Save TSV file with genes from Stage3
-	write_tsv(cbind(data.frame(Gene=df_stages$gene_id),df_stages), paste(output_dir,"genes_Stage_manual_log2folchange",stage_index,".tsv",sep=""))
+	write_tsv(cbind(data.frame(Gene=df_stages$gene_id),df_stages), paste(output_dir,"genes_Stage_Meanofdiff_log2folchange",stage_index,".tsv",sep=""))
 	####################################################################################################################
 	# Selected genes	
 	# Obtain differential Category numbers

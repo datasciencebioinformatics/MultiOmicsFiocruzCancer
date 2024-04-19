@@ -16,7 +16,7 @@ rownames(colData)                  <-colData$patient_id                         
 # Writing mtcars data                                                                                                     #
 Meanofdiff_StageI_file = "/home/felipe/Documentos/LungPortal/output/Meanofdiff_selected_genes_Stage_pos_I.tsv"            #
 Meanofdiff_StageII_file = "/home/felipe/Documentos/LungPortal/output/Meanofdiff_selected_genes_Stage_pos_II.tsv"          #
-Meanofdiff_StageIII_file = "/home/felipe/Documentos/LungPortal/output/Meanofdiff_selected_genes_Stage_pos_I.tsv"          #
+Meanofdiff_StageIII_file = "/home/felipe/Documentos/LungPortal/output/Meanofdiff_selected_genes_Stage_pos_III.tsv"          #
                                                                                                                           #
 Meanofdiff_StageI_data   <-read.table(file = Meanofdiff_StageI_file, sep = '\t', header = TRUE,fill=TRUE)   #
 Meanofdiff_StageII_data  <-read.table(file = Meanofdiff_StageII_file, sep = '\t', header = TRUE,fill=TRUE)  #
@@ -110,5 +110,5 @@ for (stage_index in stages_str)
 	dev.off()			
 	#######################################################################################################################	
 	# Save TSV file with genes from Stage1
-	write_tsv(cbind(data.frame(Gene=rownames(df_stages)),df_stages), paste(output_dir,"Manual_selected_genes_Stage_pos_",stage_index,".tsv",sep=""))
+	write_tsv(cbind(data.frame(Gene=rownames(df_stages)),df_stages), paste(output_dir,"Meanofdiff_selected_genes_Stage_pos_",stage_index,".tsv",sep=""))
 }

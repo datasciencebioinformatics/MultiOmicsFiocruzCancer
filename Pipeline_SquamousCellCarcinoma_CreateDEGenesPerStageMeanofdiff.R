@@ -56,32 +56,27 @@ for (stage_index in stages_str)
 	# Df s6tages I
 	df_stages<-list_genes_per_stage[[stage_index]]
 	####################################################################################################################
-  	colnames(df_stages)<-c("Gene","log2foldchange")	
-	####################################################################################################################	
 	# First by padj
 	padj_threshold<-1
-	log2fc_threshold<-0
+	Avg_log2folchange_threshold<-3
 	
 	# First, stage
-	df_stages<-df_stages[df_stages$log2foldchange>=log2fc_threshold,]
+	#df_stages<-df_stages[df_stages$log2foldchange>=log2fc_threshold,]
 	####################################################################################################################
 	# First, set category
 	# "Unchanged"
 	df_stages$Category<-"Uncategorized"
 	
 	# First, stageI
-	df_stages[which(df_stages$log2foldchange>=log2fc_threshold),"Category"] <-"Up-regulated"
-
-	# df_stages
-	#df_stages<-df_stages[rownames(df_stages) %in% avg_expression_pos$Gene,]
-  ####################################################################################################################	
+	df_stages[which(df_stages$Avg_log2folchange>=Avg_log2folchange_threshold),"Category"] <-"Up-regulated"
+  	####################################################################################################################	
 	# Save TSV file with genes from Stage3
-	write_tsv(cbind(data.frame(Gene=rownames(df_stages)),df_stages), paste(output_dir,"genes_Stage_manual_log2folchange",stage_index,".tsv",sep=""))
+	write_tsv(cbind(data.frame(Gene=df_stages$gene_id),df_stages), paste(output_dir,"genes_Stage_manual_log2folchange",stage_index,".tsv",sep=""))
 	####################################################################################################################
 	# Selected genes	
 	# Obtain differential Category numbers
-	selected_genes<-rownames(df_stages[which(df_stages$Category!="Uncategorized"),])
-  ####################################################################################################################
+	selected_genes<-df_stages[which(df_stages$Category!="Uncategorized"),"gene_id"]
+  	##############################################################################################################
 	# Run DESeq2
 	dds_stages <- DESeqDataSetFromMatrix(countData = na.omit(unstranded_data[selected_genes,colData$patient_id]) , colData=colData, design = as.formula(paste("~ age_at_index +  gender + ",stage_index))  )
 
@@ -107,7 +102,7 @@ for (stage_index in stages_str)
 	#######################################################################################################################
 	# FindClusters_resolution
 	png(filename=paste(output_dir,"PCA_Plot_Normal_Tumor_Stage_",stage_index,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
-		plotPCA(vst_stages_sub, intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom')
+		plotPCA(vst_stages_sub, intgroup=stage_index) + theme_bw() + ggtitle(paste(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""),"\n","log2folchange>",Avg_log2folchange_threshold,sep=""))+ theme(legend.position='bottom')
 	dev.off()		
 	#######################################################################################################################	
 	# Save TSV file with genes from Stage1

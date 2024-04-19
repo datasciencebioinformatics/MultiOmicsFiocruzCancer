@@ -163,7 +163,7 @@ unstranded_data<-unstranded_data[merge_interactome_gene_symbol$gene_id,]
 ############################################################################################################################
 colData<-na.omit(colData)
 unstranded_data<-unstranded_data[,colData$patient_id]
-merged_data_patient_info_data<-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id %in% colData$patient_id),]
+#merged_data_patient_info_data<-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id %in% colData$patient_id),]
 #####################################################################################################################
 # Writing mtcars data
 write.table(merge_interactome_gene_symbol, file = "/home/felipe/Documentos/LungPortal/samples/merge_interactome_gene_symbol", sep = "\t", row.names = TRUE, col.names = TRUE)

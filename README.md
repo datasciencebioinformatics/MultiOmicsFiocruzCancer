@@ -48,9 +48,10 @@ fpkm_unstranded.rna_seq.augmented_star_gene_counts.tsv
 header.txt 
 gene_name.txt
 
-#### Script:
-
+#### Scripts:
 /home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateTableFromFiles.sh
+
+/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateTableFromFilesMeanOfDiffRPKM.sh
 
 ## A R scripts to load expression files
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadExpressionData.R")

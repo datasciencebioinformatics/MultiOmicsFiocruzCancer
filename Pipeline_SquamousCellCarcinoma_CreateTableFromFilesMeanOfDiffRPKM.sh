@@ -14,6 +14,7 @@ input_folder="/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/"
 rm -f /home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/all_samples.RPKM.tsv
 rm -f  /home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/cases.txt
 rm -r /home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/cases_files.txt
+rm -r /home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/genes_id.txt
 
 # For each file
 ls /home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/*.csv  | while read file
@@ -23,6 +24,7 @@ do
 	echo -e $case_id > "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/"$case_id".RPKM.tsv"
 	cat $file | grep -v "gene_id" | grep -v ,, | sed 's/,/\t/g' | sort -u >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/"$case_id".RPKM.tsv"
  	echo "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/"$case_id".RPKM.tsv" >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/cases_files.txt"
+  	cat $file | grep -v "gene_id" | grep -v ,, | sed 's/,/\t/g' | sort -u | awk '{print $1}' | sort -u > "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/genes_id.txt"
 done
 
 # List of files fo gene id
@@ -37,6 +39,7 @@ do
 	echo -e $case_id > "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageII/"$case_id".RPKM.tsv"
 	cat $file | grep -v "gene_id" | grep -v ,, | sed 's/,/\t/g' | sort -u  >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageII/"$case_id".RPKM.tsv"
  	echo "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageII/"$case_id".RPKM.tsv" >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageII/cases_files.txt"
+  	cat $file | grep -v "gene_id" | grep -v ,, | sed 's/,/\t/g' | sort -u | awk '{print $1}' | sort -u > "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageII/genes_id.txt"
 done
 
 # List of files fo gene id
@@ -51,11 +54,14 @@ do
 	echo -e $case_id > "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageIII/"$case_id".RPKM.tsv"
 	cat $file | grep -v "gene_id" | grep -v ,, | sed 's/,/\t/g'| sort -u  >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageIII/"$case_id".RPKM.tsv"
  	echo "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageIII/"$case_id".RPKM.tsv" >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageIII/cases_files.txt"
+  	cat $file | grep -v "gene_id" | grep -v ,, | sed 's/,/\t/g' | sort -u | awk '{print $1}' | sort -u > "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageIII/genes_id.txt"
 done
 
 
-
-
+# Number of genes per stage
+cat /home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/genes_id.txt | sort -u | wc
+cat /home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageII/genes_id.txt |  sort -u | wc
+cat /home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageIII/genes_id.txt | sort -u | wc
 
 
 

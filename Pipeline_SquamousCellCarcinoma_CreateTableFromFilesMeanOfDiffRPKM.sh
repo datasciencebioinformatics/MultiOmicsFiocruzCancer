@@ -28,7 +28,7 @@ do
 	case_id=$(cat $file |grep -v "gene_id" | head -n 1 | sed 's\.,,\\g')
 	echo $case_id
 	echo $case_id > "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/"$case_id".RPKM.tsv"
-	cat "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/"$case_id".RPKM.tsv" | grep -v "gene_id" | grep -v ,, | sed 's/,/\t/g' >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/"$case_id".RPKM.tsv"
+	cat $file | grep -v "gene_id" | grep -v ,, | sed 's/,/\t/g' >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/"$case_id".RPKM.tsv"
 done
 
 

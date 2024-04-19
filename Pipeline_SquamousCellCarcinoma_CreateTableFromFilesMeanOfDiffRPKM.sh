@@ -20,7 +20,7 @@ ls /home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/
 do
 	case_id=$(cat $file |grep -v "gene_id" | head -n 1 | sed 's\.,,\\g')
 	echo $case_id >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/cases.txt" 
-	echo -e $case_id > "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/"$case_id".RPKM.tsv"
+	echo -e "Gene\n"$case_id > "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/"$case_id".RPKM.tsv"
 	cat $file | grep -v "gene_id" | grep -v ,, | sed 's/,/\t/g' >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/"$case_id".RPKM.tsv"
  	echo "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/"$case_id".RPKM.tsv" >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageI/cases_files.txt"
 done
@@ -34,7 +34,7 @@ ls /home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageII
 do
 	case_id=$(cat $file |grep -v "gene_id" | head -n 1 | sed 's\.,,\\g')
 	echo $case_id >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageII/cases.txt" 
-	echo -e $case_id > "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageII/"$case_id".RPKM.tsv"
+	echo -e "Gene\n"$case_id > "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageII/"$case_id".RPKM.tsv"
 	cat $file | grep -v "gene_id" | grep -v ,, | sed 's/,/\t/g' >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageII/"$case_id".RPKM.tsv"
  	echo "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageII/"$case_id".RPKM.tsv" >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageII/cases_files.txt"
 done
@@ -48,7 +48,7 @@ ls /home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageII
 do
 	case_id=$(cat $file |grep -v "gene_id" | head -n 1 | sed 's\.,,\\g')
 	echo $case_id >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageIII/cases.txt" 
-	echo -e $case_id > "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageIII/"$case_id".RPKM.tsv"
+	echo -e "Gene\n"$case_id > "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageIII/"$case_id".RPKM.tsv"
 	cat $file | grep -v "gene_id" | grep -v ,, | sed 's/,/\t/g' >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageIII/"$case_id".RPKM.tsv"
  	echo "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageIII/"$case_id".RPKM.tsv" >> "/home/felipe/Documentos/LungPortal/samples/RPKM_by_Carels/all_samples/stageIII/cases_files.txt"
 done

@@ -98,13 +98,16 @@ for (stage_index in stages_str)
 	df_stages<-df_stages[which(df_stages$Category!="Uncategorized"),]	
 	#######################################################################################################################
 	# Remove samples from Stage III and plot again
-	pca_normal_stages_first_second<-plotPCA(vst_stages_sub, intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom')
+	pca_normal_stages_first_second<-plotPCA(vst_stages_sub, intgroup=stage_index) + theme_bw() + ggtitle(paste(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""),"\n","log2folchange>",Avg_log2folchange_threshold,sep=""))+ theme(legend.position='bottom')
 	#######################################################################################################################
 	# FindClusters_resolution
-	dev.off()
 	png(filename=paste(output_dir,"PCA_Plot_Normal_Tumor_Stage_",stage_index,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
 		plotPCA(vst_stages_sub, intgroup=stage_index) + theme_bw() + ggtitle(paste(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""),"\n","log2folchange>",Avg_log2folchange_threshold,sep=""))+ theme(legend.position='bottom')
 	dev.off()		
+	# FindClusters_resolution
+	png(filename=paste(output_dir,"PCA_Plot_Normal_Tumor_Stage_",stage_index,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
+		pca_normal_stages_first_second
+	dev.off()			
 	#######################################################################################################################	
 	# Save TSV file with genes from Stage1
 	write_tsv(cbind(data.frame(Gene=rownames(df_stages)),df_stages), paste(output_dir,"Manual_selected_genes_Stage_pos_",stage_index,".tsv",sep=""))

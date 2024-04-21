@@ -72,6 +72,7 @@ dds_stages <- DESeqDataSetFromMatrix(countData = na.omit(unstranded_data[names(e
 # Run DESeq2
 dds_stages <- DESeq(dds_stages)
 
+ensembl = useMart(biomart="ensembl", dataset="hsapiens_gene_ensembl")
 
 names(ebt)<-df_unique_genes[names(ebt),"gene_id"]
 
@@ -93,10 +94,14 @@ df_unique_genes
 df_genes<-na.omit(df_unique_genes[rownames(unstranded_data),])
 library (edgeR)
 library (EDASeq)
+library("biomaRt")
 ensembl_list <- c("ENSG00000000003","ENSG00000000419","ENSG00000000457","ENSG00000000460")
-geneLengthAndGCContent<-getGeneLengthAndGCContent(df_genes$Gene_id, "hsa")
+geneLengthAndGCContent_1<-getGeneLengthAndGCContent(df_genes$Gene_id[1:1000], "hsa")
 
-rpkm(unstranded_data[df_genes$gene_id,], gene.length = geneLengthAndGCContent)
+rownames(df_unique_genes)<-df_unique_genes$Gene_id
+df_unique_genes[rownames(geneLengthAndGCContent_1),"gene_id"]
+
+rpkm(unstranded_data[df_unique_genes[rownames(geneLengthAndGCContent_1),"gene_id"],], gene.length = data.frame(geneLengthAndGCContent_1)$length)
 
 ggplot(df_stages, aes(log2FoldChange)) +
   geom_histogram(color = "#000000", fill = "#0099F8",bin=10) +

@@ -90,7 +90,7 @@ dds_stages_fpkm<-fpkm(dds_stages)
 library (edgeR)
 library (EDASeq)
 ensembl_list <- c("ENSG00000000003","ENSG00000000419","ENSG00000000457","ENSG00000000460")
-getGeneLengthAndGCContent(df_unique_genes$gene_id, "hsa")
+getGeneLengthAndGCContent(ensembl_list, "hsa")
 rpkm(y, gene.length = NULL)
 
 ggplot(df_stages, aes(log2FoldChange)) +

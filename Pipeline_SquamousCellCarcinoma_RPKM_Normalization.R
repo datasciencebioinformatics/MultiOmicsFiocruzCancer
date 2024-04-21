@@ -87,11 +87,16 @@ rowRanges(dds_stages) <- GRangesList(ebt)
 dds_stages_fpkm<-fpkm(dds_stages)
 
 
+df_unique_genes
+
+
+df_genes<-na.omit(df_unique_genes[rownames(unstranded_data),])
 library (edgeR)
 library (EDASeq)
 ensembl_list <- c("ENSG00000000003","ENSG00000000419","ENSG00000000457","ENSG00000000460")
-getGeneLengthAndGCContent(ensembl_list, "hsa")
-rpkm(y, gene.length = NULL)
+geneLengthAndGCContent<-getGeneLengthAndGCContent(df_genes$Gene_id, "hsa")
+
+rpkm(unstranded_data[df_genes$gene_id,], gene.length = geneLengthAndGCContent)
 
 ggplot(df_stages, aes(log2FoldChange)) +
   geom_histogram(color = "#000000", fill = "#0099F8",bin=10) +

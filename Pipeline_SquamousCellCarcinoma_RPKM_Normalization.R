@@ -86,6 +86,13 @@ rowRanges(dds_stages) <- GRangesList(ebt)
 # fpkm
 dds_stages_fpkm<-fpkm(dds_stages)
 
+
+library (edgeR)
+library (EDASeq)
+ensembl_list <- c("ENSG00000000003","ENSG00000000419","ENSG00000000457","ENSG00000000460")
+getGeneLengthAndGCContent(ensembl_list, "hsa")
+rpkm(y, gene.length = NULL)
+
 ggplot(df_stages, aes(log2FoldChange)) +
   geom_histogram(color = "#000000", fill = "#0099F8",bin=10) +
   geom_vline(aes(xintercept = mean(value)), color = "#000000", size = 1.25) +

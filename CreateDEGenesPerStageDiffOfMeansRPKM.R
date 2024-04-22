@@ -33,6 +33,21 @@ colData$stage_III[which(colData$stages=="Stage III")]<-"Stage III"
 
 # Vector with each stage
 stages_str<-c("stage_I","stage_II","stage_III")
+
+# Samples of each stage stored in colData                                                                                             #
+sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"]                                                                     #
+sample_stage_II <-colData[colData$stages=="Stage II","patient_id"]                                                                    #
+sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]                                                                   #
+
+sample_stages_II_III<-colData[colData$stages=="Stage II" | colData$stages=="Stage III","patient_id"]                                  #
+sample_stages_I_III<-colData[colData$stages=="Stage I" | colData$stages=="Stage III","patient_id"]                                    #
+sample_stages_I_II<-colData[colData$stages=="Stage I" | colData$stages=="Stage II","patient_id"]                                      #
+#######################################################################################################################################
+df_table_comparisson=rbind(data.frame(Stage_i="sample_stage_I",Stages_ii_and_iii="sample_stages_II_III"),
+rbind(data.frame(Stage_i="sample_stage_II",Stages_ii_and_iii="sample_stages_I_III"),
+rbind(data.frame(Stage_i="sample_stage_III",Stages_ii_and_iii="sample_stages_I_II"))))
+####################################################################################################################
+list_of_comparisson=list(sample_stage_I=sample_stage_I,sample_stage_II=sample_stage_II,sample_stage_III=sample_stage_III,sample_stages_II_III=sample_stages_II_III,sample_stages_I_III=sample_stages_I_III,sample_stages_I_II=sample_stages_I_II)
 ####################################################################################################################
 # Create bck for colData_bck
 colData_bck<-colData

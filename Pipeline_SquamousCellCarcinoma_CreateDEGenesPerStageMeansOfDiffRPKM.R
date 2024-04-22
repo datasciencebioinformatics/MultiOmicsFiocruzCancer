@@ -80,7 +80,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	fchange_Stage_i$Category<-"Uncategorized"
 
 	# First, stageI
-	fchange_Stage_i[fchange_Stage_i$folchange>=fc_threshold,]<-"Up-regulated"		
+	fchange_Stage_i[fchange_Stage_i$folchange>=fc_threshold,"Category"]<-"Up-regulated"		
   	####################################################################################################################		
 	library(ggfortify) 
 	library(ggplot2)
@@ -98,7 +98,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	dev.off()	
 
 	####################################################################################################################	
-	fchange_Stage_i_sub<-data.frame(gene=rownames(fchange_Stage_i_sub),fchange_Stage_i_sub)
+	fchange_Stage_i_sub<-fchange_Stage_i[selected_genes,]
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3
 	write_tsv(fchange_Stage_i_sub, paste(output_dir,"genes_Stage_MeansOfDiffRPKM",Stage_i,".tsv",sep=""))

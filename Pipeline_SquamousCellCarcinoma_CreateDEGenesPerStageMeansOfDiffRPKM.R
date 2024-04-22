@@ -66,38 +66,38 @@ for (comparisson_index in rownames(df_table_comparisson))
 	folchange=rowMeans(Stage_i_samples_expr)-rowMeans(Stages_ii_and_iii_sample_expr)
 
 	# log2change
-	log2change=log(folchange,2)	
+	#log2change=log(folchange,2)	
 
 	# log2change data
-	log2change_Stage_i=data.frame(gene=names(folchange),log2change=log2change)
+	fchange_Stage_i=data.frame(gene=names(folchange),folchange=folchange)
 	####################################################################################################################	
 	# First by padj
 	padj_threshold<-1
-	log2fc_threshold<-0.58	
+	fc_threshold<-3	
 	####################################################################################################################
 	# First, set category
 	# "Unchanged"
-	log2change_Stage_i$Category<-"Uncategorized"
+	fchange_Stage_i$Category<-"Uncategorized"
 
 	# First, stageI
-	log2change_Stage_i[log2change_Stage_i$log2change>=0.58,]<-"Up-regulated"		
+	fchange_Stage_i[fchange_Stage_i$folchange>=fc_threshold,]<-"Up-regulated"		
   	####################################################################################################################		
 	library(ggfortify) 
 	library(ggplot2)
 	
 	# Selected genes	
 	# Obtain differential Category numbers
-	selected_genes<-rownames(log2change_Stage_i[which(log2change_Stage_i$Category!="Uncategorized"),])
+	selected_genes<-rownames(fchange_Stage_i[which(fchange_Stage_i$Category!="Uncategorized"),])
 
 	pca_res <- prcomp(t(unstranded_data[selected_genes,]), scale. = TRUE)
 	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,]),"stages"], pca_res$x[,1:2])		
 	
 	# FindClusters_resolution
 	png(filename=paste(output_dir,"PCA_",Stage_i,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
-		print(ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,]),], colour="stages", frame=TRUE, frame.type="t") + xlim(-0.1,0.1) + ylim(-0.1,0.1) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom'))
+		print(ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,]),], colour="stages", frame=TRUE, frame.type="t") + xlim(-0.15,0.15) + ylim(-0.15,0.15) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom'))
 	dev.off()	
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3
-	write_tsv(log2change_Stage_i, paste(output_dir,"genes_Stage_DiffOfMeansRPKM",Stage_i,".tsv",sep=""))
+	write_tsv(log2change_Stage_i, paste(output_dir,"genes_Stage_MeansOfDiffRPKM",Stage_i,".tsv",sep=""))
 	####################################################################################################################	
 }

@@ -78,47 +78,21 @@ for (comparisson_index in rownames(df_table_comparisson))
 	####################################################################################################################	
 	# First by padj
 	padj_threshold<-1
-	log2fc_threshold<-0.58
-	
-	# First, stageI
-	#df_stages<-df_stages[log2change_Stage_i$padj<=padj_threshold,]
+	log2fc_threshold<-0.58	
 	####################################################################################################################
 	# First, set category
 	# "Unchanged"
-	df_stages$Category<-"Uncategorized"
-	
-	# First, stageI
-#	df_stages[intersect(which(df_stages$log2FoldChange >= 0),which(abs(df_stages$log2FoldChange)>=log2fc_threshold)),"Category"] <-"Up-regulated"
-#	df_stages[intersect(which(df_stages$log2FoldChange <0  ),which(abs(df_stages$log2FoldChange)>=log2fc_threshold)),"Category"] <-"Down-regulated"
-	df_stages[intersect(which(df_stages$log2FoldChange >= 0),which(df_stages$log2FoldChange>=log2fc_threshold)),"Category"] <-"Up-regulated"
+	log2change_Stage_i$Category<-"Uncategorized"
 
-	# df_stages
-	df_stages<-df_stages[rownames(df_stages) %in% avg_expression_pos$Gene,]
+	# First, stageI
+	log2change_Stage_i[log2change_Stage_i$log2change>=0.58,]<-"Up-regulated"		
   	####################################################################################################################	
 	# Save TSV file with genes from Stage3
-	write_tsv(cbind(data.frame(Gene=rownames(df_stages)),df_stages), paste(output_dir,"genes_Stage_",stage_index,".tsv",sep=""))
+	write_tsv(log2change_Stage_i, paste(output_dir,"genes_Stage_DiffOfMeansRPKM",Stage_i,".tsv",sep=""))
 	####################################################################################################################
-	# Create volcano plot
-	p1 <- ggplot(df_stages, aes(log2FoldChange, -log(padj,2))) +  geom_point(size = 2/5) +  theme_bw()
-	
-	# The thresholds
-	threshold_padj<-min(-log(df_stages[df_stages$Category!="Uncategorized","padj"]))
-	threshold_log2fc_up<-min(df_stages[df_stages$Category=="Up-regulated","log2FoldChange"])
-	threshold_log2fc_down<-max(df_stages[df_stages$Category=="Down-regulated","log2FoldChange"])
-
-	# Adding color to differentially expressed genes (DEGs)
-	p2 <- ggplot(df_stages, aes(log2FoldChange, -log(padj),color = Category)) + geom_point(size = 2/5,aes(color = Category))  +
-	  xlab("log2FoldChange") + 
-	  ylab("-log(padj)") +
-	  scale_color_manual(values = c("gray50", "firebrick3")) +
-	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",resultsNames(dds_stages)[4],sep=""))
-	
-	# Add treshold lines
-	p2 <- p2 + geom_hline(yintercept=threshold_padj ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_up ,linetype = 'dashed') + geom_vline(xintercept=threshold_log2fc_down ,linetype = 'dashed')
-	
 	# Selected genes	
 	# Obtain differential Category numbers
-	selected_genes<-rownames(df_stages[which(df_stages$Category!="Uncategorized"),])
+	selected_genes<-rownames(log2change_Stage_i[which(log2change_Stage_i$Category!="Uncategorized"),])
 	 
 	# Obtain differential Category numbers
 	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes", stage_index))
@@ -130,7 +104,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	padj_histogram_stages<-ggplot(df_stages, aes(x=-log(padj), fill=Category, color=Category)) +  geom_histogram(position="identity",bins = 30) + theme_bw() + ggtitle(paste("DE Genes", stage_index))+ theme(legend.position='bottom')
 	#######################################################################################################################
 	# Remove samples from Stage III and plot again
-	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom')
+	pca_normal_stages_first_second<-plotPCA(unstranded_data[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom')
 	#######################################################################################################################
 	# FindClusters_resolution
 	png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage_",stage_index,".png",sep=""), width = 28, height = 24, res=600, units = "cm")

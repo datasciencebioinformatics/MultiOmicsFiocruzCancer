@@ -84,7 +84,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	
 	# Selected genes	
 	# Obtain differential Category numbers
-	selected_genes<-rownames(log2change_Stage_i[which(log2change_Stage_i$Category!="Uncategorized"),])
+	selected_genes<-rownames(fchange_Stage_i[which(fchange_Stage_i$Category!="Uncategorized"),])
 
 	pca_res <- prcomp(t(unstranded_data[selected_genes,]), scale. = TRUE)
 	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,]),"stages"], pca_res$x[,1:2])		

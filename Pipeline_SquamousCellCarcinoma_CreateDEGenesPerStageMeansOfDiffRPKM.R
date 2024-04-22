@@ -2,7 +2,7 @@
 # Reload colData from file
 # Reload unstranded_data from file
 ###########################################################################################################################
-unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded.tsv"                        #
+unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded_rpkm.tsv"                    #
 merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
 colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
 avg_expression_pos_file             <- "/home/felipe/Documentos/LungPortal/samples/log2fc_expression_pos.tsv"             #
@@ -12,16 +12,6 @@ merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_
 colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
 avg_expression_pos                 <-read.table(file = avg_expression_pos_file, sep = '\t', header = TRUE,fill=TRUE)      #
 rownames(colData)                  <-colData$patient_id                                                                   #
-###########################################################################################################################
-# For each stage take the expression and the genes log2folchange >0.58
-# Writing mtcars data                                                                                                     #
-Meanofdiff_StageI_file = "/home/felipe/Documentos/LungPortal/output/Meanofdiff_selected_genes_Stage_pos_I.tsv"            #
-Meanofdiff_StageII_file = "/home/felipe/Documentos/LungPortal/output/Meanofdiff_selected_genes_Stage_pos_II.tsv"          #
-Meanofdiff_StageIII_file = "/home/felipe/Documentos/LungPortal/output/Meanofdiff_selected_genes_Stage_pos_III.tsv"        #
-                                                                                                                          #
-Meanofdiff_StageI_data   <-read.table(file = Meanofdiff_StageI_file, sep = '\t', header = TRUE,fill=TRUE)                 #
-Meanofdiff_StageII_data  <-read.table(file = Meanofdiff_StageII_file, sep = '\t', header = TRUE,fill=TRUE)                #
-Meanofdiff_StageIII_data <-read.table(file = Meanofdiff_StageIII_file, sep = '\t', header = TRUE,fill=TRUE)               #
 ###########################################################################################################################
 # Filter to only positive tumor/normal samples.
 unstranded_data<-unstranded_data[avg_expression_pos$Gene,]
@@ -36,80 +26,78 @@ colData$stage_I   <- "Stages_II_III"
 colData$stage_II  <- "Stages_I_III"
 colData$stage_III <- "Stages_I_II"
 
-# Each stage
-colData$stage_I[which(colData$stages=="Stage I")]<-"Stage I"
-colData$stage_II[which(colData$stages=="Stage II")]<-"Stage II"
-colData$stage_III[which(colData$stages=="Stage III")]<-"Stage III"
-
 # Vector with each stage
 stages_str<-c("stage_I","stage_II","stage_III")
 
-# Save data.frames
-list_genes_per_stage<-list(stage_I=Meanofdiff_StageI_data,stage_II=Meanofdiff_StageII_data,stage_III=Meanofdiff_StageIII_data)
+# Samples of each stage stored in colData                                                                                             #
+sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"]                                                                     #
+sample_stage_II <-colData[colData$stages=="Stage II","patient_id"]                                                                    #
+sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]                                                                   #
+
+sample_stages_II_III<-colData[colData$stages=="Stage II" | colData$stages=="Stage III","patient_id"]                                  #
+sample_stages_I_III<-colData[colData$stages=="Stage I" | colData$stages=="Stage III","patient_id"]                                    #
+sample_stages_I_II<-colData[colData$stages=="Stage I" | colData$stages=="Stage II","patient_id"]                                      #
+#######################################################################################################################################
+df_table_comparisson=rbind(data.frame(Stage_i="sample_stage_I",Stages_ii_and_iii="sample_stages_II_III"),
+rbind(data.frame(Stage_i="sample_stage_II",Stages_ii_and_iii="sample_stages_I_III"),
+rbind(data.frame(Stage_i="sample_stage_III",Stages_ii_and_iii="sample_stages_I_II"))))
+####################################################################################################################
+list_of_comparisson=list(sample_stage_I=sample_stage_I,sample_stage_II=sample_stage_II,sample_stage_III=sample_stage_III,sample_stages_II_III=sample_stages_II_III,sample_stages_I_III=sample_stages_I_III,sample_stages_I_II=sample_stages_I_II)
 ####################################################################################################################
 # Create bck for colData_bck
 colData_bck<-colData
 
 # for each pair of stage.
-for (stage_index in stages_str)
-{		
+for (comparisson_index in rownames(df_table_comparisson))
+{	
+	# Stages
+	Stage_i          <-df_table_comparisson[comparisson_index,"Stage_i"]
+	Stages_ii_and_iii<-df_table_comparisson[comparisson_index,"Stages_ii_and_iii"]
+
+	# Take samples of each stage
+	Stage_i_samples         =list_of_comparisson[[Stage_i]]
+	Stages_ii_and_iii_sample=list_of_comparisson[[Stages_ii_and_iii]]	
+
+	# Take RPKM of genes from samples of each stage
+	Stage_i_samples_expr         <-unstranded_data[,Stage_i_samples]
+	Stages_ii_and_iii_sample_expr<-unstranded_data[,Stages_ii_and_iii_sample]
 	####################################################################################################################
-	# Df s6tages I
-	df_stages<-list_genes_per_stage[[stage_index]]
-	####################################################################################################################
+	# folchange=Expr(Stage i)/Expr(Stage ii and II)
+	folchange=rowMeans(Stage_i_samples_expr)-rowMeans(Stages_ii_and_iii_sample_expr)
+
+	# log2change
+	log2change=log(folchange,2)	
+
+	# log2change data
+	log2change_Stage_i=data.frame(gene=names(folchange),log2change=log2change)
+	####################################################################################################################	
 	# First by padj
 	padj_threshold<-1
-	Avg_log2folchange_threshold<-3
-	
-	# First, stage
-	#df_stages<-df_stages[df_stages$log2foldchange>=log2fc_threshold,]
+	log2fc_threshold<-0.58	
 	####################################################################################################################
 	# First, set category
 	# "Unchanged"
-	df_stages$Category<-"Uncategorized"
-	
+	log2change_Stage_i$Category<-"Uncategorized"
+
 	# First, stageI
-	df_stages[which(df_stages$Avg_log2folchange>=Avg_log2folchange_threshold),"Category"] <-"Up-regulated"
-  	####################################################################################################################	
-	# Save TSV file with genes from Stage3
-	write_tsv(cbind(data.frame(Gene=df_stages$gene_id),df_stages), paste(output_dir,"genes_Stage_Meanofdiff_log2folchange",stage_index,".tsv",sep=""))
-	####################################################################################################################
+	log2change_Stage_i[log2change_Stage_i$log2change>=0.58,]<-"Up-regulated"		
+  	####################################################################################################################		
+	library(ggfortify) 
+	library(ggplot2)
+	
 	# Selected genes	
 	# Obtain differential Category numbers
-	selected_genes<-df_stages[which(df_stages$Category!="Uncategorized"),"gene_id"]
-  	##############################################################################################################
-	# Run DESeq2
-	dds_stages <- DESeqDataSetFromMatrix(countData = na.omit(unstranded_data[selected_genes,colData$patient_id]) , colData=colData, design = as.formula(paste("~ age_at_index +  gender + ",stage_index))  )
+	selected_genes<-rownames(log2change_Stage_i[which(log2change_Stage_i$Category!="Uncategorized"),])
 
-	# Run DESeq2
-	dds_stages <- DESeq(dds_stages)
-
-	print(resultsNames(dds_stages)[4])		
-
-	# Df s6tages I
-	df_results<-data.frame(results(dds_stages,name=resultsNames(dds_stages)[4]))
+	pca_res <- prcomp(t(unstranded_data[selected_genes,]), scale. = TRUE)
+	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,]),"stages"], pca_res$x[,1:2])		
 	
-	# Run varianceStabilizingTransformation
-	vst_stages_sub<-varianceStabilizingTransformation(dds_stages, blind = TRUE, fitType = "parametric")
-	 
-	# Obtain differential Category numbers
-	pca_normal_stages_first_second<-plotPCA(vst_stages_sub, intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes", stage_index))
-
-	# Filter table
-	df_stages<-df_stages[which(df_stages$Category!="Uncategorized"),]	
-	#######################################################################################################################
-	# Remove samples from Stage III and plot again
-	pca_normal_stages_first_second<-plotPCA(vst_stages_sub, intgroup=stage_index) + theme_bw() + ggtitle(paste(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""),"\n","log2folchange>",Avg_log2folchange_threshold,sep=""))+ theme(legend.position='bottom')
-	#######################################################################################################################
 	# FindClusters_resolution
-	png(filename=paste(output_dir,"PCA_Plot_Normal_Tumor_Stage_",stage_index,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
-		plotPCA(vst_stages_sub, intgroup=stage_index) + theme_bw() + ggtitle(paste(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""),"\n","log2folchange>",Avg_log2folchange_threshold,sep=""))+ theme(legend.position='bottom')
-	dev.off()		
-	# FindClusters_resolution
-	png(filename=paste(output_dir,"PCA_Plot_Normal_Tumor_Stage_",stage_index,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
-		pca_normal_stages_first_second
-	dev.off()			
-	#######################################################################################################################	
-	# Save TSV file with genes from Stage1
-	write_tsv(cbind(data.frame(Gene=rownames(df_stages)),df_stages), paste(output_dir,"Meanofdiff_selected_genes_Stage_pos_",stage_index,".tsv",sep=""))
+	png(filename=paste(output_dir,"PCA_",Stage_i,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
+		print(ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,]),], colour="stages", frame=TRUE, frame.type="t") + xlim(-0.1,0.1) + ylim(-0.1,0.1) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom'))
+	dev.off()	
+	####################################################################################################################	
+	# Save TSV file with genes from Stage3
+	write_tsv(log2change_Stage_i, paste(output_dir,"genes_Stage_DiffOfMeansRPKM",Stage_i,".tsv",sep=""))
+	####################################################################################################################	
 }

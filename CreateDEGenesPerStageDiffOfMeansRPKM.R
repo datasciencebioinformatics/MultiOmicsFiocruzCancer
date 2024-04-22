@@ -2,7 +2,7 @@
 # Reload colData from file
 # Reload unstranded_data from file
 ###########################################################################################################################
-unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded.tsv"                        #
+unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded_rpkm.tsv"                    #
 merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
 colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
 avg_expression_pos_file             <- "/home/felipe/Documentos/LungPortal/samples/log2fc_expression_pos.tsv"             #
@@ -14,7 +14,7 @@ avg_expression_pos                 <-read.table(file = avg_expression_pos_file, 
 rownames(colData)                  <-colData$patient_id                                                                   #
 ###########################################################################################################################
 # Filter to only positive tumor/normal samples.
-#unstranded_data<-unstranded_data[avg_expression_pos$Gene,]
+unstranded_data<-unstranded_data[avg_expression_pos$Gene,]
 
 #omit NA values from vector
 unstranded_data <- na.omit(unstranded_data)
@@ -58,30 +58,30 @@ for (comparisson_index in rownames(df_table_comparisson))
 	# Stages
 	Stage_i          <-df_table_comparisson[comparisson_index,"Stage_i"]
 	Stages_ii_and_iii<-df_table_comparisson[comparisson_index,"Stages_ii_and_iii"]
-	
-	# Run DESeq2
-	dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data[,colData$patient_id], colData=colData, design = as.formula(paste("~ age_at_index +  gender + ",stage_index))  )
 
-	# Run DESeq2
-	dds_stages <- DESeq(dds_stages)
+	# Take samples of each stage
+	Stage_i_samples         =list_of_comparisson[[Stage_i]]
+	Stages_ii_and_iii_sample=list_of_comparisson[[Stages_ii_and_iii]]	
 
-	print(resultsNames(dds_stages)[4])		
+	# Take RPKM of genes from samples of each stage
+	Stage_i_samples_expr         <-unstranded_data[,Stage_i_samples]
+	Stages_ii_and_iii_sample_expr<-unstranded_data[,Stages_ii_and_iii_sample]
+	####################################################################################################################
+	# folchange=Expr(Stage i)/Expr(Stage ii and II)
+	folchange=rowMeans(Stage_i_samples_expr)/rowMeans(Stages_ii_and_iii_sample_expr)
 
-	# Df s6tages I
-	df_stages<-data.frame(results(dds_stages,name=resultsNames(dds_stages)[4]))
-	####################################################################################################################
-	# Run varianceStabilizingTransformation
-	vst_stages_sub<-varianceStabilizingTransformation(dds_stages, blind = TRUE, fitType = "parametric")
-	####################################################################################################################
-	# Remove NA rows
-	df_stages<-na.omit(df_stages)	
-	####################################################################################################################
+	# log2change
+	log2change=log(folchange,2)	
+
+	# log2change data
+	log2change_Stage_i=data.frame(gene=names(folchange),log2change=log2change)
+	####################################################################################################################	
 	# First by padj
 	padj_threshold<-1
 	log2fc_threshold<-0.58
 	
 	# First, stageI
-	#df_stages<-df_stages[df_stages$padj<=padj_threshold,]
+	#df_stages<-df_stages[log2change_Stage_i$padj<=padj_threshold,]
 	####################################################################################################################
 	# First, set category
 	# "Unchanged"

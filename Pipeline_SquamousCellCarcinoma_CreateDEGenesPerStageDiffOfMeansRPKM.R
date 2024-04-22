@@ -86,10 +86,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 
 	# First, stageI
 	log2change_Stage_i[log2change_Stage_i$log2change>=0.58,]<-"Up-regulated"		
-  	####################################################################################################################	
-	# Save TSV file with genes from Stage3
-	write_tsv(log2change_Stage_i, paste(output_dir,"genes_Stage_DiffOfMeansRPKM",Stage_i,".tsv",sep=""))
-	####################################################################################################################
+  	####################################################################################################################		
 	library(ggfortify) 
 	library(ggplot2)
 	
@@ -98,11 +95,14 @@ for (comparisson_index in rownames(df_table_comparisson))
 	selected_genes<-rownames(log2change_Stage_i[which(log2change_Stage_i$Category!="Uncategorized"),])
 
 	pca_res <- prcomp(t(unstranded_data[selected_genes,]), scale. = TRUE)
-	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,]),"stages"], pca_res$x[,1:2])	
-	ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,]),], colour="stages", frame=TRUE, frame.type="t") + xlim(-0.1,0.1) + ylim(-0.1,0.1) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom')
+	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,]),"stages"], pca_res$x[,1:2])		
 	
 	# FindClusters_resolution
-	png(filename=paste(output_dir,"PCA_",Stage_i,".png",sep=""), width = 10, height = 10, res=600, units = "cm")
+	png(filename=paste(output_dir,"PCA_",Stage_i,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
 		print(ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,]),], colour="stages", frame=TRUE, frame.type="t") + xlim(-0.1,0.1) + ylim(-0.1,0.1) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom'))
-	dev.off()		
+	dev.off()	
+	####################################################################################################################	
+	# Save TSV file with genes from Stage3
+	write_tsv(log2change_Stage_i, paste(output_dir,"genes_Stage_DiffOfMeansRPKM",Stage_i,".tsv",sep=""))
+	####################################################################################################################	
 }

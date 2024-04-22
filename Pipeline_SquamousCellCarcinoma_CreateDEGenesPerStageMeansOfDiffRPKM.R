@@ -13,17 +13,18 @@ colData_data                       <-read.table(file = colData_file, sep = '\t',
 avg_expression_pos                 <-read.table(file = avg_expression_pos_file, sep = '\t', header = TRUE,fill=TRUE)      #
 rownames(colData)                  <-colData$patient_id                                                                   #
 ###########################################################################################################################
+# For each stage take the expression and the genes log2folchange >0.58
 # Writing mtcars data                                                                                                     #
 Meanofdiff_StageI_file = "/home/felipe/Documentos/LungPortal/output/Meanofdiff_selected_genes_Stage_pos_I.tsv"            #
 Meanofdiff_StageII_file = "/home/felipe/Documentos/LungPortal/output/Meanofdiff_selected_genes_Stage_pos_II.tsv"          #
-Meanofdiff_StageIII_file = "/home/felipe/Documentos/LungPortal/output/Meanofdiff_selected_genes_Stage_pos_III.tsv"          #
+Meanofdiff_StageIII_file = "/home/felipe/Documentos/LungPortal/output/Meanofdiff_selected_genes_Stage_pos_III.tsv"        #
                                                                                                                           #
-Meanofdiff_StageI_data   <-read.table(file = Meanofdiff_StageI_file, sep = '\t', header = TRUE,fill=TRUE)   #
-Meanofdiff_StageII_data  <-read.table(file = Meanofdiff_StageII_file, sep = '\t', header = TRUE,fill=TRUE)  #
-Meanofdiff_StageIII_data <-read.table(file = Meanofdiff_StageIII_file, sep = '\t', header = TRUE,fill=TRUE) #
+Meanofdiff_StageI_data   <-read.table(file = Meanofdiff_StageI_file, sep = '\t', header = TRUE,fill=TRUE)                 #
+Meanofdiff_StageII_data  <-read.table(file = Meanofdiff_StageII_file, sep = '\t', header = TRUE,fill=TRUE)                #
+Meanofdiff_StageIII_data <-read.table(file = Meanofdiff_StageIII_file, sep = '\t', header = TRUE,fill=TRUE)               #
 ###########################################################################################################################
 # Filter to only positive tumor/normal samples.
-#unstranded_data<-unstranded_data[avg_expression_pos$Gene,]
+unstranded_data<-unstranded_data[avg_expression_pos$Gene,]
 
 #omit NA values from vector
 unstranded_data <- na.omit(unstranded_data)

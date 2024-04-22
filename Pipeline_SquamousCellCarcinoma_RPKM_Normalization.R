@@ -47,5 +47,5 @@ rownames(df_geneLengthAndGCContent)[!grepl(".", rownames(df_geneLengthAndGCConte
 unstranded_rpkm<-rpkm(unstranded_data[df_gene_ids$gene_id_cp,], gene.length = data.frame(df_geneLengthAndGCContent)$length) #
 ####################################################################################################################################################################
 # Save TSV file with genes from Stage1                                                                                                                             #
-write.table(unstranded_rpkm, file = "/home/felipe/Documentos/LungPortal/samples/unstranded_rpkm", sep = "\t", row.names = TRUE, col.names = TRUE)                  #
+write.table(unstranded_rpkm, file = "/home/felipe/Documentos/LungPortal/samples/unstranded_rpkm.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)                  #
 ####################################################################################################################################################################

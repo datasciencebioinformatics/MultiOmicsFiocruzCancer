@@ -101,6 +101,6 @@ for (comparisson_index in rownames(df_table_comparisson))
 	fchange_Stage_i_sub<-data.frame(gene=rownames(fchange_Stage_i_sub),fchange_Stage_i_sub)
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3
-	write_tsv(fchange_Stage_i[fchange_Stage_i_sub$folchange>=fc_threshold,], paste(output_dir,"genes_Stage_MeansOfDiffRPKM",Stage_i,".tsv",sep=""))
+	write_tsv(fchange_Stage_i_sub, paste(output_dir,"genes_Stage_MeansOfDiffRPKM",Stage_i,".tsv",sep=""))
 	####################################################################################################################	
 }

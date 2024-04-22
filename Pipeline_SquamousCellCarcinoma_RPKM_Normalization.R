@@ -31,7 +31,7 @@ for (gene_id in rownames(unstranded_data))                                      
     df_gene_ids<-rbind(df_gene_ids,data.frame(gene_id=gene_ids,gene_id_cp=gene_id))                                #
 }                                                                                                                  #
 # Split gene_ids vector in parts                                                                                   #
-gene_ids_vector<-split(df_gene_ids$gene_id,ceiling(seq_along(df_gene_ids$gene_id) / 1000))                                    #
+gene_ids_vector<-split(df_gene_ids$gene_id,ceiling(seq_along(df_gene_ids$gene_id) / 1000))                         #
 ####################################################################################################################
 # Data.frame to store geneLengthAndGCContent                                                                       #
 df_geneLengthAndGCContent<-data.frame(length=c(),gc=c())                                                           #
@@ -44,7 +44,7 @@ for (index in names(gene_ids_vector) )                                          
 }                                                                                                                         #
 rownames(df_geneLengthAndGCContent)[!grepl(".", rownames(df_geneLengthAndGCContent), fixed=TRUE)]                         #
 ####################################################################################################################################################################
-unstranded_rpkm<-rpkm(unstranded_data[df_unique_genes[rownames(geneLengthAndGCContent_1),"gene_id"],], gene.length = data.frame(df_geneLengthAndGCContent)$length) #
+unstranded_rpkm<-rpkm(unstranded_data[df_gene_ids$gene_id_cp,], gene.length = data.frame(df_geneLengthAndGCContent)$length) #
 ####################################################################################################################################################################
 # Save TSV file with genes from Stage1                                                                                                                             #
 write.table(unstranded_rpkm, file = "/home/felipe/Documentos/LungPortal/samples/unstranded_rpkm", sep = "\t", row.names = TRUE, col.names = TRUE)                  #

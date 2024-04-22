@@ -24,6 +24,7 @@ df_gene_ids<-data.frame(gene_id=c(),gene_id_cp=c())                             
 for (gene_id in rownames(unstranded_data))                                                                         #
 {                                                                                                                  #
     # Store gene ids                                                                                               #
+    print(gene_id)
     gene_ids<-c(gene_ids,strsplit(gene_id,".",fixed=T)[[1]][[1]])                                                  #
                                                                                                                    #
     # Contatenate gene lists                                                                                       #

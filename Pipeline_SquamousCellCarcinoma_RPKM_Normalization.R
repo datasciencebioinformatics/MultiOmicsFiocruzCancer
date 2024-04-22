@@ -40,7 +40,7 @@ for (index in names(gene_ids_vector) )
     df_geneLengthAndGCContent<-rbind(df_geneLengthAndGCContent,getGeneLengthAndGCContent(gene_ids_vector[[index]], "hsa"))
 }
 ####################################################################################################################
-unstranded_rpkm<-rpkm(unstranded_data[df_unique_genes[rownames(geneLengthAndGCContent_1),"gene_id"],], gene.length = data.frame(geneLengthAndGCContent_1)$length)
+unstranded_rpkm<-rpkm(unstranded_data[df_unique_genes[rownames(geneLengthAndGCContent_1),"gene_id"],], gene.length = data.frame(df_geneLengthAndGCContent)$length)
 ####################################################################################################################
 # Save TSV file with genes from Stage1
 write.table(unstranded_rpkm, file = "/home/felipe/Documentos/LungPortal/samples/unstranded_rpkm", sep = "\t", row.names = TRUE, col.names = TRUE)

@@ -1,103 +1,116 @@
-#######################################################################################################################
-# Reload colData from file
-# Reload unstranded_data from file
+# A R script to create metadata from gdc files.
+# Inputs:
+# gdc_sample_sheet.2024-03-08.tsv
+# /home/felipe/Documentos/LungPortal/clinical.txt
+# /home/felipe/Documentos/LungPortal/sample.txt
+# /home/felipe/Documentos/LungPortal/exposure.txt
+# Output : merged_data_patient_info.tsv
+#############################################################################1##############################################
+library(readr)                                                                                                            #
+library("xlsx")                                                                                                           #
+library(ggplot2)                                                                                                          #
 ###########################################################################################################################
-unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded_rpkm.tsv"                    #
+output_dir="/home/felipe/Documentos/LungPortal/output/"                                                                   #
+###########################################################################################################################
+unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded_rpkm"                       #
 merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
 colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
-avg_expression_pos_file             <- "/home/felipe/Documentos/LungPortal/samples/log2fc_expression_pos.tsv"             #
 ###########################################################################################################################
 unstranded_data                    <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
 merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#
 colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
-avg_expression_pos                 <-read.table(file = avg_expression_pos_file, sep = '\t', header = TRUE,fill=TRUE)      #
 rownames(colData)                  <-colData$patient_id                                                                   #
-###########################################################################################################################
-# Filter to only positive tumor/normal samples.
-unstranded_data<-unstranded_data[avg_expression_pos$Gene,]
-
-#omit NA values from vector
-unstranded_data <- na.omit(unstranded_data)
-########################################################################################################################
-# A panel to analyse differential Category comparing samples of each stage against all others stages.
-########################################################################################################################
-# Set colData
-colData$stage_I   <- "Stages_II_III"
-colData$stage_II  <- "Stages_I_III"
-colData$stage_III <- "Stages_I_II"
-
-# Vector with each stage
-stages_str<-c("stage_I","stage_II","stage_III")
-
-# Samples of each stage stored in colData                                                                                             #
-sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"]                                                                     #
-sample_stage_II <-colData[colData$stages=="Stage II","patient_id"]                                                                    #
-sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]                                                                   #
-
-sample_stages_II_III<-colData[colData$stages=="Stage II" | colData$stages=="Stage III","patient_id"]                                  #
-sample_stages_I_III<-colData[colData$stages=="Stage I" | colData$stages=="Stage III","patient_id"]                                    #
-sample_stages_I_II<-colData[colData$stages=="Stage I" | colData$stages=="Stage II","patient_id"]                                      #
 #######################################################################################################################################
-df_table_comparisson=rbind(data.frame(Stage_i="sample_stage_I",Stages_ii_and_iii="sample_stages_II_III"),
-rbind(data.frame(Stage_i="sample_stage_II",Stages_ii_and_iii="sample_stages_I_III"),
-rbind(data.frame(Stage_i="sample_stage_III",Stages_ii_and_iii="sample_stages_I_II"))))
-####################################################################################################################
-list_of_comparisson=list(sample_stage_I=sample_stage_I,sample_stage_II=sample_stage_II,sample_stage_III=sample_stage_III,sample_stages_II_III=sample_stages_II_III,sample_stages_I_III=sample_stages_I_III,sample_stages_I_II=sample_stages_I_II)
-####################################################################################################################
-# Create bck for colData_bck
-colData_bck<-colData
+colData<-na.omit(colData)                                                                                                             #
+unstranded_data<-unstranded_data[,colData$patient_id]                                                                                 #
+merged_data_patient_info_data<-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id %in% colData$patient_id),]#
+#######################################################################################################################################
+# Obtain normalized coutns                                                                                               #
+norm_counts<-unstranded_data                                                                                             #
+##########################################################################################################################
+# Paired samples                                                                                                         
+paired_sample_df<-data.frame(normal=c(),tumor=c(),case=c())                                                              
+                                                                                                                         
+# For each case, find the pairs                                                                                          
+for (case in unique(merged_data_patient_info_data$case))                                                                 
+{                                                                                                                        
+    # All samples for case id = "case"                                                                                   
+    case_samples<-merged_data_patient_info_data[merged_data_patient_info_data$case==case,]                               
+                                                                                                                         
+    # Take the tumor samples                                                                                           
+    tumor_sampĺes <-case_samples[case_samples$tissue_type=="Tumor",]
+    normal_sampĺes<-case_samples[case_samples$tissue_type=="Normal",]
 
-# for each pair of stage.
-for (comparisson_index in rownames(df_table_comparisson))
-{	
-	# Stages
-	Stage_i          <-df_table_comparisson[comparisson_index,"Stage_i"]
-	Stages_ii_and_iii<-df_table_comparisson[comparisson_index,"Stages_ii_and_iii"]
-
-	# Take samples of each stage
-	Stage_i_samples         =list_of_comparisson[[Stage_i]]
-	Stages_ii_and_iii_sample=list_of_comparisson[[Stages_ii_and_iii]]	
-
-	# Take RPKM of genes from samples of each stage
-	Stage_i_samples_expr         <-unstranded_data[,Stage_i_samples]
-	Stages_ii_and_iii_sample_expr<-unstranded_data[,Stages_ii_and_iii_sample]
-	####################################################################################################################
-	# folchange=Expr(Stage i)/Expr(Stage ii and II)
-	folchange=rowMeans(Stage_i_samples_expr)/rowMeans(Stages_ii_and_iii_sample_expr)
-
-	# log2change
-	log2change=log(folchange,2)	
-
-	# log2change data
-	log2change_Stage_i=data.frame(gene=names(folchange),log2change=log2change)
-	####################################################################################################################	
-	# First by padj
-	padj_threshold<-1
-	log2fc_threshold<-0.58	
-	####################################################################################################################
-	# First, set category
-	# "Unchanged"
-	log2change_Stage_i$Category<-"Uncategorized"
-
-	# First, stageI
-	log2change_Stage_i[log2change_Stage_i$log2change>=0.58,]<-"Up-regulated"		
-  	####################################################################################################################		
-	library(ggfortify) 
-	library(ggplot2)
-	
-	# Selected genes	
-	# Obtain differential Category numbers
-	selected_genes<-rownames(log2change_Stage_i[which(log2change_Stage_i$Category!="Uncategorized"),])
-
-	pca_res <- prcomp(t(unstranded_data[selected_genes,]), scale. = TRUE)
-	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,]),"stages"], pca_res$x[,1:2])		
-	
-	# FindClusters_resolution
-	png(filename=paste(output_dir,"PCA_",Stage_i,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
-		print(ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,]),], colour="stages", frame=TRUE, frame.type="t") + xlim(-0.1,0.1) + ylim(-0.1,0.1) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom'))
-	dev.off()	
-	####################################################################################################################	
-	# Save TSV file with genes from Stage3
-	write_tsv(log2change_Stage_i, paste(output_dir,"genes_Stage_DiffOfMeansRPKM",Stage_i,".tsv",sep=""))
-	####################################################################################################################	
+    # if vector contains at least one tumor and one normal
+    if(length(unique(normal_sampĺes$sample_id))>0 && length(unique(tumor_sampĺes$sample_id))>0)
+    {
+            # For each tumor sample
+            for (tumor_solid_sample_id in tumor_sampĺes$patient_id)
+            {
+                # for each normal sample, compile a paired samples
+                for (normal_samples_id in normal_sampĺes$patient_id)
+                {
+                    # Contatenate                     
+                    paired_sample_df<-rbind(data.frame(normal=c(normal_samples_id),tumor=c(tumor_solid_sample_id),case=case),paired_sample_df)
+                }
+            }                
+    }
 }
+###########################################################################################################################
+# Data.frame to store results for control samples
+df_diff_expression<-data.frame(Gene=rownames(norm_counts))
+
+# set rownames
+rownames(df_diff_expression)<-df_diff_expression$Gene
+
+# For each pair, we subtracted gene expression values of control samples
+for (case in rownames(paired_sample_df))
+{    
+
+    case_sample  <-paired_sample_df[case,"case"]
+    normal_sample<-paired_sample_df[case,"normal"]
+    tumor_sample <-paired_sample_df[case,"tumor"]    
+   
+    # Normal and tumor samples for this "case" id
+    normal_sample<-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id==normal_sample),]
+    tumor_sample <-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id==tumor_sample),]
+
+    # Store results for the case
+    case_results_normal<-data.frame(case=norm_counts[,c(normal_sample$patient_id)])
+    case_results_tumor <-data.frame(case=norm_counts[,c(tumor_sample$patient_id)])
+
+    # "We substracted gene expression values of control samples from their respective tumor samples"
+    # "the resulting values were called differential expression"
+    diff_expression<-case_results_normal-case_results_tumor
+
+    diff_expression<-log(case_results_tumor/case_results_normal,2)
+
+    # Rename collumns
+    colnames(diff_expression)<-case_sample
+
+    # Concatenate 
+    df_diff_expression<-cbind(df_diff_expression,diff_expression)    
+}
+# Remove gene expression
+df_diff_expression<-df_diff_expression[,-1]
+
+# Take average expression
+log2fc_expression<-data.frame(rowMeans(df_diff_expression))
+
+###########################################################################################################################
+# we analyzez the frequency distribution of differential gene expression of 14520 genes for each patient"
+# For each patient create the frequency distribution
+
+# "positive differential gene expression values indicated higher gene expression in tumor samples"
+# Take average expression of positive sample
+#log2fc_expression_pos<-data.frame(Gene=rownames(log2fc_expression)[which(log2fc_expression>=1.584963)],Expression=log2fc_expression[which(log2fc_expression>=1.584963),])
+log2fc_expression_pos<-data.frame(Gene=rownames(log2fc_expression)[which(log2fc_expression>=0.58)],Expression=log2fc_expression[which(log2fc_expression>=0.58),])
+
+# log2fc_expression_pos
+log2fc_expression_pos <- log2fc_expression_pos[!is.infinite(log2fc_expression_pos$Expression),]
+
+# Take average expression of positive sample
+rownames(log2fc_expression_pos)<-log2fc_expression_pos$Gene
+
+# Write table
+write.table(log2fc_expression_pos, file = "/home/felipe/Documentos/LungPortal/samples/log2fc_expression_pos.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)

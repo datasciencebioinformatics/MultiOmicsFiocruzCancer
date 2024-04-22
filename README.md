@@ -79,3 +79,28 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 
 ## A R script to compute GO terms analysis ManualLog2FC
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_FunctionalAnalyseManualLog2FC.R")
+
+
+
+##  Pipeline 1
+## Paired samples tumor/control
+log2foldchange=log(case_results_tumor/case_results_normal,2)>0.58
+
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamplesRPKM.R")
+
+## Differential analysis
+log2foldchange=log(rowMeans(Stage_i_samples_expr)/rowMeans(Stages_ii_and_iii_sample_expr),2)>0.58
+
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageDiffOfMeansRPKM.R")
+####################################################################################################################################
+# Pipeline 2
+## Paired samples tumor/control
+log2foldchange=log(case_results_tumor,2)-log(case_results_normal,2)>0.58
+
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamplesDiffRPKM.R")
+
+## Differential analysis
+log2foldchange=log(rowMeans(Stage_i_samples_expr,2)-rowMeans(Stages_ii_and_iii_sample_expr),2)>0.58
+
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageMeansOfDiffRPKM.R")
+####################################################################################################################################

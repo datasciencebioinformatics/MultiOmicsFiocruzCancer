@@ -26,11 +26,6 @@ colData$stage_I   <- "Stages_II_III"
 colData$stage_II  <- "Stages_I_III"
 colData$stage_III <- "Stages_I_II"
 
-# Each stage
-colData$stage_I[which(colData$stages=="Stage I")]<-"Stage I"
-colData$stage_II[which(colData$stages=="Stage II")]<-"Stage II"
-colData$stage_III[which(colData$stages=="Stage III")]<-"Stage III"
-
 # Vector with each stage
 stages_str<-c("stage_I","stage_II","stage_III")
 

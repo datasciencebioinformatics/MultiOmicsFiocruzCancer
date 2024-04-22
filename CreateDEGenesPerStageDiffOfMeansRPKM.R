@@ -90,27 +90,19 @@ for (comparisson_index in rownames(df_table_comparisson))
 	# Save TSV file with genes from Stage3
 	write_tsv(log2change_Stage_i, paste(output_dir,"genes_Stage_DiffOfMeansRPKM",Stage_i,".tsv",sep=""))
 	####################################################################################################################
+	library(ggfortify) 
+	library(ggplot2)
+	
 	# Selected genes	
 	# Obtain differential Category numbers
 	selected_genes<-rownames(log2change_Stage_i[which(log2change_Stage_i$Category!="Uncategorized"),])
-	 
-	# Obtain differential Category numbers
-	pca_normal_stages_first_second<-plotPCA(vst_stages_sub[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes", stage_index))
 
-	# Filter table
-	df_stages<-df_stages[which(df_stages$Category!="Uncategorized"),]
+	pca_res <- prcomp(t(unstranded_data[selected_genes,]), scale. = TRUE)
+	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,]),"stages"], pca_res$x[,1:2])	
+	ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,]),], colour="stages", frame=TRUE, frame.type="t") + xlim(-0.1,0.1) + ylim(-0.1,0.1) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom')
 	
-	# Change histogram plot fill colors by groups
-	padj_histogram_stages<-ggplot(df_stages, aes(x=-log(padj), fill=Category, color=Category)) +  geom_histogram(position="identity",bins = 30) + theme_bw() + ggtitle(paste("DE Genes", stage_index))+ theme(legend.position='bottom')
-	#######################################################################################################################
-	# Remove samples from Stage III and plot again
-	pca_normal_stages_first_second<-plotPCA(unstranded_data[selected_genes,], intgroup=stage_index) + theme_bw() + ggtitle(paste("DE Genes ", stage_index,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom')
-	#######################################################################################################################
 	# FindClusters_resolution
-	png(filename=paste(output_dir,"Volcano_Plot_Normal_Tumor_Stage_",stage_index,".png",sep=""), width = 28, height = 24, res=600, units = "cm")
-		pca_plots<-grid.arrange( p2, padj_histogram_stages,pca_normal_stages_first_second,  ncol = 2)
+	png(filename=paste(output_dir,"PCA_",Stage_i,".png",sep=""), width = 10, height = 10, res=600, units = "cm")
+		ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,]),], colour="stages", frame=TRUE, frame.type="t") + xlim(-0.1,0.1) + ylim(-0.1,0.1) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom')
 	dev.off()		
-	#######################################################################################################################	
-	# Save TSV file with genes from Stage1
-	write_tsv(cbind(data.frame(Gene=rownames(df_stages)),df_stages), paste(output_dir,"DESeq2_selected_genes_Stage_pos_",stage_index,".tsv",sep=""))
 }

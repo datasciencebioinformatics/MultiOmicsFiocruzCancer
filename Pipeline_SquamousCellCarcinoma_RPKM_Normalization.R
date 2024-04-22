@@ -1,12 +1,39 @@
-unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded.tsv"                        #
-colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
-merge_interactome_file      	    <-"/home/felipe/Documentos/LungPortal/samples/merge_interactome_gene_symbol"
-unstranded_data                     <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
-colData_data                        <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)       
-merge_interactome_gene_symbol	    <-read.table(file = merge_interactome_file, sep = '\t', header = TRUE,fill=TRUE)     #
+library(AnnotationHub)
+library (edgeR)
+library (EDASeq)
+library("biomaRt")
+####################################################################################################################
+# A script to normalize reads count to RPKM                                                                        #
+####################################################################################################################
+# Path to file                                                                                                     #
+unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded.tsv"                 #
+colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                    #
+merge_interactome_file      	    <-"/home/felipe/Documentos/LungPortal/samples/merge_interactome_gene_symbol"     #
+####################################################################################################################
+# Load the files                                                                                                   #
+unstranded_data                     <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE) #
+colData_data                        <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)         #
+merge_interactome_gene_symbol	      <-read.table(file = merge_interactome_file, sep = '\t', header = TRUE,fill=TRUE) # 
+####################################################################################################################
+# RPKM normalization
+# The normalization is done for each 1000 genes duo to limitation in the biomart connection
 
+# First, gene length and gc content for all genes in the reads count table
+# Take the gene names, without variant identification
+# vector to store all gene ids
+gene_ids<-c()
+for (gene_id in rownames(unstranded_data)) 
+{
+    # Store gene ids
+    gene_ids<-c(gene_ids,strsplit(gene_id,".",fixed=T)[[1]][[1]])
+}
+
+
+
+geneLengthAndGCContent_1<-getGeneLengthAndGCContent(rownames(unstranded_data)[1:1000], "hsa")
 
 ####################################################################################################################
+
 # RPKM normalization
 # Run DESeq2
 dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data, colData=colData_data, design = as.formula(paste("~ 0+ stages"))  )

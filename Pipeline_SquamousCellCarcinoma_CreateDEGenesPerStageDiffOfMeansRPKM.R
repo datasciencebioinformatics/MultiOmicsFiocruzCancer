@@ -103,6 +103,6 @@ for (comparisson_index in rownames(df_table_comparisson))
 	
 	# FindClusters_resolution
 	png(filename=paste(output_dir,"PCA_",Stage_i,".png",sep=""), width = 10, height = 10, res=600, units = "cm")
-		ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,]),], colour="stages", frame=TRUE, frame.type="t") + xlim(-0.1,0.1) + ylim(-0.1,0.1) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom')
+		print(ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,]),], colour="stages", frame=TRUE, frame.type="t") + xlim(-0.1,0.1) + ylim(-0.1,0.1) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom'))
 	dev.off()		
 }

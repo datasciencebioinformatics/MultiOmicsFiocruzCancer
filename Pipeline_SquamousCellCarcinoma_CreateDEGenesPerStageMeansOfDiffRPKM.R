@@ -96,8 +96,11 @@ for (comparisson_index in rownames(df_table_comparisson))
 	png(filename=paste(output_dir,"PCA_",Stage_i,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
 		print(ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,]),], colour="stages", frame=TRUE, frame.type="t") + xlim(-0.15,0.15) + ylim(-0.15,0.15) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom'))
 	dev.off()	
+
+	####################################################################################################################	
+	fchange_Stage_i_sub<-data.frame(gene=rownames(fchange_Stage_i_sub),fchange_Stage_i_sub)
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3
-	write_tsv(fchange_Stage_i[fchange_Stage_i$folchange>=fc_threshold,], paste(output_dir,"genes_Stage_MeansOfDiffRPKM",Stage_i,".tsv",sep=""))
+	write_tsv(fchange_Stage_i[fchange_Stage_i_sub$folchange>=fc_threshold,], paste(output_dir,"genes_Stage_MeansOfDiffRPKM",Stage_i,".tsv",sep=""))
 	####################################################################################################################	
 }

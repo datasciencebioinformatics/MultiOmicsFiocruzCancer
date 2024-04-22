@@ -53,8 +53,12 @@ list_of_comparisson=list(sample_stage_I=sample_stage_I,sample_stage_II=sample_st
 colData_bck<-colData
 
 # for each pair of stage.
-for (stage_index in stages_str)
+for (comparisson_index in rownames(df_table_comparisson))
 {	
+	# Stages
+	Stage_i          <-df_table_comparisson[comparisson_index,"Stage_i"]
+	Stages_ii_and_iii<-df_table_comparisson[comparisson_index,"Stages_ii_and_iii"]
+	
 	# Run DESeq2
 	dds_stages <- DESeqDataSetFromMatrix(countData = unstranded_data[,colData$patient_id], colData=colData, design = as.formula(paste("~ age_at_index +  gender + ",stage_index))  )
 

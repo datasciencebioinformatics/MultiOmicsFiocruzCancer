@@ -42,3 +42,5 @@ for (index in names(gene_ids_vector) )
 ####################################################################################################################
 unstranded_rpkm<-rpkm(unstranded_data[df_unique_genes[rownames(geneLengthAndGCContent_1),"gene_id"],], gene.length = data.frame(geneLengthAndGCContent_1)$length)
 ####################################################################################################################
+# Save TSV file with genes from Stage1
+write_tsv(unstranded_rpkm, paste(output_dir,"DESeq2_selected_genes_Stage_pos_",stage_index,".tsv",sep=""))

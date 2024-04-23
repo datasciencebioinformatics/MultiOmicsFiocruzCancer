@@ -79,11 +79,9 @@ for (case in rownames(paired_sample_df))
     case_results_normal<-data.frame(case=norm_counts[,c(normal_sample$patient_id)])
     case_results_tumor <-data.frame(case=norm_counts[,c(tumor_sample$patient_id)])
 
-    # "We substracted gene expression values of control samples from their respective tumor samples"
+    # "We divided gene expression values of tumor samples from their respective control samples"
     # "the resulting values were called differential expression"
-    diff_expression<-case_results_normal-case_results_tumor
-
-    diff_expression<-log(case_results_tumor/case_results_normal,2)
+    diff_expression<-case_results_tumor/case_results_normal
 
     # Rename collumns
     colnames(diff_expression)<-case_sample
@@ -95,7 +93,7 @@ for (case in rownames(paired_sample_df))
 df_diff_expression<-df_diff_expression[,-1]
 
 # Take average expression
-log2fc_expression<-data.frame(rowMeans(df_diff_expression))
+fc_expression<-data.frame(rowMeans(df_diff_expression))
 
 ###########################################################################################################################
 # we analyzez the frequency distribution of differential gene expression of 14520 genes for each patient"
@@ -104,13 +102,13 @@ log2fc_expression<-data.frame(rowMeans(df_diff_expression))
 # "positive differential gene expression values indicated higher gene expression in tumor samples"
 # Take average expression of positive sample
 #log2fc_expression_pos<-data.frame(Gene=rownames(log2fc_expression)[which(log2fc_expression>=1.584963)],Expression=log2fc_expression[which(log2fc_expression>=1.584963),])
-log2fc_expression_pos<-data.frame(Gene=rownames(log2fc_expression)[which(log2fc_expression>=0.58)],Expression=log2fc_expression[which(log2fc_expression>=0.58),])
+fc_expression_pos<-data.frame(Gene=rownames(fc_expression)[which(fc_expression>=1.58)],Expression=fc_expression[which(fc_expression>=1.58),])
 
 # log2fc_expression_pos
-log2fc_expression_pos <- log2fc_expression_pos[!is.infinite(log2fc_expression_pos$Expression),]
+fc_expression_pos <- fc_expression_pos[!is.infinite(fc_expression_pos$Expression),]
 
 # Take average expression of positive sample
-rownames(log2fc_expression_pos)<-log2fc_expression_pos$Gene
+rownames(fc_expression_pos)<-fc_expression_pos$Gene
 
 # Write table
-write.table(log2fc_expression_pos, file = "/home/felipe/Documentos/LungPortal/samples/log2fc_expression_pos.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
+write.table(fc_expression_pos, file = "/home/felipe/Documentos/LungPortal/samples/log2fc_expression_pos.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)

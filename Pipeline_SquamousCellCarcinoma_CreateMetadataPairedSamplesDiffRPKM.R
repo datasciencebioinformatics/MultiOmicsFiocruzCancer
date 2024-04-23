@@ -179,26 +179,26 @@ for (stage in c("Stage I","Stage II","Stage III"))
 {  
 	# Subset annotation per stage
 	colData_stage_i<-colData[colData$stages==stage,]
-		
+	
 	# take normal and tumor	
 	normal_sample<-paired_sample_df[,"normal"]
 	tumor_sample <-paired_sample_df[,"tumor"]    
-		
+	
 	# Take patients from stage i, normal and tumor	
 	patient_stage_i_normal<-colData_stage_i[colData_stage_i$patient_id %in% normal_sample,"patient_id"]
 	patient_stage_i_tumor<-colData_stage_i[colData_stage_i$patient_id %in% tumor_sample,"patient_id"]
 	
-	  # Selected genes	
-	  # Obtain differential Category numbers
-	  selected_genes<-df_stage_I$Gene
-	  
-	  pca_res <- prcomp(t(unstranded_data[selected_genes,]), scale. = TRUE)
-	  dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,]),"stages"], pca_res$x[,1:2])		
+	# Selected genes	
+	# Obtain differential Category numbers
+	selected_genes<-df_stage_I$Gene
 	
-	  
-	  # FindClusters_resolution
-	  png(filename=paste(output_dir,"PCA_tumor_control_",stage,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
-	  print(print(ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,]),], colour="stages", frame=FALSE, frame.type="t") + xlim(-0.15,0.15) + ylim(-0.15,0.15) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),paste("\n",length(patient_stage_i_tumor)," tumor/control paired samples",sep=""),sep=""))+ theme(legend.position='bottom')))
-	  dev.off()
+	pca_res <- prcomp(t(unstranded_data[selected_genes,]), scale. = TRUE)
+	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,]),"stages"], pca_res$x[,1:2])		
+	
+	
+	# FindClusters_resolution
+	png(filename=paste(output_dir,"PCA_tumor_control_",stage,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
+	print(print(ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,]),], colour="stages", frame=FALSE, frame.type="t") + xlim(-0.15,0.15) + ylim(-0.15,0.15) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),paste("\n",length(patient_stage_i_tumor)," tumor/control paired samples",sep=""),sep=""))+ theme(legend.position='bottom')))
+	dev.off()
 }
 ###########################################################################################################################

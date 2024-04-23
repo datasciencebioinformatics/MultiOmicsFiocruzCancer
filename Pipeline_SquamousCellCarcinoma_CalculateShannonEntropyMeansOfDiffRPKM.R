@@ -14,9 +14,9 @@ genes_Stage_II      <-read.table(file = file_genes_Stage_II, sep = '\t', header 
 genes_Stage_III     <-read.table(file = file_genes_Stage_III, sep = '\t', header = TRUE,fill=TRUE)                 #
 
 
-genes_Stage_I<-list_of_genes[list_of_genes$gene %in% genes_Stage_I$gene,]
-genes_Stage_II<-list_of_genes[list_of_genes$gene %in% genes_Stage_II$gene,]
-genes_Stage_III<-list_of_genes[list_of_genes$gene %in% genes_Stage_III$gene,]
+genes_Stage_I<-list_of_genes[list_of_genes$gene %in% genes_Stage_I$Gene,]
+genes_Stage_II<-list_of_genes[list_of_genes$gene %in% genes_Stage_II$Gene,]
+genes_Stage_III<-list_of_genes[list_of_genes$gene %in% genes_Stage_III$Gene,]
 
 round(Entropy(genes_Stage_I$PPI, base = 2),3)
 round(Entropy(genes_Stage_II$PPI, base = 2),3)

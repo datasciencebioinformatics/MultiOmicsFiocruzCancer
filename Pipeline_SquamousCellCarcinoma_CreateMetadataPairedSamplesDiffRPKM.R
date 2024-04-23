@@ -41,6 +41,9 @@ for (case in unique(merged_data_patient_info_data$case))
     tumor_sampĺes <-case_samples[case_samples$tissue_type=="Tumor",]
     normal_sampĺes<-case_samples[case_samples$tissue_type=="Normal",]
 
+    # All samples for case id = "case"                                                                                   
+    case_samples<-merged_data_patient_info_data[merged_data_patient_info_data$case==case,"stage"]                                 
+
     # if vector contains at least one tumor and one normal
     if(length(unique(normal_sampĺes$sample_id))>0 && length(unique(tumor_sampĺes$sample_id))>0)
     {

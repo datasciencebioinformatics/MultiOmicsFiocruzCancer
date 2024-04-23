@@ -122,3 +122,20 @@ tumor_sample <-paired_sample_df[,"tumor"]
 # Normal and tumor samples for this "case" id
 normal_sample<-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id %in% normal_sample),]
 tumor_sample<-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id %in% tumor_sample),]
+###########################################################################################################################
+df_log2fc=log2(norm_counts[, tumor_sample$patient_id])-log2(norm_counts[,normal_sample$patient_id])
+
+# Omit df_log2fc<-na.omit(df_log2fc)
+df_log2fc<-na.omit(df_log2fc)
+
+# Omit inf lines
+df_log2fc <- df_log2fc[!is.infinite(rowSums(df_log2fc)),]
+
+# Omit inf lines
+df_log2fc <- data.frame(Gene=rownames(df_log2fc),MeansLog2Foldchange=rowMeans(df_log2fc))
+
+# Omit inf lines
+df_log2fc <- na.omit(df_log2fc)
+
+# Write table
+write.table(fc_expression_pos, file = "/home/felipe/Documentos/LungPortal/samples/log2fc_expression.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)

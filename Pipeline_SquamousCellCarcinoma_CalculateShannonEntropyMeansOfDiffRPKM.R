@@ -18,6 +18,6 @@ genes_Stage_I<-list_of_genes[list_of_genes$gene %in% genes_Stage_I$gene,]
 genes_Stage_II<-list_of_genes[list_of_genes$gene %in% genes_Stage_II$gene,]
 genes_Stage_III<-list_of_genes[list_of_genes$gene %in% genes_Stage_III$gene,]
 
-Entropy(genes_Stage_I$PPI, base = 2)
-Entropy(genes_Stage_II$PPI, base = 2)
-Entropy(genes_Stage_III$PPI, base = 2)
+round(Entropy(genes_Stage_I$PPI, base = 2),3)
+round(Entropy(genes_Stage_II$PPI, base = 2),3)
+round(Entropy(genes_Stage_III$PPI, base = 2),3)

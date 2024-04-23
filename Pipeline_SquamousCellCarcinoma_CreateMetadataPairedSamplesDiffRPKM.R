@@ -115,24 +115,3 @@ rownames(log2fc_expression_pos)<-log2fc_expression_pos$Gene
 # Write table
 write.table(log2fc_expression_pos, file = "/home/felipe/Documentos/LungPortal/samples/log2fc_expression_pos.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
 ###########################################################################################################################
-case_sample  <-paired_sample_df[,"case"]
-normal_sample<-paired_sample_df[,"normal"]
-tumor_sample <-paired_sample_df[,"tumor"]    
-   
-# Normal and tumor samples for this "case" id
-normal_sample<-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id %in% normal_sample),]
-tumor_sample <-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id %in% tumor_sample),]
-
-# Store results for the case
-case_results_normal<-data.frame(case=norm_counts[,c(normal_sample$patient_id)])
-case_results_tumor <-data.frame(case=norm_counts[,c(tumor_sample$patient_id)])
-
-# log2folchange_diff
-log2folchange_diff<-log(case_results_tumor,2)-log(case_results_normal,2)
-
-log2folchange_diff<-na.omit(log2folchange_diff)
-log2folchange_diff <- log2folchange_diff[!is.infinite(rowSums(log2folchange_diff)),]
-log2folchange_diff <- data.frame(Gene=rownames(log2folchange_diff),log2folchange=rowMeans(na.omit(log2folchange_diff)))
-log2folchange_diff<-na.omit(log2folchange_diff)
-###########################################################################################################################
-

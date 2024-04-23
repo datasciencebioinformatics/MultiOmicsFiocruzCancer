@@ -115,6 +115,9 @@ rownames(log2fc_expression_pos)<-log2fc_expression_pos$Gene
 # Write table
 write.table(log2fc_expression_pos, file = "/home/felipe/Documentos/LungPortal/samples/log2fc_expression_pos.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
 ###########################################################################################################################
+# Filter for up-regulated genes 
+norm_counts<-norm_counts[log2fc_expression_pos$Gene,]
+
 # Data.frame to store results for control samples
 df_diff_expression<-data.frame(Gene=c(),log2foldchange=c(),stage=c())
 

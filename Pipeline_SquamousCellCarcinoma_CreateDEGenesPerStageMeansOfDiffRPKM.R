@@ -62,32 +62,29 @@ for (comparisson_index in rownames(df_table_comparisson))
 	Stage_i_samples_expr         <-unstranded_data[,Stage_i_samples]
 	Stages_ii_and_iii_sample_expr<-unstranded_data[,Stages_ii_and_iii_sample]
 	####################################################################################################################
-	# folchange=Expr(Stage i)/Expr(Stage ii and II)
-	folchange=rowMeans(Stage_i_samples_expr)/rowMeans(Stages_ii_and_iii_sample_expr)
-
-	# log2change
-	#log2change=log(folchange,2)	
-
+	log2change folchange=Expr(Stage i)/Expr(Stage ii and II)
+	log2change=log(rowMeans(Stage_i_samples_expr),2)-log(rowMeans(Stages_ii_and_iii_sample_expr),2)
+	
 	# log2change data
-	fchange_Stage_i=data.frame(gene=names(folchange),folchange=folchange)
+	log2fchange_Stage_i=data.frame(gene=names(folchange),log2change=log2change)
 	####################################################################################################################	
 	# First by padj
 	padj_threshold<-1
-	fc_threshold<-1.58	
+	log2fc_threshold<-0.58	
 	####################################################################################################################
 	# First, set category
 	# "Unchanged"
 	fchange_Stage_i$Category<-"Uncategorized"
 
 	# First, stageI
-	fchange_Stage_i[fchange_Stage_i$folchange>=fc_threshold,"Category"]<-"Up-regulated"		
+	log2fchange_Stage_i[log2fchange_Stage_i$log2change>=log2fc_threshold,"Category"]<-"Up-regulated"		
   	####################################################################################################################		
 	library(ggfortify) 
 	library(ggplot2)
 	
 	# Selected genes	
 	# Obtain differential Category numbers
-	selected_genes<-rownames(fchange_Stage_i[which(fchange_Stage_i$Category!="Uncategorized"),])
+	selected_genes<-rownames(log2fchange_Stage_i[which(log2fchange_Stage_i$Category!="Uncategorized"),])
 
 	pca_res <- prcomp(t(unstranded_data[selected_genes,]), scale. = TRUE)
 	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,]),"stages"], pca_res$x[,1:2])		
@@ -98,9 +95,9 @@ for (comparisson_index in rownames(df_table_comparisson))
 	dev.off()	
 
 	####################################################################################################################	
-	fchange_Stage_i_sub<-fchange_Stage_i[selected_genes,]
+	log2fchange_Stage_i_sub<-log2fchange_Stage_i[selected_genes,]
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3
-	write_tsv(fchange_Stage_i_sub, paste(output_dir,"genes_Stage_MeansOfDiffRPKM",Stage_i,".tsv",sep=""))
+	write_tsv(log2fchange_Stage_i_sub, paste(output_dir,"genes_Stage_MeansOfDiffRPKM",Stage_i,".tsv",sep=""))
 	####################################################################################################################	
 }

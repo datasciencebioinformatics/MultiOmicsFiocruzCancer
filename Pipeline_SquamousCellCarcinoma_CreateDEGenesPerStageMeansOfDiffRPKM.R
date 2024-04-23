@@ -67,7 +67,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	log2change=log(rowMeans(Stage_i_samples_expr)/rowMeans(Stages_ii_and_iii_sample_expr),2)
 	
 	# log2change data
-	log2fchange_Stage_i=data.frame(gene=names(folchange),log2change=log2change)
+	log2fchange_Stage_i=data.frame(gene=names(log2change),log2change=log2change)
 	####################################################################################################################	
 	# First by padj
 	padj_threshold<-1

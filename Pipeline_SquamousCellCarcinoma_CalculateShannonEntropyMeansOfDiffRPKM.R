@@ -4,9 +4,9 @@ library(DescTools)
 list_of_genes<-unique(merge_interactome_gene_symbol[,c("gene_id","PPI")])
 
 # File path
-file_genes_Stage_I   <-"/home/felipe/Documentos/LungPortal/output/genes_Stage_MeansOfDiffRPKMsample_stage_I.tsv"
-file_genes_Stage_II  <-"/home/felipe/Documentos/LungPortal/output/genes_Stage_MeansOfDiffRPKMsample_stage_II.tsv"
-file_genes_Stage_III <-"/home/felipe/Documentos/LungPortal/output/genes_Stage_MeansOfDiffRPKMsample_stage_III.tsv"
+file_genes_Stage_I   <-"/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageI_pos"
+file_genes_Stage_II  <-"/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageII_pos"
+file_genes_Stage_III <-"/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageIII_pos"
 
 # Gene table
 genes_Stage_I       <-read.table(file = file_genes_Stage_I, sep = '\t', header = TRUE,fill=TRUE)         #

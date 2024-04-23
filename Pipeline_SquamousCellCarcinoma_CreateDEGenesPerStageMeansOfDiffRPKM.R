@@ -62,7 +62,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	Stage_i_samples_expr         <-unstranded_data[,Stage_i_samples]
 	Stages_ii_and_iii_sample_expr<-unstranded_data[,Stages_ii_and_iii_sample]
 	####################################################################################################################
-	log2change folchange=Expr(Stage i)/Expr(Stage ii and II)
+	#log2change=log(rowMeans(Stage_i_samples_expr),2)-log(rowMeans(Stages_ii_and_iii_sample_expr),2)
 	log2change=log(rowMeans(Stage_i_samples_expr),2)-log(rowMeans(Stages_ii_and_iii_sample_expr),2)
 	
 	# log2change data

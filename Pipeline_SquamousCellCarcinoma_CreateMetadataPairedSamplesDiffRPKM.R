@@ -82,7 +82,7 @@ for (case in rownames(paired_sample_df))
 
     # "We divided gene expression values of tumor samples from their respective control samples"
     # "the resulting values were called differential expression"
-    diff_expression<-case_results_tumor/case_results_normal
+    diff_expression<-log(case_results_tumor,2)-log(case_results_normal,2)
     
     # Rename collumns
     colnames(diff_expression)<-case_sample

@@ -64,14 +64,14 @@ for (comparisson_index in rownames(df_table_comparisson))
 	####################################################################################################################
 	#log2change=log(rowMeans(Stage_i_samples_expr),2)-log(rowMeans(Stages_ii_and_iii_sample_expr),2)
 	log2change=log(rowMeans(Stage_i_samples_expr),2)-log(rowMeans(Stages_ii_and_iii_sample_expr),2)
-	log2change=rowMeans(Stage_i_samples_expr)/rowMeans(Stages_ii_and_iii_sample_expr)
+	log2change=log(rowMeans(Stage_i_samples_expr)/rowMeans(Stages_ii_and_iii_sample_expr),2)
 	
 	# log2change data
 	log2fchange_Stage_i=data.frame(gene=names(folchange),log2change=log2change)
 	####################################################################################################################	
 	# First by padj
 	padj_threshold<-1
-	log2fc_threshold<-1.50	
+	log2fc_threshold<-0.58	
 	####################################################################################################################
 	# First, set category
 	# "Unchanged"

@@ -113,3 +113,12 @@ rownames(fc_expression_pos)<-fc_expression_pos$Gene
 
 # Write table
 write.table(fc_expression_pos, file = "/home/felipe/Documentos/LungPortal/samples/log2fc_expression_pos.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
+###########################################################################################################################
+# Calclate diff expression log2foldchange=log2(Epr in tumor)-log2(Epr in control)
+case_sample  <-paired_sample_df[,"case"]
+normal_sample<-paired_sample_df[,"normal"]
+tumor_sample <-paired_sample_df[,"tumor"]    
+ 
+# Normal and tumor samples for this "case" id
+normal_sample<-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id %in% normal_sample),]
+tumor_sample<-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id %in% tumor_sample),]

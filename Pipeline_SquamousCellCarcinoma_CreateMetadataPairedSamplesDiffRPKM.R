@@ -8,7 +8,8 @@
 #############################################################################1##############################################
 library(readr)                                                                                                            #
 library("xlsx")                                                                                                           #
-library(ggplot2)                                                                                                          #
+library(ggplot2)                       
+library("gtools")                                                                                                          #
 ###########################################################################################################################
 output_dir="/home/felipe/Documentos/LungPortal/output/"                                                                   #
 ###########################################################################################################################
@@ -82,7 +83,7 @@ for (case in rownames(paired_sample_df))
     # "We divided gene expression values of tumor samples from their respective control samples"
     # "the resulting values were called differential expression"
     diff_expression<-case_results_tumor/case_results_normal
-
+    
     # Rename collumns
     colnames(diff_expression)<-case_sample
 
@@ -102,7 +103,7 @@ fc_expression<-data.frame(rowMeans(df_diff_expression))
 # "positive differential gene expression values indicated higher gene expression in tumor samples"
 # Take average expression of positive sample
 #log2fc_expression_pos<-data.frame(Gene=rownames(log2fc_expression)[which(log2fc_expression>=1.584963)],Expression=log2fc_expression[which(log2fc_expression>=1.584963),])
-fc_expression_pos<-data.frame(Gene=rownames(fc_expression)[which(fc_expression>=1.58)],Expression=fc_expression[which(fc_expression>=1.58),])
+fc_expression_pos<-data.frame(Gene=rownames(fc_expression)[which(fc_expression>=3)],Expression=fc_expression[which(fc_expression>=3),])
 
 # log2fc_expression_pos
 fc_expression_pos <- fc_expression_pos[!is.infinite(fc_expression_pos$Expression),]

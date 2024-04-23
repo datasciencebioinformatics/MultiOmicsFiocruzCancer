@@ -46,9 +46,9 @@ sum(df_diff_expression[df_diff_expression$stage=="Stage II","log2foldchange"]>=5
 sum(df_diff_expression[df_diff_expression$stage=="Stage III","log2foldchange"]>=5.00)
 
 # df stages
-df_stage_I   <-df_diff_expression[which(df_diff_expression[df_diff_expression$stage=="Stage I","log2foldchange"]>=3.00),]
-df_stage_II  <-df_diff_expression[which(df_diff_expression[df_diff_expression$stage=="Stage II","log2foldchange"]>=3.00),]
-df_stage_III <-df_diff_expression[which(df_diff_expression[df_diff_expression$stage=="Stage III","log2foldchange"]>=3.00),]
+df_stage_I   <-df_diff_expression[which(df_diff_expression[df_diff_expression$stage=="Stage I","log2foldchange"]>=5.00),]
+df_stage_II  <-df_diff_expression[which(df_diff_expression[df_diff_expression$stage=="Stage II","log2foldchange"]>=5.00),]
+df_stage_III <-df_diff_expression[which(df_diff_expression[df_diff_expression$stage=="Stage III","log2foldchange"]>=5.00),]
 
 # Write table
 write.table(df_stage_I, file = "/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageI_pos", sep = "\t", row.names = TRUE, col.names = TRUE)

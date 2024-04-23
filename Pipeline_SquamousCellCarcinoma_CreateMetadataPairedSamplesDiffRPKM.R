@@ -83,7 +83,7 @@ for (case in rownames(paired_sample_df))
     # "the resulting values were called differential expression"
     diff_expression<-case_results_normal-case_results_tumor
 
-    diff_expression<-log(case_results_tumor,2)/log(case_results_normal,2)
+    diff_expression<-log(case_results_tumor,2)-log(case_results_normal,2)
 
     # Rename collumns
     colnames(diff_expression)<-case_sample

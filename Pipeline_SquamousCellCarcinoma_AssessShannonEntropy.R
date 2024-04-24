@@ -43,6 +43,12 @@ for (bootstrapping in 1:1000)
   entropy_bootstrapping_stage_II<-c(entropy_bootstrapping_stage_II,round(Entropy(random_genes_Stage_II$PPI, base = 2),3))
   entropy_bootstrapping_stage_III<-c(entropy_bootstrapping_stage_III,round(Entropy(random_genes_Stage_III$PPI, base = 2),3))
 }
+# Save stages
+df_entropy_stages<-rbind(data.frame(1:1000,entropy=entropy_bootstrapping_stage_I,stage="Stage I"),data.frame(1:1000,entropy=entropy_bootstrapping_stage_II,stage="Stage II"),data.frame(1:1000,entropy=entropy_bootstrapping_stage_III,stage="Stage III"))
+
+# Overlaid histograms
+ggplot(df_entropy_stages, aes(x=entropy),fill=stage) + geom_histogram(binwidth=.15, position="dodge") + facet_grid(~stage)+ theme_bw()
 
 
-
+# Histogram overlaid with kernel density curve
+ggplot(df_entropy_stages, aes(x=entropy)) +  geom_histogram(aes(y=..density..), binwidth=.20, colour="black", fill="white") +  geom_density(alpha=.2, fill="#FF6666") 

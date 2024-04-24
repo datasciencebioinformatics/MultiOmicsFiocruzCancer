@@ -48,8 +48,6 @@ df_enropy_stage_I  <-data.frame(1:1000,entropy=entropy_bootstrapping_stage_I,sta
 df_enropy_stage_II <-data.frame(1:1000,entropy=entropy_bootstrapping_stage_II,stage="Stage II")
 df_enropy_stage_III<-data.frame(1:1000,entropy=entropy_bootstrapping_stage_III,stage="Stage III")
 
-
-
 # Histogram overlaid with kernel density curve
 plot_enropy_stage_I   <-ggplot(df_enropy_stage_I, aes(x=entropy)) +  geom_histogram(aes(y=..density..), binwidth=.20, colour="black", fill="white") +  geom_density(alpha=.2, fill="#FF6666") + geom_segment(aes(x=entropy_stage_I, y=200, xend=entropy_stage_I, yend=0), arrow = arrow(length=unit(0.5, 'cm')))
 plot_enropy_stage_II  <-ggplot(df_enropy_stage_II, aes(x=entropy)) +  geom_histogram(aes(y=..density..), binwidth=.20, colour="black", fill="white") +  geom_density(alpha=.2, fill="#FF6666")  + geom_segment(aes(x=entropy_stage_I, y=200, xend=entropy_stage_I, yend=0), arrow = arrow(length=unit(0.5, 'cm')))

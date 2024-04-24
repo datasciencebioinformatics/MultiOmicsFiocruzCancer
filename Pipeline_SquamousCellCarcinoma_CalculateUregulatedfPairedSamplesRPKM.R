@@ -38,19 +38,19 @@ df_diff_expression<-na.omit(df_diff_expression)
 # remove infinite
 df_diff_expression <- df_diff_expression[is.finite(df_diff_expression$log2foldchange),]
 ###########################################################################################################################
-sum(df_diff_expression[df_diff_expression$stage=="Stage I","log2foldchange"]>=3.00)
-sum(df_diff_expression[df_diff_expression$stage=="Stage II","log2foldchange"]>=3.00)
-sum(df_diff_expression[df_diff_expression$stage=="Stage III","log2foldchange"]>=3.00)
+sum(df_diff_expression[df_diff_expression$stage=="Stage I","log2foldchange"]>=1.58)
+sum(df_diff_expression[df_diff_expression$stage=="Stage II","log2foldchange"]>=1.58)
+sum(df_diff_expression[df_diff_expression$stage=="Stage III","log2foldchange"]>=1.58)
 
 # df stages
-df_stage_I   <-df_diff_expression[which(df_diff_expression[df_diff_expression$stage=="Stage I","log2foldchange"]>=3.00),]
-df_stage_II  <-df_diff_expression[which(df_diff_expression[df_diff_expression$stage=="Stage II","log2foldchange"]>=3.00),]
-df_stage_III <-df_diff_expression[which(df_diff_expression[df_diff_expression$stage=="Stage III","log2foldchange"]>=3.00),]
+df_stage_I   <-df_diff_expression[which(df_diff_expression[df_diff_expression$stage=="Stage I","log2foldchange"]>=1.58),]
+df_stage_II  <-df_diff_expression[which(df_diff_expression[df_diff_expression$stage=="Stage II","log2foldchange"]>=1.58),]
+df_stage_III <-df_diff_expression[which(df_diff_expression[df_diff_expression$stage=="Stage III","log2foldchange"]>=1.58),]
 
 # Write table
-write.table(df_stage_I, file = "/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageI_pos", sep = "\t", row.names = TRUE, col.names = TRUE)
-write.table(df_stage_II, file = "/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageII_pos", sep = "\t", row.names = TRUE, col.names = TRUE)
-write.table(df_stage_III, file = "/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageIII_pos", sep = "\t", row.names = TRUE, col.names = TRUE)
+write.table(df_stage_I, file = "/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageI_pos.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
+write.table(df_stage_II, file = "/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageII_pos.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
+write.table(df_stage_III, file = "/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageIII_pos.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
 ###########################################################################################################################
 library(ggfortify) 
 library(ggplot2)
@@ -65,7 +65,7 @@ for (stage in c("Stage I","Stage II","Stage III"))
 	normal_sample<-paired_sample_df[,"normal"]
 	tumor_sample <-paired_sample_df[,"tumor"]    
 	
-	# Take patients from stage i, normal and tumor	
+	# Take patients from stage i, normal and tumor	genes_Stage_I
 	patient_stage_i_normal<-colData_stage_i[colData_stage_i$patient_id %in% normal_sample,"patient_id"]
 	patient_stage_i_tumor<-colData_stage_i[colData_stage_i$patient_id %in% tumor_sample,"patient_id"]
 	

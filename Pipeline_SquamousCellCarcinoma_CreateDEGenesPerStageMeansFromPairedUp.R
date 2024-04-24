@@ -117,6 +117,6 @@ for (comparisson_index in rownames(df_table_comparisson))
 	dev.off()	
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3
-	write_tsv(log2change_Stage_i, paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_o",Stage_i,".tsv",sep=""))
+	write_tsv(log2change_Stage_i, paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))
 	####################################################################################################################	
 }

@@ -44,11 +44,13 @@ for (bootstrapping in 1:1000)
   entropy_bootstrapping_stage_III<-c(entropy_bootstrapping_stage_III,round(Entropy(random_genes_Stage_III$PPI, base = 2),3))
 }
 # Save stages
-df_entropy_stages<-rbind(data.frame(1:1000,entropy=entropy_bootstrapping_stage_I,stage="Stage I"),data.frame(1:1000,entropy=entropy_bootstrapping_stage_II,stage="Stage II"),data.frame(1:1000,entropy=entropy_bootstrapping_stage_III,stage="Stage III"))
+df_enropy_stage_I  <-data.frame(1:1000,entropy=entropy_bootstrapping_stage_I,stage="Stage I")
+df_enropy_stage_II <-data.frame(1:1000,entropy=entropy_bootstrapping_stage_II,stage="Stage II")
+df_enropy_stage_III<-data.frame(1:1000,entropy=entropy_bootstrapping_stage_III,stage="Stage III")
 
-# Overlaid histograms
-ggplot(df_entropy_stages, aes(x=entropy),fill=stage) + geom_histogram(binwidth=.15, position="dodge") + facet_grid(~stage)+ theme_bw()
 
 
 # Histogram overlaid with kernel density curve
-ggplot(df_entropy_stages, aes(x=entropy)) +  geom_histogram(aes(y=..density..), binwidth=.20, colour="black", fill="white") +  geom_density(alpha=.2, fill="#FF6666") 
+plot_enropy_stage_I   <-ggplot(df_enropy_stage_I, aes(x=entropy)) +  geom_histogram(aes(y=..density..), binwidth=.20, colour="black", fill="white") +  geom_density(alpha=.2, fill="#FF6666") + geom_segment(aes(x=entropy_stage_I, y=200, xend=entropy_stage_I, yend=0), arrow = arrow(length=unit(0.5, 'cm')))
+plot_enropy_stage_II  <-ggplot(df_enropy_stage_II, aes(x=entropy)) +  geom_histogram(aes(y=..density..), binwidth=.20, colour="black", fill="white") +  geom_density(alpha=.2, fill="#FF6666")  + geom_segment(aes(x=entropy_stage_I, y=200, xend=entropy_stage_I, yend=0), arrow = arrow(length=unit(0.5, 'cm')))
+plot_enropy_stage_III  <-ggplot(df_enropy_stage_III, aes(x=entropy)) +  geom_histogram(aes(y=..density..), binwidth=.20, colour="black", fill="white") +  geom_density(alpha=.2, fill="#FF6666")  + geom_segment(aes(x=entropy_stage_I, y=200, xend=entropy_stage_I, yend=0), arrow = arrow(length=unit(0.5, 'cm')))

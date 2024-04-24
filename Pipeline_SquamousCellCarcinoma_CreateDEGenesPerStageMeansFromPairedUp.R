@@ -63,53 +63,57 @@ for (comparisson_index in rownames(df_table_comparisson))
 	# Stages
 	Stage_i          <-df_table_comparisson[comparisson_index,"Stage_i"]
 	Stages_ii_and_iii<-df_table_comparisson[comparisson_index,"Stages_ii_and_iii"]
-
-  print(names(list_of_genes)[as.integer(comparisson_index)])
-
-  # Take gens of corresponding stage
-  DE_genes        <- list_of_genes[[as.integer(comparisson_index)]]
-
+	
+	print(names(list_of_genes)[as.integer(comparisson_index)])
+	
+	# Take gens of corresponding stage
+	DE_genes        <- list_of_genes[[as.integer(comparisson_index)]]
+	
 	# Take samples of each stage
 	Stage_i_samples         =list_of_comparisson[[Stage_i]]
 	Stages_ii_and_iii_sample=list_of_comparisson[[Stages_ii_and_iii]]	
-
+	
 	# Take RPKM of genes from samples of each stage
-	Stage_i_samples_expr         <-unstranded_data[DE_genes,Stage_i_samples]
-	Stages_ii_and_iii_sample_expr<-unstranded_data[DE_genes,Stages_ii_and_iii_sample]
+	Stage_i_samples_expr         <-na.omit(unstranded_data[DE_genes,Stage_i_samples])
+	Stages_ii_and_iii_sample_expr<-na.omit(unstranded_data[DE_genes,Stages_ii_and_iii_sample])
 	####################################################################################################################
 	# folchange=Expr(Stage i)/Expr(Stage ii and II)
-	folchange=rowMeans(Stage_i_samples_expr)-rowMeans(Stages_ii_and_iii_sample_expr)
-
+	folchange=rowMeans(Stage_i_samples_expr)/rowMeans(Stages_ii_and_iii_sample_expr)
+	
 	# log2change
-	log2change=log(folchange,2)	
-
+	#log2change=log(folchange,2)	
+	
 	# log2change data
-	log2change_Stage_i=data.frame(gene=names(folchange),log2change=log2change)
+	#log2change_Stage_i=data.frame(gene=names(folchange),log2change=log2change)
+	fchange_Stage_i=data.frame(gene=names(folchange),folchange=folchange)
 	####################################################################################################################	
 	# First by padj
 	padj_threshold<-1
-	log2fc_threshold<-0.58	
+	fc_threshold<-1.5	
 	####################################################################################################################
 	# First, set category
 	# "Unchanged"
-	log2change_Stage_i$Category<-"Uncategorized"
-
+	fchange_Stage_i$Category<-"Uncategorized"
+	
 	# First, stageI
-	log2change_Stage_i[log2change_Stage_i$log2change>=0.58,]<-"Up-regulated"		
-  	####################################################################################################################		
+	fchange_Stage_i[fchange_Stage_i$folchange>=fc_threshold,]<-"Up-regulated"		
+	####################################################################################################################		
 	library(ggfortify) 
 	library(ggplot2)
 	
 	# Selected genes	
 	# Obtain differential Category numbers
-	selected_genes<-rownames(log2change_Stage_i[which(log2change_Stage_i$Category!="Uncategorized"),])
+	selected_genes<-rownames(fchange_Stage_i[which(fchange_Stage_i$Category!="Uncategorized"),])
 
-	pca_res <- prcomp(t(unstranded_data[selected_genes,]), scale. = TRUE)
-	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,]),"stages"], pca_res$x[,1:2])		
+	# Coldata
+	colData_sub<-colData[colData$tissue_type=="Tumor",]	
+	
+	pca_res <- prcomp(t(unstranded_data[selected_genes,colData_sub$patient_id]), scale. = TRUE)
+	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,colData_sub$patient_id]),"stages"], pca_res$x[,1:2])		
 	
 	# FindClusters_resolution
 	png(filename=paste(output_dir,"PCA_",Stage_i,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
-		print(ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,]),], colour="stages", frame=TRUE, frame.type="t") + xlim(-0.1,0.1) + ylim(-0.1,0.1) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom'))
+	print(ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,colData_sub$patient_id]),], colour="stages", frame=FALSE, frame.type="t") + xlim(-0.1,0.1) + ylim(-0.1,0.1) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom'))
 	dev.off()	
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3

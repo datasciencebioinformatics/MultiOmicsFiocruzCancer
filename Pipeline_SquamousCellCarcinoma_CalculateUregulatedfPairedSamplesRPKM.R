@@ -52,6 +52,8 @@ write.table(df_stage_I, file = "/home/felipe/Documentos/LungPortal/samples/log2f
 write.table(df_stage_II, file = "/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageII_pos.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
 write.table(df_stage_III, file = "/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageIII_pos.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
 ###########################################################################################################################
+up_regulated_genes<-list(Stage_I=df_stage_I$Gene,Stage_II=df_stage_II$Gene,Stage_III=df_stage_III$Gene)
+###########################################################################################################################
 library(ggfortify) 
 library(ggplot2)
 
@@ -71,17 +73,18 @@ for (stage in c("Stage I","Stage II","Stage III"))
 	
 	# Selected genes	
 	# Obtain differential Category numbers
-	selected_genes<-df_stage_I$Gene
+	selected_genes<-up_regulated_genes[[gsub(pattern=" ", replacement="_",x=stage)]]	
 	
 	# Coldata
 	colData_sub<-colData[colData$tissue_type=="Tumor",]	
 	
 	pca_res <- prcomp( t(na.omit(unstranded_data[selected_genes,colData_sub$patient_id])), scale. = TRUE)
 	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,colData_sub$patient_id]),"stages"], pca_res$x[,1:2])		
-	
+
+	     	
 	# FindClusters_resolution
 	png(filename=paste(output_dir,"PCA_tumor_control_",stage,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
-	print(print(ggplot2::autoplot(pca_res, data=colData[colnames(na.omit(unstranded_data[selected_genes,colData_sub$patient_id])),], colour="stages", frame=FALSE, frame.type="t") + xlim(-0.15,0.15) + ylim(-0.15,0.15) + theme_bw() + ggtitle(paste("DE Genes ", stage,"\n",paste(length(selected_genes), "genes"),paste("\n",length(patient_stage_i_tumor)," tumor/control paired samples",sep=""),sep=""))+ theme(legend.position='bottom')))
+	print(print(ggplot2::autoplot(pca_res, data=colData[colnames(na.omit(unstranded_data[selected_genes,colData_sub$patient_id])),], colour="stages", frame=FALSE, frame.type="t") + xlim(-0.15,0.15) + ylim(-0.15,0.15) + theme_bw() + ggtitle(paste("DE Genes ", gsub(pattern=" ", replacement="_",x=stage),"\n",paste(length(selected_genes), "genes"),paste("\n",length(patient_stage_i_tumor)," tumor/control paired samples",sep=""),sep=""))+ theme(legend.position='bottom')))
 	dev.off()
 }
 ##########################################################################################################################

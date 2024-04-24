@@ -78,32 +78,32 @@ for (comparisson_index in rownames(df_table_comparisson))
 	Stages_ii_and_iii_sample_expr<-na.omit(unstranded_data[DE_genes,Stages_ii_and_iii_sample])
 	####################################################################################################################
 	# folchange=Expr(Stage i)/Expr(Stage ii and II)
-	folchange=rowMeans(Stage_i_samples_expr)/rowMeans(Stages_ii_and_iii_sample_expr)
+	folchange=rowMeans(Stage_i_samples_expr)-rowMeans(Stages_ii_and_iii_sample_expr)
 	
 	# log2change
-	#log2change=log(folchange,2)	
+	log2change=log(folchange,2)	
 	
 	# log2change data
-	#log2change_Stage_i=data.frame(gene=names(folchange),log2change=log2change)
-	fchange_Stage_i=data.frame(gene=names(folchange),folchange=folchange)
+	log2change_Stage_i=na.omit(data.frame(gene=names(log2change),log2change=log2change))
+	#fchange_Stage_i=data.frame(gene=names(log2change),folchange=log2change)
 	####################################################################################################################	
 	# First by padj
 	padj_threshold<-1
-	fc_threshold<-1.5	
+	log2fc_threshold<-1.58	
 	####################################################################################################################
 	# First, set category
 	# "Unchanged"
 	fchange_Stage_i$Category<-"Uncategorized"
 	
 	# First, stageI
-	fchange_Stage_i[fchange_Stage_i$folchange>=fc_threshold,]<-"Up-regulated"		
+	log2change_Stage_i[log2change_Stage_i$log2change>=log2fc_threshold,"Category"]<-"Up-regulated"		
 	####################################################################################################################		
 	library(ggfortify) 
 	library(ggplot2)
 	
 	# Selected genes	
 	# Obtain differential Category numbers
-	selected_genes<-rownames(fchange_Stage_i[which(fchange_Stage_i$Category!="Uncategorized"),])
+	selected_genes<-rownames(log2change_Stage_i[which(log2change_Stage_i$Category!="Uncategorized"),])
 
 	# Coldata
 	colData_sub<-colData[colData$tissue_type=="Tumor",]	
@@ -117,6 +117,6 @@ for (comparisson_index in rownames(df_table_comparisson))
 	dev.off()	
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3
-	write_tsv(na.omit(fchange_Stage_i[selected_genes,]), paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))
+	write_tsv(na.omit(log2change_Stage_i[selected_genes,]), paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))
 	####################################################################################################################	
 }

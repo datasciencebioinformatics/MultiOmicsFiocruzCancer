@@ -52,3 +52,9 @@ df_enropy_stage_III<-data.frame(1:1000,entropy=entropy_bootstrapping_stage_III,s
 plot_enropy_stage_I   <-ggplot(df_enropy_stage_I, aes(x=entropy)) +  geom_histogram(aes(y=..density..), binwidth=.20, colour="black", fill="white") +  geom_density(alpha=.2, fill="#FF6666") + geom_segment(aes(x=entropy_stage_I, y=200, xend=entropy_stage_I, yend=0), arrow = arrow(length=unit(0.5, 'cm')))
 plot_enropy_stage_II  <-ggplot(df_enropy_stage_II, aes(x=entropy)) +  geom_histogram(aes(y=..density..), binwidth=.20, colour="black", fill="white") +  geom_density(alpha=.2, fill="#FF6666")  + geom_segment(aes(x=entropy_stage_II, y=200, xend=entropy_stage_II, yend=0), arrow = arrow(length=unit(0.5, 'cm')))
 plot_enropy_stage_III  <-ggplot(df_enropy_stage_III, aes(x=entropy)) +  geom_histogram(aes(y=..density..), binwidth=.20, colour="black", fill="white") +  geom_density(alpha=.2, fill="#FF6666")  + geom_segment(aes(x=entropy_stage_III, y=200, xend=entropy_stage_III, yend=0), arrow = arrow(length=unit(0.5, 'cm')))
+
+	# FindClusters_resolution
+	png(filename=paste(output_dir,"Entropy_","all_".png",sep=""), width = 16, height = 16, res=600, units = "cm")
+		print(grid.arrange(plot_enropy_stage_I,plot_enropy_stage_II,plot_enropy_stage_III))
+	dev.off()
+

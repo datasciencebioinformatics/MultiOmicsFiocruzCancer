@@ -2,20 +2,15 @@ library(ggVennDiagram)
 library(viridis)
 
 #######################################################################################################################################
-# Gene table
-genes_Stage_I       <-read.table(file = file_genes_Stage_I, sep = '\t', header = TRUE,fill=TRUE)         #
-genes_Stage_II      <-read.table(file = file_genes_Stage_II, sep = '\t', header = TRUE,fill=TRUE)#
-genes_Stage_III     <-read.table(file = file_genes_Stage_III, sep = '\t', header = TRUE,fill=TRUE) 
-#######################################################################################################################################
 # Path to files of selected_genes                                                                                                             # 
 selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_Stage_sample_stage_I.tsv"    #
 selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_Stage_sample_stage_II.tsv"   #
 selected_genes_Stage_III_file     <-"/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_Stage_sample_stage_III.tsv"  #
 #######################################################################################################################################
 # Load data                                                                                                                           #
-selected_genes_Stage_I_data       <-read.table(file = file_genes_Stage_I, sep = '\t', header = TRUE,fill=TRUE)                        #
-selected_genes_Stage_II_data      <-read.table(file = file_genes_Stage_II, sep = '\t', header = TRUE,fill=TRUE)                       #
-selected_genes_Stage_III_data     <-read.table(file = file_genes_Stage_III, sep = '\t', header = TRUE,fill=TRUE)                      #
+selected_genes_Stage_I_data       <-read.table(file = selected_genes_Stage_I_file, sep = '\t', header = TRUE,fill=TRUE)                        #
+selected_genes_Stage_II_data      <-read.table(file = selected_genes_Stage_II_file, sep = '\t', header = TRUE,fill=TRUE)                       #
+selected_genes_Stage_III_data     <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)                      #
                                                                                                                                       #
 # Set rownames                                                                                                                        #
 rownames(selected_genes_Stage_I_data)<-selected_genes_Stage_I_data$gene                                                               #

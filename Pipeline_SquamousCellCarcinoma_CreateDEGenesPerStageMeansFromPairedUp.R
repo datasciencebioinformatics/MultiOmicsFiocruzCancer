@@ -39,9 +39,9 @@ sample_stages_I_III<-colData[colData$stages=="Stage I" | colData$stages=="Stage 
 sample_stages_I_II<-colData[colData$stages=="Stage I" | colData$stages=="Stage II","patient_id"]                                      #
 #######################################################################################################################################
 # Write table
-df_stage_I_file = "/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageI_pos"
-df_stage_II_file = "/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageII_pos"
-df_stage_III_file = "/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageIII_pos"
+df_stage_I_file = "/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageI_pos.tsv"
+df_stage_II_file = "/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageII_pos.tsv"
+df_stage_III_file = "/home/felipe/Documentos/LungPortal/samples/log2foldchange_stageIII_pos.tsv"
 #######################################################################################################################################
 df_stage_I_data                    <-read.table(file = df_stage_I_file, sep = '\t', header = TRUE,fill=TRUE)         #
 df_stage_II_data                   <-read.table(file = df_stage_II_file, sep = '\t', header = TRUE,fill=TRUE)#
@@ -117,6 +117,6 @@ for (comparisson_index in rownames(df_table_comparisson))
 	dev.off()	
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3
-	write_tsv(log2change_Stage_i, paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))
+	write_tsv(na.omit(fchange_Stage_i[selected_genes,]), paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))
 	####################################################################################################################	
 }

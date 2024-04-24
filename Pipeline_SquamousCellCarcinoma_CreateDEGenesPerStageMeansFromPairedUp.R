@@ -93,7 +93,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	####################################################################################################################
 	# First, set category
 	# "Unchanged"
-	fchange_Stage_i$Category<-"Uncategorized"
+	log2change_Stage_i$Category<-"Uncategorized"
 	
 	# First, stageI
 	log2change_Stage_i[log2change_Stage_i$log2change>=log2fc_threshold,"Category"]<-"Up-regulated"		

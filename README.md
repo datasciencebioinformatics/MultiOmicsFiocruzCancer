@@ -53,54 +53,28 @@ gene_name.txt
 
 /home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateTableFromFilesMeanOfDiffRPKM.sh
 
+
+# Pipeline 
+## A R scripts to create tables
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataFromGDCFiles.R")
+
 ## A R scripts to load expression files
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadExpressionData.R")
 
-## A R scripts to load paired sample
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamples.R")
+## A R scripts for RPKM Normalization
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_RPKM_Normalization.R")
 
-## A R script to compute DE genes of each stage DESeq2
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStage.R")
-
-## A R script to compute DE genes of each stage ManualLog2FC
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageManualLog2FC.R")
-
-## A R script to compute Pipeline_SquamousCellCarcinoma_PPI_Magnitude_Entropy R
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_PPI_Magnitude_Entropy.R")
-
-## A R script to compute Ven Diagram for DE genes DESeq2
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_VeenDiagrams.R")
-
-## A R script to compute Ven Diagram for DE genes ManualLog2FC
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_VeenDiagramsManualLog2FC.R")
-
-## A R script to compute GO terms analysis DESeq2
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_FunctionalAnalyse.R")
-
-## A R script to compute GO terms analysis ManualLog2FC
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_FunctionalAnalyseManualLog2FC.R")
-
-
-
-##  Pipeline 1
-## Paired samples tumor/control
-log2foldchange=log(case_results_tumor/case_results_normal,2)>0.58
-
+## A R scripts to process paired samples
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamplesRPKM.R")
 
-## Differential analysis
-log2foldchange=log(rowMeans(Stage_i_samples_expr)/rowMeans(Stages_ii_and_iii_sample_expr),2)>0.58
+## A R scripts to calculate up-regulated genes from paired samples
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateUregulatedfPairedSamplesRPKM.R")
 
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageDiffOfMeansRPKM.R")
+## A R scripts to DE per stage
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageMeansFromPairedUp.R")
 
-# Pipeline 2
-## Paired samples tumor/control
-log2foldchange=log(case_results_tumor,2)-log(case_results_normal,2)>0.58
+## A R scripts to create veen driagam
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_VeenDiagramsFromPairedUp.R")
 
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamplesDiffRPKM.R")
-
-## Differential analysis
-log2foldchange=log(rowMeans(Stage_i_samples_expr,2)-rowMeans(Stages_ii_and_iii_sample_expr),2)>0.58
-
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageMeansOfDiffRPKM.R")
-
+## A R scripts to calculate Calculate Shannon Entrop
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropyFromPairedUp.R")

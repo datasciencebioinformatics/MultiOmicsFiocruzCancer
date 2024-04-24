@@ -48,11 +48,14 @@ df_enropy_stage_I  <-data.frame(1:1000,entropy=entropy_bootstrapping_stage_I,sta
 df_enropy_stage_II <-data.frame(1:1000,entropy=entropy_bootstrapping_stage_II,stage="Stage II")
 df_enropy_stage_III<-data.frame(1:1000,entropy=entropy_bootstrapping_stage_III,stage="Stage III")
 
-# Histogram overlaid with kernel density curve
-plot_enropy_stage_I   <-ggplot(df_enropy_stage_I, aes(x=entropy))  + geom_histogram() +  geom_segment(aes(x=entropy_stage_I, y=200, xend=entropy_stage_I, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) + ggtitle("Entropy 1000x stage I")  + theme_bw()
-plot_enropy_stage_II   <-ggplot(df_enropy_stage_II, aes(x=entropy))  + geom_histogram() +  geom_segment(aes(x=entropy_stage_II, y=200, xend=entropy_stage_II, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) + ggtitle("Entropy 1000x for stage II")  + theme_bw()
-plot_enropy_stage_III   <-ggplot(df_enropy_stage_III, aes(x=entropy))  + geom_histogram() +  geom_segment(aes(x=entropy_stage_III, y=200, xend=entropy_stage_III, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) + ggtitle("Entropy 1000x for stage III")  + theme_bw()
+p_value_stage_I<-paste("p.value: ",sum(df_enropy_stage_I$entropy>=entropy_stage_I)/1000)
+p_value_stage_II<-paste("p.value: ",sum(df_enropy_stage_II$entropy>=entropy_stage_II)/1000)
+p_value_stage_III<-paste("p.value: ",sum(df_enropy_stage_III$entropy>=entropy_stage_III)/1000)
 
+# Histogram overlaid with kernel density curve
+plot_enropy_stage_I     <-ggplot(df_enropy_stage_I, aes(x=entropy))  + geom_histogram() +  geom_segment(aes(x=entropy_stage_I, y=200, xend=entropy_stage_I, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) + ggtitle(paste("Entropy 1000x stage I\n",p_value_stage_I,sep=""))       + theme_bw()
+plot_enropy_stage_II    <-ggplot(df_enropy_stage_II, aes(x=entropy))  + geom_histogram() +  geom_segment(aes(x=entropy_stage_II, y=200, xend=entropy_stage_II, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) + ggtitle(paste("Entropy 1000x stage II\n",p_value_stage_II,sep=""))    + theme_bw()
+plot_enropy_stage_III   <-ggplot(df_enropy_stage_III, aes(x=entropy))  + geom_histogram() +  geom_segment(aes(x=entropy_stage_III, y=200, xend=entropy_stage_III, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) + ggtitle(paste("Entropy 1000x stage I\n",p_value_stage_III,sep="")) + theme_bw()
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"Entropy_","all_.png",sep=""), width = 24, height = 16, res=600, units = "cm")

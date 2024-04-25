@@ -49,7 +49,6 @@ unstranded_rpkm<-rpkm(unstranded_data[df_gene_ids$gene_id_cp,], gene.length = da
 # Filter genes by RPKM, rowMeans(unstranded_rpkm)>5 
 unstranded_rpkm<-unstranded_rpkm[rowMeans(unstranded_rpkm)>3,]
 ###################################################################################################################################################################
-
 # Save TSV file with genes from Stage1                                                                                                                             #
-write.table(unstranded_rpkm, file = "/home/felipe/Documentos/LungPortal/samples/unstranded_rpkm.tsv", sep = "\t", row.names = FALSE, col.names = TRUE, append=FALSE)                  #
+write.table(data.frame(unstranded_rpkm), file =  "/home/felipe/Documentos/LungPortal/samples/unstranded_rpkm.tsv", append = FALSE,row.names = TRUE, col.names = TRUE, quote = TRUE, sep = "\t")
 ####################################################################################################################################################################

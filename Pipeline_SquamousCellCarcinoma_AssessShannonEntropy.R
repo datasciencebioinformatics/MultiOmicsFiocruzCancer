@@ -63,7 +63,7 @@ png(filename=paste(output_dir,"Entropy_","all_.png",sep=""), width = 24, height 
 dev.off()
 ####################################################################################################################
 n_genes<-ceiling((dim(genes_Stage_I)[1]+dim(genes_Stage_II)[1]+dim(genes_Stage_I)[1])/3)                           #
-n_genes=100
+n_genes=n_genes
 ####################################################################################################################
 library("ggpubr")
 

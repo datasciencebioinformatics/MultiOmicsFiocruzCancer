@@ -27,6 +27,8 @@ entropy_bootstrapping_stage_I     <-c()
 entropy_bootstrapping_stage_II    <-c()
 entropy_bootstrapping_stage_III   <-c()
 
+dim(genes_Stage_I)[1]/dim(genes_Stage_II)[1]/dim(genes_Stage_I)[1]
+
 # Repeat 1000 times
 for (bootstrapping in 1:1000)
 {
@@ -61,4 +63,32 @@ plot_enropy_stage_III   <-ggplot(df_enropy_stage_III, aes(x=entropy))  + geom_hi
 png(filename=paste(output_dir,"Entropy_","all_.png",sep=""), width = 24, height = 16, res=600, units = "cm")
 	print(grid.arrange(plot_enropy_stage_I,plot_enropy_stage_II,plot_enropy_stage_III, ncol=3))
 dev.off()
+####################################################################################################################
+n_genes<-ceiling((dim(genes_Stage_I)[1]+dim(genes_Stage_II)[1]+dim(genes_Stage_I)[1])/3)                           #
+####################################################################################################################
 
+entropy_bootstrapping_stage_I     <-c()
+entropy_bootstrapping_stage_II    <-c()
+entropy_bootstrapping_stage_III   <-c()
+
+# Repeat 1000 times
+for (bootstrapping in 1:1000)
+{
+  random_genes_Stage_I<-sample(rownames(unstranded_data),   n_genes, replace = FALSE, prob = NULL)
+  random_genes_Stage_II<-sample(rownames(unstranded_data),  n_genes, replace = FALSE, prob = NULL)
+  random_genes_Stage_III<-sample(rownames(unstranded_data), n_genes, replace = FALSE, prob = NULL)
+  
+  # Take random genes
+  random_genes_Stage_I    <-list_of_genes[list_of_genes$gene %in% random_genes_Stage_I, ]
+  random_genes_Stage_II   <-list_of_genes[list_of_genes$gene %in% random_genes_Stage_II, ]
+  random_genes_Stage_III  <-list_of_genes[list_of_genes$gene %in% random_genes_Stage_III, ]
+  
+  entropy_bootstrapping_stage_I<-c(entropy_bootstrapping_stage_I,round(Entropy(random_genes_Stage_I$PPI, base = 2),3))
+  entropy_bootstrapping_stage_II<-c(entropy_bootstrapping_stage_II,round(Entropy(random_genes_Stage_II$PPI, base = 2),3))
+  entropy_bootstrapping_stage_III<-c(entropy_bootstrapping_stage_III,round(Entropy(random_genes_Stage_III$PPI, base = 2),3))
+}
+# Entropy bootstrapping
+entropy_bootstrapping<-rbind(data.frame(Stage="Stage I",entropy=entropy_bootstrapping_stage_I),data.frame(Stage="Stage II",entropy=entropy_bootstrapping_stage_II),data.frame(Stage="Stage III",entropy=entropy_bootstrapping_stage_III))
+
+# Create plot
+ggplot(entropy_bootstrapping, aes(x=entropy,fill=Stage))  + geom_density(alpha=.3)  + ggtitle(paste("Entropy 1000x all stages",sep="")) + theme_bw()

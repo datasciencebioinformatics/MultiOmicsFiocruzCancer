@@ -45,7 +45,11 @@ for (index in names(gene_ids_vector) )                                          
 rownames(df_geneLengthAndGCContent)[!grepl(".", rownames(df_geneLengthAndGCContent), fixed=TRUE)]                         #
 ####################################################################################################################################################################
 unstranded_rpkm<-rpkm(unstranded_data[df_gene_ids$gene_id_cp,], gene.length = data.frame(df_geneLengthAndGCContent)$length) #
-####################################################################################################################################################################
+###################################################################################################################################################################
+# Filter genes by RPKM, rowMeans(unstranded_rpkm)>10 
+unstranded_rpkm<-unstranded_rpkm[rowMeans(unstranded_rpkm)>10,]
+###################################################################################################################################################################
+
 # Save TSV file with genes from Stage1                                                                                                                             #
 write.table(unstranded_rpkm, file = "/home/felipe/Documentos/LungPortal/samples/unstranded_rpkm.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)                  #
 ####################################################################################################################################################################

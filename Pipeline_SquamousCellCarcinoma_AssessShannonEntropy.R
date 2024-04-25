@@ -27,8 +27,6 @@ entropy_bootstrapping_stage_I     <-c()
 entropy_bootstrapping_stage_II    <-c()
 entropy_bootstrapping_stage_III   <-c()
 
-dim(genes_Stage_I)[1]/dim(genes_Stage_II)[1]/dim(genes_Stage_I)[1]
-
 # Repeat 1000 times
 for (bootstrapping in 1:1000)
 {
@@ -98,7 +96,6 @@ my_comparisons <- list( c("Stage I", "Stage II"), c("Stage I", "Stage III"), c("
 # Create plot
 entropy_distribution_plot<-ggplot(entropy_bootstrapping, aes(x=entropy,fill=Stage))  + geom_density(alpha=.3)  + ggtitle(paste("Entropy densities 1000x all stages",sep="")) + theme_bw() +  scale_fill_manual(values = c("black", "orange", "purple"))
 entropy_boxplot_plot<-ggboxplot(entropy_bootstrapping, x = "Stage", y = "entropy", color = "Stage") + stat_compare_means(comparisons = my_comparisons) + theme_bw() +  scale_colour_manual(values = c("black", "orange", "purple"))+ ggtitle(paste("Entropy boxplot 1000x all stages",sep=""))
-
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"Entropy_","distribution_boxplot.png",sep=""), width = 28, height = 16, res=600, units = "cm")

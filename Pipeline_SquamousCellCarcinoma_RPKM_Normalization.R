@@ -51,5 +51,5 @@ unstranded_rpkm<-unstranded_rpkm[rowMeans(unstranded_rpkm)>3,]
 ###################################################################################################################################################################
 
 # Save TSV file with genes from Stage1                                                                                                                             #
-write.table(unstranded_rpkm, file = "/home/felipe/Documentos/LungPortal/samples/unstranded_rpkm.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)                  #
+write.table(unstranded_rpkm, file = "/home/felipe/Documentos/LungPortal/samples/unstranded_rpkm.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, append=FALSE)                  #
 ####################################################################################################################################################################

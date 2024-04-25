@@ -65,7 +65,9 @@ png(filename=paste(output_dir,"Entropy_","all_.png",sep=""), width = 24, height 
 dev.off()
 ####################################################################################################################
 n_genes<-ceiling((dim(genes_Stage_I)[1]+dim(genes_Stage_II)[1]+dim(genes_Stage_I)[1])/3)                           #
+n_genes=100
 ####################################################################################################################
+library("ggpubr")
 
 entropy_bootstrapping_stage_I     <-c()
 entropy_bootstrapping_stage_II    <-c()
@@ -90,5 +92,15 @@ for (bootstrapping in 1:1000)
 # Entropy bootstrapping
 entropy_bootstrapping<-rbind(data.frame(Stage="Stage I",entropy=entropy_bootstrapping_stage_I),data.frame(Stage="Stage II",entropy=entropy_bootstrapping_stage_II),data.frame(Stage="Stage III",entropy=entropy_bootstrapping_stage_III))
 
+# My comparissons
+my_comparisons <- list( c("Stage I", "Stage II"), c("Stage I", "Stage III"), c("Stage II", "Stage III") )
+
 # Create plot
-ggplot(entropy_bootstrapping, aes(x=entropy,fill=Stage))  + geom_density(alpha=.3)  + ggtitle(paste("Entropy 1000x all stages",sep="")) + theme_bw()
+entropy_distribution_plot<-ggplot(entropy_bootstrapping, aes(x=entropy,fill=Stage))  + geom_density(alpha=.3)  + ggtitle(paste("Entropy densities 1000x all stages",sep="")) + theme_bw() +  scale_fill_manual(values = c("black", "orange", "purple"))
+entropy_boxplot_plot<-ggboxplot(entropy_bootstrapping, x = "Stage", y = "entropy", color = "Stage") + stat_compare_means(comparisons = my_comparisons) + theme_bw() +  scale_colour_manual(values = c("black", "orange", "purple"))+ ggtitle(paste("Entropy boxplot 1000x all stages",sep=""))
+
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"Entropy_","distribution_boxplot.png",sep=""), width = 28, height = 16, res=600, units = "cm")
+	print(grid.arrange(entropy_distribution_plot,entropy_boxplot_plot, ncol=2))
+dev.off()

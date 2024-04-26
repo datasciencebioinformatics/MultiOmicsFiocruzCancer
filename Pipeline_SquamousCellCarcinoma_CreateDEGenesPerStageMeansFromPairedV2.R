@@ -65,7 +65,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	Stages_ii_and_iii_sample_expr<-na.omit(unstranded_data[DE_genes,Stages_ii_and_iii_sample])
 	####################################################################################################################
 	# folchange=Expr(Stage i)/Expr(Stage ii and II)
-	folchange=rowMeans(Stage_i_samples_expr)-rowMeans(Stages_ii_and_iii_sample_expr)
+	folchange=rowMeans(Stage_i_samples_expr)/rowMeans(Stages_ii_and_iii_sample_expr)
 	
 	# log2change
 	log2change=log(folchange,2)	
@@ -76,7 +76,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	####################################################################################################################	
 	# First by padj
 	padj_threshold<-1
-	log2fc_threshold<-3.00
+	log2fc_threshold<-1.58
 	####################################################################################################################
 	# First, set category
 	# "Unchanged"

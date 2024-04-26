@@ -65,7 +65,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	Stages_ii_and_iii_sample_expr<-na.omit(unstranded_data[DE_genes,Stages_ii_and_iii_sample])
 	####################################################################################################################
 	# folchange=Expr(Stage i)/Expr(Stage ii and II)
-	folchange=rowMeans(Stage_i_samples_expr)/rowMeans(Stages_ii_and_iii_sample_expr)
+	folchange=rowMeans(Stage_i_samples_expr)-rowMeans(Stages_ii_and_iii_sample_expr)
 	
 	# log2change
 	log2change=log(folchange,2)	
@@ -95,8 +95,8 @@ for (comparisson_index in rownames(df_table_comparisson))
 	# Coldata
 	colData_sub<-colData[colData$tissue_type=="Tumor",]	
 	
-	pca_res <- prcomp(t(unstranded_data[selected_genes,colData_sub$patient_id]), scale. = TRUE)
-	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,colData_sub$patient_id]),"stages"], pca_res$x[,1:2])		
+	#pca_res <- prcomp(t(unstranded_data[selected_genes,colData_sub$patient_id]), scale. = FALSE)
+	#dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,colData_sub$patient_id]),"stages"], pca_res$x[,1:2])		
 	
 	# FindClusters_resolution
 	png(filename=paste(output_dir,"PCA_",Stage_i,".png",sep=""), width = 16, height = 16, res=600, units = "cm")

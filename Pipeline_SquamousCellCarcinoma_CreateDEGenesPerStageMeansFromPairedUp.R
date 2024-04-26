@@ -52,8 +52,8 @@ rbind(data.frame(Stage_i="sample_stage_II",Stages_ii_and_iii="sample_stages_I_II
 rbind(data.frame(Stage_i="sample_stage_III",Stages_ii_and_iii="sample_stages_I_II"))))
 ####################################################################################################################
 list_of_comparisson=list(sample_stage_I=sample_stage_I,sample_stage_II=sample_stage_II,sample_stage_III=sample_stage_III,sample_stages_II_III=sample_stages_II_III,sample_stages_I_III=sample_stages_I_III,sample_stages_I_II=sample_stages_I_II)
-#list_of_genes=list(genes_stage_I=df_stage_I_data$Gene,genes_stage_II=df_stage_II_data$Gene,genes_stage_III=df_stage_III_data$Gene)
-list_of_genes=list(genes_stage_I=rownames(unstranded_data),genes_stage_II=rownames(unstranded_data),genes_stage_III=rownames(unstranded_data))
+list_of_genes=list(genes_stage_I=df_stage_I_data$Gene,genes_stage_II=df_stage_II_data$Gene,genes_stage_III=df_stage_III_data$Gene)
+#list_of_genes=list(genes_stage_I=rownames(unstranded_data),genes_stage_II=rownames(unstranded_data),genes_stage_III=rownames(unstranded_data))
 ####################################################################################################################
 # Create bck for colData_bck
 colData_bck<-colData

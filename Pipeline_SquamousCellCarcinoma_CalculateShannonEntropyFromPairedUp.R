@@ -112,12 +112,9 @@ for (interacting_pair in rownames(interactome_data))
     pos_regulated_gene_index<-c(check_pair,pos_regulated_gene_index) 
   }  
 }
-
-interactome_data<-rbind(interactome_data[interactome_data$Gene1 %in% genes_ids,],
-interactome_data[interactome_data$Gene2 %in% genes_ids,])
+# Filter interactome
+interactome_data<-interactome_data[pos_regulated_gene_index,]
 #######################################################################################################      
-
-
 # If at least one of the genes in the pair are in the interactome
 interactome_data_stage_I<-rbind(interactome_data[interactome_data$Gene1 %in% genes_interactome_stage_I,],
 interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_I,])

@@ -30,7 +30,7 @@ file_genes_Stage_III   <- "/home/felipe/Documentos/LungPortal/output/DE_GenesPer
 # Gene table
 genes_Stage_I       <-read.table(file = file_genes_Stage_I, sep = '\t', header = TRUE,fill=TRUE)         
 genes_Stage_II      <-read.table(file = file_genes_Stage_II, sep = '\t', header = TRUE,fill=TRUE)
-genes_Stage_III     <-read.table(file = file_genes_Stage_III, sep = '\t', header = TRUE,fill=TRUE)                 
+genes_Stage_III     <-read.table(file = file_genes_Stage_III, sep = '\t', header = TRUE,fill=TRUE)   
 ########################################################################################################################################
 # Store genes stage I, II and III
 # Vectors to store gene ids from each stage
@@ -82,6 +82,24 @@ genes_interactome_stage_I  <-genes_id_vector_stage_I[genes_id_vector_stage_I %in
 genes_interactome_stage_II <-genes_id_vector_stage_II[genes_id_vector_stage_II %in% genes]
 genes_interactome_stage_III<-genes_id_vector_stage_III[genes_id_vector_stage_III %in% genes]
 ########################################################################################################################################
+# List of genes positivelly regulated among tumor-normal
+positivelly_regulated_tumor_normal<-rownames(unstranded_data)
+
+# A vector genes_id_positivelly
+genes_id_positivelly<-c()
+
+# For each gene in stage I
+for (gene_id in positivelly_regulated_tumor_normal)
+{
+  # Store gene id in the vector
+  genes_id_positivelly<-c(genes_id_positivelly,strsplit(positivelly_regulated_tumor_normal, split = "\\.")[[1]][1])
+}
+
+# Filter tables to keep only the gene entries that are listed in the EnsemblToUniprotKBconversionList
+interactome_data<-interactome_data[interactome_data$Gene1 %in% genes_id_positivelly,]
+interactome_data<-interactome_data[interactome_data$Gene2 %in% genes_id_positivelly,]
+########################################################################################################################################
+
 # Create interactome table per stage
 # Stage I
 # A vector to store row ID of pairs present in the genes_id_vector_stage_I
@@ -90,30 +108,32 @@ pairs_in_stage_II<-c()
 pairs_in_stage_III<-c()
 
 # for each row, check if pair is present in the interactome list
+# if at least one of the genes in the inteacting pair is present in the gene list
 for (pair_id in rownames(interactome_data))
-{
+{  
   # Gene of each pair
   pair_gene_I<-interactome_data[pair_id,"Gene1"]
   pair_gene_II<-interactome_data[pair_id,"Gene2"]
 
   # If both ends of the pair are present in genes_id_vector_stage_I
-  if(sum(genes_id_vector_stage_I %in% pair_gene_I)>0 && sum(genes_id_vector_stage_I %in% pair_gene_II))
+  if(sum(genes_id_vector_stage_I %in% pair_gene_I)>0 || sum(genes_id_vector_stage_I %in% pair_gene_II))
   {    
     # Store pair id in vector
     pairs_in_stage_I<-c(pairs_in_stage_I,pair_id) 
   }      
   # If both ends of the pair are present in genes_id_vector_stage_II
-  if(sum(genes_id_vector_stage_II %in% pair_gene_I)>0 && sum(genes_id_vector_stage_II %in% pair_gene_II))
+  if(sum(genes_id_vector_stage_II %in% pair_gene_I)>0 || sum(genes_id_vector_stage_II %in% pair_gene_II))
   {    
     # Store pair id in vector
     pairs_in_stage_II<-c(pairs_in_stage_I,pair_id) 
   }        
   # If both ends of the pair are present in genes_id_vector_stage_II
-  if(sum(genes_id_vector_stage_III %in% pair_gene_I)>0 && sum(genes_id_vector_stage_III %in% pair_gene_II))
+  if(sum(genes_id_vector_stage_III %in% pair_gene_I)>0 || sum(genes_id_vector_stage_III %in% pair_gene_II))
   {    
     # Store pair id in vector
     pairs_in_stage_III<-c(pairs_in_stage_I,pair_id) 
-  }          
+  }
+  print(paste(pair_id,length(pairs_in_stage_I),length(pairs_in_stage_II),length(pairs_in_stage_III),sep=":"))
 }
 ########################################################################################################################################
 

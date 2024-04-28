@@ -98,6 +98,8 @@ pos_regulated_gene_index<-c()
 # For each gene pair
 for (interacting_pair in rownames(interactome_data))
 {
+  print(interacting_pair)
+  
   # Take both genes
   pair_gene1<-interactome_data[interacting_pair,"Gene1"]
   pair_gene2<-interactome_data[interacting_pair,"Gene2"]
@@ -109,7 +111,7 @@ for (interacting_pair in rownames(interactome_data))
   if (check_pair)
   {
     # Save pair gene index
-    pos_regulated_gene_index<-c(check_pair,pos_regulated_gene_index) 
+    pos_regulated_gene_index<-c(interacting_pair,pos_regulated_gene_index) 
   }  
 }
 # Filter interactome

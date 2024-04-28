@@ -30,7 +30,7 @@ entropy_bootstrapping_stage_values<-c()
 for (bootstrapping in 1:1000)
 {
   	# Random genes 
-	random_genes_Stage_all<-sample(rownames(unstranded_data), n_of_genes, replace = FALSE, prob = NULL)  
+	random_genes_Stage_all<-sample(rownames(na.omit(unstranded_data_filter)), n_of_genes, replace = TRUE, prob = NULL)  
 
 	# vector to store all genes 
 	genes_id_vector_stage_all<-c()
@@ -55,12 +55,16 @@ for (bootstrapping in 1:1000)
 # Save stages
 df_enropy_stage_all  <-data.frame(1:1000,entropy=entropy_bootstrapping_stage_values,stage="Stages")
 
+# Create plot
 plot_enropy_stage_all<-ggplot(df_enropy_stage_all, aes(x=entropy))  + geom_histogram() 
 
 # Histogram overlaid with kernel density curve
-plot_enropy_stage_all     <-plot_enropy_stage_all +  geom_segment(aes(x=entropy_stage_I, y=200, xend=entropy_stage_I, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) +  geom_segment(aes(x=entropy_stage_II, y=200, xend=entropy_stage_II, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) +  geom_segment(aes(x=entropy_stage_III, y=200, xend=entropy_stage_III, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) 
+plot_enropy_stage_all     <-plot_enropy_stage_all +  geom_segment(aes(x=entropy_stage_I, y=200, xend=entropy_stage_I, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) +  geom_segment(aes(x=entropy_stage_II, y=200, xend=entropy_stage_II, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) +  geom_segment(aes(x=entropy_stage_III, y=200, xend=entropy_stage_III, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) + theme_bw()
+plot_enropy_stage_all     <-plot_enropy_stage_all + annotate("text", x = entropy_stage_I, y = 205, label = "Stage I")
+plot_enropy_stage_all     <-plot_enropy_stage_all + annotate("text", x = entropy_stage_II, y = 205, label = "Stage II") 
+plot_enropy_stage_all     <- plot_enropy_stage_all + annotate("text", x = entropy_stage_III, y = 205, label = "Stage III")
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"Entropy_","all_.png",sep=""), width = 16, height = 16, res=600, units = "cm")
-	plot_enropy_stage_all
+	plot_enropy_stage_all + ggtitle("Entropy bootstrapping (1000x random gene sets)")
 dev.off()

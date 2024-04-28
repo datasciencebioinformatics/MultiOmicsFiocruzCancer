@@ -1,17 +1,26 @@
 library("readr")
 library(DescTools)
-
+#######################################################################################################################################
+# A script to caluclate entropy from lists of genes from each stage
+#######################################################################################################################################
+# Path to input files
 # Interactome file
 interactome_file<-"/home/felipe/Documentos/LungPortal/Full_Interactome_Flavia.txt"
 
 # EnsemblToUniprotKBconversionList file
 EnsemblToUniprotKBconversionList_file<-"/home/felipe/Documentos/LungPortal/EnsemblToUniprotKBconversionList.txt"
 
+# File path
+file_genes_Stage_I   <-   "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_I.tsv"
+file_genes_Stage_II   <-  "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_II.tsv"
+file_genes_Stage_III   <- "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_III.tsv"
+#######################################################################################################################################
+# Read input table
 # Gene table
-interactome_data <-read.table(file = interactome_file, sep = '\t', header = TRUE,fill=TRUE)         #
+interactome_data <-read.table(file = interactome_file, sep = '\t', header = TRUE,fill=TRUE)         
 
 # Gene EnsemblToUniprotKBconversionList_data
-EnsemblToUniprotKBconversionList_data <-read.table(file = EnsemblToUniprotKBconversionList_file, sep = '\t', header = TRUE,fill=TRUE)         #
+EnsemblToUniprotKBconversionList_data <-read.table(file = EnsemblToUniprotKBconversionList_file, sep = '\t', header = TRUE,fill=TRUE)         
 
 # Rename collumns 
 colnames(interactome_data)<-c("Gene1","Gene2")
@@ -20,11 +29,6 @@ output_dir="/home/felipe/Documentos/LungPortal/output/"
 #######################################################################################################################################
 # Take stageI_list_of_genes
 list_of_genes<-unique(merge_interactome_gene_symbol[,c("gene_id","PPI")])
-
-# File path
-file_genes_Stage_I   <-   "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_I.tsv"
-file_genes_Stage_II   <-  "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_II.tsv"
-file_genes_Stage_III   <- "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_III.tsv"
 
 # Gene table
 genes_Stage_I       <-read.table(file = file_genes_Stage_I, sep = '\t', header = TRUE,fill=TRUE)         #

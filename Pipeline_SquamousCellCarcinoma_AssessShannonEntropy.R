@@ -15,89 +15,50 @@ genes_Stage_I       <-read.table(file = file_genes_Stage_I, sep = '\t', header =
 genes_Stage_II      <-read.table(file = file_genes_Stage_II, sep = '\t', header = TRUE,fill=TRUE)#
 genes_Stage_III     <-read.table(file = file_genes_Stage_III, sep = '\t', header = TRUE,fill=TRUE)
 
-genes_Stage_I<-list_of_genes[list_of_genes$gene %in% genes_Stage_I$gene,]
-genes_Stage_II<-list_of_genes[list_of_genes$gene %in% genes_Stage_II$gene,]
-genes_Stage_III<-list_of_genes[list_of_genes$gene %in% genes_Stage_III$gene,]
+# genes_Stages
+genes_Stage_I<-rownames(unstranded_data_filter)[rownames(unstranded_data_filter) %in% genes_Stage_I$gene]
+genes_Stage_II<-rownames(unstranded_data_filter)[rownames(unstranded_data_filter) %in% genes_Stage_II$gene]
+genes_Stage_III<-rownames(unstranded_data_filter)[rownames(unstranded_data_filter) %in% genes_Stage_III$gene]
 
-entropy_stage_I  <-round(Entropy(genes_Stage_I$PPI, base = 2),3)
-entropy_stage_II <-round(Entropy(genes_Stage_II$PPI, base = 2),3)
-entropy_stage_III<-round(Entropy(genes_Stage_III$PPI, base = 2),3)
+# Number of genes
+n_of_genes<-ceiling((length(genes_Stage_I)+ length(genes_Stage_II)+length(genes_Stage_III))/3)
 
-entropy_bootstrapping_stage_I     <-c()
-entropy_bootstrapping_stage_II    <-c()
-entropy_bootstrapping_stage_III   <-c()
+# entropy_bootstrapping_stage_values
+entropy_bootstrapping_stage_values<-c()
 
 # Repeat 1000 times
 for (bootstrapping in 1:1000)
 {
-  random_genes_Stage_I<-sample(rownames(unstranded_data), dim(genes_Stage_I)[1], replace = FALSE, prob = NULL)
-  random_genes_Stage_II<-sample(rownames(unstranded_data), dim(genes_Stage_II)[1], replace = FALSE, prob = NULL)
-  random_genes_Stage_III<-sample(rownames(unstranded_data), dim(genes_Stage_III)[1], replace = FALSE, prob = NULL)
-  
-  # Take random genes
-  random_genes_Stage_I    <-list_of_genes[list_of_genes$gene %in% random_genes_Stage_I, ]
-  random_genes_Stage_II   <-list_of_genes[list_of_genes$gene %in% random_genes_Stage_II, ]
-  random_genes_Stage_III  <-list_of_genes[list_of_genes$gene %in% random_genes_Stage_III, ]
-  
-  entropy_bootstrapping_stage_I<-c(entropy_bootstrapping_stage_I,round(Entropy(random_genes_Stage_I$PPI, base = 2),3))
-  entropy_bootstrapping_stage_II<-c(entropy_bootstrapping_stage_II,round(Entropy(random_genes_Stage_II$PPI, base = 2),3))
-  entropy_bootstrapping_stage_III<-c(entropy_bootstrapping_stage_III,round(Entropy(random_genes_Stage_III$PPI, base = 2),3))
+  	# Random genes 
+	random_genes_Stage_all<-sample(rownames(unstranded_data), n_of_genes, replace = FALSE, prob = NULL)  
+
+	# vector to store all genes 
+	genes_id_vector_stage_all<-c()
+
+	# For each gene in stage I
+	for (random_gene in random_genes_Stage_all)
+	{
+	  # Store gene id in the vector
+	  genes_id_vector_stage_all<-c(genes_id_vector_stage_all,strsplit(random_gene, split = "\\.")[[1]][1])
+	}	
+
+	# If at least one of the genes in the pair are in the interactome
+	interactome_data_stage_all<-unique(rbind(interactome_data[interactome_data$Gene1 %in% genes_id_vector_stage_all,],
+	interactome_data[interactome_data$Gene2 %in% genes_id_vector_stage_all,]))
+
+	# PPI counts
+	interactome_data_stage_all   <-unique(data.frame(Conectivity=table(c(interactome_data_stage_all$Gene1,interactome_data_stage_all$Gene2))))
+
+	# entropy_bootstrapping_samples
+	entropy_bootstrapping_stage_values<-c(entropy_bootstrapping_stage_values,round(Entropy(interactome_data_stage_all$Conectivity.Freq, base = 2),3))
 }
 # Save stages
-df_enropy_stage_I  <-data.frame(1:1000,entropy=entropy_bootstrapping_stage_I,stage="Stage I")
-df_enropy_stage_II <-data.frame(1:1000,entropy=entropy_bootstrapping_stage_II,stage="Stage II")
-df_enropy_stage_III<-data.frame(1:1000,entropy=entropy_bootstrapping_stage_III,stage="Stage III")
-
-p_value_stage_I<-paste("p.value: ",sum(df_enropy_stage_I$entropy>=entropy_stage_I)/1000)
-p_value_stage_II<-paste("p.value: ",sum(df_enropy_stage_II$entropy>=entropy_stage_II)/1000)
-p_value_stage_III<-paste("p.value: ",sum(df_enropy_stage_III$entropy>=entropy_stage_III)/1000)
+df_enropy_stage_all  <-data.frame(1:1000,entropy=entropy_bootstrapping_stage_values,stage="Stages")
 
 # Histogram overlaid with kernel density curve
-plot_enropy_stage_I     <-ggplot(df_enropy_stage_I, aes(x=entropy))  + geom_histogram() +  geom_segment(aes(x=entropy_stage_I, y=200, xend=entropy_stage_I, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) + ggtitle(paste("Entropy 1000x stage I\n",p_value_stage_I,sep=""))       + theme_bw()
-plot_enropy_stage_II    <-ggplot(df_enropy_stage_II, aes(x=entropy))  + geom_histogram() +  geom_segment(aes(x=entropy_stage_II, y=200, xend=entropy_stage_II, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) + ggtitle(paste("Entropy 1000x stage II\n",p_value_stage_II,sep=""))    + theme_bw()
-plot_enropy_stage_III   <-ggplot(df_enropy_stage_III, aes(x=entropy))  + geom_histogram() +  geom_segment(aes(x=entropy_stage_III, y=200, xend=entropy_stage_III, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) + ggtitle(paste("Entropy 1000x stage I\n",p_value_stage_III,sep="")) + theme_bw()
+plot_enropy_stage_all     <-plot_enropy_stage_all +  geom_segment(aes(x=entropy_stage_I, y=200, xend=entropy_stage_I, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) +  geom_segment(aes(x=entropy_stage_II, y=200, xend=entropy_stage_II, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) +  geom_segment(aes(x=entropy_stage_III, y=200, xend=entropy_stage_III, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) 
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"Entropy_","all_.png",sep=""), width = 24, height = 16, res=600, units = "cm")
-	print(grid.arrange(plot_enropy_stage_I,plot_enropy_stage_II,plot_enropy_stage_III, ncol=3))
-dev.off()
-####################################################################################################################
-n_genes<-ceiling((dim(genes_Stage_I)[1]+dim(genes_Stage_II)[1]+dim(genes_Stage_I)[1])/3)                           #
-n_genes=n_genes
-####################################################################################################################
-library("ggpubr")
-
-entropy_bootstrapping_stage_I     <-c()
-entropy_bootstrapping_stage_II    <-c()
-entropy_bootstrapping_stage_III   <-c()
-
-# Repeat 1000 times
-for (bootstrapping in 1:1000)
-{
-  random_genes_Stage_I<-sample(rownames(unstranded_data),   n_genes, replace = FALSE, prob = NULL)
-  random_genes_Stage_II<-sample(rownames(unstranded_data),  n_genes, replace = FALSE, prob = NULL)
-  random_genes_Stage_III<-sample(rownames(unstranded_data), n_genes, replace = FALSE, prob = NULL)
-  
-  # Take random genes
-  random_genes_Stage_I    <-list_of_genes[list_of_genes$gene %in% random_genes_Stage_I, ]
-  random_genes_Stage_II   <-list_of_genes[list_of_genes$gene %in% random_genes_Stage_II, ]
-  random_genes_Stage_III  <-list_of_genes[list_of_genes$gene %in% random_genes_Stage_III, ]
-  
-  entropy_bootstrapping_stage_I<-c(entropy_bootstrapping_stage_I,round(Entropy(random_genes_Stage_I$PPI, base = 2),3))
-  entropy_bootstrapping_stage_II<-c(entropy_bootstrapping_stage_II,round(Entropy(random_genes_Stage_II$PPI, base = 2),3))
-  entropy_bootstrapping_stage_III<-c(entropy_bootstrapping_stage_III,round(Entropy(random_genes_Stage_III$PPI, base = 2),3))
-}
-# Entropy bootstrapping
-entropy_bootstrapping<-rbind(data.frame(Stage="Stage I",entropy=entropy_bootstrapping_stage_I),data.frame(Stage="Stage II",entropy=entropy_bootstrapping_stage_II),data.frame(Stage="Stage III",entropy=entropy_bootstrapping_stage_III))
-
-# My comparissons
-my_comparisons <- list( c("Stage I", "Stage II"), c("Stage I", "Stage III"), c("Stage II", "Stage III") )
-
-# Create plot
-entropy_distribution_plot<-ggplot(entropy_bootstrapping, aes(x=entropy,fill=Stage))  + geom_density(alpha=.3)  + ggtitle(paste("Entropy densities 1000x all stages",sep="")) + theme_bw() +  scale_fill_manual(values = c("black", "orange", "purple"))
-entropy_boxplot_plot<-ggboxplot(entropy_bootstrapping, x = "Stage", y = "entropy", color = "Stage") + stat_compare_means(comparisons = my_comparisons, method = "t.test") + theme_bw() +  scale_colour_manual(values = c("black", "orange", "purple"))+ ggtitle(paste("Entropy boxplot 1000x all stages",sep=""))
-
-# FindClusters_resolution
-png(filename=paste(output_dir,"Entropy_","distribution_boxplot.png",sep=""), width = 28, height = 16, res=600, units = "cm")
-	print(grid.arrange(entropy_distribution_plot,entropy_boxplot_plot, ncol=2))
+png(filename=paste(output_dir,"Entropy_","all_.png",sep=""), width = 16, height = 16, res=600, units = "cm")
+	plot_enropy_stage_all
 dev.off()

@@ -110,9 +110,9 @@ df_stageI_connectivity   <-unique(data.frame(Conectivity=table(c(interactome_dat
 df_stageII_connectivity  <-unique(data.frame(Conectivity=table(c(interactome_data_stage_II$Gene1,interactome_data_stage_II$Gene2))))
 df_stageIII_connectivity <-unique(data.frame(Conectivity=table(c(interactome_data_stage_III$Gene1,interactome_data_stage_III$Gene2))))
 
-round(Entropy(df_stageI_connectivity$Conectivity.Freq, base = 2),3)
-round(Entropy(df_stageII_connectivity$Conectivity.Freq, base = 2),3)
-round(Entropy(df_stageIII_connectivity$Conectivity.Freq, base = 2),3)
+entropy_stage_I<-round(Entropy(df_stageI_connectivity$Conectivity.Freq, base = 2),3)
+entropy_stage_II<-round(Entropy(df_stageII_connectivity$Conectivity.Freq, base = 2),3)
+entropy_stage_III<-round(Entropy(df_stageIII_connectivity$Conectivity.Freq, base = 2),3)
 
 # Save TSV file with genes from Stage1
 write_tsv(df_stageI_connectivity, paste(output_dir,"df_stageI_connectivity_I",".tsv",sep=""))

@@ -67,7 +67,7 @@ gene_conversion<-merge(gene1_conversion,EnsemblToUniprotKBconversionList_data,by
 
 # Keep only the collumns of interest- 
 # interactome_data : interactome with converted ids
-interactome_data<-gene_conversion[,3:4]
+interactome_data<-unique(gene_conversion[,3:4])
 
 # Rename interactome_data collumns
 colnames(interactome_data)<-c("Gene1","Gene2")
@@ -81,6 +81,8 @@ for (gene_id in rownames(unstranded_data_filter))
   # Store gene id in the vector
   genes_ids<-c(genes_ids,strsplit(gene_id, split = "\\.")[[1]][1])
 }
+# Gene_ids
+genes_ids<-unique(genes_ids)
 #######################################################################################################      
 # Take all genes from interactom
 # store both, gene in pair one and gene in pair two in a same vectors
@@ -92,31 +94,6 @@ genes_interactome_stage_I  <-genes_id_vector_stage_I[genes_id_vector_stage_I %in
 genes_interactome_stage_II <-genes_id_vector_stage_II[genes_id_vector_stage_II %in% genes]
 genes_interactome_stage_III<-genes_id_vector_stage_III[genes_id_vector_stage_III %in% genes]
 ########################################################################################################################################
-# A vector to store interactome pairs that are positivelly regualted
-pos_regulated_gene_index<-c()
-
-# For each gene pair
-for (interacting_pair in rownames(interactome_data))
-{
-  print(interacting_pair)
-  
-  # Take both genes
-  pair_gene1<-interactome_data[interacting_pair,"Gene1"]
-  pair_gene2<-interactome_data[interacting_pair,"Gene2"]
-
-  # Check if both ends of the pair are in the list
-  check_pair<-sum(which(genes_ids %in% pair_gene1)>0) && sum(which(genes_ids %in% pair_gene2)>0)
-
-  # If so, save the results
-  if (check_pair)
-  {
-    # Save pair gene index
-    pos_regulated_gene_index<-c(interacting_pair,pos_regulated_gene_index) 
-  }  
-}
-# Filter interactome
-interactome_data<-interactome_data[pos_regulated_gene_index,]
-#######################################################################################################      
 # If at least one of the genes in the pair are in the interactome
 interactome_data_stage_I<-rbind(interactome_data[interactome_data$Gene1 %in% genes_interactome_stage_I,],
 interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_I,])
@@ -129,9 +106,9 @@ interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_II,])
 interactome_data_stage_III<-rbind(interactome_data[interactome_data$Gene1 %in% genes_interactome_stage_III,],
 interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_III,])
 ########################################################################################################################################
-df_stageI_connectivity   <-data.frame(Conectivity=table(c(interactome_data_stage_I$Gene1,interactome_data_stage_I$Gene2)))
-df_stageII_connectivity  <-data.frame(Conectivity=table(c(interactome_data_stage_II$Gene1,interactome_data_stage_II$Gene2)))
-df_stageIII_connectivity <-data.frame(Conectivity=table(c(interactome_data_stage_III$Gene1,interactome_data_stage_III$Gene2)))
+df_stageI_connectivity   <-unique(data.frame(Conectivity=table(c(interactome_data_stage_I$Gene1,interactome_data_stage_I$Gene2))))
+df_stageII_connectivity  <-unique(data.frame(Conectivity=table(c(interactome_data_stage_II$Gene1,interactome_data_stage_II$Gene2))))
+df_stageIII_connectivity <-unique(data.frame(Conectivity=table(c(interactome_data_stage_III$Gene1,interactome_data_stage_III$Gene2))))
 
 round(Entropy(df_stageI_connectivity$Conectivity.Freq, base = 2),3)
 round(Entropy(df_stageII_connectivity$Conectivity.Freq, base = 2),3)

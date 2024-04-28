@@ -56,7 +56,7 @@ for (gene_id in genes_Stage_III$gene)
   # Store gene id in the vector
   genes_id_vector_stage_III<-c(genes_id_vector_stage_III,strsplit(gene_id, split = "\\.")[[1]][1])
 }
-########################################################################################################################################
+#######################################################################################################
 # Filter tables to keep only the gene entries that are listed in the EnsemblToUniprotKBconversionList
 interactome_data<-interactome_data[interactome_data$Gene1 %in% EnsemblToUniprotKBconversionList_data$SYMBOL,]
 interactome_data<-interactome_data[interactome_data$Gene2 %in% EnsemblToUniprotKBconversionList_data$SYMBOL,]
@@ -71,7 +71,17 @@ interactome_data<-gene_conversion[,3:4]
 
 # Rename interactome_data collumns
 colnames(interactome_data)<-c("Gene1","Gene2")
-      
+#######################################################################################################
+# A filter to keep only genes that are positivelly regulated
+genes_ids<-c()
+
+# For each gene in stage I
+for (gene_id in rownames(unstranded_data_filter))
+{
+  # Store gene id in the vector
+  genes_ids<-c(genes_ids,strsplit(gene_id, split = "\\.")[[1]][1])
+}
+#######################################################################################################      
 # Take all genes from interactom
 # store both, gene in pair one and gene in pair two in a same vectors
 genes<-unique(c(interactome_data$Gene1,interactome_data$Gene2))
@@ -82,6 +92,32 @@ genes_interactome_stage_I  <-genes_id_vector_stage_I[genes_id_vector_stage_I %in
 genes_interactome_stage_II <-genes_id_vector_stage_II[genes_id_vector_stage_II %in% genes]
 genes_interactome_stage_III<-genes_id_vector_stage_III[genes_id_vector_stage_III %in% genes]
 ########################################################################################################################################
+# A vector to store interactome pairs that are positivelly regualted
+pos_regulated_gene_index<-c()
+
+# For each gene pair
+for (interacting_pair in rownames(interactome_data))
+{
+  # Take both genes
+  pair_gene1<-interactome_data[interacting_pair,"Gene1"]
+  pair_gene2<-interactome_data[interacting_pair,"Gene2"]
+
+  # Check if both ends of the pair are in the list
+  check_pair<-sum(which(genes_ids %in% pair_gene1)>0) && sum(which(genes_ids %in% pair_gene2)>0)
+
+  # If so, save the results
+  if (check_pair)
+  {
+    # Save pair gene index
+    pos_regulated_gene_index<-c(check_pair,pos_regulated_gene_index) 
+  }  
+}
+
+interactome_data<-rbind(interactome_data[interactome_data$Gene1 %in% genes_ids,],
+interactome_data[interactome_data$Gene2 %in% genes_ids,])
+#######################################################################################################      
+
+
 # If at least one of the genes in the pair are in the interactome
 interactome_data_stage_I<-rbind(interactome_data[interactome_data$Gene1 %in% genes_interactome_stage_I,],
 interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_I,])

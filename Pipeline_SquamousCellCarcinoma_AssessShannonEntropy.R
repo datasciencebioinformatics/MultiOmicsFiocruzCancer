@@ -55,6 +55,8 @@ for (bootstrapping in 1:1000)
 # Save stages
 df_enropy_stage_all  <-data.frame(1:1000,entropy=entropy_bootstrapping_stage_values,stage="Stages")
 
+plot_enropy_stage_all<-ggplot(df_enropy_stage_all, aes(x=entropy))  + geom_histogram() 
+
 # Histogram overlaid with kernel density curve
 plot_enropy_stage_all     <-plot_enropy_stage_all +  geom_segment(aes(x=entropy_stage_I, y=200, xend=entropy_stage_I, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) +  geom_segment(aes(x=entropy_stage_II, y=200, xend=entropy_stage_II, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) +  geom_segment(aes(x=entropy_stage_III, y=200, xend=entropy_stage_III, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) 
 

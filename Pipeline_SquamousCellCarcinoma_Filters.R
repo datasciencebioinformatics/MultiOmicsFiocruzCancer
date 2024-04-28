@@ -7,6 +7,8 @@ merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_
 colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
 rownames(colData)                  <-colData$patient_id                                                                   #
 ###########################################################################################################################
+log2foldchange_trheshold<-1.5
+
 tumor_samples<-colData_data[colData_data$tissue_type=="Tumor","patient_id"]
 normal_samples<-colData_data[colData_data$tissue_type=="Normal","patient_id"]
 
@@ -14,7 +16,7 @@ normal_samples<-colData_data[colData_data$tissue_type=="Normal","patient_id"]
 log2fc<-log(rowMeans(unstranded_rpkm[,tumor_samples]),2)/log(rowMeans(unstranded_rpkm[,normal_samples],2))
 
 # Filter by log2folchage
-unstranded_rpkm<-unstranded_rpkm[log2fc>1.5,]
+unstranded_rpkm<-unstranded_rpkm[log2fc>log2foldchange_trheshold,]
 
 # Filter by RPKM
 unstranded_data_filter<-unstranded_rpkm[rowMeans(unstranded_rpkm[,tumor_samples])>10,]

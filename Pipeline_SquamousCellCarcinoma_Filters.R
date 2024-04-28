@@ -15,7 +15,7 @@ normal_samples<-colData_data[colData_data$tissue_type=="Normal","patient_id"]
 unstranded_data_filter<-unstranded_data[rowMeans(unstranded_data[,tumor_samples])-rowMeans(unstranded_data[,normal_samples])>0,]
 
 # Filter by rowmeans(tumor)-rowmeans(normal)
-unstranded_data_filter<-unstranded_data[rowMeans(unstranded_data[,tumor_samples])>5,]
+unstranded_data_filter<-unstranded_data[rowMeans(unstranded_data[,tumor_samples])>10,]
 ###########################################################################################################################
 # Save TSV file with genes from Stage1                                                                                                                             #
 write.table(data.frame(unstranded_data_filter), file =  "/home/felipe/Documentos/LungPortal/samples/unstranded_rpkm.tsv", append = FALSE,row.names = TRUE, col.names = TRUE, quote = TRUE, sep = "\t")

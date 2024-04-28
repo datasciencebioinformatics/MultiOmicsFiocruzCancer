@@ -68,3 +68,9 @@ plot_enropy_stage_all     <- plot_enropy_stage_all + annotate("text", x = entrop
 png(filename=paste(output_dir,"Entropy_","all_.png",sep=""), width = 16, height = 16, res=600, units = "cm")
 	plot_enropy_stage_all + ggtitle("Entropy bootstrapping (1000x random gene sets)")
 dev.off()
+####################################################################################################################
+round(sum(entropy_stage_I<=entropy_bootstrapping_stage_values)/1000,3)
+round(sum(entropy_stage_II<=entropy_bootstrapping_stage_values)/1000,3)
+round(sum(entropy_stage_III<=entropy_bootstrapping_stage_values)/1000,3)
+####################################################################################################################
+

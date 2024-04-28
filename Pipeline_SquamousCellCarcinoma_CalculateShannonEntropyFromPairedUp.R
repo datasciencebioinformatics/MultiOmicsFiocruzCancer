@@ -86,6 +86,8 @@ genes_interactome_stage_III<-genes_id_vector_stage_III[genes_id_vector_stage_III
 # Stage I
 # A vector to store row ID of pairs present in the genes_id_vector_stage_I
 pairs_in_stage_I<-c()
+pairs_in_stage_II<-c()
+pairs_in_stage_III<-c()
 
 # for each row, check if pair is present in the interactome list
 for (pair_id in rownames(interactome_data))
@@ -97,8 +99,21 @@ for (pair_id in rownames(interactome_data))
   # If both ends of the pair are present in genes_id_vector_stage_I
   if(sum(genes_id_vector_stage_I %in% pair_gene_I)>0 && sum(genes_id_vector_stage_I %in% pair_gene_II))
   {    
-     pairs_in_stage_I<-c(pairs_in_stage_I,pair_id) 
+    # Store pair id in vector
+    pairs_in_stage_I<-c(pairs_in_stage_I,pair_id) 
   }      
+  # If both ends of the pair are present in genes_id_vector_stage_II
+  if(sum(genes_id_vector_stage_II %in% pair_gene_I)>0 && sum(genes_id_vector_stage_II %in% pair_gene_II))
+  {    
+    # Store pair id in vector
+    pairs_in_stage_II<-c(pairs_in_stage_I,pair_id) 
+  }        
+  # If both ends of the pair are present in genes_id_vector_stage_II
+  if(sum(genes_id_vector_stage_III %in% pair_gene_I)>0 && sum(genes_id_vector_stage_III %in% pair_gene_II))
+  {    
+    # Store pair id in vector
+    pairs_in_stage_III<-c(pairs_in_stage_I,pair_id) 
+  }          
 }
 ########################################################################################################################################
 

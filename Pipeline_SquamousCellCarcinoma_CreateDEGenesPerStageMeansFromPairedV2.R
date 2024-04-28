@@ -2,11 +2,10 @@
 # Reload colData from file
 # Reload unstranded_data from file
 ###########################################################################################################################
-unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded_rpkm.tsv"                    #
 merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
 colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
 ###########################################################################################################################
-unstranded_data                    <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE)         #
+unstranded_data                    <-unstranded_data_filter
 merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#
 colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
 rownames(colData)                  <-colData$patient_id                                                                   #
@@ -95,7 +94,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	# Coldata
 	colData_sub<-colData[colData$tissue_type=="Tumor",]	
 	
-	pca_res <- prcomp(t(unstranded_data[selected_genes,colData_sub$patient_id]), scale. = FALSE)
+	pca_res <- prcomp(t(unstranded_data[selected_genes,colData_sub$patient_id]), scale. = TRUE)
 	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,colData_sub$patient_id]),"stages"], pca_res$x[,1:2])		
 	
 	# FindClusters_resolution

@@ -95,8 +95,8 @@ for (comparisson_index in rownames(df_table_comparisson))
 	# Coldata
 	colData_sub<-colData[colData$tissue_type=="Tumor",]	
 	
-	#pca_res <- prcomp(t(unstranded_data[selected_genes,colData_sub$patient_id]), scale. = FALSE)
-	#dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,colData_sub$patient_id]),"stages"], pca_res$x[,1:2])		
+	pca_res <- prcomp(t(unstranded_data[selected_genes,colData_sub$patient_id]), scale. = FALSE)
+	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,colData_sub$patient_id]),"stages"], pca_res$x[,1:2])		
 	
 	# FindClusters_resolution
 	png(filename=paste(output_dir,"PCA_",Stage_i,".png",sep=""), width = 16, height = 16, res=600, units = "cm")

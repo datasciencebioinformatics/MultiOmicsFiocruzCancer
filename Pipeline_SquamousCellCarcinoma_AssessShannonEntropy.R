@@ -1,68 +1,74 @@
 ####################################################################################################################
 unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded.tsv"                 #
 unstranded_data                     <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE) #
-####################################################################################################################
-# Take stageI_list_of_genes
-list_of_genes<-unique(merge_interactome_gene_symbol[,c("gene_id","PPI")])
+####################################################################################################################interactome_data_stage_I
+merge_interactome_data<-rbind(data.frame(Gene1=interactome_data_stage_I_clean$Gene1,Gene2=interactome_data_stage_I_clean$Gene2,Stage="Stage I"),
+data.frame(Gene1=interactome_data_stage_II_clean$Gene1,Gene2=interactome_data_stage_II_clean$Gene2,Stage="Stage II"),
+data.frame(Gene1=interactome_data_stage_III_clean$Gene1,Gene2=interactome_data_stage_III_clean$Gene2,Stage="Stage III"))
 
-# File path
-file_genes_Stage_I   <-   "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_I.tsv"
-file_genes_Stage_II   <-  "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_II.tsv"
-file_genes_Stage_III   <- "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_III.tsv"
-
-# Gene table
-genes_Stage_I       <-read.table(file = file_genes_Stage_I, sep = '\t', header = TRUE,fill=TRUE)         #
-genes_Stage_II      <-read.table(file = file_genes_Stage_II, sep = '\t', header = TRUE,fill=TRUE)#
-genes_Stage_III     <-read.table(file = file_genes_Stage_III, sep = '\t', header = TRUE,fill=TRUE)
-
-# genes_Stages
-genes_Stage_I<-rownames(unstranded_data_filter)[rownames(unstranded_data_filter) %in% genes_Stage_I$gene]
-genes_Stage_II<-rownames(unstranded_data_filter)[rownames(unstranded_data_filter) %in% genes_Stage_II$gene]
-genes_Stage_III<-rownames(unstranded_data_filter)[rownames(unstranded_data_filter) %in% genes_Stage_III$gene]
+# merge_interactome_data
+merge_interactome_data<-unique(merge_interactome_data[,c("Gene1","Gene2")])
 
 # Number of genes
-n_of_genes<-ceiling((length(genes_Stage_I)+ length(genes_Stage_II)+length(genes_Stage_III))/3)
+n_of_interactions<-ceiling((dim(interactome_data_stage_I)[1]+ dim(interactome_data_stage_II)[1]+dim(interactome_data_stage_III)[1])/3)
 
 # entropy_bootstrapping_stage_values
-entropy_bootstrapping_stage_values<-c()
+entropy_bootstrapping_Carels<-c()
+entropy_bootstrapping_Shannon<-c()
 
 # Repeat 1000 times
 for (bootstrapping in 1:1000)
 {
   	# Random genes 
-	random_genes_Stage_all<-sample(rownames(na.omit(unstranded_data_filter)), n_of_genes, replace = TRUE, prob = NULL)  
+	random_interactions_Stage_all<-sample( 1:dim(interactome_data)[1], n_of_interactions, replace = TRUE, prob = NULL)  
 
-	# vector to store all genes 
-	genes_id_vector_stage_all<-c()
+	# Take random interactions
+	random_interactions<-interactome_data[random_interactions_Stage_all,]	
 
-	# For each gene in stage I
-	for (random_gene in random_genes_Stage_all)
-	{
-	  # Store gene id in the vector
-	  genes_id_vector_stage_all<-c(genes_id_vector_stage_all,strsplit(random_gene, split = "\\.")[[1]][1])
-	}	
-
-	# If at least one of the genes in the pair are in the interactome
-	interactome_data_stage_all<-unique(rbind(interactome_data[interactome_data$Gene1 %in% genes_id_vector_stage_all,],
-	interactome_data[interactome_data$Gene2 %in% genes_id_vector_stage_all,]))
-
+	# Colnames
+	colnames(random_interactions)<-c("Gene1","Gene2")
+	
 	# PPI counts
-	interactome_data_stage_all   <-unique(data.frame(Conectivity=table(c(interactome_data_stage_all$Gene1,interactome_data_stage_all$Gene2))))
+	interactome_data_stage_all   <-unique(data.frame(Conectivity=table(c(random_interactions$Gene1,random_interactions$Gene2))))
 
-	# entropy_bootstrapping_samples
-	entropy_bootstrapping_stage_values<-c(entropy_bootstrapping_stage_values,round(Entropy(interactome_data_stage_all$Conectivity.Freq, base = 2),3))
+	# Rename names
+	colnames(interactome_data_stage_all)<-c("Gene","Conectivity")
+
+	# Table for the calculation of entropy
+	df_entropy_calulation_random   <-data.frame(table(interactome_data_stage_all$Conectivity),p_k=0,log2_pk=0,p_k_mult_log2_pk=0)
+	
+	# Rename colnames
+	colnames(df_entropy_calulation_random)<-c("k","count","p_k","log2_pk","p_k_mult_log2_pk")
+	
+	# Calculate p(k)
+	df_entropy_calulation_random$p_k<-df_entropy_calulation_random$count/sum(df_entropy_calulation_random$count)
+	
+	# Calculate log2(p(k))
+	df_entropy_calulation_random$log2_pk<-log(df_entropy_calulation_random$p_k,2)
+	
+	# Calculate p(k)*log2(p(k))
+	df_entropy_calulation_random$p_k_mult_log2_pk<-df_entropy_calulation_random$p_k*df_entropy_calulation_random$log2_pk
+	
+	# Caclulate entropy value
+	Entropy_stage_random_value_Carels  <-abs(sum(df_entropy_calulation_random$p_k_mult_log2_pk))
+	
+	# Caclulate entropy value
+	Entropy_value_Shannon_stage_random<-Entropy(df_stageI_connectivity$Conectivity, base=exp(2))
+
+	entropy_bootstrapping_Carels<-c(entropy_bootstrapping_Carels,Entropy_stage_random_value_Carels)
+	entropy_bootstrapping_Shannon<-c(entropy_bootstrapping_Shannon,Entropy_value_Shannon_stage_random)	
 }
 # Save stages
-df_enropy_stage_all  <-data.frame(1:1000,entropy=entropy_bootstrapping_stage_values,stage="Stages")
+df_enropy_stage_all  <-data.frame(1:1000,entropy=entropy_bootstrapping_Carels,Method="Conforte")
 
 # Create plot
 plot_enropy_stage_all<-ggplot(df_enropy_stage_all, aes(x=entropy))  + geom_histogram() 
 
 # Histogram overlaid with kernel density curve
-plot_enropy_stage_all     <-plot_enropy_stage_all +  geom_segment(aes(x=entropy_stage_I, y=200, xend=entropy_stage_I, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) +  geom_segment(aes(x=entropy_stage_II, y=200, xend=entropy_stage_II, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) +  geom_segment(aes(x=entropy_stage_III, y=200, xend=entropy_stage_III, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) + theme_bw()
-plot_enropy_stage_all     <-plot_enropy_stage_all + annotate("text", x = entropy_stage_I, y = 205, label = "Stage I")
-plot_enropy_stage_all     <-plot_enropy_stage_all + annotate("text", x = entropy_stage_II, y = 205, label = "Stage II") 
-plot_enropy_stage_all     <- plot_enropy_stage_all + annotate("text", x = entropy_stage_III, y = 205, label = "Stage III")
+plot_enropy_stage_all     <-plot_enropy_stage_all +  geom_segment(aes(x=Entropy_stage_I_value_Carels, y=200, xend=Entropy_stage_I_value_Carels, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) +   geom_segment(aes(x=Entropy_stage_II_value_Carels, y=200, xend=Entropy_stage_II_value_Carels, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) +  geom_segment(aes(x=Entropy_stage_III_value_Carels, y=200, xend=Entropy_stage_III_value_Carels, yend=0), arrow = arrow(length=unit(0.5, 'cm'))) + theme_bw()
+plot_enropy_stage_all     <-plot_enropy_stage_all + annotate("text", x = Entropy_stage_I_value_Carels, y = 205, label = "Stage I")
+plot_enropy_stage_all     <-plot_enropy_stage_all + annotate("text", x = Entropy_stage_II_value_Carels, y = 205, label = "Stage II") 
+plot_enropy_stage_all     <- plot_enropy_stage_all + annotate("text", x = Entropy_stage_III_value_Carels, y = 205, label = "Stage III")
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"Entropy_","all_.png",sep=""), width = 16, height = 16, res=600, units = "cm")

@@ -86,13 +86,51 @@ genes_ids<-unique(genes_ids)
 #######################################################################################################      
 # Take all genes from interactom
 # store both, gene in pair one and gene in pair two in a same vectors
-genes<-unique(c(interactome_data$Gene1,interactome_data$Gene2))
 
 # The gene in lists of genes per stage must be filterd to keep only entris that are present in the interactome
 # ~99% of genes in the selected lists are in the interactome
-genes_interactome_stage_I  <-genes_id_vector_stage_I[genes_id_vector_stage_I %in% genes]
-genes_interactome_stage_II <-genes_id_vector_stage_II[genes_id_vector_stage_II %in% genes]
-genes_interactome_stage_III<-genes_id_vector_stage_III[genes_id_vector_stage_III %in% genes]
+genes_interactome_stage_I  <-genes_id_vector_stage_I[genes_id_vector_stage_I %in% genes_ids]
+genes_interactome_stage_II <-genes_id_vector_stage_II[genes_id_vector_stage_II %in% genes_ids]
+genes_interactome_stage_III<-genes_id_vector_stage_III[genes_id_vector_stage_III %in% genes_ids]
+########################################################################################################################################
+# Filter tables to keep only the gene entries that are listed in the EnsemblToUniprotKBconversionList
+interactome_data<-interactome_data[interactome_data$Gene1 %in% genes_ids,]
+interactome_data<-interactome_data[interactome_data$Gene2 %in% genes_ids,]
+########################################################################################################################################
+# copy interactome_data_stages
+interactome_data_stage_I_clean<-interactome_data_stage_I
+interactome_data_stage_II_clean<-interactome_data_stage_II
+interactome_data_stage_III_clean<-interactome_data_stage_III
+
+merge_interactome_data<-rbind(data.frame(Gene1=interactome_data_stage_I_clean$Gene1,Gene2=interactome_data_stage_I_clean$Gene2,Stage="Stage I"),
+data.frame(Gene1=interactome_data_stage_II_clean$Gene1,Gene2=interactome_data_stage_II_clean$Gene2,Stage="Stage II"),
+data.frame(Gene1=interactome_data_stage_III_clean$Gene1,Gene2=interactome_data_stage_III_clean$Gene2,Stage="Stage III"))
+
+# Clean the tables
+for (gene_pair_index in rownames(merge_interactome_data))
+{
+    # interactome_data_stage
+    pair_gene_id_I <-merge_interactome_data[gene_pair_index,"Gene1"]
+    pair_gene_id_II<-merge_interactome_data[gene_pair_index,"Gene2"]
+
+    # If both genes are in the list of genes_ids
+    if( (pair_gene_id_I %in% genes_ids) &&  (pair_gene_id_II %in% genes_ids) )
+    {
+      # Re-order gene ids
+      if(pair_gene_id_II<pair_gene_id_I)
+      {
+        merge_interactome_data[gene_pair_index,"Gene1"]<-pair_gene_id_II
+        merge_interactome_data[gene_pair_index,"Gene2"]<-pair_gene_id_I     
+      }
+      # Re-order gene ids
+      if(pair_gene_id_II==pair_gene_id_I)
+      {
+        merge_interactome_data[gene_pair_index,"Gene2"]<-"REPEAT"
+      }
+    }
+}
+# Take unique values
+merge_interactome_data<-unique(merge_interactome_data)
 ########################################################################################################################################
 # If at least one of the genes in the pair are in the interactome
 interactome_data_stage_I<-rbind(interactome_data[interactome_data$Gene1 %in% genes_interactome_stage_I,],
@@ -106,14 +144,61 @@ interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_II,])
 interactome_data_stage_III<-rbind(interactome_data[interactome_data$Gene1 %in% genes_interactome_stage_III,],
 interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_III,])
 ########################################################################################################################################
+interactome_data_stage_I<-merge_interactome_data[merge_interactome_data$Stage=="Stage I",]
+interactome_data_stage_II<-merge_interactome_data[merge_interactome_data$Stage=="Stage II",]
+interactome_data_stage_III<-merge_interactome_data[merge_interactome_data$Stage=="Stage III",]
+########################################################################################################################################
+interactome_data_stage_I<-unique(interactome_data_stage_I[,c("Gene1","Gene2")])
+interactome_data_stage_II<-unique(interactome_data_stage_II[,c("Gene1","Gene2")])
+interactome_data_stage_III<-unique(interactome_data_stage_III[,c("Gene1","Gene2")])
+########################################################################################################################################
 df_stageI_connectivity   <-unique(data.frame(Conectivity=table(c(interactome_data_stage_I$Gene1,interactome_data_stage_I$Gene2))))
 df_stageII_connectivity  <-unique(data.frame(Conectivity=table(c(interactome_data_stage_II$Gene1,interactome_data_stage_II$Gene2))))
 df_stageIII_connectivity <-unique(data.frame(Conectivity=table(c(interactome_data_stage_III$Gene1,interactome_data_stage_III$Gene2))))
+########################################################################################################################################
+colnames(df_stageI_connectivity)<-c("Gene","Conectivity")
+colnames(df_stageII_connectivity)<-c("Gene","Conectivity")
+colnames(df_stageIII_connectivity)<-c("Gene","Conectivity")
+########################################################################################################################################
+df_stageI_connectivity<-df_stageI_connectivity[df_stageI_connectivity$Gene!="REPEAT",]
+df_stageII_connectivity<-df_stageII_connectivity[df_stageII_connectivity$Gene!="REPEAT",]
+df_stageIII_connectivity<-df_stageIII_connectivity[df_stageIII_connectivity$Gene!="REPEAT",]
+########################################################################################################################################
+# Table for the calculation of entropy
+df_entropy_calulation_I   <-data.frame(table(df_stageI_connectivity$Conectivity),p_k=0,log2_pk=0,p_k_mult_log2_pk=0)
+df_entropy_calulation_II  <-data.frame(table(df_stageII_connectivity$Conectivity),p_k=0,log2_pk=0,p_k_mult_log2_pk=0)
+df_entropy_calulation_III <-data.frame(table(df_stageIII_connectivity$Conectivity),p_k=0,log2_pk=0,p_k_mult_log2_pk=0)
 
-entropy_stage_I<-round(Entropy(df_stageI_connectivity$Conectivity.Freq, base = 2),3)
-entropy_stage_II<-round(Entropy(df_stageII_connectivity$Conectivity.Freq, base = 2),3)
-entropy_stage_III<-round(Entropy(df_stageIII_connectivity$Conectivity.Freq, base = 2),3)
+# Rename colnames
+colnames(df_entropy_calulation_I)<-c("k","count","p_k","log2_pk","p_k_mult_log2_pk")
+colnames(df_entropy_calulation_II)<-c("k","count","p_k","log2_pk","p_k_mult_log2_pk")
+colnames(df_entropy_calulation_III)<-c("k","count","p_k","log2_pk","p_k_mult_log2_pk")
 
+# Calculate p(k)
+df_entropy_calulation_I$p_k<-df_entropy_calulation_I$count/sum(df_entropy_calulation_I$count)
+df_entropy_calulation_II$p_k<-df_entropy_calulation_II$count/sum(df_entropy_calulation_II$count)
+df_entropy_calulation_III$p_k<-df_entropy_calulation_III$count/sum(df_entropy_calulation_III$count)
+
+# Calculate log2(p(k))
+df_entropy_calulation_I$log2_pk<-log(df_entropy_calulation_I$p_k,2)
+df_entropy_calulation_II$log2_pk<-log(df_entropy_calulation_II$p_k,2)
+df_entropy_calulation_III$log2_pk<-log(df_entropy_calulation_III$p_k,2)
+
+# Calculate p(k)*log2(p(k))
+df_entropy_calulation_I$p_k_mult_log2_pk<-df_entropy_calulation_I$p_k*df_entropy_calulation_I$log2_pk
+df_entropy_calulation_II$p_k_mult_log2_pk<-df_entropy_calulation_II$p_k*df_entropy_calulation_II$log2_pk
+df_entropy_calulation_III$p_k_mult_log2_pk<-df_entropy_calulation_III$p_k*df_entropy_calulation_III$log2_pk
+
+# Caclulate entropy value
+Entropy_stage_I_value_Carels  <-abs(sum(df_entropy_calulation_I$p_k_mult_log2_pk))
+Entropy_stage_II_value_Carels <-abs(sum(df_entropy_calulation_II$p_k_mult_log2_pk))
+Entropy_stage_III_value_Carels<-abs(sum(df_entropy_calulation_III$p_k_mult_log2_pk))
+
+# Caclulate entropy value
+Entropy_value_Shannon_stage_I<-Entropy(df_stageI_connectivity$Conectivity, base=exp(2))
+Entropy_value_Shannon_stage_II<-Entropy(df_stageII_connectivity$Conectivity, base=exp(2))
+Entropy_value_Shannon_stage_III<-Entropy(df_stageIII_connectivity$Conectivity, base=exp(2))
+########################################################################################################################################
 # Save TSV file with genes from Stage1
 write_tsv(df_stageI_connectivity, paste(output_dir,"df_stageI_connectivity_I",".tsv",sep=""))
 write_tsv(df_stageII_connectivity, paste(output_dir,"df_stageII_connectivity_II",".tsv",sep=""))

@@ -193,11 +193,6 @@ df_entropy_calulation_III$p_k_mult_log2_pk<-df_entropy_calulation_III$p_k*df_ent
 Entropy_stage_I_value_Carels  <-abs(sum(df_entropy_calulation_I$p_k_mult_log2_pk))
 Entropy_stage_II_value_Carels <-abs(sum(df_entropy_calulation_II$p_k_mult_log2_pk))
 Entropy_stage_III_value_Carels<-abs(sum(df_entropy_calulation_III$p_k_mult_log2_pk))
-
-# Caclulate entropy value
-Entropy_value_Shannon_stage_I<-Entropy(df_stageI_connectivity$Conectivity, base=exp(2))
-Entropy_value_Shannon_stage_II<-Entropy(df_stageII_connectivity$Conectivity, base=exp(2))
-Entropy_value_Shannon_stage_III<-Entropy(df_stageIII_connectivity$Conectivity, base=exp(2))
 ########################################################################################################################################
 # Save TSV file with genes from Stage1
 write_tsv(df_stageI_connectivity, paste(output_dir,"df_stageI_connectivity_I",".tsv",sep=""))
@@ -205,7 +200,7 @@ write_tsv(df_stageII_connectivity, paste(output_dir,"df_stageII_connectivity_II"
 write_tsv(df_stageIII_connectivity, paste(output_dir,"df_stageIII_connectivity_II",".tsv",sep=""))
 
 # Save TSV file with genes from Stage1
-write_tsv(df_stageI_connectivity, paste(output_dir,"df_stageI_interactome",".tsv",sep=""))
-write_tsv(df_stageII_connectivity, paste(output_dir,"df_stageII_interactome",".tsv",sep=""))
-write_tsv(df_stageIII_connectivity, paste(output_dir,"df_stageIII_interactome",".tsv",sep=""))
+write_tsv(interactome_data_stage_I, paste(output_dir,"df_stageI_interactome",".tsv",sep=""))
+write_tsv(interactome_data_stage_II, paste(output_dir,"df_stageII_interactome",".tsv",sep=""))
+write_tsv(interactome_data_stage_III, paste(output_dir,"df_stageIII_interactome",".tsv",sep=""))
 ########################################################################################################################################

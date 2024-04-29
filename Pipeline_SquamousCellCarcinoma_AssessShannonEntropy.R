@@ -51,12 +51,9 @@ for (bootstrapping in 1:1000)
 	
 	# Caclulate entropy value
 	Entropy_stage_random_value_Carels  <-abs(sum(df_entropy_calulation_random$p_k_mult_log2_pk))
-	
-	# Caclulate entropy value
-	Entropy_value_Shannon_stage_random<-Entropy(df_stageI_connectivity$Conectivity, base=exp(2))
 
+	# Store in the vector
 	entropy_bootstrapping_Carels<-c(entropy_bootstrapping_Carels,Entropy_stage_random_value_Carels)
-	entropy_bootstrapping_Shannon<-c(entropy_bootstrapping_Shannon,Entropy_value_Shannon_stage_random)	
 }
 # Save stages
 df_enropy_stage_all  <-data.frame(1:1000,entropy=entropy_bootstrapping_Carels,Method="Conforte")
@@ -74,9 +71,3 @@ plot_enropy_stage_all     <- plot_enropy_stage_all + annotate("text", x = Entrop
 png(filename=paste(output_dir,"Entropy_","all_.png",sep=""), width = 16, height = 16, res=600, units = "cm")
 	plot_enropy_stage_all + ggtitle("Entropy bootstrapping (1000x random gene sets)")
 dev.off()
-####################################################################################################################
-round(sum(entropy_stage_I<=entropy_bootstrapping_stage_values)/1000,3)
-round(sum(entropy_stage_II<=entropy_bootstrapping_stage_values)/1000,3)
-round(sum(entropy_stage_III<=entropy_bootstrapping_stage_values)/1000,3)
-####################################################################################################################
-

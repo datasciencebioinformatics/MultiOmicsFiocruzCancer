@@ -1,38 +1,89 @@
-####################################################################################################################
-unstranded_data_file                <- "/home/felipe/Documentos/LungPortal/samples/unstranded.tsv"                 #
-unstranded_data                     <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,fill=TRUE) #
-####################################################################################################################interactome_data_stage_I
-merge_interactome_data<-rbind(data.frame(Gene1=interactome_data_stage_I_clean$Gene1,Gene2=interactome_data_stage_I_clean$Gene2,Stage="Stage I"),
-data.frame(Gene1=interactome_data_stage_II_clean$Gene1,Gene2=interactome_data_stage_II_clean$Gene2,Stage="Stage II"),
-data.frame(Gene1=interactome_data_stage_III_clean$Gene1,Gene2=interactome_data_stage_III_clean$Gene2,Stage="Stage III"))
+#######################################################################################################################################
+# Load interactome data
+interactome_data <-read.table(file = interactome_file, sep = '\t', header = FALSE,fill=TRUE)         
 
+# Rename collumns 
+colnames(interactome_data)<-c("Gene1","Gene2")
+#######################################################################################################################################
+# Filter tables to keep only the gene entries that are listed in the EnsemblToUniprotKBconversionList
+interactome_data<-interactome_data[interactome_data$Gene1 %in% EnsemblToUniprotKBconversionList_data$SYMBOL,]
+interactome_data<-interactome_data[interactome_data$Gene2 %in% EnsemblToUniprotKBconversionList_data$SYMBOL,]
+
+# Create a table for id conversion gene_id and gene_symbol for the genes in the interactome data
+gene1_conversion<-merge(interactome_data,EnsemblToUniprotKBconversionList_data,by.x="Gene1", by.y="SYMBOL",all.x=TRUE,all.y=FALSE)
+gene_conversion<-merge(gene1_conversion,EnsemblToUniprotKBconversionList_data,by.x="Gene2", by.y="SYMBOL",all.x=TRUE,all.y=FALSE)
+
+# Keep only the collumns of interest- 
+# interactome_data : interactome with converted ids
+interactome_data<-unique(gene_conversion[,3:4])
+
+# Rename interactome_data collumns
+colnames(interactome_data)<-c("Gene1","Gene2")
+
+# Filter tables to keep only the gene entries that are listed in the EnsemblToUniprotKBconversionList
+interactome_data<-interactome_data[interactome_data$Gene1 %in% genes_ids,]
+interactome_data<-interactome_data[interactome_data$Gene2 %in% genes_ids,]
+#######################################################################################################################################
 # merge_interactome_data
 merge_interactome_data<-unique(merge_interactome_data[,c("Gene1","Gene2")])
 
 # Number of genes
-n_of_interactions<-ceiling((dim(interactome_data_stage_I)[1]+ dim(interactome_data_stage_II)[1]+dim(interactome_data_stage_III)[1])/3)
+n_of_interactions<-ceiling((length(genes_interactome_stage_I)+ length(genes_interactome_stage_II)+length(genes_interactome_stage_II))/3)
 
 # entropy_bootstrapping_stage_values
 entropy_bootstrapping_Carels<-c()
-entropy_bootstrapping_Shannon<-c()
 
 # Repeat 1000 times
 for (bootstrapping in 1:1000)
 {
-  	# Random genes 
-	random_interactions_Stage_all<-sample( 1:dim(interactome_data)[1], n_of_interactions, replace = TRUE, prob = NULL)  
-
-	# Take random interactions
-	random_interactions<-interactome_data[random_interactions_Stage_all,]	
+	# Store genes stage I, II and III
+	# Vectors to store gene ids from each stage
+	genes_id_vector_random<-sample( genes_ids, n_of_interactions, replace = TRUE, prob = NULL)  
 
 	# Colnames
 	colnames(random_interactions)<-c("Gene1","Gene2")
+
+	# If at least one of the genes in the pair are in the interactome
+	interactome_data_stage_random<-rbind(interactome_data[interactome_data$Gene1 %in% genes_id_vector_random,],
+	interactome_data[interactome_data$Gene2 %in% genes_id_vector_random,])
+
+	# Clean the tables
+	for (gene_pair_index in rownames(interactome_data_stage_random))
+	{
+	    # interactome_data_stage
+	    pair_gene_id_I <-interactome_data_stage_random[gene_pair_index,"Gene1"]
+	    pair_gene_id_II<-interactome_data_stage_random[gene_pair_index,"Gene2"]
 	
+	    # If both genes are in the list of genes_ids
+	    if( (pair_gene_id_I %in% genes_ids) &&  (pair_gene_id_II %in% genes_ids) )
+	    {
+	      # Re-order gene ids
+	      if(pair_gene_id_II<pair_gene_id_I)
+	      {
+	        interactome_data_stage_random[gene_pair_index,"Gene1"]<-pair_gene_id_II
+	        interactome_data_stage_random[gene_pair_index,"Gene2"]<-pair_gene_id_I     
+	      }
+	      # Re-order gene ids
+	      if(pair_gene_id_II==pair_gene_id_I)
+	      {
+	        interactome_data_stage_random[gene_pair_index,"Gene2"]<-"REPEAT"
+	      }
+	    }
+	}
+	# Take unique values
+	interactome_data_stage_random<-unique(interactome_data_stage_random)
+
+	# df_stageI_connectivity
+	df_random_connectivity   <-unique(data.frame(Conectivity=table(c(interactome_data_stage_random$Gene1,interactome_data_stage_random$Gene2))))
+		
 	# PPI counts
-	interactome_data_stage_all   <-unique(data.frame(Conectivity=table(c(random_interactions$Gene1,random_interactions$Gene2))))
+	interactome_data_stage_all   <-unique(data.frame(Conectivity=table(c(interactome_data_stage_random$Gene1,interactome_data_stage_random$Gene2))))
 
 	# Rename names
 	colnames(interactome_data_stage_all)<-c("Gene","Conectivity")
+
+	# Remove REPEAT
+	interactome_data_stage_all<-interactome_data_stage_all[interactome_data_stage_all$Gene!="REPEAT",]
 
 	# Table for the calculation of entropy
 	df_entropy_calulation_random   <-data.frame(table(interactome_data_stage_all$Conectivity),p_k=0,log2_pk=0,p_k_mult_log2_pk=0)

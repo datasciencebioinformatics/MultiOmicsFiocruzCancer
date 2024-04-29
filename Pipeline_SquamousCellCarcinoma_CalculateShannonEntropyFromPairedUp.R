@@ -97,6 +97,18 @@ genes_interactome_stage_III<-genes_id_vector_stage_III[genes_id_vector_stage_III
 interactome_data<-interactome_data[interactome_data$Gene1 %in% genes_ids,]
 interactome_data<-interactome_data[interactome_data$Gene2 %in% genes_ids,]
 ########################################################################################################################################
+# If at least one of the genes in the pair are in the interactome
+interactome_data_stage_I<-rbind(interactome_data[interactome_data$Gene1 %in% genes_interactome_stage_I,],
+interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_I,])
+
+# If at least one of the genes in the pair are in the interactome
+interactome_data_stage_II<-rbind(interactome_data[interactome_data$Gene1 %in% genes_interactome_stage_II,],
+interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_II,])
+
+# If at least one of the genes in the pair are in the interactome
+interactome_data_stage_III<-rbind(interactome_data[interactome_data$Gene1 %in% genes_interactome_stage_III,],
+interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_III,])
+########################################################################################################################################
 # copy interactome_data_stages
 interactome_data_stage_I_clean<-interactome_data_stage_I
 interactome_data_stage_II_clean<-interactome_data_stage_II
@@ -131,18 +143,6 @@ for (gene_pair_index in rownames(merge_interactome_data))
 }
 # Take unique values
 merge_interactome_data<-unique(merge_interactome_data)
-########################################################################################################################################
-# If at least one of the genes in the pair are in the interactome
-interactome_data_stage_I<-rbind(interactome_data[interactome_data$Gene1 %in% genes_interactome_stage_I,],
-interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_I,])
-
-# If at least one of the genes in the pair are in the interactome
-interactome_data_stage_II<-rbind(interactome_data[interactome_data$Gene1 %in% genes_interactome_stage_II,],
-interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_II,])
-
-# If at least one of the genes in the pair are in the interactome
-interactome_data_stage_III<-rbind(interactome_data[interactome_data$Gene1 %in% genes_interactome_stage_III,],
-interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_III,])
 ########################################################################################################################################
 interactome_data_stage_I<-merge_interactome_data[merge_interactome_data$Stage=="Stage I",]
 interactome_data_stage_II<-merge_interactome_data[merge_interactome_data$Stage=="Stage II",]

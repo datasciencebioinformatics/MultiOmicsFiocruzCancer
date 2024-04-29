@@ -40,9 +40,6 @@ for (bootstrapping in 1:1000)
 	# Vectors to store gene ids from each stage
 	genes_id_vector_random<-sample( genes_ids, n_of_interactions, replace = TRUE, prob = NULL)  
 
-	# Colnames
-	colnames(random_interactions)<-c("Gene1","Gene2")
-
 	# If at least one of the genes in the pair are in the interactome
 	interactome_data_stage_random<-rbind(interactome_data[interactome_data$Gene1 %in% genes_id_vector_random,],
 	interactome_data[interactome_data$Gene2 %in% genes_id_vector_random,])

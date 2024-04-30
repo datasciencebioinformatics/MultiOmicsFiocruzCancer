@@ -17,7 +17,7 @@ g_stage_III<-graph_from_data_frame(df_stageIII_interactome, directed = TRUE, ver
 
 g_stage_I_ceb <- cluster_edge_betweenness(g_stage_I) 
 dendPlot(g_stage_I_ceb, mode="hclust")
-l <- do.call("layout_randomly", list(g_stage_I)) 
+l <- do.call("layout_with_kk", list(g_stage_I)) 
 plot(g_stage_I_ceb, g_stage_I, layout=l) 
 
 # FindClusters_resolution

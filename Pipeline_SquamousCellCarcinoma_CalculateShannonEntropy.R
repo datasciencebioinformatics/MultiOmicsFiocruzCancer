@@ -89,7 +89,7 @@ net_stage_II_cor <- melt(net_stage_II_cor)
 net_stage_III_cor <- melt(net_stage_III_cor) 
 
 # Take value of thhreshold
-spearman_threshold<-0.95
+spearman_threshold<-0.99
 
 dim(unique(net_stage_I_cor[net_stage_I_cor$value>=spearman_threshold,]))
 dim(unique(net_stage_II_cor[net_stage_II_cor$value>=spearman_threshold,]))

@@ -1,6 +1,7 @@
 #######################################################################################################################################
 # Number of genes
-n_of_interactions<-ceiling((length(genes_interactome_stage_I)+ length(genes_interactome_stage_II)+length(genes_interactome_stage_II))/3)
+N=length(rownames(na.omit(unstranded_data_filter)))
+n_of_interactions<-(N*(N-1))/2
 
 # entropy_bootstrapping_stage_values
 entropy_bootstrapping_random_Carels<-c()
@@ -35,7 +36,7 @@ for (bootstrapping in 1:1000)
 			node_pair_2 <- "REPEAT"
 		}	
 		# If probability greater 0.7
-		if (runif(1, min=0, max=1)>0.1)
+		if (runif(1, min=0, max=1)>0.99)
 		{
 			df_random_interacions<-rbind(df_random_interacions,data.frame(Gene1=node_pair_1,Gene2=node_pair_2))
 		}	

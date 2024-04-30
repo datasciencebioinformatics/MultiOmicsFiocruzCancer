@@ -32,5 +32,5 @@ dev.off()
 #############################################################################################################################
 write_tsv(selected_genes_Stage_I_data[unique_stage_I,], "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_I.tsv")
 write_tsv(selected_genes_Stage_II_data[unique_stage_II,], "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_II.tsv")
-write_tsv(selected_genes_Stage_III_data[unique_stage_III,], "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedU_unique_III.tsv")
+write_tsv(selected_genes_Stage_III_data[unique_stage_III,], "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_III.tsv")
 #############################################################################################################################

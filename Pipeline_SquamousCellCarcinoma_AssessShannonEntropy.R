@@ -1,8 +1,16 @@
 #######################################################################################################################################
+# Gene table
+genes_Stage_I       <-read.table(file = file_genes_Stage_I, sep = '\t', header = TRUE,fill=TRUE)         
+genes_Stage_II      <-read.table(file = file_genes_Stage_II, sep = '\t', header = TRUE,fill=TRUE)
+genes_Stage_III     <-read.table(file = file_genes_Stage_III, sep = '\t', header = TRUE,fill=TRUE) 
+#######################################################################################################################################
+N=ceiling((length(genes_Stage_I$gene)+length(genes_Stage_II$gene)+length(genes_Stage_III$gene))/3)
+#######################################################################################################################################
 # Number of genes
-N=length(rownames(na.omit(unstranded_data_filter)))
-n_of_interactions<-(N*(N-1))/2
-
+g <- barabasi.game(n=N, directed = FALSE)
+as_data_frame(g, what = c("edges", "vertices", "both"))
+plot(g, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
+#######################################################################################################################################
 # entropy_bootstrapping_stage_values
 entropy_bootstrapping_random_Carels<-c()
 
@@ -12,39 +20,11 @@ for (bootstrapping in 1:1000)
 	print(bootstrapping)
 	print(Sys.time()) # get start time
 
-	# Data frame of df_random_interacions
-	df_random_interacions<-data.frame(Gene1=c(),Gene2=c())
-
-	# For each interactions
-	for (i in 1:n_of_interactions*(n_of_interactions-1)/2)
-	{
-		# Store genes stage I, II and III
-		# Vectors to store gene ids from each stage
-		node_pair_1<-sample( rownames(na.omit(unstranded_data_filter)), 1, replace = TRUE, prob = NULL) 
-		node_pair_2<-sample( rownames(na.omit(unstranded_data_filter)), 1, replace = TRUE, prob = NULL) 
-		
-		# Re-order gene ids
-		if(pair_gene_id_II<pair_gene_id_I)
-		{
-			node_pair_tmp<-node_pair_1
-			node_pair_1  <-node_pair_2
-			node_pair_2  <-node_pair_1
-		}
-		# Re-order gene ids
-		if(pair_gene_id_II==pair_gene_id_I)
-		{
-			node_pair_2 <- "REPEAT"
-		}	
-		# If probability greater 0.7
-		if (runif(1, min=0, max=1)>0.99)
-		{
-			df_random_interacions<-rbind(df_random_interacions,data.frame(Gene1=node_pair_1,Gene2=node_pair_2))
-		}	
-	}
-	colnames(df_random_interacions)<-c("Gene1","Gene2")
-
+	# Generate random graph
+	g <- barabasi.game(n=N, directed = FALSE)
+	df_random_graph<-as_data_frame(g, what = c("edges"))
 	########################################################################################################################################
-	df_random_connectivity   <-unique(data.frame(Conectivity=table(c(df_random_interacions$Gene1,df_random_interacions$Gene2))))	
+	df_random_connectivity   <-unique(data.frame(Conectivity=table(c(df_random_graph$from,df_random_graph$to))))	
 	########################################################################################################################################
 	colnames(df_random_connectivity)<-c("Gene","Conectivity")	
 	########################################################################################################################################
@@ -69,10 +49,8 @@ for (bootstrapping in 1:1000)
 	# Random entropy 
 	entropy_bootstrapping_random_Carels<-c(entropy_bootstrapping_random_Carels,Entropy_stage_random_value_Carels)		
 }
-
-
 # Save stages
-df_enropy_stage_all  <-data.frame(1:1000,entropy=entropy_bootstrapping_Carels,Method="Conforte")
+df_enropy_stage_all  <-data.frame(1:1000,entropy=entropy_bootstrapping_random_Carels,Method="Conforte")
 
 # Create plot
 plot_enropy_stage_all<-ggplot(df_enropy_stage_all, aes(x=entropy))  + geom_histogram() 

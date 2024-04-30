@@ -101,9 +101,9 @@ interactome_data_stage_I_clean<-interactome_data_stage_I
 interactome_data_stage_II_clean<-interactome_data_stage_II
 interactome_data_stage_III_clean<-interactome_data_stage_III
 
-merge_interactome_data<-rbind(data.frame(Gene1=interactome_data_stage_I_clean$Gene1,Gene2=interactome_data_stage_I_clean$Gene2,Stage="Stage I"),
+merge_interactome_data<-unique(rbind(data.frame(Gene1=interactome_data_stage_I_clean$Gene1,Gene2=interactome_data_stage_I_clean$Gene2,Stage="Stage I"),
 data.frame(Gene1=interactome_data_stage_II_clean$Gene1,Gene2=interactome_data_stage_II_clean$Gene2,Stage="Stage II"),
-data.frame(Gene1=interactome_data_stage_III_clean$Gene1,Gene2=interactome_data_stage_III_clean$Gene2,Stage="Stage III"))
+data.frame(Gene1=interactome_data_stage_III_clean$Gene1,Gene2=interactome_data_stage_III_clean$Gene2,Stage="Stage III")))
 
 # Clean the tables
 for (gene_pair_index in rownames(merge_interactome_data))

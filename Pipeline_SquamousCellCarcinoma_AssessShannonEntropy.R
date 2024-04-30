@@ -1,11 +1,6 @@
 #######################################################################################################################################
 N=ceiling((length(genes_Stage_I$gene)+length(genes_Stage_II$gene)+length(genes_Stage_III$gene))/3)
 #######################################################################################################################################
-# Number of genes
-g <- barabasi.game(n=N, directed = FALSE)
-as_data_frame(g, what = c("edges", "vertices", "both"))
-plot(g, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
-#######################################################################################################################################
 # entropy_bootstrapping_stage_values
 entropy_bootstrapping_random_Carels<-c()
 

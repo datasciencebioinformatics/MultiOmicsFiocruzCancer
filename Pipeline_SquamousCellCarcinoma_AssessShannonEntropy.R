@@ -1,16 +1,5 @@
 #######################################################################################################################################
-g<-graph_from_data_frame(interactome_data, directed = TRUE, vertices = NULL)
-gI<-graph_from_data_frame(interactome_dataI, directed = TRUE, vertices = NULL)
-gII<-graph_from_data_frame(interactome_dataII, directed = TRUE, vertices = NULL)
-
-interactions_stage_1<-plot(g, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Network for genes of stage I")
-#######################################################################################################################################
-# Number of genes
-g <- barabasi.game(n=length(genes$gene),m=dim(interactome_data)[1]/length(genes$gene), directed = FALSE, start.graph =g)
-as_data_frame(g, what = c("edges"))
-interactions_random_1<-plot(g, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Random network for stage I")
-#######################################################################################################################################
-N=ceiling((length(genes$gene)+length(genesI$gene)+length(genesII$gene))/3)
+N=ceiling((length(genes_Stage_I$gene)+length(genes_Stage_I$gene)+length(genes_Stage_I$gene))/3)
 #######################################################################################################################################
 # entropy_bootstrapping_stage_values
 entropy_bootstrapping_random_stage_all<-c()

@@ -58,9 +58,13 @@ colnames(df_correlation_net_stage_I)<-genes_id_vector_stage_I
 colnames(df_correlation_net_stage_II)<-genes_id_vector_stage_II
 colnames(df_correlation_net_stage_III)<-genes_id_vector_stage_III
 #######################################################################################################
-net_stage_I <- build_net(df_correlation_net_stage_I, cor_func = "spearman", n_threads =1)
-net_stage_II <- build_net(df_correlation_net_stage_II, cor_func = "spearman", n_threads =1)
-net_stage_III <- build_net(df_correlation_net_stage_III, cor_func = "spearman", n_threads =1)
+net_stage_I <- build_net(df_correlation_net_stage_I, cor_func = "pearson", n_threads =1)
+net_stage_II <- build_net(df_correlation_net_stage_II, cor_func = "pearson", n_threads =1)
+net_stage_III <- build_net(df_correlation_net_stage_III, cor_func = "pearson", n_threads =1)
+
+net_stage_I$network[lower.tri(net_stage_I$network, diag = FALSE)] <- 0
+net_stage_II$network[lower.tri(net_stage_I$network, diag = FALSE)] <- 0
+net_stage_III$network[lower.tri(net_stage_I$network, diag = FALSE)] <- 0
 
 # Take the correlation matrix
 net_stage_I_cor<-net_stage_I$network
@@ -96,41 +100,6 @@ colnames(interactome_data_stage_I)<-c("Gene1","Gene2")
 colnames(interactome_data_stage_II)<-c("Gene1","Gene2")
 colnames(interactome_data_stage_III)<-c("Gene1","Gene2")
 ########################################################################################################################################
-# copy interactome_data_stages
-interactome_data_stage_I_clean<-interactome_data_stage_I
-interactome_data_stage_II_clean<-interactome_data_stage_II
-interactome_data_stage_III_clean<-interactome_data_stage_III
-
-merge_interactome_data<-unique(rbind(data.frame(Gene1=interactome_data_stage_I_clean$Gene1,Gene2=interactome_data_stage_I_clean$Gene2,Stage="Stage I"),
-data.frame(Gene1=interactome_data_stage_II_clean$Gene1,Gene2=interactome_data_stage_II_clean$Gene2,Stage="Stage II"),
-data.frame(Gene1=interactome_data_stage_III_clean$Gene1,Gene2=interactome_data_stage_III_clean$Gene2,Stage="Stage III")))
-
-# Clean the tables
-for (gene_pair_index in rownames(merge_interactome_data))
-{
-    # interactome_data_stage
-    pair_gene_id_I <-as.vector(merge_interactome_data[gene_pair_index,"Gene1"])
-    pair_gene_id_II<-as.vector(merge_interactome_data[gene_pair_index,"Gene2"])
-
-    # Re-order gene ids
-    if(pair_gene_id_II<pair_gene_id_I)
-    {
-      merge_interactome_data[gene_pair_index,"Gene1"]<-pair_gene_id_II
-      merge_interactome_data[gene_pair_index,"Gene2"]<-pair_gene_id_I     
-    }
-    # Re-order gene ids
-    if(pair_gene_id_II==pair_gene_id_I)
-    {
-      merge_interactome_data[gene_pair_index,"Gene2"]<-"REPEAT"
-    }
-}
-# Take unique values
-merge_interactome_data<-unique(merge_interactome_data)
-########################################################################################################################################
-interactome_data_stage_I<-merge_interactome_data[merge_interactome_data$Stage=="Stage I",]
-interactome_data_stage_II<-merge_interactome_data[merge_interactome_data$Stage=="Stage II",]
-interactome_data_stage_III<-merge_interactome_data[merge_interactome_data$Stage=="Stage III",]
-########################################################################################################################################
 interactome_data_stage_I<-unique(interactome_data_stage_I[,c("Gene1","Gene2")])
 interactome_data_stage_II<-unique(interactome_data_stage_II[,c("Gene1","Gene2")])
 interactome_data_stage_III<-unique(interactome_data_stage_III[,c("Gene1","Gene2")])
@@ -142,10 +111,6 @@ df_stageIII_connectivity <-unique(data.frame(Conectivity=table(c(interactome_dat
 colnames(df_stageI_connectivity)<-c("Gene","Conectivity")
 colnames(df_stageII_connectivity)<-c("Gene","Conectivity")
 colnames(df_stageIII_connectivity)<-c("Gene","Conectivity")
-########################################################################################################################################
-df_stageI_connectivity<-df_stageI_connectivity[df_stageI_connectivity$Gene!="REPEAT",]
-df_stageII_connectivity<-df_stageII_connectivity[df_stageII_connectivity$Gene!="REPEAT",]
-df_stageIII_connectivity<-df_stageIII_connectivity[df_stageIII_connectivity$Gene!="REPEAT",]
 ########################################################################################################################################
 # Table for the calculation of entropy
 df_entropy_calulation_I   <-data.frame(table(df_stageI_connectivity$Conectivity),p_k=0,log2_pk=0,p_k_mult_log2_pk=0)

@@ -1,9 +1,4 @@
 #######################################################################################################################################
-# Gene table
-genes_Stage_I       <-read.table(file = file_genes_Stage_I, sep = '\t', header = TRUE,fill=TRUE)         
-genes_Stage_II      <-read.table(file = file_genes_Stage_II, sep = '\t', header = TRUE,fill=TRUE)
-genes_Stage_III     <-read.table(file = file_genes_Stage_III, sep = '\t', header = TRUE,fill=TRUE) 
-#######################################################################################################################################
 N=ceiling((length(genes_Stage_I$gene)+length(genes_Stage_II$gene)+length(genes_Stage_III$gene))/3)
 #######################################################################################################################################
 # Number of genes

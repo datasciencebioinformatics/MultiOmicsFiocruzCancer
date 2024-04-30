@@ -63,8 +63,8 @@ net_stage_II <- build_net(df_correlation_net_stage_II, cor_func = "pearson", n_t
 net_stage_III <- build_net(df_correlation_net_stage_III, cor_func = "pearson", n_threads =1)
 
 net_stage_I$network[lower.tri(net_stage_I$network, diag = FALSE)] <- 0
-net_stage_II$network[lower.tri(net_stage_I$network, diag = FALSE)] <- 0
-net_stage_III$network[lower.tri(net_stage_I$network, diag = FALSE)] <- 0
+net_stage_II$network[lower.tri(net_stage_II$network, diag = FALSE)] <- 0
+net_stage_III$network[lower.tri(net_stage_III$network, diag = FALSE)] <- 0
 
 # Take the correlation matrix
 net_stage_I_cor<-net_stage_I$network

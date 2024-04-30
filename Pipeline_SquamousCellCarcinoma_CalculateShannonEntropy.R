@@ -34,6 +34,14 @@ genes_Stage_II      <-read.table(file = file_genes_Stage_II, sep = '\t', header 
 genes_Stage_III     <-read.table(file = file_genes_Stage_III, sep = '\t', header = TRUE,fill=TRUE) 
 
 #######################################################################################################################################
+# Select only tumor
+colDta_tumor<-colData[colData$tissue_type=="Tumor",]
+
+# Samples of each stage stored in colData                                                                                             #
+sample_stage_I  <-colDta_tumor[colDta_tumor$stages=="Stage I","patient_id"]                                                                     #
+sample_stage_II <-colDta_tumor[colDta_tumor$stages=="Stage II","patient_id"]                                                                    #
+sample_stage_III<-colDta_tumor[colDta_tumor$stages=="Stage III","patient_id"]                                                                   #
+#######################################################################################################################################
 df_correlation_net_stage_I<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,sample_stage_I])))
 df_correlation_net_stage_II<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,sample_stage_II])))
 df_correlation_net_stage_III<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,sample_stage_III])))
@@ -67,14 +75,6 @@ colnames(df_correlation_net_stage_I)<-genes_id_vector_stage_I
 colnames(df_correlation_net_stage_II)<-genes_id_vector_stage_II
 colnames(df_correlation_net_stage_III)<-genes_id_vector_stage_III
 #######################################################################################################
-# Select only tumor
-colDta_tumor<-colData[colData$tissue_type=="Tumor",]
-
-# Samples of each stage stored in colData                                                                                             #
-sample_stage_I  <-colDta_tumor[colDta_tumor$stages=="Stage I","patient_id"]                                                                     #
-sample_stage_II <-colDta_tumor[colDta_tumor$stages=="Stage II","patient_id"]                                                                    #
-sample_stage_III<-colDta_tumor[colDta_tumor$stages=="Stage III","patient_id"]                                                                   #
-#######################################################################################################################################
 net_stage_I <- build_net(df_correlation_net_stage_I, cor_func = "spearman", n_threads =1)
 net_stage_II <- build_net(df_correlation_net_stage_II, cor_func = "spearman", n_threads =1)
 net_stage_III <- build_net(df_correlation_net_stage_III, cor_func = "spearman", n_threads =1)

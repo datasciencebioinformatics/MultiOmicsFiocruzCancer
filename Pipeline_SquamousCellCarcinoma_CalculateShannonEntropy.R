@@ -4,23 +4,6 @@ library("GWENA")
 #######################################################################################################################################
 # A script to caluclate entropy from lists of genes from each stage
 #######################################################################################################################################
-# Path to input files
-# Interactome file
-interactome_file<-"/home/felipe/Documentos/LungPortal/Full_Interactome_Flavia.txt"
-
-# EnsemblToUniprotKBconversionList file
-EnsemblToUniprotKBconversionList_file<-"/home/felipe/Documentos/LungPortal/EnsemblToUniprotKBconversionList.txt"
-#######################################################################################################################################
-# Read input table
-# Gene table
-interactome_data <-read.table(file = interactome_file, sep = '\t', header = FALSE,fill=TRUE)         
-
-# Gene EnsemblToUniprotKBconversionList_data
-EnsemblToUniprotKBconversionList_data <-read.table(file = EnsemblToUniprotKBconversionList_file, sep = '\t', header = TRUE,fill=TRUE)         
-
-# Rename collumns 
-colnames(interactome_data)<-c("Gene1","Gene2")
-#######################################################################################################################################
 output_dir="/home/felipe/Documentos/LungPortal/output/"   
 #######################################################################################################################################
 # File path to gene stages
@@ -44,7 +27,7 @@ sample_stage_III<-colDta_tumor[colDta_tumor$stages=="Stage III","patient_id"]   
 #######################################################################################################################################
 df_correlation_net_stage_I<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,sample_stage_I])))
 df_correlation_net_stage_II<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,sample_stage_II])))
-df_correlation_net_stage_III<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,sample_stage_III])))
+df_correlation_net_stage_III<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,sample_stage_III])))
 #######################################################################################################################################
 # Store genes stage I, II and III
 # Vectors to store gene ids from each stage
@@ -203,4 +186,12 @@ write_tsv(df_stageIII_connectivity, paste(output_dir,"df_stageIII_connectivity_I
 write_tsv(interactome_data_stage_I, paste(output_dir,"df_stageI_interactome",".tsv",sep=""))
 write_tsv(interactome_data_stage_II, paste(output_dir,"df_stageII_interactome",".tsv",sep=""))
 write_tsv(interactome_data_stage_III, paste(output_dir,"df_stageIII_interactome",".tsv",sep=""))
+########################################################################################################################################
+g_stage_I<-graph_from_data_frame(interactome_data_stage_I, directed = TRUE, vertices = NULL)
+g_stage_II<-graph_from_data_frame(interactome_data_stage_II, directed = TRUE, vertices = NULL)
+g_stage_III<-graph_from_data_frame(interactome_data_stage_III, directed = TRUE, vertices = NULL)
+
+plot(g_stage_I, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
+plot(g_stage_II, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
+plot(g_stage_III, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
 ########################################################################################################################################

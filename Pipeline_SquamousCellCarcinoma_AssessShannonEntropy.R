@@ -11,20 +11,53 @@ entropy_bootstrapping_Stage_III_Carels<-c()
 for (bootstrapping in 1:1000)
 {
 	print(bootstrapping)
+	print(Sys.time()) # get start time
 	
 	# Store genes stage I, II and III
 	# Vectors to store gene ids from each stage
-	genes_id_vector_random<-sample( genes_ids, n_of_interactions, replace = TRUE, prob = NULL)  
+	genes_id_vector_random<-sample( rownames(na.omit(unstranded_data_filter)), n_of_interactions, replace = TRUE, prob = NULL)  
 
 	# Vectors to store gene ids from each stage
 	df_correlation_net_stage_I<-t(data.frame(na.omit(unstranded_data_filter[genes_id_vector_random,sample_stage_I])))
 	df_correlation_net_stage_II<-t(data.frame(na.omit(unstranded_data_filter[genes_id_vector_random,sample_stage_II])))
 	df_correlation_net_stage_III<-t(data.frame(na.omit(unstranded_data_filter[genes_id_vector_random,sample_stage_III])))
 
-	# Merge data
-	merge_interactome_data<-rbind(data.frame(Gene1=interactome_data_stage_I$Gene1,Gene2=interactome_data_stage_I$Gene2,Stage="Stage I"),
-	data.frame(Gene1=interactome_data_stage_II$Gene1,Gene2=interactome_data_stage_II$Gene2,Stage="Stage II"),
-	data.frame(Gene1=interactome_data_stage_III$Gene1,Gene2=interactome_data_stage_III$Gene2,Stage="Stage III"))
+	net_stage_I <- build_net(df_correlation_net_stage_I, cor_func = "spearman", n_threads =1)
+	net_stage_II <- build_net(df_correlation_net_stage_II, cor_func = "spearman", n_threads =1)
+	net_stage_III <- build_net(df_correlation_net_stage_III, cor_func = "spearman", n_threads =1)
+	
+	# Take the correlation matrix
+	net_stage_I_cor<-net_stage_I$network
+	net_stage_II_cor<-net_stage_II$network
+	net_stage_III_cor<-net_stage_III$network
+	
+	net_stage_I_cor <- melt(net_stage_I_cor)
+	net_stage_II_cor <- melt(net_stage_II_cor)  
+	net_stage_III_cor <- melt(net_stage_III_cor) 
+	
+	# Take value of thhreshold
+	spearman_threshold<-0.99
+	
+	dim(unique(net_stage_I_cor[net_stage_I_cor$value>=spearman_threshold,]))
+	dim(unique(net_stage_II_cor[net_stage_II_cor$value>=spearman_threshold,]))
+	dim(unique(net_stage_III_cor[net_stage_III_cor$value>=spearman_threshold,]))
+	
+	interactions_stage_I<-unique(net_stage_I_cor[net_stage_I_cor$value>=spearman_threshold,c(1,2)])
+	interactions_stage_II<-unique(net_stage_II_cor[net_stage_II_cor$value>=spearman_threshold,c(1,2)])
+	interactions_stage_III<-unique(net_stage_III_cor[net_stage_III_cor$value>=spearman_threshold,c(1,2)])
+
+	colnames(interactions_stage_I)<-c("Gene1","Gene2")
+	colnames(interactions_stage_II)<-c("Gene1","Gene2")
+	colnames(interactions_stage_III)<-c("Gene1","Gene2")
+
+	# copy interactome_data_stages
+	interactome_data_stage_I_clean<-interactions_stage_I
+	interactome_data_stage_II_clean<-interactions_stage_II
+	interactome_data_stage_III_clean<-interactions_stage_III
+	
+	merge_interactome_data<-rbind(data.frame(Gene1=interactome_data_stage_I_clean$Gene1,Gene2=interactome_data_stage_I_clean$Gene2,Stage="Stage I"),
+	data.frame(Gene1=interactome_data_stage_II_clean$Gene1,Gene2=interactome_data_stage_II_clean$Gene2,Stage="Stage II"),
+	data.frame(Gene1=interactome_data_stage_III_clean$Gene1,Gene2=interactome_data_stage_III_clean$Gene2,Stage="Stage III"))
 	
 	# Clean the tables
 	for (gene_pair_index in rownames(merge_interactome_data))
@@ -100,7 +133,7 @@ for (bootstrapping in 1:1000)
 
 	entropy_bootstrapping_Stage_I_Carels<-c(entropy_bootstrapping_Stage_I_Carels,Entropy_stage_I_value_Carels)
 	entropy_bootstrapping_Stage_II_Carels<-c(entropy_bootstrapping_Stage_II_Carels,Entropy_stage_II_value_Carels)
-	entropy_bootstrapping_Stage_III_Carels<-c(entropy_bootstrapping_Stage_II_Carels,Entropy_stage_III_value_Carels)
+	entropy_bootstrapping_Stage_III_Carels<-c(entropy_bootstrapping_Stage_III_Carels,Entropy_stage_III_value_Carels)
 		
 }
 # Save stages

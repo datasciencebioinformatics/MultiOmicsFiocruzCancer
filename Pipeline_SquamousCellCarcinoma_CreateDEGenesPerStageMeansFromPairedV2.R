@@ -15,22 +15,25 @@ unstranded_data <- na.omit(unstranded_data)
 ########################################################################################################################
 # A panel to analyse differential Category comparing samples of each stage against all others stages.
 ########################################################################################################################
+# Only tumor samples
+colData_tumor<-colData[colData$tissue_type=="Tumor",]
+
 # Set colData
-colData$stage_I   <- "Stages_II_III"
-colData$stage_II  <- "Stages_I_III"
-colData$stage_III <- "Stages_I_II"
+colData_tumor$stage_I   <- "Stages_II_III"
+colData_tumor$stage_II  <- "Stages_I_III"
+colData_tumor$stage_III <- "Stages_I_II"
 
 # Vector with each stage
 stages_str<-c("stage_I","stage_II","stage_III")
 
 # Samples of each stage stored in colData                                                                                             #
-sample_stage_I  <-colData[colData$stages=="Stage I","patient_id"]                                                                     #
-sample_stage_II <-colData[colData$stages=="Stage II","patient_id"]                                                                    #
-sample_stage_III<-colData[colData$stages=="Stage III","patient_id"]                                                                   #
+sample_stage_I  <-colData_tumor[colData_tumor$stages=="Stage I","patient_id"]                                                                     #
+sample_stage_II <-colData_tumor[colData_tumor$stages=="Stage II","patient_id"]                                                                    #
+sample_stage_III<-colData_tumor[colData_tumor$stages=="Stage III","patient_id"]                                                                   #
 
-sample_stages_II_III<-colData[colData$stages=="Stage II" | colData$stages=="Stage III","patient_id"]                                  #
-sample_stages_I_III<-colData[colData$stages=="Stage I" | colData$stages=="Stage III","patient_id"]                                    #
-sample_stages_I_II<-colData[colData$stages=="Stage I" | colData$stages=="Stage II","patient_id"]                                      #
+sample_stages_II_III<-colData_tumor[colData_tumor$stages=="Stage II" | colData_tumor$stages=="Stage III","patient_id"]                                  #
+sample_stages_I_III<-colData_tumor[colData_tumor$stages=="Stage I" | colData_tumor$stages=="Stage III","patient_id"]                                    #
+sample_stages_I_II<-colData_tumor[colData_tumor$stages=="Stage I" | colData_tumor$stages=="Stage II","patient_id"]                                      #
 #######################################################################################################################################
 df_table_comparisson=rbind(data.frame(Stage_i="sample_stage_I",Stages_ii_and_iii="sample_stages_II_III"),
 rbind(data.frame(Stage_i="sample_stage_II",Stages_ii_and_iii="sample_stages_I_III"),
@@ -38,7 +41,7 @@ rbind(data.frame(Stage_i="sample_stage_III",Stages_ii_and_iii="sample_stages_I_I
 ####################################################################################################################
 list_of_comparisson=list(sample_stage_I=sample_stage_I,sample_stage_II=sample_stage_II,sample_stage_III=sample_stage_III,sample_stages_II_III=sample_stages_II_III,sample_stages_I_III=sample_stages_I_III,sample_stages_I_II=sample_stages_I_II)
 #list_of_genes=list(genes_stage_I=df_stage_I_data$Gene,genes_stage_II=df_stage_II_data$Gene,genes_stage_III=df_stage_III_data$Gene)
-list_of_genes=list(genes_stage_I=rownames(unstranded_data),genes_stage_II=rownames(unstranded_data),genes_stage_III=rownames(unstranded_data))
+list_of_genes=list(genes_stage_I=rownames(na.omit(unstranded_data_filter)),genes_stage_II=rownames(na.omit(unstranded_data_filter)),genes_stage_III=rownames(na.omit(unstranded_data_filter)))
 ####################################################################################################################
 # Create bck for colData_bck
 colData_bck<-colData

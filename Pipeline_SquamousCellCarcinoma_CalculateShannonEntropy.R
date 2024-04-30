@@ -28,6 +28,10 @@ sample_stage_III<-colDta_tumor[colDta_tumor$stages=="Stage III","patient_id"]   
 df_correlation_net_stage_I<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,sample_stage_I])))
 df_correlation_net_stage_II<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,sample_stage_II])))
 df_correlation_net_stage_III<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,sample_stage_III])))
+
+df_correlation_net_stage_I<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,])))
+df_correlation_net_stage_II<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,])))
+df_correlation_net_stage_III<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,])))
 #######################################################################################################################################
 # Store genes stage I, II and III
 # Vectors to store gene ids from each stage
@@ -58,9 +62,9 @@ colnames(df_correlation_net_stage_I)<-genes_id_vector_stage_I
 colnames(df_correlation_net_stage_II)<-genes_id_vector_stage_II
 colnames(df_correlation_net_stage_III)<-genes_id_vector_stage_III
 #######################################################################################################
-net_stage_I <- build_net(df_correlation_net_stage_I, cor_func = "pearson", n_threads =1)
-net_stage_II <- build_net(df_correlation_net_stage_II, cor_func = "pearson", n_threads =1)
-net_stage_III <- build_net(df_correlation_net_stage_III, cor_func = "pearson", n_threads =1)
+net_stage_I <-   build_net(df_correlation_net_stage_I, cor_func = "spearman", n_threads =1)
+net_stage_II <-  build_net(df_correlation_net_stage_II, cor_func = "spearman", n_threads =1)
+net_stage_III <- build_net(df_correlation_net_stage_III, cor_func = "spearman", n_threads =1)
 
 net_stage_I$network[lower.tri(net_stage_I$network, diag = FALSE)] <- 0
 net_stage_II$network[lower.tri(net_stage_II$network, diag = FALSE)] <- 0
@@ -141,6 +145,10 @@ df_entropy_calulation_III$p_k_mult_log2_pk<-df_entropy_calulation_III$p_k*df_ent
 Entropy_stage_I_value_Carels  <-abs(sum(df_entropy_calulation_I$p_k_mult_log2_pk))
 Entropy_stage_II_value_Carels <-abs(sum(df_entropy_calulation_II$p_k_mult_log2_pk))
 Entropy_stage_III_value_Carels<-abs(sum(df_entropy_calulation_III$p_k_mult_log2_pk))
+
+round(Entropy_stage_I_value_Carels,4)
+round(Entropy_stage_II_value_Carels,4)
+round(Entropy_stage_III_value_Carels,4)
 ########################################################################################################################################
 # Save TSV file with genes from Stage1
 write_tsv(df_stageI_connectivity, paste(output_dir,"df_stageI_connectivity_I",".tsv",sep=""))

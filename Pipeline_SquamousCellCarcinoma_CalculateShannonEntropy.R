@@ -32,102 +32,9 @@ sample_stage_I  <-colDta_tumor[colDta_tumor$stages=="Stage I","patient_id"]     
 sample_stage_II <-colDta_tumor[colDta_tumor$stages=="Stage II","patient_id"]                                                                    #
 sample_stage_III<-colDta_tumor[colDta_tumor$stages=="Stage III","patient_id"]                                                                   #
 #######################################################################################################################################
-df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,sample_stage_I]))
-df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,sample_stage_II]))
-df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,sample_stage_III]))
-
 df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,]))
 df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,]))
 df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,]))
-
-#df_correlation_net_stage_I<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,])))
-#df_correlation_net_stage_II<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,])))
-#df_correlation_net_stage_III<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,])))
-#######################################################################################################################################
-# Store genes stage I, II and III
-# Vectors to store gene ids from each stage
-df_id_vector_stage_I<-data.frame(gene_id=c(),gene_symbol=c(), cp_gene_id=c())
-df_id_vector_stage_II<-data.frame(gene_id=c(),gene_symbol=c(), cp_gene_id=c())
-df_id_vector_stage_III<-data.frame(gene_id=c(),gene_symbol=c(), cp_gene_id=c())
-
-##############################################
-# For each gene in stage I
-for (cp_gene_id in rownames(df_correlation_net_stage_I))
-{ 
-  gene_id<-Table1_data[strsplit(cp_gene_id, split = "\\.")[[1]][1],"gene_id"]
-  gene_symbol<-Table1_data[strsplit(cp_gene_id, split = "\\.")[[1]][1],"gene_symbol"]
-    
-  # Add row to table
-  df_id_vector_stage_I<-rbind(df_id_vector_stage_I,data.frame(gene_id=gene_id,gene_symbol=gene_symbol, cp_gene_id=cp_gene_id))
-}
-# Remove NA lines
-NA_rows<-rownames(df_id_vector_stage_I[is.na(df_id_vector_stage_I$gene_id),])
-
-# Replace NA values for gene id values
-df_id_vector_stage_I[NA_rows,"gene_id"]<-df_id_vector_stage_I[NA_rows,"cp_gene_id"]
-df_id_vector_stage_I[NA_rows,"gene_symbol"]<-df_id_vector_stage_I[NA_rows,"cp_gene_id"]
-##############################################
-# For each gene in stage II
-for (cp_gene_id in rownames(df_correlation_net_stage_II))
-{ 
-  gene_id<-Table1_data[strsplit(cp_gene_id, split = "\\.")[[1]][1],"gene_id"]
-  gene_symbol<-Table1_data[strsplit(cp_gene_id, split = "\\.")[[1]][1],"gene_symbol"]
-    
-  # Add row to table
-  df_id_vector_stage_II<-rbind(df_id_vector_stage_II,data.frame(gene_id=gene_id,gene_symbol=gene_symbol, cp_gene_id=cp_gene_id))
-}
-# Remove NA lines
-NA_rows<-rownames(df_id_vector_stage_II[is.na(df_id_vector_stage_I$gene_id),])
-
-# Replace NA values for gene id values
-df_id_vector_stage_II[NA_rows,"gene_id"]<-df_id_vector_stage_II[NA_rows,"cp_gene_id"]
-df_id_vector_stage_II[NA_rows,"gene_symbol"]<-df_id_vector_stage_II[NA_rows,"cp_gene_id"]
-##############################################
-# For each gene in stage II
-for (cp_gene_id in rownames(df_correlation_net_stage_III))
-{ 
-  gene_id<-Table1_data[strsplit(cp_gene_id, split = "\\.")[[1]][1],"gene_id"]
-  gene_symbol<-Table1_data[strsplit(cp_gene_id, split = "\\.")[[1]][1],"gene_symbol"]
-    
-  # Add row to table
-  df_id_vector_stage_III<-rbind(df_id_vector_stage_III,data.frame(gene_id=gene_id,gene_symbol=gene_symbol, cp_gene_id=cp_gene_id))
-}
-# Remove NA lines
-NA_rows<-rownames(df_id_vector_stage_III[is.na(df_id_vector_stage_I$gene_id),])
-
-# Replace NA values for gene id values
-df_id_vector_stage_III[NA_rows,"gene_id"]<-df_id_vector_stage_III[NA_rows,"cp_gene_id"]
-df_id_vector_stage_III[NA_rows,"gene_symbol"]<-df_id_vector_stage_III[NA_rows,"cp_gene_id"]
-##############################################
-df_id_vector_stage_I<-setDT(df_id_vector_stage_I)[, dupID := rowid(gene_symbol)]
-df_id_vector_stage_II<-setDT(df_id_vector_stage_II)[, dupID := rowid(gene_symbol)]
-df_id_vector_stage_III<-setDT(df_id_vector_stage_III)[, dupID := rowid(gene_symbol)]
-
-# Create indexed values
-df_id_vector_stage_I$dupID<-paste(df_id_vector_stage_I$gene_symbol,df_id_vector_stage_I$dupID-1,sep=".")
-df_id_vector_stage_II$dupID<-paste(df_id_vector_stage_II$gene_symbol,df_id_vector_stage_II$dupID-1,sep=".")
-df_id_vector_stage_III$dupID<-paste(df_id_vector_stage_III$gene_symbol,df_id_vector_stage_III$dupID-1,sep=".")
-
-# remove .0 values
-df_id_vector_stage_I$dupID<-gsub("\\.0", "", df_id_vector_stage_I$dupID)
-df_id_vector_stage_II$dupID<-gsub("\\.0", "", df_id_vector_stage_II$dupID)
-df_id_vector_stage_III$dupID<-gsub("\\.0", "", df_id_vector_stage_III$dupID)
-
-rownames(df_id_vector_stage_I)<-df_id_vector_stage_I$cp_gene_id
-rownames(df_id_vector_stage_II)<-df_id_vector_stage_II$cp_gene_id
-rownames(df_id_vector_stage_III)<-df_id_vector_stage_III$cp_gene_id
-
-df_id_vector_stage_I<-data.frame(df_id_vector_stage_I)
-df_id_vector_stage_II<-data.frame(df_id_vector_stage_II)
-df_id_vector_stage_III<-data.frame(df_id_vector_stage_III)
-
-rownames(df_id_vector_stage_I)<-df_id_vector_stage_I$cp_gene_id
-rownames(df_id_vector_stage_II)<-df_id_vector_stage_II$cp_gene_id
-rownames(df_id_vector_stage_III)<-df_id_vector_stage_III$cp_gene_id
-
-rownames(df_correlation_net_stage_I)<-df_id_vector_stage_I[rownames(df_correlation_net_stage_I),"dupID"]
-rownames(df_correlation_net_stage_II)<-df_id_vector_stage_II[rownames(df_correlation_net_stage_II),"dupID"]
-rownames(df_correlation_net_stage_III)<-df_id_vector_stage_III[rownames(df_correlation_net_stage_III),"dupID"]
 #######################################################################################################################################
 # Filter table
 df_stage_I_filtered <- filter_low_var(t(df_correlation_net_stage_I), pct = 0.75, type = "mean")
@@ -135,14 +42,21 @@ df_stage_II_filtered <- filter_low_var(t(df_correlation_net_stage_II), pct = 0.7
 df_stage_III_filtered <- filter_low_var(t(df_correlation_net_stage_III), pct = 0.75, type = "mean")
 
 # calculate network
-net_stage_I <-   build_net(df_stage_I_filtered, cor_func = "spearman", n_threads =1, fit_cut_off = 0.99999)
-net_stage_II <-   build_net(df_stage_II_filtered, cor_func = "spearman", n_threads =1, fit_cut_off = 0.99999)
-net_stage_III <-   build_net(df_stage_III_filtered, cor_func = "spearman", n_threads =1, fit_cut_off = 0.99999)
+net_stage_I <-   build_net(df_stage_I_filtered, cor_func = "spearman", n_threads =1)
+net_stage_II <-   build_net(df_stage_II_filtered, cor_func = "spearman", n_threads =1)
+net_stage_III <-   build_net(df_stage_III_filtered, cor_func = "spearman", n_threads =1)
 
-# detect_modules
-modules_stage_I       <- detect_modules(df_stage_I_filtered, net_stage_I$network,   detailled_result = TRUE,min_module_size =20,  merge_threshold = 0.25)
-modules_stage_II      <- detect_modules(df_stage_II_filtered, net_stage_II$network, detailled_result = TRUE,min_module_size =20,  merge_threshold = 0.25)
-modules_stage_III     <- detect_modules(df_stage_III_filtered, net_stage_III$network,detailled_result = TRUE,min_module_size =20,  merge_threshold = 0.25 )
+module_stage_I  <- detect_modules(df_stage_I_filtered,  net_stage_I$network,  detailled_result = TRUE,  merge_threshold = 0.25)
+module_stage_II <- detect_modules(df_stage_II_filtered,  net_stage_II$network,  detailled_result = TRUE,  merge_threshold = 0.25)
+module_stage_II <- detect_modules(df_stage_III_filtered,  net_stage_III$network,  detailled_result = TRUE,  merge_threshold = 0.25)
+
+sub_clusters_modules_stage_I<- get_sub_clusters(net_stage_I$network)
+sub_clusters_modules_stage_II<- get_sub_clusters(net_stage_II$network)
+sub_clusters_modules_stage_III<- get_sub_clusters(net_stage_III$network)
+
+graph_stage_I <- build_graph_from_sq_mat(net_stage_I$network)
+graph_stage_II <- build_graph_from_sq_mat(net_stage_II$network)
+graph_stage_III <- build_graph_from_sq_mat(net_stage_III$network)
 #######################################################################################################################################
 # Set threshold
 upper_weight_th = 0.9995
@@ -158,26 +72,6 @@ net_stage_III_correlation_network<-melt(net_stage_III$network)
 net_stage_I_correlation_network<-na.omit(net_stage_I_correlation_network[net_stage_I_correlation_network$value>=upper_weight_th,])
 net_stage_II_correlation_network<-na.omit(net_stage_II_correlation_network[net_stage_II_correlation_network$value>=upper_weight_th,])
 net_stage_III_correlation_network<-na.omit(net_stage_III_correlation_network[net_stage_III_correlation_network$value>=upper_weight_th,])
-
-# Create plot for the network
-graph <- build_graph_from_sq_mat(net_stage_II$network)
-sub_clusters_modules_stage_II<- get_sub_clusters(net_stage_II$network)
-graph <- build_graph_from_sq_mat(net_stage_II$network)
-layout_mod_2_sub_clust <- plot_module(graph, upper_weight_th = upper_weight_th,
-                                      groups = sub_clusters_modules_stage_II,
-                                      vertex.label.cex = 0.5, 
-                                      node_scaling_max = 10, 
-                                      legend_cex = 1)
-
-
-# FindClusters_resolution
-png(filename=paste(output_dir,"Network_","graph_Stage_II_.png",sep=""), width = 20, height = 20, res=600, units = "cm")
-	plot_module(graph, upper_weight_th = upper_weight_th,
-                                      groups = sub_clusters_modules_stage_II,
-                                      vertex.label.cex = 0.5, title = "Network for the gene of Stage II",
-                                      node_scaling_max = 10, 
-                                      legend_cex = 1)
-dev.off()
 #######################################################################################################################################
 interactions_stage_I<-unique(net_stage_I_correlation_network[,c(1,2)])
 interactions_stage_II<-unique(net_stage_II_correlation_network[,c(1,2)])
@@ -239,9 +133,24 @@ Entropy_stage_I_value_Carels  <-abs(sum(df_entropy_calulation_I$p_k_mult_log2_pk
 Entropy_stage_II_value_Carels <-abs(sum(df_entropy_calulation_II$p_k_mult_log2_pk))
 Entropy_stage_III_value_Carels<-abs(sum(df_entropy_calulation_III$p_k_mult_log2_pk))
 
-round(Entropy_stage_I_value_Carels,4)
 round(Entropy_stage_II_value_Carels,4)
 round(Entropy_stage_III_value_Carels,4)
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"Network_","graph_Stage_I_.png",sep=""), width = 20, height = 20, res=600, units = "cm")
+	layout_stage_I <- plot_module(graph_stage_I, upper_weight_th = upper_weight_th, groups = sub_clusters_modules_stage_I,vertex.label.cex = 0.5, node_scaling_max = 7,  legend_cex = 1,  title = paste("Network for genes of Stage I\nEntropy : ", round(Entropy_stage_I_value_Carels,4),sep=""))
+dev.off()
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"Network_","graph_Stage_II_.png",sep=""), width = 20, height = 20, res=600, units = "cm")
+	layout_stage_II <- plot_module(graph_stage_II, upper_weight_th = upper_weight_th, groups = sub_clusters_modules_stage_II,vertex.label.cex = 0.5, node_scaling_max = 7,  legend_cex = 1,  title = paste("Network for genes of Stage II\nEntropy : ", round(Entropy_stage_II_value_Carels,4),sep=""))
+dev.off()
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"Network_","graph_Stage_III_.png",sep=""), width = 20, height = 20, res=600, units = "cm")
+	layout_stage_III <- plot_module(graph_stage_III, upper_weight_th = upper_weight_th, groups = sub_clusters_modules_stage_III,vertex.label.cex = 0.5, node_scaling_max = 7,  legend_cex = 1,  title = paste("Network for genes of Stage III\nEntropy : ", round(Entropy_stage_III_value_Carels,4),sep=""))
+dev.off()
+
 ########################################################################################################################################
 # Save TSV file with genes from Stage1
 write_tsv(df_stageI_connectivity, paste(output_dir,"df_stageI_connectivity_I",".tsv",sep=""))

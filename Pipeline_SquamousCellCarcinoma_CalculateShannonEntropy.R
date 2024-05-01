@@ -36,9 +36,9 @@ df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stag
 df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,sample_stage_II]))
 df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,sample_stage_III]))
 
-df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,sample_stage_I]))
-df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,sample_stage_II]))
-df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,sample_stage_III]))
+df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,]))
+df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,]))
+df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,]))
 
 #df_correlation_net_stage_I<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,])))
 #df_correlation_net_stage_II<-t(data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,])))

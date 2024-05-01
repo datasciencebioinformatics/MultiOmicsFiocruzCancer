@@ -31,8 +31,8 @@ g_stage_II<-graph_from_data_frame(df_stageII_interactome, directed = FALSE, vert
 g_stage_III<-graph_from_data_frame(df_stageIII_interactome, directed = FALSE, vertices = NULL)
 
 # Create communities
-g_stage_I_ceb <- cluster_optimal(g_stage_I) 
-g_stage_I_ceb <- cluster_leiden(g_stage_I_ceb, objective_function = "modularity",n_iterations = 3, resolution_parameter = 0.75)
+decompose_stage_I <- decompose.graph(g_stage_I)
+
 
 # Plot communities
 df_stageI_interactome.net <- network(df_stageI_interactome, directed = FALSE)

@@ -46,9 +46,9 @@ net_stage_I <-   build_net(df_stage_I_filtered, cor_func = "spearman", n_threads
 net_stage_II <-   build_net(df_stage_II_filtered, cor_func = "spearman", n_threads =1)
 net_stage_III <-   build_net(df_stage_III_filtered, cor_func = "spearman", n_threads =1)
 
-module_stage_I  <- detect_modules(df_stage_I_filtered,  net_stage_I$network,  detailled_result = TRUE,  merge_threshold = 0.25)
-module_stage_II <- detect_modules(df_stage_II_filtered,  net_stage_II$network,  detailled_result = TRUE,  merge_threshold = 0.25)
-module_stage_II <- detect_modules(df_stage_III_filtered,  net_stage_III$network,  detailled_result = TRUE,  merge_threshold = 0.25)
+#module_stage_I  <- detect_modules(df_stage_I_filtered,  net_stage_I$network,  detailled_result = TRUE,  merge_threshold = 0.25)
+#module_stage_II <- detect_modules(df_stage_II_filtered,  net_stage_II$network,  detailled_result = TRUE,  merge_threshold = 0.25)
+#module_stage_II <- detect_modules(df_stage_III_filtered,  net_stage_III$network,  detailled_result = TRUE,  merge_threshold = 0.25)
 
 sub_clusters_modules_stage_I<- get_sub_clusters(net_stage_I$network)
 sub_clusters_modules_stage_II<- get_sub_clusters(net_stage_II$network)

@@ -7,7 +7,7 @@ merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_
 colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
 rownames(colData)                  <-colData$patient_id                                                                   #
 ###########################################################################################################################
-log2foldchange_trheshold<-1.0
+log2foldchange_trheshold<-1.58
 
 tumor_samples<-colData_data[colData_data$tissue_type=="Tumor","patient_id"]
 normal_samples<-colData_data[colData_data$tissue_type=="Normal","patient_id"]

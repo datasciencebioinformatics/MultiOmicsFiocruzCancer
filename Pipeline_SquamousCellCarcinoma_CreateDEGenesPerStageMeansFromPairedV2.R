@@ -78,7 +78,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	####################################################################################################################	
 	# First by padj
 	padj_threshold<-1
-	log2fc_threshold<-1.58
+	log2fc_threshold<-1.00
 	####################################################################################################################
 	# First, set category
 	# "Unchanged"

@@ -173,5 +173,152 @@ for (module in 1:length(unique(sub_clusters_modules_stage_I$sub_module)))
 }
 
 
+############################################################################################################################################
+# for each module of stage I
+for (module in 1:length(unique(sub_clusters_modules_stage_II$sub_module)))
+{
+  # Copy net and subclusters
+  net_stage<-net_stage_II
+  sub_clusters_modules_stage<-sub_clusters_modules_stage_II
+  
+  # Take genes of the module
+  module_genes<-sub_clusters_modules_stage[which(sub_clusters_modules_stage$sub_module==module),"gene"]
+
+  if(length(module_genes)>1)
+  {
+    # build_graph_from_sq_mat use modules genes to crete the graph
+    graph_subcluster <- build_graph_from_sq_mat(net_stage$network[module_genes,module_genes])
+  
+    #######################################################################################################################################
+     upper_weight_th = 0.990
+    
+    # Take subgraph
+    cor_subgraph<-net_stage$network[module_genes,module_genes]
+    
+    # Subclusters
+    cor_subgraph[lower.tri(cor_subgraph)] <- NA
+    
+    # Melt data
+    net_stage_subcluster_correlation_network<-melt(cor_subgraph)
+    
+    net_stage_subcluster_correlation_network<-na.omit(net_stage_subcluster_correlation_network[net_stage_subcluster_correlation_network$value>=upper_weight_th,])
+
+    # If there is at least one entry
+    if(dim(net_stage_subcluster_correlation_network)[1]>0)
+    {
+      #######################################################################################################################################
+      interactions_stage_subcluster<-unique(net_stage_subcluster_correlation_network[,c(1,2)])
+      #######################################################################################################################################
+      # If at least one of the genes in the pair are in the interactome
+      interactome_data_stage_subcluster<-interactions_stage_subcluster
+      
+      # Rename columns
+      colnames(interactome_data_stage_subcluster)<-c("Gene1","Gene2")
+      ########################################################################################################################################
+      interactome_data_stage_subcluster<-unique(interactome_data_stage_subcluster[,c("Gene1","Gene2")])
+      ########################################################################################################################################
+      df_stageI_connectivity   <-unique(data.frame(Conectivity=table(c(interactome_data_stage_subcluster$Gene1,interactome_data_stage_subcluster$Gene2))))
+      ########################################################################################################################################
+      colnames(df_stageI_connectivity)<-c("Gene","Conectivity")
+      ########################################################################################################################################
+      # Table for the calculation of entropy
+      df_entropy_calulation   <-data.frame(table(df_stageI_connectivity$Conectivity),p_k=0,log2_pk=0,p_k_mult_log2_pk=0)
+      
+      # Rename colnames
+      colnames(df_entropy_calulation)<-c("k","count","p_k","log2_pk","p_k_mult_log2_pk")
+      
+      # Calculate p(k)
+      df_entropy_calulation$p_k<-df_entropy_calulation$count/sum(df_entropy_calulation$count)
+      
+      # Calculate log2(p(k))
+      df_entropy_calulation$log2_pk<-log(df_entropy_calulation$p_k,2)
+      
+      # Calculate p(k)*log2(p(k))
+      df_entropy_calulation$p_k_mult_log2_pk<-df_entropy_calulation$p_k*df_entropy_calulation$log2_pk
+      
+      # Caclulate entropy value
+      Entropy_stage_subcluster_value_Carels  <-abs(sum(df_entropy_calulation$p_k_mult_log2_pk))
+      
+      # FindClusters_resolution
+      png(filename=paste(output_folder,"Network_","graph_stage_II_Module",module,".png",sep=""), width = 20, height = 20, res=600, units = "cm")
+        layout_stage_II <- plot_module(graph_subcluster, upper_weight_th = upper_weight_th,vertex.label.cex = 0.7, node_scaling_max = 7,  legend_cex = 1,title = paste("Network for genes of Stage I\n",paste("Module",module,sep=" "),"\nEntropy : ", round(Entropy_stage_subcluster_value_Carels,4),sep=""))
+      dev.off()
+    }
+  }
+}
 
 
+
+############################################################################################################################################
+# for each module of stage I
+for (module in 1:length(unique(sub_clusters_modules_stage_III$sub_module)))
+{
+  # Copy net and subclusters
+  net_stage<-net_stage_III
+  sub_clusters_modules_stage<-sub_clusters_modules_stage_III
+  
+  # Take genes of the module
+  module_genes<-sub_clusters_modules_stage[which(sub_clusters_modules_stage$sub_module==module),"gene"]
+
+  if(length(module_genes)>1)
+  {
+    # build_graph_from_sq_mat use modules genes to crete the graph
+    graph_subcluster <- build_graph_from_sq_mat(net_stage$network[module_genes,module_genes])
+  
+    #######################################################################################################################################
+     upper_weight_th = 0.990
+    
+    # Take subgraph
+    cor_subgraph<-net_stage$network[module_genes,module_genes]
+    
+    # Subclusters
+    cor_subgraph[lower.tri(cor_subgraph)] <- NA
+    
+    # Melt data
+    net_stage_subcluster_correlation_network<-melt(cor_subgraph)
+    
+    net_stage_subcluster_correlation_network<-na.omit(net_stage_subcluster_correlation_network[net_stage_subcluster_correlation_network$value>=upper_weight_th,])
+
+    # If there is at least one entry
+    if(dim(net_stage_subcluster_correlation_network)[1]>0)
+    {
+      #######################################################################################################################################
+      interactions_stage_subcluster<-unique(net_stage_subcluster_correlation_network[,c(1,2)])
+      #######################################################################################################################################
+      # If at least one of the genes in the pair are in the interactome
+      interactome_data_stage_subcluster<-interactions_stage_subcluster
+      
+      # Rename columns
+      colnames(interactome_data_stage_subcluster)<-c("Gene1","Gene2")
+      ########################################################################################################################################
+      interactome_data_stage_subcluster<-unique(interactome_data_stage_subcluster[,c("Gene1","Gene2")])
+      ########################################################################################################################################
+      df_stageI_connectivity   <-unique(data.frame(Conectivity=table(c(interactome_data_stage_subcluster$Gene1,interactome_data_stage_subcluster$Gene2))))
+      ########################################################################################################################################
+      colnames(df_stageI_connectivity)<-c("Gene","Conectivity")
+      ########################################################################################################################################
+      # Table for the calculation of entropy
+      df_entropy_calulation   <-data.frame(table(df_stageI_connectivity$Conectivity),p_k=0,log2_pk=0,p_k_mult_log2_pk=0)
+      
+      # Rename colnames
+      colnames(df_entropy_calulation)<-c("k","count","p_k","log2_pk","p_k_mult_log2_pk")
+      
+      # Calculate p(k)
+      df_entropy_calulation$p_k<-df_entropy_calulation$count/sum(df_entropy_calulation$count)
+      
+      # Calculate log2(p(k))
+      df_entropy_calulation$log2_pk<-log(df_entropy_calulation$p_k,2)
+      
+      # Calculate p(k)*log2(p(k))
+      df_entropy_calulation$p_k_mult_log2_pk<-df_entropy_calulation$p_k*df_entropy_calulation$log2_pk
+      
+      # Caclulate entropy value
+      Entropy_stage_subcluster_value_Carels  <-abs(sum(df_entropy_calulation$p_k_mult_log2_pk))
+      
+      # FindClusters_resolution
+      png(filename=paste(output_folder,"Network_","graph_stage_III_Module",module,".png",sep=""), width = 20, height = 20, res=600, units = "cm")
+        layout_stage_III <- plot_module(graph_subcluster, upper_weight_th = upper_weight_th,vertex.label.cex = 0.7, node_scaling_max = 7,  legend_cex = 1,title = paste("Network for genes of Stage I\n",paste("Module",module,sep=" "),"\nEntropy : ", round(Entropy_stage_subcluster_value_Carels,4),sep=""))
+      dev.off()
+    }
+  }
+}

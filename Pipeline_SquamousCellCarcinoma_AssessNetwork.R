@@ -241,7 +241,7 @@ for (module in 1:length(unique(sub_clusters_modules_stage_II$sub_module)))
       
       # FindClusters_resolution
       png(filename=paste(output_folder,"Network_","graph_stage_II_Module",module,".png",sep=""), width = 20, height = 20, res=600, units = "cm")
-        layout_stage_II <- plot_module(graph_subcluster, upper_weight_th = upper_weight_th,vertex.label.cex = 0.7, node_scaling_max = 7,  legend_cex = 1,title = paste("Network for genes of Stage I\n",paste("Module",module,sep=" "),"\nEntropy : ", round(Entropy_stage_subcluster_value_Carels,4),sep=""))
+        layout_stage_II <- plot_module(graph_subcluster, upper_weight_th = upper_weight_th,vertex.label.cex = 0.7, node_scaling_max = 7,  legend_cex = 1,title = paste("Network for genes of Stage II\n",paste("Module",module,sep=" "),"\nEntropy : ", round(Entropy_stage_subcluster_value_Carels,4),sep=""))
       dev.off()
     }
   }
@@ -317,7 +317,7 @@ for (module in 1:length(unique(sub_clusters_modules_stage_III$sub_module)))
       
       # FindClusters_resolution
       png(filename=paste(output_folder,"Network_","graph_stage_III_Module",module,".png",sep=""), width = 20, height = 20, res=600, units = "cm")
-        layout_stage_III <- plot_module(graph_subcluster, upper_weight_th = upper_weight_th,vertex.label.cex = 0.7, node_scaling_max = 7,  legend_cex = 1,title = paste("Network for genes of Stage I\n",paste("Module",module,sep=" "),"\nEntropy : ", round(Entropy_stage_subcluster_value_Carels,4),sep=""))
+        layout_stage_III <- plot_module(graph_subcluster, upper_weight_th = upper_weight_th,vertex.label.cex = 0.7, node_scaling_max = 7,  legend_cex = 1,title = paste("Network for genes of Stage III\n",paste("Module",module,sep=" "),"\nEntropy : ", round(Entropy_stage_subcluster_value_Carels,4),sep=""))
       dev.off()
     }
   }

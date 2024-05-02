@@ -77,7 +77,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	#fchange_Stage_i=data.frame(gene=names(log2change),folchange=log2change)
 	####################################################################################################################	
 	# First by padj
-	padj_threshold<-1
+	<-1
 	log2fc_threshold<-1.00
 	####################################################################################################################
 	# First, set category

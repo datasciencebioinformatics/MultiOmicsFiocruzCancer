@@ -1,5 +1,6 @@
 ############################################################################################################################################
 library(RCy3)
+# cyrestGET(operation = NULL, parameters = NULL, base.url = "http://localhost:1234")
 ############################################################################################################################################
 output_folder<-"/home/felipe/Documentos/LungPortal/output/modules/"
 ############################################################################################################################################
@@ -64,6 +65,24 @@ edges_stage_II <- data.frame(source=interactions_stage_II$Gene1,  target=interac
 edges_stage_III <- data.frame(source=interactions_stage_III$Gene1,  target=interactions_stage_III$Gene2,  weight=interactions_stage_III$spearman,  stringsAsFactors=FALSE)
 
 # Create networks
+stage_I_png_file_name <- paste(output_folder,"/","stage_I_network.png",sep="")
+stage_II_png_file_name <- paste(output_folder,"/","stage_II_network.png",sep="")
+stage_III_png_file_name <- paste(output_folder,"/","stage_III_network.png",sep="")
+
+# Remove temporary files
+if(file.exists(stage_I_png_file_name)){file.remove(stage_I_png_file_name) } 
+if(file.exists(stage_II_png_file_name)){file.remove(stage_II_png_file_name) } 
+if(file.exists(stage_III_png_file_name)){file.remove(stage_III_png_file_name) } 
+
+#######################################################################################################################################
+# Create networks
 network_stage_I <- createNetworkFromDataFrames(nodes_stage_I,edges_stage_I, title="Stage I genes")
 network_stage_II <- createNetworkFromDataFrames(nodes_stage_II,edges_stage_II, title="Stage II genes")
 network_stage_III <- createNetworkFromDataFrames(nodes_stage_III,edges_stage_III, title="Stage III genes")
+
+exportImage(stage_I_png_file_name, type = "png",network=network_stage_I )
+exportImage(stage_II_png_file_name, type = "png",network=network_stage_II )
+exportImage(stage_III_png_file_name, type = "png",network=network_stage_III )
+#######################################################################################################################################
+
+#######################################################################################################################################

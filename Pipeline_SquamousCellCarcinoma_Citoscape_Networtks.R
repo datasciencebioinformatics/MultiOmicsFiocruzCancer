@@ -1,5 +1,5 @@
+############################################################################################################################################
 library(RCy3)
-
 ############################################################################################################################################
 output_folder<-"/home/felipe/Documentos/LungPortal/output/modules/"
 ############################################################################################################################################
@@ -65,3 +65,5 @@ edges_stage_III <- data.frame(source=interactions_stage_III$Gene1,  target=inter
 
 # Create networks
 network_stage_I <- createNetworkFromDataFrames(nodes_stage_I,edges_stage_I, title="Stage I genes")
+network_stage_II <- createNetworkFromDataFrames(nodes_stage_II,edges_stage_II, title="Stage II genes")
+network_stage_III <- createNetworkFromDataFrames(nodes_stage_III,edges_stage_III, title="Stage III genes")

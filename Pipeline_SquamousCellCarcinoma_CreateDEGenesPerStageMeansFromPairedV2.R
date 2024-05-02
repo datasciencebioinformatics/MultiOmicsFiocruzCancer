@@ -76,8 +76,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	log2change_Stage_i=na.omit(data.frame(gene=names(log2change),log2change=log2change))
 	#fchange_Stage_i=data.frame(gene=names(log2change),folchange=log2change)
 	####################################################################################################################	
-	# First by padj
-	
+	# log2fc_threshold
 	log2fc_threshold<-1.00
 	####################################################################################################################
 	# First, set category

@@ -115,7 +115,7 @@ for (module in 1:length(unique(sub_clusters_modules_stage_I$sub_module)))
     graph_subcluster <- build_graph_from_sq_mat(net_stage$network[module_genes,module_genes])
   
     #######################################################################################################################################
-     upper_weight_th = 0.9995
+     upper_weight_th = 0.990
     
     # Take subgraph
     cor_subgraph<-net_stage$network[module_genes,module_genes]

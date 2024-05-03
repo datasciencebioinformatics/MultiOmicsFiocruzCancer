@@ -203,3 +203,45 @@ write_tsv(interactome_data_stage_I, paste(output_dir,"df_stageI_interactome_inte
 write_tsv(interactome_data_stage_II, paste(output_dir,"df_stageII_interactome_interactome",".tsv",sep=""))
 write_tsv(interactome_data_stage_III, paste(output_dir,"df_stageIII_interactome_interactome",".tsv",sep=""))
 ########################################################################################################################################
+list_pairs_stage_I<-c()
+list_pairs_stage_II<-c()
+list_pairs_stage_III<-c()
+for (gene_pair in rownames(interactome_data_stage_I))
+{
+	gene1<-interactome_data_stage_I[gene_pair,1]
+	gene2<-interactome_data_stage_I[gene_pair,2]
+	
+	if(sum(gene1 %in% genes_id_vector_stage_I) && sum(gene2 %in% genes_id_vector_stage_I) )
+	{
+		list_pairs_stage_I<-c(list_pairs_stage_I,gene_pair)
+	}
+}
+for (gene_pair in rownames(interactome_data_stage_II))
+{
+	gene1<-interactome_data_stage_I[gene_pair,1]
+	gene2<-interactome_data_stage_I[gene_pair,2]
+	
+	if(sum(gene1 %in% genes_id_vector_stage_II) && sum(gene2 %in% genes_id_vector_stage_II) )
+	{
+		list_pairs_stage_II<-c(list_pairs_stage_II,gene_pair)
+	}
+}
+for (gene_pair in rownames(interactome_data_stage_III))
+{
+	gene1<-interactome_data_stage_I[gene_pair,1]
+	gene2<-interactome_data_stage_I[gene_pair,2]
+	
+	if(sum(gene1 %in% genes_id_vector_stage_III) && sum(gene2 %in% genes_id_vector_stage_III) )
+	{
+		list_pairs_stage_II<-c(list_pairs_stage_III,gene_pair)
+	}
+}
+########################################################################################################################################
+interactome_data_stage_I<-interactome_data_stage_I[list_pairs_stage_I,]
+interactome_data_stage_II<-interactome_data_stage_I[list_pairs_stage_II,]
+interactome_data_stage_III<-interactome_data_stage_I[list_pairs_stage_III,]
+# Save TSV file with genes from Stage1
+write_tsv(interactome_data_stage_I, paste(output_dir,"df_stageI_interactome_sub",".tsv",sep=""))
+write_tsv(interactome_data_stage_II, paste(output_dir,"df_stageII_interactome_sub",".tsv",sep=""))
+write_tsv(interactome_data_stage_III, paste(output_dir,"df_stageIII_interactome_sub",".tsv",sep=""))
+########################################################################################################################################

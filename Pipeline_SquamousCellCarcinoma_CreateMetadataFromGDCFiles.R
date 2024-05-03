@@ -19,8 +19,6 @@ gdc_sample_sheet_data<-read.table(file = gdc_sample_sheet_file, sep = '\t', head
 # Add collumn sample_id
 gdc_sample_sheet_data$sample_submitter_id<-gdc_sample_sheet_data$Sample.ID
 #####################################################################################################################
-output_dir="/home/felipe/Documentos/LungPortal/output/"                                                             #
-#####################################################################################################################
 # Set path to files                                                                                                 
 clinical_file="/home/felipe/Documentos/LungPortal/clinical.txt" 
 sample_file="/home/felipe/Documentos/LungPortal/sample.txt"    

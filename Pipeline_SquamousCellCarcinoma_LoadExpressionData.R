@@ -8,8 +8,6 @@ library(ggplot2)
 library("DESeq2")
 library(gridExtra)
 #####################################################################################################################
-output_dir="/home/felipe/Documentos/LungPortal/output/"                                                             #
-#####################################################################################################################
 # Reading the contents of TSV file using read_tsv() method
 merged_data_patient_info_file<- "/home/felipe/Documentos/LungPortal/samples/merged_data_patient_info.tsv"
 

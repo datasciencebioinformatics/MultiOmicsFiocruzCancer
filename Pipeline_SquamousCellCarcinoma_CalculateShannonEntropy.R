@@ -12,8 +12,6 @@ colnames(Table1_data)<-c("gene_id","gene_symbol")
 Table1_data <- Table1_data[match(unique(Table1_data$gene_id), Table1_data$gene_id),]
 rownames(Table1_data)<-Table1_data$gene_id
 #######################################################################################################################################
-output_dir="/home/felipe/Documentos/LungPortal/output/"   
-#######################################################################################################################################
 # File path to gene stages
 file_genes_Stage_I   <-   "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_I.tsv"
 file_genes_Stage_II   <-  "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_II.tsv"

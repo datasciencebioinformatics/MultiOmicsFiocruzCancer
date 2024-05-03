@@ -8,6 +8,8 @@ colData_data                       <-read.table(file = colData_file, sep = '\t',
 rownames(colData)                  <-colData$patient_id                                                                   #
 ###########################################################################################################################
 log2foldchange_trheshold<-1.58
+# log2fc_threshold
+log2fc_threshold<-1.00
 
 tumor_samples<-colData_data[colData_data$tissue_type=="Tumor","patient_id"]
 normal_samples<-colData_data[colData_data$tissue_type=="Normal","patient_id"]

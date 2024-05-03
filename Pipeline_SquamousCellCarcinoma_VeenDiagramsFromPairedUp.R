@@ -3,9 +3,9 @@ library(viridis)
 
 #######################################################################################################################################
 # Path to files of selected_genes                                                                                                             # 
-selected_genes_Stage_I_file       <-"/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_Stage_sample_stage_I.tsv"    #
-selected_genes_Stage_II_file      <-"/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_Stage_sample_stage_II.tsv"   #
-selected_genes_Stage_III_file     <-"/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_Stage_sample_stage_III.tsv"  #
+selected_genes_Stage_I_file       <-paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_I",".tsv",sep="")
+selected_genes_Stage_II_file      <-paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_II",".tsv",sep="")
+selected_genes_Stage_III_file     <-paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_III",".tsv",sep="")
 #######################################################################################################################################
 # Load data                                                                                                                           #
 selected_genes_Stage_I_data       <-read.table(file = selected_genes_Stage_I_file, sep = '\t', header = TRUE,fill=TRUE)                        #
@@ -30,7 +30,7 @@ png(filename=paste(output_dir,"Ven_Diagrams.png",sep=""), width = 28, height = 1
   grid.arrange(stages_I_II_III, stages_I_II_III_unique, nrow = 1)
 dev.off()
 #############################################################################################################################
-write_tsv(selected_genes_Stage_I_data[unique_stage_I,], "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_I.tsv")
-write_tsv(selected_genes_Stage_II_data[unique_stage_II,], "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_II.tsv")
-write_tsv(selected_genes_Stage_III_data[unique_stage_III,], "/home/felipe/Documentos/LungPortal/output/DE_GenesPerStageMeansFromPairedUp_unique_stage_III.tsv")
+write_tsv(selected_genes_Stage_I_data[unique_stage_I,], paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_I",".tsv",sep=""))
+write_tsv(selected_genes_Stage_II_data[unique_stage_II,], paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_II",".tsv",sep=""))
+write_tsv(selected_genes_Stage_III_data[unique_stage_III,], paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_III",".tsv",sep=""))
 #############################################################################################################################

@@ -20,8 +20,6 @@ EnsemblToUniprotKBconversionList_data <-read.table(file = EnsemblToUniprotKBconv
 # Rename collumns 
 colnames(interactome_data)<-c("Gene1","Gene2")
 #######################################################################################################################################
-output_dir="/home/felipe/Documentos/LungPortal/output/"   
-#######################################################################################################################################
 # File path to gene stages
 # File path to gene stages
 file_genes_Stage_I   <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_I.tsv",sep="")

@@ -1,0 +1,131 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% To be compiled in https://www.overleaf.com/
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{article}
+\usepackage{algorithm2e}
+\begin{document}
+\RestyleAlgo{ruled}
+%% This declares a command \Comment
+%% The argument will be surrounded by /* ... */
+\SetKwComment{Comment}{/* }{ */}
+
+\begin{algorithm}
+\caption{A procedure for filtering expression data : RPKM value and tumor/normal foldchange}\label{alg:two}
+\KwData{RPKM normalized expression data}
+\KwResult{Filtered RPKM normalized expression data}
+
+\vspace{0.2cm}
+$threshold_{RPKM} \gets x$ \Comment*[r]{expression threshold unit=RPKM }
+$threshold_{tumor} \gets y$ \Comment*[r]{tumor log2foldchange threshold }
+\vspace{0.2cm}
+
+\For{all gene_{i}}{
+\Comment*[r]{Mean expression of gene i among all tumor samples subtracted by mean expression among normal samples }\\
+\State foldchage=mean(gene_{i,tumor})-mean(gene_{i,normal}) \\
+\State log2foldchage(gene_{i})=log2[foldchage(gene_{i})] \\
+
+}
+
+\Return genes wtih log2[foldchage(gene_{i})] \geq $threshold_{tumor}$  and RPKM(gene_{i}) \geq $threshold_{RPKM}$
+\end{algorithm}
+
+
+
+\begin{algorithm}
+\caption{An algorithm for obtaining up-regulated tumor genes per stage}
+\KwData{Filtered RPKM normalized expression data}
+\KwResult{lists of up-regulated tumor genes per stage}
+
+\vspace{0.2cm}
+$threshold_{stage} \gets x$ \Comment*[r]{ log2foldchange threshold }
+\vspace{0.2cm}
+
+\For{all stage_{a}}{
+	\For{all gene_{i}}{
+		\Comment*[r]{Mean expression of gene i among tumor samples in stage A divided by mean expression among samples of all other stages, denoted by stages B}\\
+		\State foldchage_{gene_{i,stageA}}=mean(gene_{i,stageA})/mean(gene_{i,stagesB}) \\
+		\State log2foldchage(gene_{i,stageA})=log2[foldchage(gene_{i,stageA})] \\
+	}
+}
+
+\Return genes wtih log2foldchage(gene_{i,stageA}) \geq $threshold_{stage}$  
+\end{algorithm}
+
+
+
+
+
+
+\begin{algorithm}
+\caption{An algorithm for calculating co-expression networks from list of genes}
+\KwData{ lists of up-regulated tumor genes per stage}
+\KwResult{Co-expression networks per stage}
+
+\vspace{0.1cm}
+$threshold_{spearman} \gets x$ \Comment*[r]{ spearman's coefficient threshold}
+\vspace{0.1cm}
+
+
+\vspace{0.2cm}
+
+\For{all stage_{a}}{
+	\Comment*[r]{ all-against-all spearman's rank correlation matrix, gene co-expression matrix per stage (stage a)}\\
+    \If{spearman [vertice(gene_{L}),vertice(gene_{R})] \geq $threshold_{spearman}$}
+    {
+        \Return edge[(vertice(GeneL),vertice(GeneR)]
+    }
+    
+}
+\end{algorithm}
+
+
+
+
+
+
+\begin{algorithm}
+\caption{An algorithm for calculating interactome sub-networks from list of genes}
+\KwData{ lists of up-regulated tumor genes per stage}
+\KwResult{Interactome sub-networks per stage}
+
+\vspace{0.05cm}
+$upregulated_{tumor} \gets x$ \Comment*[r]{ up-regulated tumor genes}
+\vspace{0.05cm}
+
+\vspace{0.05cm}
+$interactome_{full} \gets y$ \Comment*[r]{ Full interactome}
+\vspace{0.05cm}
+
+\vspace{0.05cm}
+$upregulatedgenes_{stage} \gets z$ \Comment*[r]{ Up-regulated tumor genes per stage}
+\vspace{0.05cm}
+
+\vspace{0.1cm}
+
+
+\For{all stage_{a}}{ 
+    \Comment*[r]{ for each interaction in the full interactome }\\
+    \For{edge[(vertex(GeneL),vertex(GeneR)] \subseteq $interactome_{full} }{
+
+    \Comment*[r]{ if both genes are among the tumor up-regulated genes }\\
+    \If{both vertex(geneL) AND vertex(gene_R) \subset $upregulated_{tumor}$}
+    {
+
+        \Comment*[r]{ if at least one gene is among the tumor up-regulated genes }\\
+        \If{both vertex(geneL) OR vertex(gene_R) \subset $upregulatedgenes_{stage}}
+        {
+            \Return edge[(vertex(GeneL),vertex(GeneR)]
+        }        
+    }
+
+    }
+    
+
+    
+}
+\end{algorithm}
+
+
+
+
+\end{document}

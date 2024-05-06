@@ -1,0 +1,31 @@
+Variable	Value	Stage
+Number of nodes	54	Stage I
+Number of edges	624	Stage I
+Avg. number of neighbors	23111	Stage I
+Network diameter	2	Stage I
+Network radius	2	Stage I
+Characteristic path length	1564	Stage I
+Clustering coefficient	519	Stage I
+Network density	436	Stage I
+Network heterogeneity	529	Stage I
+Network centralization	429	Stage I
+Number of nodes	119	Stage II
+Number of edges	675	Stage II
+Avg. number of neighbors	11345	Stage II
+Network diameter	4	Stage II
+Network radius	3	Stage II
+Characteristic path length	2139	Stage II
+Clustering coefficient	120	Stage II
+Network density	96	Stage II
+Network heterogeneity	1208	Stage II
+Network centralization	566	Stage II
+Number of nodes	248	Stage III
+Number of edges	21465	Stage III
+Avg. number of neighbors	173105	Stage III
+Network diameter	2	Stage III
+Network radius	1	Stage III
+Characteristic path length	1299	Stage III
+Clustering coefficient	818	Stage III
+Network density	701	Stage III
+Network heterogeneity	301	Stage III
+Network centralization	302	Stage III

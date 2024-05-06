@@ -58,7 +58,7 @@ subgraph_igraph_stage_III<-subgraph(interactome_igraph_stage_III, which(membersh
 # Set node size based on audience size:
 V(subgraph_igraph_stage_I)$size <- degree(subgraph_igraph_stage_I)*2
 V(subgraph_igraph_stage_II)$size <- degree(subgraph_igraph_stage_II)*2
-V(subgraph_igraph_stage_III)$size <- degree(subgraph_igraph_stage_III)*2
+V(subgraph_igraph_stage_III)$size <- degree(subgraph_igraph_stage_III)
 
 # The labels are currently node IDs.
 # Setting them to NA will render no labels:

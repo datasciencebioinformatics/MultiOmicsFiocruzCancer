@@ -9,8 +9,8 @@ df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Sta
 df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,]))
 #######################################################################################################################################
 rownames(interactome_data_stage_I)
-rownames(interactome_data_stage_I)
-rownames(interactome_data_stage_I)
+rownames(interactome_data_stage_II)
+rownames(interactome_data_stage_III)
 
 # Merge data.frame
 merge_interactome_gene_symbol <- merge_interactome_gene_symbol[match(unique(merge_interactome_gene_symbol$gene_id), merge_interactome_gene_symbol$gene_id),]

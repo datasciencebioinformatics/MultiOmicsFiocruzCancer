@@ -22,8 +22,8 @@ unique_stage_II=setdiff(selected_genes_Stage_II_data$gene, c(selected_genes_Stag
 unique_stage_III=setdiff(selected_genes_Stage_III_data$gene, c(selected_genes_Stage_I_data$gene,selected_genes_Stage_II_data$gene))
 #######################################################################################################################################
 # Select stages 
-stages_I_II_III_unique<-ggVennDiagram(list(Stage_I=unique_stage_I,Stage_II=unique_stage_II,Stage_III=unique_stage_III), label_alpha = 0.9) + scale_fill_viridis() + theme_bw() + ggtitle("Stages I, II and III")+ guides(fill="none")
-stages_I_II_III<-ggVennDiagram(list(Stage_I=selected_genes_Stage_I_data$gene,Stage_II=selected_genes_Stage_II_data$gene,Stage_III=selected_genes_Stage_III_data$gene), label_alpha = 0.9) + scale_fill_viridis() + theme_bw() + ggtitle("Stages I, II and III, without overlap")+ guides(fill="none")
+stages_I_II_III_unique<-ggVennDiagram(list(Stage_I=unique_stage_I,Stage_II=unique_stage_II,Stage_III=unique_stage_III), label_alpha = 0.9) + scale_colour_grey() + theme_bw() + ggtitle("Stages I, II and III")+ guides(fill="none")
+stages_I_II_III<-ggVennDiagram(list(Stage_I=selected_genes_Stage_I_data$gene,Stage_II=selected_genes_Stage_II_data$gene,Stage_III=selected_genes_Stage_III_data$gene), label_alpha = 0.9) + scale_colour_grey() + theme_bw() + ggtitle("Stages I, II and III, without overlap")+ guides(fill="none")
 
 # FindClusters_resolution
 png(filename=paste(output_dir,"Ven_Diagrams.png",sep=""), width = 28, height = 14, res=600, units = "cm")

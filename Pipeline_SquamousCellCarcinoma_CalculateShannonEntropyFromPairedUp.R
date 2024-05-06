@@ -163,6 +163,10 @@ df_stageI_connectivity<-df_stageI_connectivity[df_stageI_connectivity$Gene!="REP
 df_stageII_connectivity<-df_stageII_connectivity[df_stageII_connectivity$Gene!="REPEAT",]
 df_stageIII_connectivity<-df_stageIII_connectivity[df_stageIII_connectivity$Gene!="REPEAT",]
 ########################################################################################################################################
+interactome_data_stage_I<-unique(interactome_data_stage_I)
+interactome_data_stage_II<-unique(interactome_data_stage_II)
+interactome_data_stage_III<-unique(interactome_data_stage_III)
+
 # Table for the calculation of entropy
 df_entropy_calulation_I   <-data.frame(table(df_stageI_connectivity$Conectivity),p_k=0,log2_pk=0,p_k_mult_log2_pk=0)
 df_entropy_calulation_II  <-data.frame(table(df_stageII_connectivity$Conectivity),p_k=0,log2_pk=0,p_k_mult_log2_pk=0)

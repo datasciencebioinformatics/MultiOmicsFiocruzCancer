@@ -55,10 +55,6 @@ subgraph_igraph_stage_I<-subgraph(interactome_igraph_stage_I, which(membership(c
 subgraph_igraph_stage_II<-subgraph(interactome_igraph_stage_II, which(membership(cluster_igraph_stage_II)==most_populous_module_stage_II))
 subgraph_igraph_stage_III<-subgraph(interactome_igraph_stage_III, which(membership(cluster_igraph_stage_III)==most_populous_module_stage_III))
 
-
-plot(subgraph_igraph_stage_II,layout=layout_with_gem)
-plot(subgraph_igraph_stage_III,layout=layout_with_dh)
-
 # FindClusters_resolution                                                                                                                                                                                                   #
 png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_I.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
   plot(subgraph_igraph_stage_I,layout=layout_with_gem, vertex.color="gray50")

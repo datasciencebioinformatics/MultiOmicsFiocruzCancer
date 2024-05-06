@@ -46,14 +46,33 @@ data.frame(table(as.vector(membership(cluster_igraph_stage_II))))[1,]
 data.frame(table(as.vector(membership(cluster_igraph_stage_III))))[1,]
 
 # Number of verices in the sub-network
-most_populous_module_stage_I   <-data.frame(table(as.vector(membership(cluster_igraph_stage_I))))[3,"Var1"]
-most_populous_module_stage_II  <-data.frame(table(as.vector(membership(cluster_igraph_stage_II))))[3,"Var1"]
-most_populous_module_stage_III <-data.frame(table(as.vector(membership(cluster_igraph_stage_III))))[3,"Var1"]
+most_populous_module_stage_I   <-data.frame(table(as.vector(membership(cluster_igraph_stage_I))))[2,"Var1"]
+most_populous_module_stage_II  <-data.frame(table(as.vector(membership(cluster_igraph_stage_II))))[2,"Var1"]
+most_populous_module_stage_III <-data.frame(table(as.vector(membership(cluster_igraph_stage_III))))[2,"Var1"]
 
 # Select sbgraphs
 subgraph_igraph_stage_I<-subgraph(interactome_igraph_stage_I, which(membership(cluster_igraph_stage_I)==most_populous_module_stage_I))
 subgraph_igraph_stage_II<-subgraph(interactome_igraph_stage_II, which(membership(cluster_igraph_stage_II)==most_populous_module_stage_II))
 subgraph_igraph_stage_III<-subgraph(interactome_igraph_stage_III, which(membership(cluster_igraph_stage_III)==most_populous_module_stage_III))
+
+
+plot(subgraph_igraph_stage_II,layout=layout_with_gem)
+plot(subgraph_igraph_stage_III,layout=layout_with_dh)
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_I.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
+  plot(subgraph_igraph_stage_I,layout=layout_with_gem, vertex.color="gray50")
+dev.off() 
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_II.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
+  plot(subgraph_igraph_stage_II,layout= layout_with_dh, vertex.color="gray50")
+dev.off() 
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_IIi.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
+  plot(subgraph_igraph_stage_III,layout=   layout_with_dh, vertex.color="gray50")
+dev.off() 
 
 # Set node size based on audience size:
 V(subgraph_igraph_stage_I)$size <- degree(subgraph_igraph_stage_I)
@@ -70,6 +89,7 @@ V(subgraph_igraph_stage_III)$label.color <- "black"
 E(subgraph_igraph_stage_I)$arrow.size <- .2
 E(subgraph_igraph_stage_I)$edge.color <- "gray80"
 
+# Plot subgraphs
 plot(subgraph_igraph_stage_I) 
 plot(subgraph_igraph_stage_II) 
 plot(subgraph_igraph_stage_III) 

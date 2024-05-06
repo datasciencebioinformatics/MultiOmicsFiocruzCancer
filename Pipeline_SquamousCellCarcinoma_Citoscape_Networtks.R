@@ -55,9 +55,24 @@ subgraph_igraph_stage_I<-subgraph(interactome_igraph_stage_I, which(membership(c
 subgraph_igraph_stage_II<-subgraph(interactome_igraph_stage_II, which(membership(cluster_igraph_stage_II)==most_populous_module_stage_II))
 subgraph_igraph_stage_III<-subgraph(interactome_igraph_stage_III, which(membership(cluster_igraph_stage_III)==most_populous_module_stage_III))
 
+# Set node size based on audience size:
+V(subgraph_igraph_stage_I)$size <- degree(subgraph_igraph_stage_I)*2
+V(subgraph_igraph_stage_II)$size <- degree(subgraph_igraph_stage_II)*2
+V(subgraph_igraph_stage_III)$size <- degree(subgraph_igraph_stage_III)*2
+
+# The labels are currently node IDs.
+# Setting them to NA will render no labels:
+V(subgraph_igraph_stage_I)$label.color <- "black"
+V(subgraph_igraph_stage_II)$label.color <- "black"
+V(subgraph_igraph_stage_III)$label.color <- "black"
+
+#change arrow size and edge color:
+E(subgraph_igraph_stage_I)$arrow.size <- .2
+E(subgraph_igraph_stage_I)$edge.color <- "gray80"
+
 # FindClusters_resolution                                                                                                                                                                                                   #
 png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_I.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
-  plot(subgraph_igraph_stage_I,layout=layout_with_gem, vertex.color="gray50")
+  plot(subgraph_igraph_stage_I,layout=layout_with_dh, vertex.color="grey")
 dev.off() 
 
 # FindClusters_resolution                                                                                                                                                                                                   #
@@ -70,28 +85,25 @@ png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_IIi.png",sep=""), wid
   plot(subgraph_igraph_stage_III,layout=   layout_with_dh, vertex.color="gray50")
 dev.off() 
 
-# Set node size based on audience size:
-V(subgraph_igraph_stage_I)$size <- degree(subgraph_igraph_stage_I)
-V(subgraph_igraph_stage_II)$size <- degree(subgraph_igraph_stage_II)
-V(subgraph_igraph_stage_III)$size <- degree(subgraph_igraph_stage_III)
-
-# The labels are currently node IDs.
-# Setting them to NA will render no labels:
-V(subgraph_igraph_stage_I)$label.color <- "black"
-V(subgraph_igraph_stage_II)$label.color <- "black"
-V(subgraph_igraph_stage_III)$label.color <- "black"
-
-#change arrow size and edge color:
-E(subgraph_igraph_stage_I)$arrow.size <- .2
-E(subgraph_igraph_stage_I)$edge.color <- "gray80"
-
-# Plot subgraphs
-plot(subgraph_igraph_stage_I) 
-plot(subgraph_igraph_stage_II) 
-plot(subgraph_igraph_stage_III) 
 
 # Save TSV file with genes from Stage1
 write_tsv(interactome_smbols_stage_I, paste(output_dir,"interactome_smbols_stage_I",".tsv",sep=""))
 write_tsv(interactome_smbols_stage_II, paste(output_dir,"interactome_smbols_stage_II",".tsv",sep=""))
 write_tsv(interactome_smbols_stage_III, paste(output_dir,"interactome_smbols_stage_III",".tsv",sep=""))
 
+
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_igraph_stage_I.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
+  plot(interactome_igraph_stage_I,layout=layout_with_dh, vertex.color="grey")
+dev.off() 
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_igraph_stage_II.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
+  plot(interactome_igraph_stage_II,layout= layout_with_dh, vertex.color="gray50")
+dev.off() 
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_igraph_stage_IIi.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
+  plot(interactome_igraph_stage_III,layout=   layout_with_dh, vertex.color="gray50")
+dev.off() 

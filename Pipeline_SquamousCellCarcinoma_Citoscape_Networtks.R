@@ -24,6 +24,6 @@ interactome_smbols_stage_II   <-na.omit(data.frame(Gene1=merge_interactome_gene_
 interactome_smbols_stage_III  <-na.omit(data.frame(Gene1=merge_interactome_gene_symbol[interactome_data_stage_III$Gene1,"gene_symbol"],Gene2=merge_interactome_gene_symbol[interactome_data_stage_III$Gene2,"gene_symbol"]))
 
 # Save TSV file with genes from Stage1
-write_tsv(interactome_data_stage_I, paste(output_dir,"interactome_smbols_stage_I",".tsv",sep=""))
-write_tsv(interactome_data_stage_II, paste(output_dir,"interactome_smbols_stage_II",".tsv",sep=""))
-write_tsv(interactome_data_stage_III, paste(output_dir,"interactome_smbols_stage_III",".tsv",sep=""))
+write_tsv(interactome_smbols_stage_I, paste(output_dir,"interactome_smbols_stage_I",".tsv",sep=""))
+write_tsv(interactome_smbols_stage_II, paste(output_dir,"interactome_smbols_stage_II",".tsv",sep=""))
+write_tsv(interactome_smbols_stage_III, paste(output_dir,"interactome_smbols_stage_III",".tsv",sep=""))

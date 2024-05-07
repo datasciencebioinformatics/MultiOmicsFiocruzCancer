@@ -20,6 +20,5 @@ unstranded_rpkm<-unstranded_rpkm[rownames(log2change_tumor_control[which(log2cha
 # Filter by RPKM
 unstranded_data_filter<-unstranded_rpkm[rowMeans(unstranded_rpkm[,tumor_samples])>RPKM_trheshold,]
 ###########################################################################################################################
-print(paste("Number of up-regulated tumor-genes :",dim(unstranded_data_filter)[1]))
 cat(print(paste("\nNumber of up-regulated tumor-genes :",dim(unstranded_data_filter)[1])),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
 

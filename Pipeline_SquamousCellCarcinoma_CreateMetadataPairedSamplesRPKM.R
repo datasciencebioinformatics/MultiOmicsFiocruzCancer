@@ -6,10 +6,6 @@
 # /home/felipe/Documentos/LungPortal/exposure.txt
 # Output : merged_data_patient_info.tsv
 #############################################################################1##############################################
-library(readr)                                                                                                            #
-library("xlsx")                                                                                                           #
-library(ggplot2)                                                                                                          #
-###########################################################################################################################
 output_dir="/home/felipe/Documentos/LungPortal/output/"                                                                   #
 ###########################################################################################################################
 merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #

@@ -23,5 +23,5 @@ unstranded_rpkm<-unstranded_rpkm[log2fc>log2foldchange_trheshold,]
 # Filter by RPKM
 unstranded_data_filter<-unstranded_rpkm[rowMeans(unstranded_rpkm[,tumor_samples])>10,]
 ###########################################################################################################################
-
+print(paste("Number of up-regulated tumor-genes :",dim(unstranded_data_filter)[1]))
 

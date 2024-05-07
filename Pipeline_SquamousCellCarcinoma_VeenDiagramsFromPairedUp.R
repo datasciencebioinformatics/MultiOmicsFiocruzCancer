@@ -1,6 +1,3 @@
-library(ggVennDiagram)
-library(viridis)
-
 #######################################################################################################################################
 # Path to files of selected_genes                                                                                                             # 
 selected_genes_Stage_I_file       <-paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_I",".tsv",sep="")

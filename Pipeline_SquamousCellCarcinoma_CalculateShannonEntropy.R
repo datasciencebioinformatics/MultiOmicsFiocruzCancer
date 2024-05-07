@@ -36,9 +36,9 @@ df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Sta
 df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,]))
 #######################################################################################################################################
 # Filter table
-df_stage_I_filtered <- filter_low_var(t(df_correlation_net_stage_I), pct = 0.90, type = "mean")
-df_stage_II_filtered <- filter_low_var(t(df_correlation_net_stage_II), pct = 0.90, type = "mean")
-df_stage_III_filtered <- filter_low_var(t(df_correlation_net_stage_III), pct = 0.90, type = "mean")
+df_stage_I_filtered <- filter_low_var(t(df_correlation_net_stage_I), pct = 0.75, type = "mean")
+df_stage_II_filtered <- filter_low_var(t(df_correlation_net_stage_II), pct = 0.75, type = "mean")
+df_stage_III_filtered <- filter_low_var(t(df_correlation_net_stage_III), pct = 0.75, type = "mean")
 
 # calculate network
 net_stage_I <-   build_net(df_stage_I_filtered, cor_func = "spearman", n_threads =1)
@@ -169,13 +169,9 @@ plot(g_stage_I, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab =
 plot(g_stage_II, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
 plot(g_stage_III, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
 ########################################################################################################################################
-print(paste("Nº of vertex/Nº of edges, after filter for Stage I: ",  paste(length(df_stageI_connectivity$Gene),dim(unique(interactome_data_stage_I))[1],sep="/"),sep=""))
-print(paste("Nº of vertex/Nº of edges, after filter for Stage II: ", paste(length(df_stageII_connectivity$Gene),dim(unique(interactome_data_stage_II))[1],sep="/"),sep=""))
-print(paste("Nº of vertex/Nº of edges, after filter for Stage III: ",paste(length(df_stageIII_connectivity$Gene),dim(unique(interactome_data_stage_III))[1],sep="/"),sep=""))
-
-print(paste("Entropy for Stage I: ",   round(Entropy_stage_I_value_Carels,4),sep=""))
-print(paste("Entropy for Stage II: ",   round(Entropy_stage_II_value_Carels,4),sep=""))
-print(paste("Entropy for Stage III: ",   round(Entropy_stage_III_value_Carels,4),sep=""))
+print(paste("Nº of vertex/Nº of edges, after filter for Stage I/Entropy: ",  paste(length(df_stageI_connectivity$Gene),dim(unique(interactome_data_stage_I),)[1],Entropy_stage_I_value_Carels,sep="/"),sep=""),sep=""))
+print(paste("Nº of vertex/Nº of edges, after filter for Stage II/Entropy: ", paste(length(df_stageII_connectivity$Gene),dim(unique(interactome_data_stage_II),)[1],Entropy_stage_II_value_Carels,sep="/"),sep=""),sep=""))
+print(paste("Nº of vertex/Nº of edges, after filter for Stage III/Entropy: ",paste(length(df_stageIII_connectivity$Gene),dim(unique(interactome_data_stage_III),)[1],Entropy_stage_III_value_Carels,sep="/"),sep=""),sep=""))
 
 
 

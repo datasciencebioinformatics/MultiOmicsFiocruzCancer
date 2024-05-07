@@ -1,9 +1,11 @@
 #####################################################################################################################
-# A R scripts to create tables
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataFromGDCFiles.R")
-
+output_dir="/home/felipe/Documentos/LungPortal/output/"
+#####################################################################################################################
 # CreateMetadataFromGDCFiles
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadRPackages.R")
+
+# A R scripts to create tables
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataFromGDCFiles.R")
 
 ## A R scripts to load expression files
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadExpressionData.R")
@@ -12,27 +14,33 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_RPKM_Normalization_V2.R")
 
 #####################################################################################################################
-rm -R /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_1/
-mkdir /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_1/
+# Configuration 
+output_folder="/home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_1_RPKM_3/"
+sudo rm -R $output_folder
+mkdir $output_folder
+#####################################################################################################################
+# # Pipeline
+# RPKM threshold
+RPKM_trheshold<-3
 
-output_dir="/home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_1_per_stage_1/"                                                             
-
+# # Pipeline
 # Threshold Tumor/Normal        
-log2foldchange_trheshold<-1
+log2foldchange_trheshold<-1.58
 
 # Threshold per stage 
 log2fc_threshold<-1
 
+output_dir="/home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_1_RPKM_3/"                                                             
+#####################################################################################################################
 # CreateMetadataFromGDCFiles
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadRPackages.R")
 
-## A R scripts for RPKM Normalization # Done 
+## A R scripts for RPKM Normalization # Done
 # rowMeans(unstranded_rpkm)>3 
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadRPKM_Data.R")
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadAllTables.R")
 
 ## A R scripts to apply filters
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamplesRPKM.R")
-
 
 ## A R scripts to apply filters
 #source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_Filters.R")
@@ -50,3 +58,12 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 ## A R scripts to calculate Calculate Shannon Entropy
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropyFromPairedUp.R")
 ###########################################################################################################################
+cat /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_1_per_stage_1_RPKM_3/outfile.txt
+cat /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_1_per_stage_1_RPKM_5/outfile.txt
+cat /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_1_per_stage_1_RPKM_10/outfile.txt
+
+cat /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_1_RPKM_3/outfile.txt
+cat /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_1_RPKM_5/outfile.txt
+
+cat /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_158_RPKM_3/outfile.txt
+cat /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_158_RPKM_5/outfile.txt

@@ -50,3 +50,13 @@ for (case in unique(merged_data_patient_info_data$case))
             }                
     }
 }
+#######################################################################################################################################
+# folchange=Expr(Stage i)/Expr(Stage ii and II)
+folchange=rowMeans(unstranded_rpkm[,paired_sample_df$tumor])/rowMeans(unstranded_rpkm[,paired_sample_df$normal])
+
+# log2change
+log2change=log(folchange,2)	
+
+# log2change data
+log2change_tumor_control=na.omit(data.frame(gene=names(log2change),log2change=log2change))
+#######################################################################################################################################

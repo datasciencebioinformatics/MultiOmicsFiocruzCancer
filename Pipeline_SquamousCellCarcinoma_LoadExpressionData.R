@@ -2,12 +2,7 @@
 # This script will take the TSV file (metadata), unstranded.rna_seq.augmented_star_gene_counts (rna-seq count data), 
 # the name of genes and samples already processed for the primary_diagnosis=Squamous cell carcinoma, NOS
 #####################################################################################################################
-library(readr)
-library("xlsx")
-library(ggplot2)
-library("DESeq2")
-library(gridExtra)
-#####################################################################################################################
+
 # Reading the contents of TSV file using read_tsv() method
 merged_data_patient_info_file<- "/home/felipe/Documentos/LungPortal/samples/merged_data_patient_info.tsv"
 
@@ -129,7 +124,6 @@ df_gene_id_symbol<-data.frame(gene_id=gene_ids_data,gene_symbol=gene_name_data)
 colnames(df_gene_id_symbol)<-c("gene_id","gene_symbol")
 
 #####################################################################################################################
-library("readxl")
 Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/Table_1.tsv", sep = '\t', header = TRUE,fill=TRUE)      
 Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/EnsemblToUniprotKBconversionList.txt", sep = '\t', header = FALSE,fill=TRUE)    
 colnames(Table1_data)<-c("gene_id","gene_symbol")

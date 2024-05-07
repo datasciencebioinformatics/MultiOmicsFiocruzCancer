@@ -6,10 +6,6 @@
 # /home/felipe/Documentos/LungPortal/exposure.txt
 # Output : merged_data_patient_info.tsv
 ##########################################################################################################################################################################################################
-library(readr)
-library("xlsx")
-library(ggplot2)
-##########################################################################################################################################################################################################
 # Reading the contents of TSV file using read_tsv() method
 gdc_sample_sheet_file<-"/home/felipe/Documentos/LungPortal/gdc_sample_sheet.2024-04-04.tsv"
 

@@ -5,8 +5,6 @@
 # /home/felipe/Documentos/LungPortal/sample.txt
 # /home/felipe/Documentos/LungPortal/exposure.txt
 # Output : merged_data_patient_info.tsv
-#############################################################################1##############################################
-output_dir="/home/felipe/Documentos/LungPortal/output/"                                                                   #
 ###########################################################################################################################
 merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
 colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #

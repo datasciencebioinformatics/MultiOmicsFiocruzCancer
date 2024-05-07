@@ -132,23 +132,20 @@ Entropy_stage_I_value_Carels  <-abs(sum(df_entropy_calulation_I$p_k_mult_log2_pk
 Entropy_stage_II_value_Carels <-abs(sum(df_entropy_calulation_II$p_k_mult_log2_pk))
 Entropy_stage_III_value_Carels<-abs(sum(df_entropy_calulation_III$p_k_mult_log2_pk))
 
-round(Entropy_stage_II_value_Carels,4)
-round(Entropy_stage_III_value_Carels,4)
+# FindClusters_resolution
+#png(filename=paste(output_dir,"Network_","graph_Stage_I_.png",sep=""), width = 20, height = 20, res=600, units = "cm")
+#	layout_stage_I <- plot_module(graph_stage_I, upper_weight_th = upper_weight_th, groups = sub_clusters_modules_stage_I,vertex.label.cex = 0.5, node_scaling_max = 7,  legend_cex = 1,  title = paste("Network for genes of Stage I\nEntropy : ", round(Entropy_stage_I_value_Carels,4),sep=""))
+#dev.off()
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"Network_","graph_Stage_I_.png",sep=""), width = 20, height = 20, res=600, units = "cm")
-	layout_stage_I <- plot_module(graph_stage_I, upper_weight_th = upper_weight_th, groups = sub_clusters_modules_stage_I,vertex.label.cex = 0.5, node_scaling_max = 7,  legend_cex = 1,  title = paste("Network for genes of Stage I\nEntropy : ", round(Entropy_stage_I_value_Carels,4),sep=""))
-dev.off()
+#png(filename=paste(output_dir,"Network_","graph_Stage_II_.png",sep=""), width = 20, height = 20, res=600, units = "cm")
+#	layout_stage_II <- plot_module(graph_stage_II, upper_weight_th = upper_weight_th, groups = sub_clusters_modules_stage_II,vertex.label.cex = 0.5, node_scaling_max = 7,  legend_cex = 1,  title = paste("Network for genes of Stage II\nEntropy : ", round(Entropy_stage_II_value_Carels,4),sep=""))
+#dev.off()
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"Network_","graph_Stage_II_.png",sep=""), width = 20, height = 20, res=600, units = "cm")
-	layout_stage_II <- plot_module(graph_stage_II, upper_weight_th = upper_weight_th, groups = sub_clusters_modules_stage_II,vertex.label.cex = 0.5, node_scaling_max = 7,  legend_cex = 1,  title = paste("Network for genes of Stage II\nEntropy : ", round(Entropy_stage_II_value_Carels,4),sep=""))
-dev.off()
-
-# FindClusters_resolution
-png(filename=paste(output_dir,"Network_","graph_Stage_III_.png",sep=""), width = 20, height = 20, res=600, units = "cm")
-	layout_stage_III <- plot_module(graph_stage_III, upper_weight_th = upper_weight_th, groups = sub_clusters_modules_stage_III,vertex.label.cex = 0.5, node_scaling_max = 7,  legend_cex = 1,  title = paste("Network for genes of Stage III\nEntropy : ", round(Entropy_stage_III_value_Carels,4),sep=""))
-dev.off()
+#png(filename=paste(output_dir,"Network_","graph_Stage_III_.png",sep=""), width = 20, height = 20, res=600, units = "cm")
+#	layout_stage_III <- plot_module(graph_stage_III, upper_weight_th = upper_weight_th, groups = sub_clusters_modules_stage_III,vertex.label.cex = 0.5, node_scaling_max = 7,  legend_cex = 1,  title = paste("Network for genes of Stage III\nEntropy : ", round(Entropy_stage_III_value_Carels,4),sep=""))
+#dev.off()
 
 ########################################################################################################################################
 # Save TSV file with genes from Stage1
@@ -165,13 +162,13 @@ g_stage_I<-graph_from_data_frame(interactome_data_stage_I, directed = TRUE, vert
 g_stage_II<-graph_from_data_frame(interactome_data_stage_II, directed = TRUE, vertices = NULL)
 g_stage_III<-graph_from_data_frame(interactome_data_stage_III, directed = TRUE, vertices = NULL)
 
-plot(g_stage_I, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
-plot(g_stage_II, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
-plot(g_stage_III, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
+#plot(g_stage_I, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
+#plot(g_stage_II, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
+#plot(g_stage_III, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
 ########################################################################################################################################
-print(paste("Nº of vertex/Nº of edges, after filter for Stage I/Entropy: ",  paste(length(df_stageI_connectivity$Gene),dim(unique(interactome_data_stage_I),)[1],Entropy_stage_I_value_Carels,sep="/"),sep=""),sep=""))
-print(paste("Nº of vertex/Nº of edges, after filter for Stage II/Entropy: ", paste(length(df_stageII_connectivity$Gene),dim(unique(interactome_data_stage_II),)[1],Entropy_stage_II_value_Carels,sep="/"),sep=""),sep=""))
-print(paste("Nº of vertex/Nº of edges, after filter for Stage III/Entropy: ",paste(length(df_stageIII_connectivity$Gene),dim(unique(interactome_data_stage_III),)[1],Entropy_stage_III_value_Carels,sep="/"),sep=""),sep=""))
+print(paste("Nº of vertex/Nº of edges, after filter for Stage I/Entropy: ",  paste(length(df_stageI_connectivity$Gene),dim(unique(interactome_data_stage_I))[1],round(Entropy_stage_I_value_Carels,4),sep="/"),sep=""))
+print(paste("Nº of vertex/Nº of edges, after filter for Stage II/Entropy: ", paste(length(df_stageII_connectivity$Gene),dim(unique(interactome_data_stage_II))[1],round(Entropy_stage_II_value_Carels,4),sep="/"),sep=""))
+print(paste("Nº of vertex/Nº of edges, after filter for Stage III/Entropy: ",paste(length(df_stageIII_connectivity$Gene),dim(unique(interactome_data_stage_III))[1],round(Entropy_stage_III_value_Carels,4),sep="/"),sep=""))
 
 
 

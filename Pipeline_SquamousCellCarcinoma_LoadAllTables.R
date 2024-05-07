@@ -9,4 +9,4 @@ merge_interactome_gene_symbol  <-read.table(file = merge_interactome_gene_symbol
 colData                        <-read.table(file =colData_file, sep = '\t', header = TRUE,)         #
 merged_data_patient_info       <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,)         #
 unstranded_data                <-read.table(file = unstranded_data_file, sep = '\t', header = TRUE,)         #
-unstranded_rpkm  <-read.table(file = paste(output_dir,"unstranded_rpkm.tsv",sep=""), sep = '\t', header = TRUE,)         #
+unstranded_rpkm  <-read.table(file = paste("/home/felipe/Documentos/LungPortal/output/","unstranded_rpkm.tsv",sep=""), sep = '\t', header = TRUE,)         #

@@ -161,9 +161,8 @@ g_stage_III<-graph_from_data_frame(interactome_data_stage_III, directed = TRUE, 
 #plot(g_stage_II, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
 #plot(g_stage_III, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
 ########################################################################################################################################
-print(paste("Nº of vertex/Nº of edges, after filter for Stage I/Entropy: ",  paste(length(df_stageI_connectivity$Gene),dim(unique(interactome_data_stage_I))[1],round(Entropy_stage_I_value_Carels,4),sep="/"),sep=""))
-print(paste("Nº of vertex/Nº of edges, after filter for Stage II/Entropy: ", paste(length(df_stageII_connectivity$Gene),dim(unique(interactome_data_stage_II))[1],round(Entropy_stage_II_value_Carels,4),sep="/"),sep=""))
-print(paste("Nº of vertex/Nº of edges, after filter for Stage III/Entropy: ",paste(length(df_stageIII_connectivity$Gene),dim(unique(interactome_data_stage_III))[1],round(Entropy_stage_III_value_Carels,4),sep="/"),sep=""))
-
+cat(print(paste("\nNº of vertex/Nº of edges, after filter for Stage I/Entropy: ",  paste(length(df_stageI_connectivity$Gene),dim(unique(interactome_data_stage_I))[1],round(Entropy_stage_I_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
+cat(print(paste("\nNº of vertex/Nº of edges, after filter for Stage II/Entropy: ", paste(length(df_stageII_connectivity$Gene),dim(unique(interactome_data_stage_II))[1],round(Entropy_stage_II_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
+cat(print(paste("\nNº of vertex/Nº of edges, after filter for Stage III/Entropy: ",paste(length(df_stageIII_connectivity$Gene),dim(unique(interactome_data_stage_III))[1],round(Entropy_stage_III_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
 
 

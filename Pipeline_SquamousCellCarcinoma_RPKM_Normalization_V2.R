@@ -1,7 +1,3 @@
-library(AnnotationHub)
-library (edgeR)
-library (EDASeq)
-library("biomaRt")
 ####################################################################################################################
 hsa <- useMart(biomart = "ENSEMBL_MART_ENSEMBL", dataset = "hsapiens_gene_ensembl", host = "asia.ensembl.org" ) 
 ####################################################################################################################

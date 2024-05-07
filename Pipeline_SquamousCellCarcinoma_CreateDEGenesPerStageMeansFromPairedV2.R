@@ -82,10 +82,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	
 	# First, stageI
 	log2change_Stage_i[log2change_Stage_i$log2change>=log2fc_threshold,"Category"]<-"Up-regulated"		
-	####################################################################################################################		
-	library(ggfortify) 
-	library(ggplot2)
-	
+	####################################################################################################################			
 	# Selected genes	
 	# Obtain differential Category numbers
 	selected_genes<-rownames(log2change_Stage_i[which(log2change_Stage_i$Category!="Uncategorized"),])

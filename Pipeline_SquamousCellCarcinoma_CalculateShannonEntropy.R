@@ -173,9 +173,9 @@ print(paste("Nº of vertex, after filter for Stage I: ",  length(df_stageI_conne
 print(paste("Nº of vertex, after filter for Stage II: ",  length(df_stageII_connectivity$Gene),sep=""))
 print(paste("Nº of vertex, after filter for Stage III: ",  length(df_stageIII_connectivity$Gene),sep=""))
 
-print(paste("Nº of edges, for Stage I: ",   dim(unique(interactome_data_stage_I))[1],sep=""))
-print(paste("Nº of edges, for Stage II: ",   dim(unique(interactome_data_stage_II))[1],sep=""))
-print(paste("Nº of edges, for Stage III: ",   dim(unique(interactome_data_stage_III))[1],sep=""))
+print(paste("Nº of edges, co-expression network, for Stage I: ",   dim(unique(interactome_data_stage_I))[1],sep=""))
+print(paste("Nº of edges, co-expression network, for Stage II: ",   dim(unique(interactome_data_stage_II))[1],sep=""))
+print(paste("Nº of edges, co-expression network, for Stage III: ",   dim(unique(interactome_data_stage_III))[1],sep=""))
 
 print(paste("Entropy for Stage I: ",   round(Entropy_stage_I_value_Carels,4),sep=""))
 print(paste("Entropy for Stage II: ",   round(Entropy_stage_II_value_Carels,4),sep=""))

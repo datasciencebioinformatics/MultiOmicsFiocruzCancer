@@ -1,0 +1,43 @@
+#####################################################################################################################
+rm -R /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_1/
+mkdir /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_1/
+
+output_dir="/home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_1_per_stage_1/"                                                             
+
+# Threshold Tumor/Normal        
+log2foldchange_trheshold<-1
+
+# Threshold per stage 
+log2fc_threshold<-1
+#####################################################################################################################
+# CreateMetadataFromGDCFiles
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadRPackages.R")
+
+## A R scripts to load expression files
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadExpressionData.R")
+
+# rowMeans(unstranded_rpkm)>3 
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_RPKM_Normalization_V2.R")
+
+## A R scripts for RPKM Normalization # Done 
+
+## A R scripts to apply filters
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamplesRPKM.R")
+
+
+## A R scripts to apply filters
+#source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_Filters.R")
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_Filters_V2.R")
+
+## A R scripts to DE per stage
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageMeansFromPairedV2.R")
+
+## A R scripts to create veen driagam
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_VeenDiagramsFromPairedUp.R")
+
+## A R scripts to calculate Calculate Shannon Entropy
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropy.R")
+
+## A R scripts to calculate Calculate Shannon Entropy
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropyFromPairedUp.R")
+###########################################################################################################################

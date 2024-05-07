@@ -269,3 +269,7 @@ print(paste("Nº of edges, sub-interactome for Stage III: ",   dim(unique(intera
 print(paste("Entropy for Stage I: ",   round(Entropy_stage_I_value_Carels,4),sep=""))
 print(paste("Entropy for Stage II: ",   round(Entropy_stage_II_value_Carels,4),sep=""))
 print(paste("Entropy for Stage III: ",   round(Entropy_stage_III_value_Carels,4),sep=""))
+
+print(paste("sub-interactome network, extrapolated  (Nº of vertex/Nº of edges/Entropy) Stage I: ",  paste(length(df_stageI_connectivity$Gene),dim(unique(interactome_data_stage_I))[1],round(Entropy_stage_I_value_Carels,4),sep="/"),sep=""))
+print(paste("sub-interactome network, extrapolated  (Nº of vertex/Nº of edges/Entropy) Stage II: ", paste(length(df_stageII_connectivity$Gene),dim(unique(interactome_data_stage_II))[1],round(Entropy_stage_II_value_Carels,4),sep="/"),sep=""))
+print(paste("sub-interactome network, extrapolated  (Nº of vertex/Nº of edges/Entropy) Stage III: ",paste(length(df_stageIII_connectivity$Gene),dim(unique(interactome_data_stage_III))[1],round(Entropy_stage_III_value_Carels,4),sep="/"),sep=""))

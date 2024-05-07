@@ -254,20 +254,6 @@ write_tsv(interactome_data_stage_III, paste(output_dir,"df_stageIII_interactome_
 #write_tsv(interactome_data_stage_II, paste(output_dir,"df_stageII_interactome_sub",".tsv",sep=""))
 #write_tsv(interactome_data_stage_III, paste(output_dir,"df_stageIII_interactome_sub",".tsv",sep=""))
 #########################################################################################################################################
-
-
-print(paste("Nº of vertex, extrapolated for Stage I: ",  length(df_stageI_connectivity$Gene),sep=""))
-print(paste("Nº of vertex, extrapolated for Stage II: ",  length(df_stageII_connectivity$Gene),sep=""))
-print(paste("Nº of vertex, extrapolated for Stage III: ",  length(df_stageIII_connectivity$Gene),sep=""))
-
-print(paste("Nº of edges, sub-interactome for Stage I: ",   dim(unique(interactome_data_stage_I))[1],sep=""))
-print(paste("Nº of edges, sub-interactome for Stage II: ",   dim(unique(interactome_data_stage_II))[1],sep=""))
-print(paste("Nº of edges, sub-interactome for Stage III: ",   dim(unique(interactome_data_stage_III))[1],sep=""))
-
-print(paste("Entropy for Stage I: ",   round(Entropy_stage_I_value_Carels,4),sep=""))
-print(paste("Entropy for Stage II: ",   round(Entropy_stage_II_value_Carels,4),sep=""))
-print(paste("Entropy for Stage III: ",   round(Entropy_stage_III_value_Carels,4),sep=""))
-
-print(paste("sub-interactome network, extrapolated  (Nº of vertex/Nº of edges/Entropy) Stage I: ",  paste(length(df_stageI_connectivity$Gene),dim(unique(interactome_data_stage_I))[1],round(Entropy_stage_I_value_Carels,4),sep="/"),sep=""))
-print(paste("sub-interactome network, extrapolated  (Nº of vertex/Nº of edges/Entropy) Stage II: ", paste(length(df_stageII_connectivity$Gene),dim(unique(interactome_data_stage_II))[1],round(Entropy_stage_II_value_Carels,4),sep="/"),sep=""))
-print(paste("sub-interactome network, extrapolated  (Nº of vertex/Nº of edges/Entropy) Stage III: ",paste(length(df_stageIII_connectivity$Gene),dim(unique(interactome_data_stage_III))[1],round(Entropy_stage_III_value_Carels,4),sep="/"),sep=""))
+cat(print(paste("\nsub-interactome network, extrapolated  (Nº of vertex/Nº of edges/Entropy) Stage I: ",  paste(length(df_stageI_connectivity$Gene),dim(unique(interactome_data_stage_I))[1],round(Entropy_stage_I_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
+cat(print(paste("\nsub-interactome network, extrapolated  (Nº of vertex/Nº of edges/Entropy) Stage II: ", paste(length(df_stageII_connectivity$Gene),dim(unique(interactome_data_stage_II))[1],round(Entropy_stage_II_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
+cat(print(paste("\nsub-interactome network, extrapolated  (Nº of vertex/Nº of edges/Entropy) Stage III: ",paste(length(df_stageIII_connectivity$Gene),dim(unique(interactome_data_stage_III))[1],round(Entropy_stage_III_value_Carels,4),sep="/"),sep=""))

@@ -1,31 +1,34 @@
 Variable	Value	Stage
-Number of nodes	54	Stage I
-Number of edges	624	Stage I
-Avg. number of neighbors	23111	Stage I
-Network diameter	2	Stage I
-Network radius	2	Stage I
-Characteristic path length	1564	Stage I
-Clustering coefficient	519	Stage I
-Network density	436	Stage I
-Network heterogeneity	529	Stage I
-Network centralization	429	Stage I
-Number of nodes	119	Stage II
-Number of edges	675	Stage II
-Avg. number of neighbors	11345	Stage II
-Network diameter	4	Stage II
-Network radius	3	Stage II
-Characteristic path length	2139	Stage II
-Clustering coefficient	120	Stage II
-Network density	96	Stage II
-Network heterogeneity	1208	Stage II
-Network centralization	566	Stage II
-Number of nodes	248	Stage III
-Number of edges	21465	Stage III
-Avg. number of neighbors	173105	Stage III
-Network diameter	2	Stage III
-Network radius	1	Stage III
-Characteristic path length	1299	Stage III
-Clustering coefficient	818	Stage III
-Network density	701	Stage III
-Network heterogeneity	301	Stage III
-Network centralization	302	Stage III
+Number of nodes	98	Stage I
+Number of edges	106	Stage I
+Avg. number of neighbors	2.348	Stage I
+Network diameter	8	Stage I
+Network radius	4	Stage I
+Characteristic path length	3.792	Stage I
+Clustering coefficient	0	Stage I
+Network density	0.035	Stage I
+Network heterogeneity	1.421	Stage I
+Network centralization	0.252	Stage I
+Connected components	15	Stage I
+Number of nodes	237	Stage II
+Number of edges	296	Stage II
+Avg. number of neighbors	2.503	Stage II
+Network diameter	12	Stage II
+Network radius	7	Stage II
+Characteristic path length	4.571	Stage II
+Clustering coefficient	0.042	Stage II
+Network density	0.013	Stage II
+Network heterogeneity	1.604	Stage II
+Network centralization	0.232	Stage II
+Connected components	19	Stage II
+Number of nodes	229	Stage III
+Number of edges	339	Stage III
+Avg. number of neighbors	3.025	Stage III
+Network diameter	10	Stage III
+Network radius	5	Stage III
+Characteristic path length	4.17	Stage III
+Clustering coefficient	0.071	Stage III
+Network density	0.015	Stage III
+Network heterogeneity	1.37	Stage III
+Network centralization	0.12	Stage III
+Connected components	15	Stage III

@@ -4,14 +4,14 @@ library(RCy3)
 ############################################################################################################################################
 output_folder<-"/home/felipe/Documentos/LungPortal/output/modules/"
 ############################################################################################################################################
-df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,]))
-df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,]))
-df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,]))
+stage_I_interaction_file               <- "/media/felipe/UBUNTU\ 20_0/Network_cytoscape/df_stageI_interactome_interactome.tsv" #
+stage_II_interaction_file               <- "/media/felipe/UBUNTU\ 20_0/Network_cytoscape/df_stageII_interactome_interactome.tsv" #
+stage_III_interaction_file               <- "/media/felipe/UBUNTU\ 20_0/Network_cytoscape/df_stageIII_interactome_interactome.tsv" #
 #######################################################################################################################################
-rownames(interactome_data_stage_I)
-rownames(interactome_data_stage_II)
-rownames(interactome_data_stage_III)
-
+stage_I_interaction_data     <-read.table(file = stage_I_interaction_file, sep = '\t', header = TRUE,fill=TRUE)    #
+stage_II_interaction_data     <-read.table(file = stage_II_interaction_file, sep = '\t', header = TRUE,fill=TRUE)    #
+stage_III_interaction_data     <-read.table(file = stage_III_interaction_file, sep = '\t', header = TRUE,fill=TRUE)    #
+#######################################################################################################################################
 # Merge data.frame
 merge_interactome_gene_symbol <- merge_interactome_gene_symbol[match(unique(merge_interactome_gene_symbol$gene_id), merge_interactome_gene_symbol$gene_id),]
 
@@ -33,56 +33,37 @@ cluster_igraph_stage_I  <- cluster_fast_greedy(interactome_igraph_stage_I)
 cluster_igraph_stage_II <- cluster_fast_greedy(interactome_igraph_stage_II)
 cluster_igraph_stage_III <- cluster_fast_greedy(interactome_igraph_stage_III)
 
-# memberships of nodes
-membership(cluster_igraph_stage_I)
+# Set colour
+nb.cols  <- max(c(length(unique(membership(cluster_igraph_stage_I))),length(unique(membership(cluster_igraph_stage_II))), length(unique(membership(cluster_igraph_stage_III)))))
+mycolors <- data.frame(colour=colorRampPalette(brewer.pal(8, "Set3"))(nb.cols))
 
-most_populous_community_stage_I<-data.frame(table(as.vector(membership(cluster_igraph_stage_I))))[1,"Var1"]
-most_populous_community_stage_II<-data.frame(table(as.vector(membership(cluster_igraph_stage_II))))[1,"Var1"]
-most_populous_community_stage_III<-data.frame(table(as.vector(membership(cluster_igraph_stage_III))))[1,"Var1"]
 
-# Number of verices in the sub-network
-data.frame(table(as.vector(membership(cluster_igraph_stage_I))))[1,]
-data.frame(table(as.vector(membership(cluster_igraph_stage_II))))[1,]
-data.frame(table(as.vector(membership(cluster_igraph_stage_III))))[1,]
 
-# Number of verices in the sub-network
-most_populous_module_stage_I   <-data.frame(table(as.vector(membership(cluster_igraph_stage_I))))[2,"Var1"]
-most_populous_module_stage_II  <-data.frame(table(as.vector(membership(cluster_igraph_stage_II))))[2,"Var1"]
-most_populous_module_stage_III <-data.frame(table(as.vector(membership(cluster_igraph_stage_III))))[2,"Var1"]
+# Generate colors based on media type:
+V(interactome_igraph_stage_I)$color  <- mycolors[as.numeric( membership(cluster_igraph_stage_I)),]
+V(interactome_igraph_stage_II)$color <- mycolors[as.numeric( membership(cluster_igraph_stage_II)),]
+V(interactome_igraph_stage_III)$color<- mycolors[as.numeric( membership(cluster_igraph_stage_III)),]
 
-# Select sbgraphs
-subgraph_igraph_stage_I<-subgraph(interactome_igraph_stage_I, which(membership(cluster_igraph_stage_I)==most_populous_module_stage_I))
-subgraph_igraph_stage_II<-subgraph(interactome_igraph_stage_II, which(membership(cluster_igraph_stage_II)==most_populous_module_stage_II))
-subgraph_igraph_stage_III<-subgraph(interactome_igraph_stage_III, which(membership(cluster_igraph_stage_III)==most_populous_module_stage_III))
 
 # Set node size based on audience size:
-V(subgraph_igraph_stage_I)$size <- degree(subgraph_igraph_stage_I)*2
-V(subgraph_igraph_stage_II)$size <- degree(subgraph_igraph_stage_II)*2
-V(subgraph_igraph_stage_III)$size <- degree(subgraph_igraph_stage_III)
+V(interactome_igraph_stage_I)$size <- degree(interactome_igraph_stage_I)*1.5
+V(interactome_igraph_stage_II)$size <- degree(interactome_igraph_stage_II)*1.5
+V(interactome_igraph_stage_III)$size <- degree(interactome_igraph_stage_III)*1.5
 
-# The labels are currently node IDs.
-# Setting them to NA will render no labels:
-V(subgraph_igraph_stage_I)$label.color <- "black"
-V(subgraph_igraph_stage_II)$label.color <- "black"
-V(subgraph_igraph_stage_III)$label.color <- "black"
-
-#change arrow size and edge color:
-E(subgraph_igraph_stage_I)$arrow.size <- .2
-E(subgraph_igraph_stage_I)$edge.color <- "gray80"
 
 # FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_I.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
-  plot(subgraph_igraph_stage_I,layout=layout_with_dh, vertex.color="grey")
+png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_I.png",sep=""), width = 30, height = 30, res=1200, units = "cm")                                                                                                    #
+  plot(interactome_igraph_stage_I,layout=layout_with_dh, edge.color	="black")
 dev.off() 
 
 # FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_II.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
-  plot(subgraph_igraph_stage_II,layout= layout_with_dh, vertex.color="gray50")
+png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_II.png",sep=""), width = 30, height = 30, res=1200, units = "cm")                                                                                                    #
+  plot(interactome_igraph_stage_II,layout= layout_with_dh, edge.color="black")
 dev.off() 
 
 # FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_IIi.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
-  plot(subgraph_igraph_stage_III,layout=   layout_with_dh, vertex.color="gray50")
+png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_III.png",sep=""), width = 30, height = 30, res=1200, units = "cm")                                                                                                    #
+  plot(interactome_igraph_stage_III,layout=   layout_with_dh, edge.color="black")
 dev.off() 
 
 

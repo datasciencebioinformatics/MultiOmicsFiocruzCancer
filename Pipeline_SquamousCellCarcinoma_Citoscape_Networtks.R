@@ -72,19 +72,3 @@ write_tsv(interactome_smbols_stage_I, paste(output_dir,"interactome_smbols_stage
 write_tsv(interactome_smbols_stage_II, paste(output_dir,"interactome_smbols_stage_II",".tsv",sep=""))
 write_tsv(interactome_smbols_stage_III, paste(output_dir,"interactome_smbols_stage_III",".tsv",sep=""))
 
-
-
-# FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"Panel_igraph_stage_I.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
-  plot(interactome_igraph_stage_I,layout=layout_with_dh, vertex.color="grey")
-dev.off() 
-
-# FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"Panel_igraph_stage_II.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
-  plot(interactome_igraph_stage_II,layout= layout_with_dh, vertex.color="gray50")
-dev.off() 
-
-# FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"Panel_igraph_stage_IIi.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
-  plot(interactome_igraph_stage_III,layout=   layout_with_dh, vertex.color="gray50")
-dev.off() 

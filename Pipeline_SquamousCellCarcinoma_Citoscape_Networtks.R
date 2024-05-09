@@ -1,9 +1,9 @@
 ############################################################################################################################################
 library(RCy3)
+library(RColorBrewer)
 # cyrestGET(operation = NULL, parameters = NULL, base.url = "http://localhost:1234")
 ############################################################################################################################################
-output_folder<-"/home/felipe/Documentos/LungPortal/output/modules/"
-############################################################################################################################################
+
 stage_I_interaction_file               <- "/media/felipe/UBUNTU\ 20_0/Network_cytoscape/df_stageI_interactome_interactome.tsv" #
 stage_II_interaction_file               <- "/media/felipe/UBUNTU\ 20_0/Network_cytoscape/df_stageII_interactome_interactome.tsv" #
 stage_III_interaction_file               <- "/media/felipe/UBUNTU\ 20_0/Network_cytoscape/df_stageIII_interactome_interactome.tsv" #

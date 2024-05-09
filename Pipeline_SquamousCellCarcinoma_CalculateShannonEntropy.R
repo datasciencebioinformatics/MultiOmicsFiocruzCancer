@@ -30,30 +30,17 @@ df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stag
 df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,]))
 df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,]))
 #######################################################################################################################################
-# Filter table
-df_stage_I_filtered <- filter_low_var(t(df_correlation_net_stage_I), pct = 0.75, type = "mean")
-df_stage_II_filtered <- filter_low_var(t(df_correlation_net_stage_II), pct = 0.75, type = "mean")
-df_stage_III_filtered <- filter_low_var(t(df_correlation_net_stage_III), pct = 0.75, type = "mean")
+df_stage_I_filtered<-t(df_correlation_net_stage_I)
+df_stage_II_filtered<-t(df_correlation_net_stage_II)
+df_stage_III_filtered<-t(df_correlation_net_stage_III)
 
-# calculate network
-net_stage_I <-   build_net(df_stage_I_filtered, cor_func = "spearman", n_threads =1)
-net_stage_II <-   build_net(df_stage_II_filtered, cor_func = "spearman", n_threads =1)
-net_stage_III <-   build_net(df_stage_III_filtered, cor_func = "spearman", n_threads =1)
+net_stage_I$network   <- cor(df_stage_I_filtered, method = "spearman", use = "complete.obs")
+net_stage_II$network  <- cor(df_stage_II_filtered, method = "spearman", use = "complete.obs")
+net_stage_III$network <- cor(df_stage_III_filtered, method = "spearman", use = "complete.obs")
 
-#module_stage_I  <- detect_modules(df_stage_I_filtered,  net_stage_I$network,  detailled_result = TRUE,  merge_threshold = 0.25)
-#module_stage_II <- detect_modules(df_stage_II_filtered,  net_stage_II$network,  detailled_result = TRUE,  merge_threshold = 0.25)
-#module_stage_II <- detect_modules(df_stage_III_filtered,  net_stage_III$network,  detailled_result = TRUE,  merge_threshold = 0.25)
 
-sub_clusters_modules_stage_I<- get_sub_clusters(net_stage_I$network)
-sub_clusters_modules_stage_II<- get_sub_clusters(net_stage_II$network)
-sub_clusters_modules_stage_III<- get_sub_clusters(net_stage_III$network)
-
-graph_stage_I <- build_graph_from_sq_mat(net_stage_I$network)
-graph_stage_II <- build_graph_from_sq_mat(net_stage_II$network)
-graph_stage_III <- build_graph_from_sq_mat(net_stage_III$network)
-#######################################################################################################################################
 # Set threshold
-upper_weight_th = 0.9995
+upper_weight_th = 0.70
 
 net_stage_I$network[lower.tri(net_stage_I$network)] <- NA
 net_stage_II$network[lower.tri(net_stage_II$network)] <- NA
@@ -66,6 +53,7 @@ net_stage_III_correlation_network<-melt(net_stage_III$network)
 net_stage_I_correlation_network<-na.omit(net_stage_I_correlation_network[net_stage_I_correlation_network$value>=upper_weight_th,])
 net_stage_II_correlation_network<-na.omit(net_stage_II_correlation_network[net_stage_II_correlation_network$value>=upper_weight_th,])
 net_stage_III_correlation_network<-na.omit(net_stage_III_correlation_network[net_stage_III_correlation_network$value>=upper_weight_th,])
+
 #######################################################################################################################################
 interactions_stage_I<-unique(net_stage_I_correlation_network[,c(1,2)])
 interactions_stage_II<-unique(net_stage_II_correlation_network[,c(1,2)])
@@ -156,13 +144,7 @@ write_tsv(interactome_data_stage_III, paste(output_dir,"df_stageIII_interactome"
 g_stage_I<-graph_from_data_frame(interactome_data_stage_I, directed = TRUE, vertices = NULL)
 g_stage_II<-graph_from_data_frame(interactome_data_stage_II, directed = TRUE, vertices = NULL)
 g_stage_III<-graph_from_data_frame(interactome_data_stage_III, directed = TRUE, vertices = NULL)
-
-#plot(g_stage_I, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
-#plot(g_stage_II, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
-#plot(g_stage_III, vertex.label= NA, edge.arrow.size=0.02,vertex.size = 0.5, xlab = "Scale-free network model")
 ########################################################################################################################################
 cat(print(paste("\nNº of vertex/Nº of edges, after filter for Stage I/Entropy: ",  paste(length(df_stageI_connectivity$Gene),dim(unique(interactome_data_stage_I))[1],round(Entropy_stage_I_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
 cat(print(paste("\nNº of vertex/Nº of edges, after filter for Stage II/Entropy: ", paste(length(df_stageII_connectivity$Gene),dim(unique(interactome_data_stage_II))[1],round(Entropy_stage_II_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
 cat(print(paste("\nNº of vertex/Nº of edges, after filter for Stage III/Entropy: ",paste(length(df_stageIII_connectivity$Gene),dim(unique(interactome_data_stage_III))[1],round(Entropy_stage_III_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
-
-

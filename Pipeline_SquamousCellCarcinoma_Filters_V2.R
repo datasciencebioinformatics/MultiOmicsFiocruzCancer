@@ -18,7 +18,8 @@ tumor_samples<-colData[which(colData$tissue_type=="Tumor"),"patient_id"]
 unstranded_rpkm<-unstranded_rpkm[rownames(log2change_tumor_control[which(log2change_tumor_control$log2change>=log2foldchange_trheshold),]),]
 
 # Filter by RPKM
-unstranded_data_filter<-unstranded_rpkm[rowMeans(unstranded_rpkm[,tumor_samples])>RPKM_trheshold,]
+#unstranded_data_filter<-unstranded_rpkm[rowMeans(unstranded_rpkm[,tumor_samples])>RPKM_trheshold,]
+unstranded_data_filter<-unstranded_rpkm[rowMeans(unstranded_rpkm)>RPKM_trheshold,]
 ###########################################################################################################################
 cat(print(paste("\nNumber of up-regulated tumor-genes :",dim(unstranded_data_filter)[1])),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
 

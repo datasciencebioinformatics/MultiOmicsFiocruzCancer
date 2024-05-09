@@ -1,5 +1,5 @@
 ###############################################################################################################################
-Network_stages_value_file               <- "/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Network_stages_value.txt" #
+Network_stages_value_file               <- "/media/felipe/UBUNTU 20_0/Network_cytoscape/Summary_statistics_networks.txt" #
 ###############################################################################################################################
 Network_stages_value_file_data     <-read.table(file = Network_stages_value_file, sep = '\t', header = TRUE,fill=TRUE)    #
 ###########################################################################################################################

@@ -34,17 +34,16 @@ df_stage_I_filtered<-t(df_correlation_net_stage_I)
 df_stage_II_filtered<-t(df_correlation_net_stage_II)
 df_stage_III_filtered<-t(df_correlation_net_stage_III)
 
-net_stage_I$network   <- cor(df_stage_I_filtered, method = "spearman", use = "complete.obs")
-net_stage_II$network  <- cor(df_stage_II_filtered, method = "spearman", use = "complete.obs")
-net_stage_III$network <- cor(df_stage_III_filtered, method = "spearman", use = "complete.obs")
-
+net_stage_I   <- cor(df_stage_I_filtered, method = "spearman", use = "complete.obs")
+net_stage_II  <- cor(df_stage_II_filtered, method = "spearman", use = "complete.obs")
+net_stage_III <- cor(df_stage_III_filtered, method = "spearman", use = "complete.obs")
 
 # Set threshold
 upper_weight_th = 0.70
 
-net_stage_I$network[lower.tri(net_stage_I$network)] <- NA
-net_stage_II$network[lower.tri(net_stage_II$network)] <- NA
-net_stage_III$network[lower.tri(net_stage_III$network)] <- NA
+net_stage_I[lower.tri(net_stage_I)] <- NA
+net_stage_II[lower.tri(net_stage_II)] <- NA
+net_stage_III[lower.tri(net_stage_III)] <- NA
 
 net_stage_I_correlation_network<-melt(net_stage_I$network)
 net_stage_II_correlation_network<-melt(net_stage_II$network)

@@ -45,9 +45,9 @@ net_stage_I[lower.tri(net_stage_I)] <- NA
 net_stage_II[lower.tri(net_stage_II)] <- NA
 net_stage_III[lower.tri(net_stage_III)] <- NA
 
-net_stage_I_correlation_network<-melt(net_stage_I$network)
-net_stage_II_correlation_network<-melt(net_stage_II$network)
-net_stage_III_correlation_network<-melt(net_stage_III$network)
+net_stage_I_correlation_network<-melt(net_stage_I)
+net_stage_II_correlation_network<-melt(net_stage_II)
+net_stage_III_correlation_network<-melt(net_stage_III)
 
 net_stage_I_correlation_network<-na.omit(net_stage_I_correlation_network[net_stage_I_correlation_network$value>=upper_weight_th,])
 net_stage_II_correlation_network<-na.omit(net_stage_II_correlation_network[net_stage_II_correlation_network$value>=upper_weight_th,])

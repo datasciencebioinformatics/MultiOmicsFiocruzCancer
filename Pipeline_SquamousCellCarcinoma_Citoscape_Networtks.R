@@ -46,9 +46,9 @@ V(interactome_igraph_stage_III)$color<- mycolors[as.numeric( membership(cluster_
 
 
 # Set node size based on audience size:
-V(interactome_igraph_stage_I)$size <- degree(interactome_igraph_stage_I)*1.5
-V(interactome_igraph_stage_II)$size <- degree(interactome_igraph_stage_II)*1.5
-V(interactome_igraph_stage_III)$size <- degree(interactome_igraph_stage_III)*1.5
+V(interactome_igraph_stage_I)$size <- degree(interactome_igraph_stage_I)
+V(interactome_igraph_stage_II)$size <- degree(interactome_igraph_stage_II)
+V(interactome_igraph_stage_III)$size <- degree(interactome_igraph_stage_III)
 
 
 # FindClusters_resolution                                                                                                                                                                                                   #

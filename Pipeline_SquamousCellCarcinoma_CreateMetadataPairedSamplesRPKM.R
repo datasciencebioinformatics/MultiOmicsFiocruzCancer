@@ -46,8 +46,8 @@ for (case in unique(merged_data_patient_info_data$case))
 }
 #######################################################################################################################################
 # folchange=Expr(Stage i)/Expr(Stage ii and II)
-folchange=rowMeans(unstranded_rpkm[,paired_sample_df$tumor])-rowMeans(unstranded_rpkm[,paired_sample_df$normal])
-#folchange=rowMeans(unstranded_rpkm[,colData[colData$tissue_type=="Tumor","patient_id"]])/rowMeans(unstranded_rpkm[,paired_sample_df$normal])
+#folchange=rowMeans(unstranded_rpkm[,paired_sample_df$tumor])-rowMeans(unstranded_rpkm[,paired_sample_df$normal])
+folchange=rowMeans(unstranded_rpkm[,colData[colData$tissue_type=="Tumor","patient_id"]])/rowMeans(unstranded_rpkm[,paired_sample_df$normal])
 
 # log2change
 log2change=log(folchange,2)	

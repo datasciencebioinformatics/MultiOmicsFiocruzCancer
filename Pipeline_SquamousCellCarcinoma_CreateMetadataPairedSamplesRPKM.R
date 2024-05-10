@@ -54,6 +54,9 @@ for (case in unique(merged_data_patient_info_data$case))
 # Log2foldchange
 log2change=rowMeans(log(unstranded_rpkm[,paired_sample_df$tumor],2))-rowMeans(log(unstranded_rpkm[,paired_sample_df$normal],2))
 
+LOG_CONSTANT=0.001
+log2change=rowMeans(log(unstranded_rpkm[,paired_sample_df$tumor]+LOG_CONSTANT,2))-rowMeans(log(unstranded_rpkm[,paired_sample_df$normal]+LOG_CONSTANT,2))
+
 # log2change data
 log2change_tumor_control=na.omit(data.frame(gene=names(log2change),log2change=log2change))
 #######################################################################################################################################

@@ -34,9 +34,13 @@ df_stage_I_filtered<-filter_low_var(t(df_correlation_net_stage_I), pct = 0.75, t
 df_stage_II_filtered<-filter_low_var(t(df_correlation_net_stage_II), pct = 0.75, type = c("mean"))
 df_stage_III_filtered<-filter_low_var(t(df_correlation_net_stage_III), pct = 0.75, type = c("mean"))
 
-net_stage_I   <- build_net(t(df_correlation_net_stage_I), cor_func = "spearman",  n_threads = 1)
-net_stage_II   <- build_net(t(df_correlation_net_stage_II), cor_func = "spearman",  n_threads = 1)
-net_stage_III   <- build_net(t(df_correlation_net_stage_III), cor_func = "spearman",  n_threads = 1)
+#net_stage_I   <- build_net(t(df_correlation_net_stage_I), cor_func = "spearman",  n_threads = 1)
+#net_stage_II   <- build_net(t(df_correlation_net_stage_II), cor_func = "spearman",  n_threads = 1)
+#net_stage_III   <- build_net(t(df_correlation_net_stage_III), cor_func = "spearman",  n_threads = 1)
+
+net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "spearman", use = "complete.obs")
+net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "spearman", use = "complete.obs")
+net_stage_III   <- cor(t(df_correlation_net_stage_III), method = "spearman", use = "complete.obs")
 
 # Set threshold
 upper_weight_th = upper_weight_th

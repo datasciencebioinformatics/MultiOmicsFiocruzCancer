@@ -37,6 +37,13 @@ df_stage_III_filtered<-filter_low_var(t(df_correlation_net_stage_III), pct = 0.7
 #net_stage_I   <- build_net(t(df_correlation_net_stage_I), cor_func = "spearman",  n_threads = 1)
 #net_stage_II   <- build_net(t(df_correlation_net_stage_II), cor_func = "spearman",  n_threads = 1)
 #net_stage_III   <- build_net(t(df_correlation_net_stage_III), cor_func = "spearman",  n_threads = 1)
+# Here I will use different packages to construct gene co-expression network.
+# In a first moment I am interested in the number of genes, around 100 an same quantity accross stages.
+# in a second moment, I am interested in the number of edgens per stages. This could be in the order of less than 1000.
+https://rdrr.io/github/juancholkovich/coexnet/man/createNet.html
+https://bioconductor.org/packages/release/bioc/vignettes/BioNERO/inst/doc/vignette_01_GCN_inference.html
+https://github.com/cxli233/SimpleTidy_GeneCoEx
+https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-9-559
 
 net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "spearman", use = "complete.obs")
 net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "spearman", use = "complete.obs")

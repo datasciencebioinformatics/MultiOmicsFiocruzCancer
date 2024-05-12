@@ -40,23 +40,10 @@ df_stage_III_filtered<-filter_low_var(t(df_correlation_net_stage_III), pct = 0.7
 # Here I will use different packages to construct gene co-expression network.
 # In a first moment I am interested in the number of genes, around 100 an same quantity accross stages.
 # in a second moment, I am interested in the number of edgens per stages. This could be in the order of less than 1000.
-# https://rdrr.io/cran/WGCNA/man/adjacency.html
-# From this package I can obtain adjacency matrix, and from this the edges list.
-# I can use I graph for this:
-# library(igraph)
-# g <- graph.adjacency(x)
-# get.edgelist(g)
-
-
-# https://bioconductor.org/packages/release/bioc/vignettes/BioNERO/inst/doc/vignette_01_GCN_inference.html
-# From this package I can obtain adjacency matrix, and from this the edges list.
-# I can use I graph for this:
-# library(igraph)
-# g <- graph.adjacency(x)
-# get.edgelist(g)
-
-https://github.com/cxli233/SimpleTidy_GeneCoEx
-https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-9-559
+# https://rdrr.io/cran/WGCNA/man/adjacency.html:
+# I can use this tutorial to obtain edges list
+# GO to "Generate and Export Networks"
+https://bioinformaticsworkbook.org/tutorials/wgcna.html#gsc.tab=0
 
 net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "spearman", use = "complete.obs")
 net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "spearman", use = "complete.obs")

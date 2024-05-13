@@ -72,9 +72,11 @@ colnames(interactome_data)<-c("Gene1","Gene2")
 # A vector with all genes of the interactome,
 genes_interactome<-unique(c(interactome_data$Gene1,interactome_data$Gene2))
 
+# Genertue full interactome 
+full_interactome<-combinations(n=length(full_interactome), r=2, v = full_interactome, set = TRUE, repeats.allowed = FALSE)
 
-unique(c(interactome_data$Gene1,interactome_data$Gene2))
-
+# Calculate all pairwise combinations of genes, without redunctancy
+full_interactome<- expand.grid.unique(x = genes_interactome, y = genes_interactome,include.equals=FALSE)
 #######################################################################################################
 # A filter to keep only genes that are positivelly regulated
 genes_ids<-c()

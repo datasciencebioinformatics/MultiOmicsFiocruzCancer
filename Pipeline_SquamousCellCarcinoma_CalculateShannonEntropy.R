@@ -1,5 +1,3 @@
-library(tidyr)
-library(dplyr)
 #######################################################################################################################################
 # A script to caluclate entropy from lists of genes from each stage
 # To construct the gene coexpression network, low variation genes are removed based on a threshold for the percentage of genes to be maintained (75%). Then a correlation matrix is ​​constructed using Spearman rank correlation, but only the upper diagonal is kept to avoid redundant edges. Finally, a correlation threshold of XX was used to maintain edges with significant coexpression.

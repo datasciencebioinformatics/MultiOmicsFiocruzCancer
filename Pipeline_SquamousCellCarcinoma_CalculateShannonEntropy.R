@@ -2,6 +2,7 @@ library(tidyr)
 library(dplyr)
 #######################################################################################################################################
 # A script to caluclate entropy from lists of genes from each stage
+# To construct the gene coexpression network, low variation genes are removed based on a threshold for the percentage of genes to be maintained (75%). Then a correlation matrix is ​​constructed using Spearman rank correlation, but only the upper diagonal is kept to avoid redundant edges. Finally, a correlation threshold of XX was used to maintain edges with significant coexpression.
 #######################################################################################################################################
 # Load conversion table
 Table1_data<-read.table(file = "/home/felipe/Documentos/LungPortal/EnsemblToUniprotKBconversionList.txt", sep = '\t', header = TRUE,fill=TRUE)    
@@ -32,7 +33,6 @@ df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stag
 df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,]))
 df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,]))
 #######################################################################################################################################
-# To construct the gene coexpression network, low variation genes are removed based on a threshold for the percentage of genes to be maintained (75%). Then a correlation matrix is ​​constructed using Spearman rank correlation, but only the upper diagonal is kept to avoid redundant edges. Finally, a correlation threshold of XX was used to maintain edges with significant coexpression.
 # Filter by low variability
 df_stage_I_filtered<-filter_low_var(t(df_correlation_net_stage_I), pct = 0.75, type = c("mean"))
 df_stage_II_filtered<-filter_low_var(t(df_correlation_net_stage_II), pct = 0.75, type = c("mean"))

@@ -83,7 +83,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	log2change_Stage_i$Category<-"Uncategorized"
 	
 	# First, stageI
-	log2change_Stage_i[log2change_Stage_i$log2change>=log2fc_threshold,"Category"]<-"Up-regulated"		
+	log2change_Stage_i[log2change_Stage_i$log2change>=threshold_stage,"Category"]<-"Up-regulated"		
 	####################################################################################################################			
 	# Selected genes	
 	# Obtain differential Category numbers

@@ -90,15 +90,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	selected_genes<-rownames(log2change_Stage_i[which(log2change_Stage_i$Category!="Uncategorized"),])
 
 	# Coldata
-	colData_sub<-colData[colData$tissue_type=="Tumor",]	
-	
-	pca_res <- prcomp(t(unstranded_data[selected_genes,colData_sub$patient_id]), scale. = TRUE)
-	dt_pca <- data.frame('Stages' = colData[colnames(unstranded_data[selected_genes,colData_sub$patient_id]),"stages"], pca_res$x[,1:2])		
-	
-	# FindClusters_resolution
-	png(filename=paste(output_dir,"PCA_",Stage_i,".png",sep=""), width = 16, height = 16, res=600, units = "cm")
-	print(ggplot2::autoplot(pca_res, data=colData[colnames(unstranded_data[selected_genes,colData_sub$patient_id]),], colour="stages", frame=FALSE, frame.type="t") + xlim(-0.1,0.1) + ylim(-0.1,0.1) + theme_bw() + ggtitle(paste("DE Genes ", Stage_i,"\n",paste(length(selected_genes), "genes"),sep=""))+ theme(legend.position='bottom'))
-	dev.off()	
+	colData_sub<-colData[colData$tissue_type=="Tumor",]		
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3
 	write_tsv(na.omit(log2change_Stage_i[selected_genes,]), paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))

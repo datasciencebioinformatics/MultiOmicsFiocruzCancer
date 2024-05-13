@@ -57,17 +57,14 @@ net_stage_I_correlation_network<-na.omit(net_stage_I_correlation_network[net_sta
 net_stage_II_correlation_network<-na.omit(net_stage_II_correlation_network[net_stage_II_correlation_network$value>=upper_weight_th,])
 net_stage_III_correlation_network<-na.omit(net_stage_III_correlation_network[net_stage_III_correlation_network$value>=upper_weight_th,])
 #######################################################################################################################################
-dim(unique(net_stage_I_correlation_network[,c(1,2)]))
-unique(net_stage_I_correlation_network[,c(1,2)])
-#######################################################################################################################################
 # If at least one of the genes in the pair are in the interactome
-interactome_data_stage_I<-interactions_stage_I
+interactome_data_stage_I<-net_stage_I_correlation_network[,1:2]
 
 # If at least one of the genes in the pair are in the interactome
-interactome_data_stage_II<-interactions_stage_II
+interactome_data_stage_II<-net_stage_II_correlation_network[,1:2]
 
 # If at least one of the genes in the pair are in the interactome
-interactome_data_stage_III<-interactions_stage_III
+interactome_data_stage_III<-net_stage_III_correlation_network[,1:2]
 
 # Rename columns
 colnames(interactome_data_stage_I)<-c("Gene1","Gene2")

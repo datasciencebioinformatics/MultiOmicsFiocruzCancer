@@ -1,5 +1,6 @@
 #######################################################################################################################################
 # A script to caluclate entropy from lists of genes from each stage
+# To construct sub-interactome networks, pairwise combinations of stage-specific genes are created and then filtered to keep edges overlapping the interctome.
 #######################################################################################################################################
 # Path to input files
 # Interactome file

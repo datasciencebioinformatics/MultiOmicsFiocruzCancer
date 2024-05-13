@@ -71,7 +71,7 @@ interactome_data<-unique(gene_conversion[,3:4])
 colnames(interactome_data)<-c("Gene1","Gene2")
 
 # Set rownames(interactome_data)
-rownames(interactome_data)<-paste(interactome_data$Gene1,interactome_data$Gene2,sep="-"))
+rownames(interactome_data)<-paste(interactome_data$Gene1,interactome_data$Gene2,sep="-")
 
 # Invert data.frame
 interactome_data_inv<-data.frame(Gene1=interactome_data$Gene2,Gene2=interactome_data$Gene1)

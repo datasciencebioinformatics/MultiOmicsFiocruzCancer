@@ -32,6 +32,8 @@ df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stag
 df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,]))
 df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,]))
 #######################################################################################################################################
+# To construct the gene coexpression network, low variation genes are removed based on a threshold for the percentage of genes to be maintained (75%). Then a correlation matrix is ​​constructed using Spearman rank correlation, but only the upper diagonal is kept to avoid redundant edges. Finally, a correlation threshold of XX was used to maintain edges with significant coexpression.
+# Filter by low variability
 df_stage_I_filtered<-filter_low_var(t(df_correlation_net_stage_I), pct = 0.75, type = c("mean"))
 df_stage_II_filtered<-filter_low_var(t(df_correlation_net_stage_II), pct = 0.75, type = c("mean"))
 df_stage_III_filtered<-filter_low_var(t(df_correlation_net_stage_III), pct = 0.75, type = c("mean"))
@@ -39,44 +41,9 @@ df_stage_III_filtered<-filter_low_var(t(df_correlation_net_stage_III), pct = 0.7
 # Set threshold
 upper_weight_th = upper_weight_th
 
-net_stage_I   <- build_net(t(df_correlation_net_stage_I), cor_func = "spearman",  n_threads = 1, fit_cut_off=upper_weight_th)
-net_stage_II   <- build_net(t(df_correlation_net_stage_II), cor_func = "spearman",  n_threads = 1, fit_cut_off=upper_weight_th)
-net_stage_III   <- build_net(t(df_correlation_net_stage_III), cor_func = "spearman",  n_threads = 1, fit_cut_off=upper_weight_th)
-########################################################################################################################################
-# Only recalculate TOM for modules of interest (faster, altho there's some online discussion if this will be slightly off)
-# Here I calculate the TOM Similarity Matrix from expression from genes of each stage
-# the gene lista have been checked, the table have been checked
-# I have used power value = 9 as in the tutorial, for the moment no moment to change
-adjancy
-
-
-
-# For each stage, a table is composed with the edges of the network.
-# The resulting table is a pairwise combination of the genes in the TOM_Stage table
-# Questions are : a) What is the value returned by TOMsimilarity b) how to define the threhold? 
-edge_list_stage_I = data.frame(data.frame(TOM_Stage_I) %>%  mutate(gene1 = row.names(.)) %>%  pivot_longer(-gene1) %>%  dplyr::rename(gene2 = name, correlation = value) %>%
-  unique() %>%  subset(!(gene1==gene2)))
-
-# edge_list_stage_II
-edge_list_stage_II = data.frame(data.frame(TOM_Stage_II) %>%  mutate(gene1 = row.names(.)) %>%  pivot_longer(-gene1) %>%  dplyr::rename(gene2 = name, correlation = value) %>%
-  unique() %>%  subset(!(gene1==gene2)))
-
-# edge_list_stage_III
-edge_list_stage_III = data.frame(data.frame(TOM_Stage_III) %>%  mutate(gene1 = row.names(.)) %>%  pivot_longer(-gene1) %>%  dplyr::rename(gene2 = name, correlation = value) %>%
-  unique() %>%  subset(!(gene1==gene2)))
-
-
-# Here I will use different packages to construct gene co-expression network.
-# In a first moment I am interested in the number of genes, around 100 an same quantity accross stages.
-# in a second moment, I am interested in the number of edgens per stages. This could be in the order of less than 1000.
-# https://rdrr.io/cran/WGCNA/man/adjacency.html:
-# I can use this tutorial to obtain edges list
-# GO to "Generate and Export Networks"
-https://bioinformaticsworkbook.org/tutorials/wgcna.html#gsc.tab=0
-
-#net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "spearman", use = "complete.obs")
-#net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "spearman", use = "complete.obs")
-#net_stage_III   <- cor(t(df_correlation_net_stage_III), method = "spearman", use = "complete.obs")
+net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "spearman", use = "complete.obs")
+net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "spearman", use = "complete.obs")
+net_stage_III   <- cor(t(df_correlation_net_stage_III), method = "spearman", use = "complete.obs")
 
 net_stage_I[lower.tri(net_stage_I)] <- NA
 net_stage_II[lower.tri(net_stage_II)] <- NA
@@ -89,11 +56,9 @@ net_stage_III_correlation_network<-melt(net_stage_III)
 net_stage_I_correlation_network<-na.omit(net_stage_I_correlation_network[net_stage_I_correlation_network$value>=upper_weight_th,])
 net_stage_II_correlation_network<-na.omit(net_stage_II_correlation_network[net_stage_II_correlation_network$value>=upper_weight_th,])
 net_stage_III_correlation_network<-na.omit(net_stage_III_correlation_network[net_stage_III_correlation_network$value>=upper_weight_th,])
-
 #######################################################################################################################################
-interactions_stage_I<-unique(net_stage_I_correlation_network[,c(1,2)])
-interactions_stage_II<-unique(net_stage_II_correlation_network[,c(1,2)])
-interactions_stage_III<-unique(net_stage_III_correlation_network[,c(1,2)])
+dim(unique(net_stage_I_correlation_network[,c(1,2)]))
+unique(net_stage_I_correlation_network[,c(1,2)])
 #######################################################################################################################################
 # If at least one of the genes in the pair are in the interactome
 interactome_data_stage_I<-interactions_stage_I
@@ -150,22 +115,6 @@ df_entropy_calulation_III$p_k_mult_log2_pk<-df_entropy_calulation_III$p_k*df_ent
 Entropy_stage_I_value_Carels  <-abs(sum(df_entropy_calulation_I$p_k_mult_log2_pk))
 Entropy_stage_II_value_Carels <-abs(sum(df_entropy_calulation_II$p_k_mult_log2_pk))
 Entropy_stage_III_value_Carels<-abs(sum(df_entropy_calulation_III$p_k_mult_log2_pk))
-
-# FindClusters_resolution
-#png(filename=paste(output_dir,"Network_","graph_Stage_I_.png",sep=""), width = 20, height = 20, res=600, units = "cm")
-#	layout_stage_I <- plot_module(graph_stage_I, upper_weight_th = upper_weight_th, groups = sub_clusters_modules_stage_I,vertex.label.cex = 0.5, node_scaling_max = 7,  legend_cex = 1,  title = paste("Network for genes of Stage I\nEntropy : ", round(Entropy_stage_I_value_Carels,4),sep=""))
-#dev.off()
-
-# FindClusters_resolution
-#png(filename=paste(output_dir,"Network_","graph_Stage_II_.png",sep=""), width = 20, height = 20, res=600, units = "cm")
-#	layout_stage_II <- plot_module(graph_stage_II, upper_weight_th = upper_weight_th, groups = sub_clusters_modules_stage_II,vertex.label.cex = 0.5, node_scaling_max = 7,  legend_cex = 1,  title = paste("Network for genes of Stage II\nEntropy : ", round(Entropy_stage_II_value_Carels,4),sep=""))
-#dev.off()
-
-# FindClusters_resolution
-#png(filename=paste(output_dir,"Network_","graph_Stage_III_.png",sep=""), width = 20, height = 20, res=600, units = "cm")
-#	layout_stage_III <- plot_module(graph_stage_III, upper_weight_th = upper_weight_th, groups = sub_clusters_modules_stage_III,vertex.label.cex = 0.5, node_scaling_max = 7,  legend_cex = 1,  title = paste("Network for genes of Stage III\nEntropy : ", round(Entropy_stage_III_value_Carels,4),sep=""))
-#dev.off()
-
 ########################################################################################################################################
 # Save TSV file with genes from Stage1
 write_tsv(df_stageI_connectivity, paste(output_dir,"df_stageI_connectivity_I",".tsv",sep=""))
@@ -176,10 +125,6 @@ write_tsv(df_stageIII_connectivity, paste(output_dir,"df_stageIII_connectivity_I
 write_tsv(interactome_data_stage_I, paste(output_dir,"df_stageI_interactome",".tsv",sep=""))
 write_tsv(interactome_data_stage_II, paste(output_dir,"df_stageII_interactome",".tsv",sep=""))
 write_tsv(interactome_data_stage_III, paste(output_dir,"df_stageIII_interactome",".tsv",sep=""))
-########################################################################################################################################
-g_stage_I<-graph_from_data_frame(interactome_data_stage_I, directed = TRUE, vertices = NULL)
-g_stage_II<-graph_from_data_frame(interactome_data_stage_II, directed = TRUE, vertices = NULL)
-g_stage_III<-graph_from_data_frame(interactome_data_stage_III, directed = TRUE, vertices = NULL)
 ########################################################################################################################################
 cat(print(paste("\nNº of vertex/Nº of edges, after filter for Stage I/Entropy: ",  paste(length(df_stageI_connectivity$Gene),dim(unique(interactome_data_stage_I))[1],round(Entropy_stage_I_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
 cat(print(paste("\nNº of vertex/Nº of edges, after filter for Stage II/Entropy: ", paste(length(df_stageII_connectivity$Gene),dim(unique(interactome_data_stage_II))[1],round(Entropy_stage_II_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)

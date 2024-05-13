@@ -34,9 +34,30 @@ df_stage_I_filtered<-filter_low_var(t(df_correlation_net_stage_I), pct = 0.75, t
 df_stage_II_filtered<-filter_low_var(t(df_correlation_net_stage_II), pct = 0.75, type = c("mean"))
 df_stage_III_filtered<-filter_low_var(t(df_correlation_net_stage_III), pct = 0.75, type = c("mean"))
 
-#net_stage_I   <- build_net(t(df_correlation_net_stage_I), cor_func = "spearman",  n_threads = 1)
-#net_stage_II   <- build_net(t(df_correlation_net_stage_II), cor_func = "spearman",  n_threads = 1)
-#net_stage_III   <- build_net(t(df_correlation_net_stage_III), cor_func = "spearman",  n_threads = 1)
+# Set threshold
+upper_weight_th = upper_weight_th
+
+net_stage_I   <- build_net(t(df_correlation_net_stage_I), cor_func = "spearman",  n_threads = 1, fit_cut_off=upper_weight_th)
+net_stage_II   <- build_net(t(df_correlation_net_stage_II), cor_func = "spearman",  n_threads = 1, fit_cut_off=upper_weight_th)
+net_stage_III   <- build_net(t(df_correlation_net_stage_III), cor_func = "spearman",  n_threads = 1, fit_cut_off=upper_weight_th)
+########################################################################################################################################
+# Only recalculate TOM for modules of interest (faster, altho there's some online discussion if this will be slightly off)
+TOM_Stage_I = TOMsimilarityFromExpr(t(df_correlation_net_stage_I), power = 9)
+TOM_Stage_II = TOMsimilarityFromExpr(t(df_correlation_net_stage_II), power = 9)
+TOM_Stage_III = TOMsimilarityFromExpr(t(df_correlation_net_stage_III), power = 9)
+
+# Add gene names to row and columns
+row.names(TOM_Stage_I) = row.names(df_correlation_net_stage_I)
+colnames(TOM_Stage_I) = row.names(df_correlation_net_stage_I)
+
+# Add gene names to row and columns
+row.names(TOM_Stage_II) = row.names(df_correlation_net_stage_II)
+colnames(TOM_Stage_II) = row.names(df_correlation_net_stage_II)
+
+# Add gene names to row and columns
+row.names(TOM_Stage_III) = row.names(df_correlation_net_stage_III)
+colnames(TOM_Stage_III) = row.names(df_correlation_net_stage_III)
+
 # Here I will use different packages to construct gene co-expression network.
 # In a first moment I am interested in the number of genes, around 100 an same quantity accross stages.
 # in a second moment, I am interested in the number of edgens per stages. This could be in the order of less than 1000.
@@ -45,12 +66,9 @@ df_stage_III_filtered<-filter_low_var(t(df_correlation_net_stage_III), pct = 0.7
 # GO to "Generate and Export Networks"
 https://bioinformaticsworkbook.org/tutorials/wgcna.html#gsc.tab=0
 
-net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "spearman", use = "complete.obs")
-net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "spearman", use = "complete.obs")
-net_stage_III   <- cor(t(df_correlation_net_stage_III), method = "spearman", use = "complete.obs")
-
-# Set threshold
-upper_weight_th = upper_weight_th
+#net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "spearman", use = "complete.obs")
+#net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "spearman", use = "complete.obs")
+#net_stage_III   <- cor(t(df_correlation_net_stage_III), method = "spearman", use = "complete.obs")
 
 net_stage_I[lower.tri(net_stage_I)] <- NA
 net_stage_II[lower.tri(net_stage_II)] <- NA

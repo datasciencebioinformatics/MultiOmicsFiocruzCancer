@@ -32,14 +32,11 @@ for (threshold_rpkm in trheshold_1)
 			for (threshold_cor in trheshold_4)
 			{						
 				# Create output folder name
-				output_dir=paste(output_dir,"/trheshold1_",threshold_rpkm,"_trheshold2_",threshold_tumor,"_trheshold3_",threshold_stage,"_trheshold4_",threshold_cor,"/",sep="")
-				
-				# Double folder
-				output_folder=output_dir
-				
+				output_folder=paste(output_dir,"/trheshold1_",threshold_rpkm,"_trheshold2_",threshold_tumor,"_trheshold3_",threshold_stage,"_trheshold4_",threshold_cor,"/",sep="")
+												
 				# Remove and re-create folder
-				system(paste("rm -r ",output_dir,sep=""))
-				system(paste("mkdir ",output_dir,sep=""))
+				system(paste("rm -r ",output_folder,sep=""))
+				system(paste("mkdir ",output_folder,sep=""))
 								
 				## A R scripts for RPKM Normalization # Done
 				# rowMeans(unstranded_rpkm)>3 

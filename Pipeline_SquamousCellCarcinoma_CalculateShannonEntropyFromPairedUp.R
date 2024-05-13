@@ -69,6 +69,13 @@ interactome_data<-unique(gene_conversion[,3:4])
 # Rename interactome_data collumns
 colnames(interactome_data)<-c("Gene1","Gene2")
 #######################################################################################################
+# A vector with all genes of the interactome,
+genes_interactome<-unique(c(interactome_data$Gene1,interactome_data$Gene2))
+
+
+unique(c(interactome_data$Gene1,interactome_data$Gene2))
+
+#######################################################################################################
 # A filter to keep only genes that are positivelly regulated
 genes_ids<-c()
 

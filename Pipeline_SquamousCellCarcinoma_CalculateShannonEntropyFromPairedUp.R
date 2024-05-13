@@ -68,15 +68,9 @@ interactome_data<-unique(gene_conversion[,3:4])
 
 # Rename interactome_data collumns
 colnames(interactome_data)<-c("Gene1","Gene2")
-#######################################################################################################
-# A vector with all genes of the interactome,
-genes_interactome<-unique(c(interactome_data$Gene1,interactome_data$Gene2))
 
-# Genertue full interactome 
-full_interactome<-combinations(n=length(full_interactome), r=2, v = full_interactome, set = TRUE, repeats.allowed = FALSE)
-
-# Calculate all pairwise combinations of genes, without redunctancy
-full_interactome<- expand.grid.unique(x = genes_interactome, y = genes_interactome,include.equals=FALSE)
+# Set rownames(interactome_data)
+rownames(interactome_data)<-paste(interactome_data$Gene1,interactome_data$Gene2,sep="-"))
 #######################################################################################################
 # A filter to keep only genes that are positivelly regulated
 genes_ids<-c()
@@ -98,6 +92,23 @@ genes_ids<-unique(genes_ids)
 genes_interactome_stage_I  <-genes_id_vector_stage_I[genes_id_vector_stage_I %in% genes_ids]
 genes_interactome_stage_II <-genes_id_vector_stage_II[genes_id_vector_stage_II %in% genes_ids]
 genes_interactome_stage_III<-genes_id_vector_stage_III[genes_id_vector_stage_III %in% genes_ids]
+
+# A vector with all genes of the interactome,full_interactome<-unique(c(genes_interactome_stage_I$Gene1,genes_interactome_stage_I$Gene2))
+# Calculate all pairwise combinations of genes, without redunctancy
+full_interactome_stage_I<- data.frame(expand.grid.unique(x = genes_interactome_stage_I, y = genes_interactome_stage_I,include.equals=FALSE))
+full_interactome_stage_II<- data.frame(expand.grid.unique(x = genes_interactome_stage_II, y = genes_interactome_stage_II,include.equals=FALSE))
+full_interactome_stage_III<- data.frame(expand.grid.unique(x = genes_interactome_stage_III, y = genes_interactome_stage_III,include.equals=FALSE))
+
+# set colnames
+colnames(full_interactome_stage_I)<-c("Gene1","Gene2")
+colnames(full_interactome_stage_II)<-c("Gene1","Gene2")
+colnames(full_interactome_stage_III)<-c("Gene1","Gene2")
+
+rownames(full_interactome_stage_I)<-paste(full_interactome_stage_I$Gene1,full_interactome_stage_I$Gene2,sep="-")
+rownames(full_interactome_stage_II)<-paste(full_interactome_stage_II$Gene1,full_interactome_stage_II$Gene2,sep="-")
+rownames(full_interactome_stage_III)<-paste(full_interactome_stage_III$Gene1,full_interactome_stage_III$Gene2,sep="-")
+#######################################################################################################
+
 ########################################################################################################################################
 # Filter tables to keep only the gene entries that are listed in the EnsemblToUniprotKBconversionList
 interactome_data<-interactome_data[interactome_data$Gene1 %in% genes_ids,]

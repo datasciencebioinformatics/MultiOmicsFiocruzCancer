@@ -1,3 +1,5 @@
+library(tidyr)
+library(dplyr)
 #######################################################################################################################################
 # A script to caluclate entropy from lists of genes from each stage
 #######################################################################################################################################
@@ -57,6 +59,19 @@ colnames(TOM_Stage_II) = row.names(df_correlation_net_stage_II)
 # Add gene names to row and columns
 row.names(TOM_Stage_III) = row.names(df_correlation_net_stage_III)
 colnames(TOM_Stage_III) = row.names(df_correlation_net_stage_III)
+
+# edge_list_stage_I
+edge_list_stage_I = data.frame(data.frame(TOM_Stage_I) %>%  mutate(gene1 = row.names(.)) %>%  pivot_longer(-gene1) %>%  dplyr::rename(gene2 = name, correlation = value) %>%
+  unique() %>%  subset(!(gene1==gene2)))
+
+# edge_list_stage_II
+edge_list_stage_II = data.frame(data.frame(TOM_Stage_II) %>%  mutate(gene1 = row.names(.)) %>%  pivot_longer(-gene1) %>%  dplyr::rename(gene2 = name, correlation = value) %>%
+  unique() %>%  subset(!(gene1==gene2)))
+
+# edge_list_stage_III
+edge_list_stage_III = data.frame(data.frame(TOM_Stage_III) %>%  mutate(gene1 = row.names(.)) %>%  pivot_longer(-gene1) %>%  dplyr::rename(gene2 = name, correlation = value) %>%
+  unique() %>%  subset(!(gene1==gene2)))
+
 
 # Here I will use different packages to construct gene co-expression network.
 # In a first moment I am interested in the number of genes, around 100 an same quantity accross stages.

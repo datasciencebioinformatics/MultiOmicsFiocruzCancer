@@ -12,58 +12,64 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 
 # rowMeans(unstranded_rpkm)>3 
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_RPKM_Normalization_V2.R")
-
 #####################################################################################################################
-# Configuration 
-output_folder="/home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_1_RPKM_3/"
-sudo rm -R $output_folder
-mkdir $output_folder
-#####################################################################################################################
-# # Pipeline
-# RPKM threshold
-RPKM_trheshold<-3
+# # Pipeline thresholds
+trheshold_1<-c(3,5,10)            # Threshold RPKM
+trheshold_2<-c(0.25,0.50,1.0)     # Threshold Tumor/Normal        
+trheshold_3<-c(0.25,0.50,1.0)     # Threshold per stage
+trheshold_4<-c(0.25,0.50,1.0)     # for correlation network
 
-# # Pipeline
-# Threshold Tumor/Normal        
-log2foldchange_trheshold<-1.58
+# For each threshold_rpkm
+for (threshold_rpkm in trheshold_1)
+{
+	# For each threshold_rpkm
+	for (threshold_tumor in trheshold_2)	
+	{
+		# For each threshold_stage
+		for (threshold_stage in trheshold_3)
+		{
+			# For each threshold_cor
+			for (threshold_cor in trheshold_4)
+			{						
+				# Create output folder name
+				output_dir=paste(output_dir,"/trheshold1_",threshold_rpkm,"_trheshold2_",threshold_tumor,"_trheshold3_",threshold_stage,"_trheshold4_",threshold_cor,"/",sep="")
+				
+				# Double folder
+				output_folder=output_dir
+				
+				# Remove and re-create folder
+				system(paste("rm -r ",output_dir,sep=""))
+				system(paste("mkdir ",output_dir,sep=""))
+								
+				## A R scripts for RPKM Normalization # Done
+				# rowMeans(unstranded_rpkm)>3 
+				source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadAllTables.R")
 
-# Threshold per stage 
-log2fc_threshold<-1
+				## A R scripts to apply filters
+				source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamplesRPKM.R")
 
-output_dir="/home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_1_RPKM_3/"                                                             
-#####################################################################################################################
-# CreateMetadataFromGDCFiles
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadRPackages.R")
+				## A R scripts to apply filters
+				#source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_Filters.R")
+				source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_Filters_V2.R")
 
-## A R scripts for RPKM Normalization # Done
-# rowMeans(unstranded_rpkm)>3 
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadAllTables.R")
+				## A R scripts to DE per stage
+				source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageMeansFromPairedV2.R")
 
-## A R scripts to apply filters
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamplesRPKM.R")
+				## A R scripts to create veen driagam
+				source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_VeenDiagramsFromPairedUp.R")
 
-## A R scripts to apply filters
-#source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_Filters.R")
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_Filters_V2.R")
+				## A R scripts to calculate Calculate Shannon Entropy
+				source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropy.R")
 
-## A R scripts to DE per stage
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageMeansFromPairedV2.R")
+				## A R scripts to calculate Calculate Shannon Entropy
+				source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropyFromPairedUp.R")																
+			}
+		}		
+	}	
+}
 
-## A R scripts to create veen driagam
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_VeenDiagramsFromPairedUp.R")
+## A R scripts to plot cytoscape network analysis
+#source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_NetworkAnalysisPlot.R")
 
-## A R scripts to calculate Calculate Shannon Entropy
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropy.R")
-
-## A R scripts to calculate Calculate Shannon Entropy
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropyFromPairedUp.R")
-###########################################################################################################################
-cat /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_1_per_stage_1_RPKM_3/outfile.txt
-cat /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_1_per_stage_1_RPKM_5/outfile.txt
-cat /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_1_per_stage_1_RPKM_10/outfile.txt
-
-cat /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_1_RPKM_3/outfile.txt
-cat /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_1_RPKM_5/outfile.txt
-
-cat /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_158_RPKM_3/outfile.txt
-cat /home/felipe/Documentos/LungPortal/output_tumor_normal_log2fc_158_per_stage_158_RPKM_5/outfile.txt
+## A R scripts to plot cytoscape network analysis
+#source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_Citoscape_Networtks.R")

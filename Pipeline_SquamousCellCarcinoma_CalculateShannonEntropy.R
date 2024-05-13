@@ -44,10 +44,14 @@ net_stage_II   <- build_net(t(df_correlation_net_stage_II), cor_func = "spearman
 net_stage_III   <- build_net(t(df_correlation_net_stage_III), cor_func = "spearman",  n_threads = 1, fit_cut_off=upper_weight_th)
 ########################################################################################################################################
 # Only recalculate TOM for modules of interest (faster, altho there's some online discussion if this will be slightly off)
+# Here I calculate the TOM Similarity Matrix from expression from genes of each stage
+# the gene lista have been checked, the table have been checked
+# I have used power value = 9 as in the tutorial, for the moment no moment to change
 TOM_Stage_I = TOMsimilarityFromExpr(t(df_correlation_net_stage_I), power = 9)
 TOM_Stage_II = TOMsimilarityFromExpr(t(df_correlation_net_stage_II), power = 9)
 TOM_Stage_III = TOMsimilarityFromExpr(t(df_correlation_net_stage_III), power = 9)
 
+# Rownames and colnames ot tom similarity matry are set for each stage.
 # Add gene names to row and columns
 row.names(TOM_Stage_I) = row.names(df_correlation_net_stage_I)
 colnames(TOM_Stage_I) = row.names(df_correlation_net_stage_I)
@@ -60,7 +64,9 @@ colnames(TOM_Stage_II) = row.names(df_correlation_net_stage_II)
 row.names(TOM_Stage_III) = row.names(df_correlation_net_stage_III)
 colnames(TOM_Stage_III) = row.names(df_correlation_net_stage_III)
 
-# edge_list_stage_I
+# For each stage, a table is composed with the edges of the network.
+# The resulting table is a pairwise combination of the genes in the TOM_Stage table
+# Questions are : a) What is the value returned by TOMsimilarity b) how to define the threhold? 
 edge_list_stage_I = data.frame(data.frame(TOM_Stage_I) %>%  mutate(gene1 = row.names(.)) %>%  pivot_longer(-gene1) %>%  dplyr::rename(gene2 = name, correlation = value) %>%
   unique() %>%  subset(!(gene1==gene2)))
 

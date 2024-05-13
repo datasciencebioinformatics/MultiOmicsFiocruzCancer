@@ -39,7 +39,7 @@ df_stage_II_filtered<-filter_low_var(t(df_correlation_net_stage_II), pct = 0.75,
 df_stage_III_filtered<-filter_low_var(t(df_correlation_net_stage_III), pct = 0.75, type = c("mean"))
 
 # Set threshold
-upper_weight_th = upper_weight_th
+upper_weight_th = threshold_cor
 
 net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "spearman", use = "complete.obs")
 net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "spearman", use = "complete.obs")

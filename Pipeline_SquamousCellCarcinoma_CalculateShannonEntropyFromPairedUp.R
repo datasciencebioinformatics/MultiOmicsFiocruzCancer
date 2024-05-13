@@ -71,6 +71,15 @@ colnames(interactome_data)<-c("Gene1","Gene2")
 
 # Set rownames(interactome_data)
 rownames(interactome_data)<-paste(interactome_data$Gene1,interactome_data$Gene2,sep="-"))
+
+# Invert data.frame
+interactome_data_inv<-data.frame(Gene1=interactome_data$Gene2,Gene2=interactome_data$Gene1)
+
+# Assert rownames
+rownames(interactome_data_inv)<-paste(interactome_data_inv$Gene1,interactome_data_inv$Gene2,sep="-")
+
+# combine interactomes
+interactome_data_inv<-rbind(interactome_data,interactome_data_inv)
 #######################################################################################################
 # A filter to keep only genes that are positivelly regulated
 genes_ids<-c()
@@ -108,70 +117,13 @@ rownames(full_interactome_stage_I)<-paste(full_interactome_stage_I$Gene1,full_in
 rownames(full_interactome_stage_II)<-paste(full_interactome_stage_II$Gene1,full_interactome_stage_II$Gene2,sep="-")
 rownames(full_interactome_stage_III)<-paste(full_interactome_stage_III$Gene1,full_interactome_stage_III$Gene2,sep="-")
 #######################################################################################################
-
+interactome_stage_I  <-interactome_data_inv[which(rownames(interactome_data_inv) %in% rownames(full_interactome_stage_I)),]
+interactome_stage_II <-interactome_data_inv[which(rownames(interactome_data_inv) %in% rownames(full_interactome_stage_II)),]
+interactome_stage_III<-interactome_data_inv[which(rownames(interactome_data_inv) %in% rownames(full_interactome_stage_III)),]
 ########################################################################################################################################
-# Filter tables to keep only the gene entries that are listed in the EnsemblToUniprotKBconversionList
-interactome_data<-interactome_data[interactome_data$Gene1 %in% genes_ids,]
-interactome_data<-interactome_data[interactome_data$Gene2 %in% genes_ids,]
-########################################################################################################################################
-# If at least one of the genes in the pair are in the interactome
-interactome_data_stage_I<-rbind(interactome_data[interactome_data$Gene1 %in% genes_interactome_stage_I,],
-interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_I,])
-
-# If at least one of the genes in the pair are in the interactome
-interactome_data_stage_II<-rbind(interactome_data[interactome_data$Gene1 %in% genes_interactome_stage_II,],
-interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_II,])
-
-# If at least one of the genes in the pair are in the interactome
-interactome_data_stage_III<-rbind(interactome_data[interactome_data$Gene1 %in% genes_interactome_stage_III,],
-interactome_data[interactome_data$Gene2 %in% genes_interactome_stage_III,])
-########################################################################################################################################
-# copy interactome_data_stages
-interactome_data_stage_I_clean<-interactome_data_stage_I
-interactome_data_stage_II_clean<-interactome_data_stage_II
-interactome_data_stage_III_clean<-interactome_data_stage_III
-
-merge_interactome_data<-rbind(data.frame(Gene1=interactome_data_stage_I_clean$Gene1,Gene2=interactome_data_stage_I_clean$Gene2,Stage="Stage I"),
-data.frame(Gene1=interactome_data_stage_II_clean$Gene1,Gene2=interactome_data_stage_II_clean$Gene2,Stage="Stage II"),
-data.frame(Gene1=interactome_data_stage_III_clean$Gene1,Gene2=interactome_data_stage_III_clean$Gene2,Stage="Stage III"))
-
-# Clean the tables
-for (gene_pair_index in rownames(merge_interactome_data))
-{
-    # interactome_data_stage
-    pair_gene_id_I <-merge_interactome_data[gene_pair_index,"Gene1"]
-    pair_gene_id_II<-merge_interactome_data[gene_pair_index,"Gene2"]
-
-    # If both genes are in the list of genes_ids
-    if( (pair_gene_id_I %in% genes_ids) &&  (pair_gene_id_II %in% genes_ids) )
-    {
-      # Re-order gene ids
-      if(pair_gene_id_II<pair_gene_id_I)
-      {
-        merge_interactome_data[gene_pair_index,"Gene1"]<-pair_gene_id_II
-        merge_interactome_data[gene_pair_index,"Gene2"]<-pair_gene_id_I     
-      }
-      # Re-order gene ids
-      if(pair_gene_id_II==pair_gene_id_I)
-      {
-        merge_interactome_data[gene_pair_index,"Gene2"]<-"REPEAT"
-      }
-    }
-}
-# Take unique values
-merge_interactome_data<-unique(merge_interactome_data)
-########################################################################################################################################
-interactome_data_stage_I<-merge_interactome_data[merge_interactome_data$Stage=="Stage I",]
-interactome_data_stage_II<-merge_interactome_data[merge_interactome_data$Stage=="Stage II",]
-interactome_data_stage_III<-merge_interactome_data[merge_interactome_data$Stage=="Stage III",]
-########################################################################################################################################
-interactome_data_stage_I<-unique(interactome_data_stage_I[,c("Gene1","Gene2")])
-interactome_data_stage_II<-unique(interactome_data_stage_II[,c("Gene1","Gene2")])
-interactome_data_stage_III<-unique(interactome_data_stage_III[,c("Gene1","Gene2")])
-########################################################################################################################################
-df_stageI_connectivity   <-unique(data.frame(Conectivity=table(c(interactome_data_stage_I$Gene1,interactome_data_stage_I$Gene2))))
-df_stageII_connectivity  <-unique(data.frame(Conectivity=table(c(interactome_data_stage_II$Gene1,interactome_data_stage_II$Gene2))))
-df_stageIII_connectivity <-unique(data.frame(Conectivity=table(c(interactome_data_stage_III$Gene1,interactome_data_stage_III$Gene2))))
+df_stageI_connectivity   <-unique(data.frame(Conectivity=table(c(interactome_stage_I$Gene1,interactome_stage_I$Gene2))))
+df_stageII_connectivity  <-unique(data.frame(Conectivity=table(c(interactome_stage_II$Gene1,interactome_stage_II$Gene2))))
+df_stageIII_connectivity <-unique(data.frame(Conectivity=table(c(interactome_stage_III$Gene1,interactome_stage_III$Gene2))))
 ########################################################################################################################################
 colnames(df_stageI_connectivity)<-c("Gene","Conectivity")
 colnames(df_stageII_connectivity)<-c("Gene","Conectivity")
@@ -225,55 +177,3 @@ write_tsv(interactome_data_stage_I, paste(output_dir,"df_stageI_interactome_inte
 write_tsv(interactome_data_stage_II, paste(output_dir,"df_stageII_interactome_interactome",".tsv",sep=""))
 write_tsv(interactome_data_stage_III, paste(output_dir,"df_stageIII_interactome_interactome",".tsv",sep=""))
 ########################################################################################################################################
-
-
-
-
-
-
-
-list_pairs_stage_I<-c()
-list_pairs_stage_II<-c()
-list_pairs_stage_III<-c()
-for (gene_pair in rownames(interactome_data_stage_I))
-{
-	gene1<-interactome_data_stage_I[gene_pair,1]
-	gene2<-interactome_data_stage_I[gene_pair,2]
-	
-	if(sum(gene1 %in% genes_id_vector_stage_I) && sum(gene2 %in% genes_id_vector_stage_I) )
-	{
-		list_pairs_stage_I<-c(list_pairs_stage_I,gene_pair)
-	}
-}
-for (gene_pair in rownames(interactome_data_stage_II))
-{
-	gene1<-interactome_data_stage_I[gene_pair,1]
-	gene2<-interactome_data_stage_I[gene_pair,2]
-	
-	if(sum(gene1 %in% genes_id_vector_stage_II) && sum(gene2 %in% genes_id_vector_stage_II) )
-	{
-		list_pairs_stage_II<-c(list_pairs_stage_II,gene_pair)
-	}
-}
-for (gene_pair in rownames(interactome_data_stage_III))
-{
-	gene1<-interactome_data_stage_I[gene_pair,1]
-	gene2<-interactome_data_stage_I[gene_pair,2]
-	
-	if(sum(gene1 %in% genes_id_vector_stage_III) && sum(gene2 %in% genes_id_vector_stage_III) )
-	{
-		list_pairs_stage_II<-c(list_pairs_stage_III,gene_pair)
-	}
-}
-########################################################################################################################################
-interactome_data_stage_I<-interactome_data_stage_I[list_pairs_stage_I,]
-interactome_data_stage_II<-interactome_data_stage_I[list_pairs_stage_II,]
-interactome_data_stage_III<-interactome_data_stage_I[list_pairs_stage_III,]
-# Save TSV file with genes from Stage1
-#write_tsv(interactome_data_stage_I, paste(output_dir,"df_stageI_interactome_sub",".tsv",sep=""))
-#write_tsv(interactome_data_stage_II, paste(output_dir,"df_stageII_interactome_sub",".tsv",sep=""))
-#write_tsv(interactome_data_stage_III, paste(output_dir,"df_stageIII_interactome_sub",".tsv",sep=""))
-#########################################################################################################################################
-cat(print(paste("\nsub-interactome network, extrapolated  (Nº of vertex/Nº of edges/Entropy) Stage I: ",  paste(length(df_stageI_connectivity$Gene),dim(unique(interactome_data_stage_I))[1],round(Entropy_stage_I_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
-cat(print(paste("\nsub-interactome network, extrapolated  (Nº of vertex/Nº of edges/Entropy) Stage II: ", paste(length(df_stageII_connectivity$Gene),dim(unique(interactome_data_stage_II))[1],round(Entropy_stage_II_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
-cat(print(paste("\nsub-interactome network, extrapolated  (Nº of vertex/Nº of edges/Entropy) Stage III: ",paste(length(df_stageIII_connectivity$Gene),dim(unique(interactome_data_stage_III))[1],round(Entropy_stage_III_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)

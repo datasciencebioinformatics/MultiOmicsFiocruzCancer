@@ -19,6 +19,7 @@ trheshold_2<-c(0.15,0.25,0.5,0.75,1.0,1.58)     # Threshold Tumor/Normal
 trheshold_3<-c(0.15,0.25,0.5,0.75,1.0,1.58)     # Threshold per stage
 trheshold_4<-c(0.75,0.85,0.95,0.99)     # for correlation network
 
+
 # For each threshold_rpkm
 for (threshold_rpkm in trheshold_1)
 {
@@ -63,9 +64,9 @@ Script_file=paste("/home/felipe/scripts/Script_trheshold1_",threshold_rpkm,"_trh
 				cat(step1,file=Script_file,sep="\n",append=TRUE)				
 				cat(step2,file=Script_file,sep="\n",append=TRUE)				
 				cat(step3,file=Script_file,sep="\n",append=TRUE)				
-				cat(step4,file=Script_file,sep="\n",append=TRUE)											
-				cat(step5,file=Script_file,sep="\n",append=TRUE)											
-				cat(step6,file=Script_file,sep="\n",append=TRUE)																	
+				cat(step4,file=Script_file,sep="\n",append=TRUE)																
+				cat(step5,file=Script_file,sep="\n",append=TRUE)																				
+				cat(step6,file=Script_file,sep="\n",append=TRUE)																																
 				cat(step7,file=Script_file,sep="\n",append=TRUE)				
 				cat(step8,file=Script_file,sep="\n",append=TRUE)								
 			}
@@ -99,6 +100,8 @@ do
 	# Take the combination of parameters
 	execution_name=$(cat /home/felipe/scripts/$script | grep output_folder | sed 's/\/home//g' | sed 's/\/felipe//g'  | sed 's/\/Documentos//g'  | sed 's/\/LungPortal//g' | sed 's/\/output//g' | sed 's/\///g' | sed 's/=/ /g' | awk '{print $2}')
 	
+	echo $execution_name
+	
 	# File name
 	file_name="outfile.txt"
 	
@@ -129,7 +132,7 @@ do
 	# Number of tumor genes Stage I    (all/exclusive)
 	n_interactom_stage_III=$(cat $path_output_file | grep "co-expression network for Stage III: " | awk '{print $11}')				
 	
-	echo -e $execution_name"\t"$n_tumor_genes"\t"$n_coexpression_stage_I"\t"$n_coexpression_stage_II"\t"$n_coexpression_stage_III"\t"$n_interactom_stage_I"\t"$n_interactom_stage_II"\t"$n_interactom_stage_III >>> /home/felipe/Documentos/LungPortal/output/compiled_results.txt
+	echo -e $execution_name"\t"$n_tumor_genes"\t"$n_coexpression_stage_I"\t"$n_coexpression_stage_II"\t"$n_coexpression_stage_III"\t"$n_interactom_stage_I"\t"$n_interactom_stage_II"\t"$n_interactom_stage_III >> /home/felipe/Documentos/LungPortal/output/compiled_results.txt
 		
 done
 ##################################################################################################################################

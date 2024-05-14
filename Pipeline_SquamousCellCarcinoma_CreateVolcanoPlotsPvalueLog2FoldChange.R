@@ -1,6 +1,8 @@
 # Volcano plot of –log10 (p values) vs. log2foldchange. 
 # All, log2foldchange tumor,        log2foldchange per stage I, 
 #      log2foldchange per stage II, log2foldchange per stage III
+# Genes were filtered to include only those that had an RPKM ≥ 1.0, a fold-change of ≥1.5 and a paired t-test value of <0.01. https://pubmed.ncbi.nlm.nih.gov/27884954/
+
 
 # Create volcano plot
 	p1 <- ggplot(df_stages, aes(log2FoldChange, -log(padj,2))) +  geom_point(size = 2/5) +  theme_bw()

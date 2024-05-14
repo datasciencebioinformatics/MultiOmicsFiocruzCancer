@@ -15,14 +15,10 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 #####################################################################################################################
 # # Pipeline thresholds
 trheshold_1<-c(3,5,10)            # Threshold RPKM
-trheshold_2<-c(0.25,0.50,1.0)     # Threshold Tumor/Normal        
-trheshold_3<-c(0.25,0.50,1.0)     # Threshold per stage
+trheshold_2<-c(0.15,0.25,0.5,0.75,1.0)     # Threshold Tumor/Normal        
+trheshold_3<-c(0.15,0.25,0.5,0.75,1.0)     # Threshold per stage
 trheshold_4<-c(0.75,0.85,0.95)     # for correlation network
 
-threshold_rpkm  =3
-threshold_tumor =0.25
-threshold_stage =0.15
-threshold_cor   =0.75
 
 # For each threshold_rpkm
 for (threshold_rpkm in trheshold_1)
@@ -38,43 +34,64 @@ for (threshold_rpkm in trheshold_1)
 			{						
 				# Create output folder name
 				output_folder=paste(output_dir,"/trheshold1_",threshold_rpkm,"_trheshold2_",threshold_tumor,"_trheshold3_",threshold_stage,"_trheshold4_",threshold_cor,"/",sep="")
-												
-				# Remove and re-create folder
-				system(paste("rm -r ",output_folder,sep=""))
-				system(paste("mkdir ",output_folder,sep=""))
 				
-				# CreateMetadataFromGDCFiles
-				source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadRPackages.R")				
-								
-				## A R scripts for RPKM Normalization # Done
-				# rowMeans(unstranded_rpkm)>3 
-				source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadAllTables.R")
+										
+				# Save script path						
+Script_file=paste("/home/felipe/scripts/Script_trheshold1_",threshold_rpkm,"_trheshold2_",threshold_tumor,"_trheshold3_",threshold_stage,"_trheshold4",threshold_cor,".R",sep="")								
+				
+				system(paste("rm -R ",output_folder,sep=""))
+				system(paste("mkdir ",output_folder,sep=""))
 
-				## A R scripts to apply filters
-				source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamplesRPKM.R")
-
-				## A R scripts to apply filters
-				#source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_Filters.R")
-				source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_Filters_V2.R")
-
-				## A R scripts to DE per stage
-				source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageMeansFromPairedV2.R")
-
-				## A R scripts to create veen driagam
-				source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_VeenDiagramsFromPairedUp.R")
-
-				## A R scripts to calculate Calculate Shannon Entropy
-				source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropy.R")
-
-				## A R scripts to calculate Calculate Shannon Entropy
-				source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropyFromPairedUp.R")																
+				
+				# Create file							
+				cat(paste("#!/usr/bin/env Rscript",sep=""),file=Script_file,sep="\n")
+				cat(paste("threshold_rpkm=",threshold_rpkm,sep=""),file=Script_file,sep="\n",append=TRUE)
+				cat(paste("threshold_tumor=",threshold_tumor,sep=""),file=Script_file,sep="\n",append=TRUE)				
+				cat(paste("threshold_stage=",threshold_stage,sep=""),file=Script_file,sep="\n",append=TRUE)								
+				cat(paste("threshold_cor=",threshold_cor,sep=""),file=Script_file,sep="\n",append=TRUE)												
+				cat(paste("output_folder=--",output_folder,"--",sep=""),file=Script_file,sep="\n",append=TRUE)
+				cat(paste("output_dir=--",output_dir,"--",sep=""),file=Script_file,sep="\n",append=TRUE)				
+				
+				step1<-paste("source(/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadRPackages.R)",sep="")
+				step2<-paste("source(/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadAllTables.R)",sep="")
+				step3<-paste("source(/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamplesRPKM.R)",sep="")
+				step4<-paste("source(/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_Filters_V2.R)",sep="")
+				step5<-paste("source(/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageMeansFromPairedV2.R)",sep="")
+				step6<-paste("source(/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_VeenDiagramsFromPairedUp.R)",sep="")				
+				step7<-paste("source(/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropy.R)",sep="")
+				step8<-paste("source(/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropyFromPairedUp.R)",sep="")																
+				cat(step1,file=Script_file,sep="\n",append=TRUE)				
+				cat(step2,file=Script_file,sep="\n",append=TRUE)				
+				cat(step3,file=Script_file,sep="\n",append=TRUE)				
+				cat(step4,file=Script_file,sep="\n",append=TRUE)																
+				cat(step5,file=Script_file,sep="\n",append=TRUE)																				
+				cat(step6,file=Script_file,sep="\n",append=TRUE)																																
+				cat(step7,file=Script_file,sep="\n",append=TRUE)				
+				cat(step8,file=Script_file,sep="\n",append=TRUE)								
 			}
 		}		
 	}	
 }
-
-## A R scripts to plot cytoscape network analysis
+##################################################################################################################################
+# Bash procedure to prepare script
+ls /home/felipe/scripts/ | while read script
+do
+	echo /home/felipe/scripts/$script
+	sed -i 's/(/\("/g' /home/felipe/scripts/$script
+	sed -i 's/)/\")/g' /home/felipe/scripts/$script
+	sed -i 's/--/\"/g' /home/felipe/scripts/$script	
+done
+##################################################################################################################################
+# Bash procedure to prepare and call script
+ls /home/felipe/scripts/ | while read script
+do
+	chmod a+x /home/felipe/scripts/$script
+	sudo Rscript /home/felipe/scripts/$script
+done
+##################################################################################################################################
+ ## A R scripts to plot cytoscape network analysis
 #source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_NetworkAnalysisPlot.R")
 
 ## A R scripts to plot cytoscape network analysis
 #source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_Citoscape_Networtks.R")
+##################################################################################################################################

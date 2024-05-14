@@ -93,7 +93,6 @@ done
 # Bash procedure to prepare and call script
 ls /home/felipe/scripts/ | while read script
 do
-
 	# Name of execution	
 	# Take the combination of parameters
 	execution_name=$(cat /home/felipe/scripts/$script | grep output_folder | sed 's/\/home//g' | sed 's/\/felipe//g'  | sed 's/\/Documentos//g'  | sed 's/\/LungPortal//g' | sed 's/\/output//g' | sed 's/\///g' | sed 's/=/ /g' | awk '{print $2}')
@@ -107,22 +106,27 @@ do
 	# Complete output files
 	path_output_file=$(echo $path_output_file$file_name)
 	
-	
 	# Number of tumor genes
-	n_tumor_genes=$(cat $path_output_file | grep "Number of up-regulated tumor-genes :" | 
+	n_tumor_genes=$(cat $path_output_file | grep "Number of up-regulated tumor-genes : " | sed 's/Number of up-regulated tumor-genes : //g')
 	
-
 	# Number of tumor genes Stage I    (all/exclusive)
-	# Number of tumor genes Stage II   (all/exclusive)
-	# Number of tumor genes Stage III  (all/exclusive)
-
-	# Co-expression network of edges/vertex/entropy  (Stage I)
-	# Co-expression network of edges/vertex/entropy  (Stage II)
-	# Co-expression network of edges/vertex/entropy  (Stage III)
-
-	# Sub-interactome network of edges/vertex/entropy  (Stage I)
-	# Sub-interactome network of edges/vertex/entropy  (Stage II)
-	# Sub-interactome network of edges/vertex/entropy  (Stage III)
+	n_coexpression_stage_I=$(cat $path_output_file | grep "Number of tumor genes per stage for Stage I :  " | sed 's/Number of tumor genes per stage for Stage I :  //g')	
+	
+	# Number of tumor genes Stage I    (all/exclusive)
+	n_coexpression_stage_II=$(cat $path_output_file | grep "Number of tumor genes per stage for Stage II :  " | sed 's/Number of tumor genes per stage for Stage II :  //g')
+	
+	# Number of tumor genes Stage I    (all/exclusive)
+	n_coexpression_stage_III=$(cat $path_output_file | grep "Number of tumor genes per stage for Stage III :  " | sed 's/Number of tumor genes per stage for Stage III :  //g')			
+	
+	# Number of tumor genes Stage I    (all/exclusive)
+	n_interactom_stage_I=$(cat $path_output_file | grep "co-expression network for Stage I: " | awk '{print $11}' )	
+	
+	# Number of tumor genes Stage I    (all/exclusive)
+	n_interactom_stage_II=$(cat $path_output_file | grep "co-expression network for Stage II: " | awk '{print $11}')
+	
+	# Number of tumor genes Stage I    (all/exclusive)
+	n_interactom_stage_III=$(cat $path_output_file | grep "co-expression network for Stage III: " | awk '{print $11}')				
+	
 done
 ##################################################################################################################################
  ## A R scripts to plot cytoscape network analysis

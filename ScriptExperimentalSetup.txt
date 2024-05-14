@@ -127,6 +127,8 @@ do
 	# Number of tumor genes Stage I    (all/exclusive)
 	n_interactom_stage_III=$(cat $path_output_file | grep "co-expression network for Stage III: " | awk '{print $11}')				
 	
+	echo -e $execution_name"\t"$n_tumor_genes"\t"$n_coexpression_stage_I"\t"$n_coexpression_stage_II"\t"$n_coexpression_stage_III"\t"$n_interactom_stage_I"\t"$n_interactom_stage_II"\t"$n_interactom_stage_III
+	
 done
 ##################################################################################################################################
  ## A R scripts to plot cytoscape network analysis

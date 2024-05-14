@@ -14,10 +14,10 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_RPKM_Normalization_V2.R")
 #####################################################################################################################
 # # Pipeline thresholds
-trheshold_1<-c(3,5,10)            # Threshold RPKM
-trheshold_2<-c(0.15,0.25,0.5,0.75,1.0)     # Threshold Tumor/Normal        
-trheshold_3<-c(0.15,0.25,0.5,0.75,1.0)     # Threshold per stage
-trheshold_4<-c(0.75,0.85,0.95)     # for correlation network
+trheshold_1<-c(3,5,10,20)            # Threshold RPKM
+trheshold_2<-c(0.15,0.25,0.5,0.75,1.0,1.58)     # Threshold Tumor/Normal        
+trheshold_3<-c(0.15,0.25,0.5,0.75,1.0,1.58)     # Threshold per stage
+trheshold_4<-c(0.75,0.85,0.95,0.99)     # for correlation network
 
 
 # For each threshold_rpkm
@@ -50,7 +50,7 @@ Script_file=paste("/home/felipe/scripts/Script_trheshold1_",threshold_rpkm,"_trh
 				cat(paste("threshold_stage=",threshold_stage,sep=""),file=Script_file,sep="\n",append=TRUE)								
 				cat(paste("threshold_cor=",threshold_cor,sep=""),file=Script_file,sep="\n",append=TRUE)												
 				cat(paste("output_folder=--",output_folder,"--",sep=""),file=Script_file,sep="\n",append=TRUE)
-				cat(paste("output_dir=--",output_dir,"--",sep=""),file=Script_file,sep="\n",append=TRUE)				
+				cat(paste("output_dir=--",output_folder,"--",sep=""),file=Script_file,sep="\n",append=TRUE)				
 				
 				step1<-paste("source(/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadRPackages.R)",sep="")
 				step2<-paste("source(/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadAllTables.R)",sep="")
@@ -59,7 +59,8 @@ Script_file=paste("/home/felipe/scripts/Script_trheshold1_",threshold_rpkm,"_trh
 				step5<-paste("source(/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageMeansFromPairedV2.R)",sep="")
 				step6<-paste("source(/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_VeenDiagramsFromPairedUp.R)",sep="")				
 				step7<-paste("source(/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropy.R)",sep="")
-				step8<-paste("source(/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropyFromPairedUp.R)",sep="")																
+				step8<-paste("source(/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropyFromPairedUp.R)",sep="")												
+				
 				cat(step1,file=Script_file,sep="\n",append=TRUE)				
 				cat(step2,file=Script_file,sep="\n",append=TRUE)				
 				cat(step3,file=Script_file,sep="\n",append=TRUE)				

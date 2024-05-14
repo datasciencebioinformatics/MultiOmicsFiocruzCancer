@@ -90,6 +90,41 @@ do
 	sudo Rscript /home/felipe/scripts/$script
 done
 ##################################################################################################################################
+# Bash procedure to prepare and call script
+ls /home/felipe/scripts/ | while read script
+do
+
+	# Name of execution	
+	# Take the combination of parameters
+	execution_name=$(cat /home/felipe/scripts/$script | grep output_folder | sed 's/\/home//g' | sed 's/\/felipe//g'  | sed 's/\/Documentos//g'  | sed 's/\/LungPortal//g' | sed 's/\/output//g' | sed 's/\///g' | sed 's/=/ /g' | awk '{print $2}')
+	
+	# File name
+	file_name="outfile.txt"
+	
+	# Path to output files
+	path_output_file=$(cat /home/felipe/scripts/$script | grep output_folder | sed 's/=/ /g' | awk '{print $2}' | sed 's/\"//g')
+	
+	# Complete output files
+	path_output_file=$(echo $path_output_file$file_name)
+	
+	
+	# Number of tumor genes
+	n_tumor_genes=$(cat $path_output_file | grep "Number of up-regulated tumor-genes :" | 
+	
+
+	# Number of tumor genes Stage I    (all/exclusive)
+	# Number of tumor genes Stage II   (all/exclusive)
+	# Number of tumor genes Stage III  (all/exclusive)
+
+	# Co-expression network of edges/vertex/entropy  (Stage I)
+	# Co-expression network of edges/vertex/entropy  (Stage II)
+	# Co-expression network of edges/vertex/entropy  (Stage III)
+
+	# Sub-interactome network of edges/vertex/entropy  (Stage I)
+	# Sub-interactome network of edges/vertex/entropy  (Stage II)
+	# Sub-interactome network of edges/vertex/entropy  (Stage III)
+done
+##################################################################################################################################
  ## A R scripts to plot cytoscape network analysis
 #source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_NetworkAnalysisPlot.R")
 

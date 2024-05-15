@@ -98,3 +98,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 # Third, the log2foldchane tumor/normal per stage II
 # Fourth, the log2foldchane tumor/normal per stage II
 # Save the log2foldchange per stage in a list (from Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageMeansFromPairedV2.R)
+list_of_plots[[1]]
+list_of_plots[[2]]
+list_of_plots[[3]]
+list_of_plots[[4]]

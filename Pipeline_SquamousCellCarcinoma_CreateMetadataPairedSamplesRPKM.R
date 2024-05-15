@@ -50,8 +50,8 @@ for (case in unique(merged_data_patient_info_data$case))
 # folchange=rowMeans(unstranded_rpkm[,paired_sample_df$tumor])/rowMeans(unstranded_rpkm[,paired_sample_df$normal])
 # log2change=l/og(folchange,2)	
 # Log(FC) = mean(log2(Group1)) - mean(log2(Group2))
-# 
-
+# Paired t-test, RPKM of paired tumor/normal samples
+# Plot with 15208 genes.
 # Log2foldchange
 log2change=rowMeans(log(unstranded_rpkm[,paired_sample_df$tumor],2))-rowMeans(log(unstranded_rpkm[,paired_sample_df$normal],2))
 
@@ -88,4 +88,9 @@ p1 <- ggplot(log2change_tumor_control, aes(log2change, -log(FDR),color = Categor
   ylab("-log10(padj)") +
   scale_color_manual(values = c("black", "red")) +
   guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("Paired t-test, RPKM of paired tumor/normal samples\nlog2foldchange >=",threshold_tumor, " and FRD <= 0.05", sep="")) + guides(fill="none")
-
+#######################################################################################################################################
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Volcano_plot_Tumor_Normal.png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
+	p1
+dev.off() 
+#######################################################################################################################################

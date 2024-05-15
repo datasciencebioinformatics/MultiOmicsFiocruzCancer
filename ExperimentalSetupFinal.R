@@ -1,9 +1,9 @@
 #########################################################
 output_dir="/home/felipe/Documentos/LungPortal/output/" #
 #########################################################
-threshold_rpkm=20
+threshold_rpkm=10
 threshold_tumor=1.0
-threshold_stage=1.58
+threshold_stage=1.0
 threshold_cor=0.75
 
 # Create output folder name

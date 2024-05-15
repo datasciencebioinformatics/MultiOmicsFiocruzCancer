@@ -1,3 +1,5 @@
+#########################################################################################################################################################################
+unstranded_rpkm  <-read.table(file = paste("/home/felipe/Documentos/LungPortal/output/","unstranded_rpkm.tsv",sep=""), sep = '\t', header = TRUE,)         #
 # Volcano plot of –log10 (p values) vs. log2foldchange. 
 # All, log2foldchange tumor,        log2foldchange per stage I, 
 #      log2foldchange per stage II, log2foldchange per stage III
@@ -27,11 +29,6 @@ log2change_tumor_control[intersect(which(log2change_tumor_control$FDR<=0.05), wh
 # Create volcano plot
 p1 <- ggplot(log2change_tumor_control, aes(log2change, -log(FDR,10))) +  geom_point(size = 2/5) +  theme_bw()
 	
-# The thresholds
-threshold_padj<-min(-log(log2change_tumor_control[log2change_tumor_control$Category!="Uncategorized","FDR"]))
-threshold_log2fc_up<-min(log2change_tumor_control[log2change_tumor_control$Category=="Up-regulated","log2change"])
-threshold_log2fc_down<-max(log2change_tumor_control[log2change_tumor_control$Category=="Down-regulated","log2change"])
-
 # Adding color to differentially expressed genes (DEGs)
 p1 <- ggplot(log2change_tumor_control, aes(log2change, -log(FDR),color = Category)) + geom_point(size = 2/5,aes(color = Category))  +
   xlab("log2FoldChange") + 

@@ -46,9 +46,6 @@ list_of_genes=list(genes_stage_I=rownames(na.omit(unstranded_data_filter)),genes
 # Create bck for colData_bck
 colData_bck<-colData
 
-# List to sabe results
-list_selected_genes<-list()
-
 # for each pair of stage.
 for (comparisson_index in rownames(df_table_comparisson))
 {	
@@ -79,28 +76,43 @@ for (comparisson_index in rownames(df_table_comparisson))
 	
 	# log2change data
 	log2change_Stage_i=na.omit(data.frame(gene=names(log2change),log2change=log2change))
-	#fchange_Stage_i=data.frame(gene=names(log2change),folchange=log2change)
-	####################################################################################################################		
-	# First, set category
-	# "Unchanged"
-	log2change_Stage_i$Category<-"Uncategorized"
-	
-	# First, stageI
-	log2change_Stage_i[log2change_Stage_i$log2change>=threshold_stage,"Category"]<-"Up-regulated"		
-	####################################################################################################################			
-	# Selected genes	
-	# Obtain differential Category numbers
-	selected_genes<-rownames(log2change_Stage_i[which(log2change_Stage_i$Category!="Uncategorized"),])
 
-	# Coldata
-	colData_sub<-colData[colData$tissue_type=="Tumor",]		
+	# First, the log2foldchane tumor/normal samples is used
+	log2change_Stage_i$Category<-"insignificant"
+
+	# First, the log2foldchane tumor/normal samples is used
+	log2change_Stage_i$Pvalue<-1
+
+	# For each genes in the tabe
+	for (gene in log2change_Stage_i$gene)
+	{
+		# Take p-value
+		log2change_Stage_i[gene,"Pvalue"]<-t.test(x=as.numeric(unstranded_rpkm[gene,paired_sample_df$tumor]), y=as.numeric(unstranded_rpkm[gene,paired_sample_df$normal]), paired = TRUE, alternative = "two.sided")$p.value	
+	}
+	# FRD 
+	log2change_Stage_i$FDR<-p.adjust(log2change_Stage_i$Pvalue, method="BH")
+
+	# Categorize genes if log2foldchange >= threshold_tumor
+	log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=0.05), which(log2change_Stage_i$log2change>=threshold_tumor)),"Category"]<-paste("Per stage genes", sep="")
+	
+	# Selected genes based on FDR, log2foldchange
+	selected_genes<-log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=0.05), which(log2change_Stage_i$log2change>=threshold_tumor)),"gene"]	
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3
-	write_tsv(na.omit(log2change_Stage_i[selected_genes,]), paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))
-		
-	# Store result in the list
-	list_selected_genes[[Stage_i]]<-selected_genes
-	####################################################################################################################	
-	print(paste("Number of tumor genes per stage for ",Stage_i, " : ",length(selected_genes)))
+	write_tsv(na.omit(log2change_Stage_i[selected_genes,]), paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))			####################################################################################################################		
 	cat(print(paste("\nNumber of tumor genes per stage for ",Stage_i, " : ",length(selected_genes))),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
+
+	# Create volcano plot
+	p1 <- ggplot(log2change_Stage_i, aes(log2change, -log(FDR,10))) +  geom_point(size = 2/5) +  theme_bw()
+		
+	# Adding color to differentially expressed genes (DEGs)
+	p1 <- ggplot(log2change_Stage_i, aes(log2change, -log(FDR),color = Category)) + geom_point(size = 2/5,aes(color = Category))  +
+	  xlab("log2FoldChange") + 
+	  ylab("-log10(padj)") +
+	  scale_color_manual(values = c("black", "red")) +
+	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("Unpaired t-test, RPKM of samples from ", gsub('sample_s', 'S' ,Stage_i), "\nlog2foldchange >=",threshold_tumor, " and FRD <= 0.05", sep="")) + guides(fill="none")
+	#######################################################################################################################################		
+	png(filename=paste(output_dir,"Volcano_plot_",gsub('sample_s', 'S' ,Stage_i),".png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
+		p1
+	dev.off() 
 }

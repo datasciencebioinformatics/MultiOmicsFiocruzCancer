@@ -46,7 +46,6 @@ V(interactome_igraph_stage_I)$size <- degree(interactome_igraph_stage_I)
 V(interactome_igraph_stage_II)$size <- degree(interactome_igraph_stage_II)
 V(interactome_igraph_stage_III)$size <- degree(interactome_igraph_stage_III)
 
-
 # FindClusters_resolution                                                                                                                                                                                                   #
 png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_I.png",sep=""), width = 30, height = 30, res=1200, units = "cm")                                                                                                    #
   plot(interactome_igraph_stage_I,layout=layout_with_dh, edge.color	="black")
@@ -61,7 +60,6 @@ dev.off()
 png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_III.png",sep=""), width = 30, height = 30, res=1200, units = "cm")                                                                                                    #
   plot(interactome_igraph_stage_III,layout=   layout_with_dh, edge.color="black")
 dev.off() 
-
 
 # Save TSV file with genes from Stage1
 write_tsv(stage_I_interaction_data, paste(output_dir,"interactome_smbols_stage_I",".tsv",sep=""))

@@ -3,6 +3,9 @@
 #      log2foldchange per stage II, log2foldchange per stage III
 # Genes were filtered to include only those that had an RPKM ≥ 1.0, a fold-change of ≥1.5 and a paired t-test value of <0.01. https://pubmed.ncbi.nlm.nih.gov/27884954/
 #########################################################################################################################################################################
+# Save plots
+list_of_plots<-list()
+#########################################################################################################################################################################
 # First, the log2foldchane tumor/normal samples is used
 log2change_tumor_control$Category<-"insignificant"
 
@@ -35,6 +38,8 @@ p1 <- ggplot(log2change_tumor_control, aes(log2change, -log(FDR),color = Categor
   ylab("-log10(padj)") +
   scale_color_manual(values = c("black", "red")) +
   guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("Paired t-test, RPKM of paired tumor/normal samples\nlog2foldchange >=",threshold_tumor, " and FRD <= 0.05", sep="")) + guides(fill="none")
+
+list_of_plots[[tumor]]<-p1
 #########################################################################################################################################################################
 # for each pair of stage.
 for (comparisson_index in rownames(df_table_comparisson))
@@ -44,7 +49,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	Stages_ii_and_iii<-df_table_comparisson[comparisson_index,"Stages_ii_and_iii"]	
 	
 	# Take gens of corresponding stage
-	DE_genes        <- list_of_genes[[as.integer(comparisson_index)]]
+	DE_genes        <- list_selected_genes[[Stage_i]]
 	
 	# Take samples of each stage
 	Stage_i_samples         =list_of_comparisson[[Stage_i]]
@@ -87,11 +92,9 @@ for (comparisson_index in rownames(df_table_comparisson))
 	  xlab("log2FoldChange") + 
 	  ylab("-log10(padj)") +
 	  scale_color_manual(values = c("black", "red")) +
-	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("Unpaired t-test, RPKM in ",gsub("sample", "", gsub("_", " ", Stage_i)), " vs. ohter two stages",sep="")) + guides(fill="none")
+	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("Unpaired t-test, RPKM in ",gsub("sample", "", gsub("_", " ", Stage_i)), " vs. ohter two stages",sep="")) + guides(fill="none")		
 
-		
-
-	
+	list_of_plots[[Stage_i]]<-pn
 }
 
 # Second, the log2foldchane tumor/normal per stage I

@@ -48,8 +48,9 @@ for (case in unique(merged_data_patient_info_data$case))
 # folchange=Expr(Stage i)/Expr(Stage ii and II)
 # folchange=rowMeans(unstranded_rpkm[,paired_sample_df$tumor])-rowMeans(unstranded_rpkm[,paired_sample_df$normal])
 # folchange=rowMeans(unstranded_rpkm[,paired_sample_df$tumor])/rowMeans(unstranded_rpkm[,paired_sample_df$normal])
-# log2change=log(folchange,2)	
+# log2change=l/og(folchange,2)	
 # Log(FC) = mean(log2(Group1)) - mean(log2(Group2))
+# 
 
 # Log2foldchange
 log2change=rowMeans(log(unstranded_rpkm[,paired_sample_df$tumor],2))-rowMeans(log(unstranded_rpkm[,paired_sample_df$normal],2))
@@ -59,4 +60,32 @@ log2change=rowMeans(log(unstranded_rpkm[,paired_sample_df$tumor]+LOG_CONSTANT,2)
 
 # log2change data
 log2change_tumor_control=na.omit(data.frame(gene=names(log2change),log2change=log2change))
+
+# First, the log2foldchane tumor/normal samples is used
+log2change_tumor_control$Category<-"insignificant"
+
+# First, the log2foldchane tumor/normal samples is used
+log2change_tumor_control$Pvalue<-1
+
+# For each genes in the tabe
+for (gene in log2change_tumor_control$gene)
+{
+	# Take p-value
+	log2change_tumor_control[gene,"Pvalue"]<-t.test(x=as.numeric(unstranded_rpkm[gene,paired_sample_df$tumor]), y=as.numeric(unstranded_rpkm[gene,paired_sample_df$normal]), paired = TRUE, alternative = "two.sided")$p.value	
+}
+# FRD 
+log2change_tumor_control$FDR<-p.adjust(log2change_tumor_control$Pvalue, method="BH")
+
+# Categorize genes if log2foldchange >= threshold_tumor
+log2change_tumor_control[intersect(which(log2change_tumor_control$FDR<=0.05), which(log2change_tumor_control$log2change>=threshold_tumor)),"Category"]<-paste("Tumor genes", sep="")
 #######################################################################################################################################
+# Create volcano plot
+p1 <- ggplot(log2change_tumor_control, aes(log2change, -log(FDR,10))) +  geom_point(size = 2/5) +  theme_bw()
+	
+# Adding color to differentially expressed genes (DEGs)
+p1 <- ggplot(log2change_tumor_control, aes(log2change, -log(FDR),color = Category)) + geom_point(size = 2/5,aes(color = Category))  +
+  xlab("log2FoldChange") + 
+  ylab("-log10(padj)") +
+  scale_color_manual(values = c("black", "red")) +
+  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("Paired t-test, RPKM of paired tumor/normal samples\nlog2foldchange >=",threshold_tumor, " and FRD <= 0.05", sep="")) + guides(fill="none")
+

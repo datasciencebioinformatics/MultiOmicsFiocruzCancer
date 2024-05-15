@@ -63,8 +63,8 @@ for (comparisson_index in rownames(df_table_comparisson))
 	Stages_ii_and_iii_sample=list_of_comparisson[[Stages_ii_and_iii]]	
 	
 	# Take RPKM of genes from samples of each stage
-	Stage_i_samples_expr         <-na.omit(unstranded_rpkm[DE_genes,Stage_i_samples])
-	Stages_ii_and_iii_sample_expr<-na.omit(unstranded_rpkm[DE_genes,Stages_ii_and_iii_sample])
+	Stage_i_samples_expr         <-na.omit(unstranded_data[DE_genes,Stage_i_samples])
+	Stages_ii_and_iii_sample_expr<-na.omit(unstranded_data[DE_genes,Stages_ii_and_iii_sample])
 	####################################################################################################################
 	# folchange=Expr(Stage i)/Expr(Stage ii and II)
 	#folchange=rowMeans(Stage_i_samples_expr)/rowMeans(Stages_ii_and_iii_sample_expr)	
@@ -72,7 +72,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 
 	# Log2foldchange
 	LOG_CONSTANT=0.001
-	log2change=rowMeans(log(Stage_i_samples_expr+LOG_CONSTANT,2))-rowMeans(log(Stages_ii_and_iii_sample_expr+LOG_CONSTANT,2))
+	log2change=rowMeans(log(Stage_i_samples_expr+LOG_CONSTANT,2))/rowMeans(log(Stages_ii_and_iii_sample_expr+LOG_CONSTANT,2))
 	
 	# log2change data
 	log2change_Stage_i=na.omit(data.frame(gene=names(log2change),log2change=log2change))

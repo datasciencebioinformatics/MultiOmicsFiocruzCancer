@@ -36,7 +36,7 @@ p1 <- ggplot(log2change_tumor_control, aes(log2change, -log(FDR),color = Categor
   scale_color_manual(values = c("black", "red")) +
   guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("Paired t-test, RPKM of paired tumor/normal samples\nlog2foldchange >=",threshold_tumor, " and FRD <= 0.05", sep="")) + guides(fill="none")
 
-list_of_plots[[tumor]]<-p1
+list_of_plots[["tumor"]]<-p1
 #########################################################################################################################################################################
 # for each pair of stage.
 for (comparisson_index in rownames(df_table_comparisson))

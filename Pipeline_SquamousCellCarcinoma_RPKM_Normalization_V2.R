@@ -29,20 +29,21 @@ for (gene_id in rownames(unstranded_data))                                      
     df_gene_ids<-rbind(df_gene_ids,data.frame(gene_id=gene_ids,gene_id_cp=gene_id))                                #
 }                                                                                                                  #
 ####################################################################################################################
-# Get gene coordinates
-gene_coords=getBM(attributes=c("hgnc_symbol","ensembl_gene_id", "start_position","end_position"), filters="ensembl_gene_id", values=df_gene_ids$gene_id, mart=hsa)
-
-# Get gene size
-gene_coords$size=gene_coords$end_position - gene_coords$start_position
-
-# Set colnames
-colnames(df_gene_ids)<-c("gene_id","transcript_id")
-colnames(gene_coords)[2]<-"gene_id"
-
-# Merge data
-merged_data<-merge(df_gene_ids,gene_coords,by="gene_id")
-
-# Calculate 
-unstranded_rpkm<-rpkm(unstranded_data[merged_data$transcript_id,], gene.length = merged_data$size) #
+# Split gene_ids vector in parts                                                                                   #
+gene_ids_vector<-split(df_gene_ids$gene_id,ceiling(seq_along(df_gene_ids$gene_id) / 1000))                         #
 ####################################################################################################################
-write.table(data.frame(unstranded_rpkm), paste(output_dir,"unstranded_rpkm.tsv",sep="/"), sep = '\t')
+# Data.frame to store geneLengthAndGCContent                                                                       #
+df_geneLengthAndGCContent<-data.frame(length=c(),gc=c())                                                           #
+                                                                                                                   #
+# For each part of the vectors                                                                                     #
+for (index in names(gene_ids_vector) )                                                                             #
+{                                                                                                                  #
+    # Concatenate files                                                                                            ########
+    df_geneLengthAndGCContent<-rbind(df_geneLengthAndGCContent,getGeneLengthAndGCContent(gene_ids_vector[[index]], "hsa"))#
+}                                                                                                                         #
+rownames(df_geneLengthAndGCContent)[!grepl(".", rownames(df_geneLengthAndGCContent), fixed=TRUE)]                         #
+#############################################################################################################################
+unstranded_rpkm<-rpkm(unstranded_data[df_gene_ids$gene_id_cp,], gene.length = data.frame(df_geneLengthAndGCContent)$length) #
+#############################################################################################################################
+write.table(data.frame(unstranded_rpkm), paste(output_dir,"unstranded_rpkm.tsv",sep="/"), sep = '\t')                       #
+#############################################################################################################################

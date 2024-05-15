@@ -66,3 +66,32 @@ write_tsv(stage_I_interaction_data, paste(output_dir,"interactome_smbols_stage_I
 write_tsv(stage_II_interaction_data, paste(output_dir,"interactome_smbols_stage_II",".tsv",sep=""))
 write_tsv(stage_III_interaction_data, paste(output_dir,"interactome_smbols_stage_III",".tsv",sep=""))
 
+# Generate tables
+stage_I_interaction_data_table <- table(stage_I_interaction_data)
+stage_II_interaction_data_table <- table(stage_II_interaction_data)
+stage_III_interaction_data_table <- table(stage_III_interaction_data)
+
+# Generate graphs
+g_stage_I <- graph.incidence(stage_I_interaction_data_table, weighted = TRUE)
+g_stage_II <- graph.incidence(stage_II_interaction_data_table, weighted = TRUE)
+g_stage_III <- graph.incidence(stage_III_interaction_data_table, weighted = TRUE)
+
+V(g_stage_I)$color <- ifelse(V(g_stage_I)$type, "lightblue", "salmon")
+V(g_stage_I)$shape <- ifelse(V(g_stage_I)$type, "circle", "square")
+E(g_stage_I)$color <- "lightgray"
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_bipartite_stage_I.png",sep=""), width = 30, height = 30, res=1200, units = "cm")                                                                                                    #
+  plot(g_stage_I,layout=layout_with_dh, edge.color	="black")
+dev.off() 
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_bipartite_stage_II.png",sep=""), width = 30, height = 30, res=1200, units = "cm")                                                                                                    #
+  plot(g_stage_II,layout=layout_with_dh, edge.color	="black")
+dev.off() 
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_bipartite_stage_III.png",sep=""), width = 30, height = 30, res=1200, units = "cm")                                                                                                    #
+  plot(g_stage_I,layout=layout_with_dh, edge.color	="black")
+dev.off() 
+

@@ -46,6 +46,9 @@ list_of_genes=list(genes_stage_I=rownames(na.omit(unstranded_data_filter)),genes
 # Create bck for colData_bck
 colData_bck<-colData
 
+# List to sabe results
+list_selected_genes<-list()
+
 # for each pair of stage.
 for (comparisson_index in rownames(df_table_comparisson))
 {	
@@ -94,6 +97,9 @@ for (comparisson_index in rownames(df_table_comparisson))
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3
 	write_tsv(na.omit(log2change_Stage_i[selected_genes,]), paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))
+		
+	# Store result in the list
+	list_selected_genes[[gsub("sample_", "",Stage_i)]]<-selected_genes
 	####################################################################################################################	
 	print(paste("Number of tumor genes per stage for ",Stage_i, " : ",length(selected_genes)))
 	cat(print(paste("\nNumber of tumor genes per stage for ",Stage_i, " : ",length(selected_genes))),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)

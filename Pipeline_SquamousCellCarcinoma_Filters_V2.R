@@ -10,8 +10,11 @@ rownames(colData)                  <-colData$patient_id                         
 # Save tumor samples
 tumor_samples<-colData[which(colData$tissue_type=="Tumor"),"patient_id"]
 
+# Select only the tumor genes
+tumor_genes<-log2change_tumor_control[intersect(which(log2change_tumor_control$FDR<=0.05), which(log2change_tumor_control$log2change>=threshold_tumor)),"gene"]
+
 # Filter by log2folchage
-unstranded_rpkm<-unstranded_rpkm[rownames(log2change_tumor_control[which(log2change_tumor_control$log2change>=threshold_tumor),]),]
+unstranded_rpkm<-unstranded_rpkm[tumor_genes,]
 
 # Filter by RPKM
 unstranded_data_filter<-unstranded_rpkm[rowMeans(unstranded_rpkm)>threshold_rpkm,]

@@ -9,9 +9,15 @@ Table1_data <- Table1_data[match(unique(Table1_data$gene_id), Table1_data$gene_i
 rownames(Table1_data)<-Table1_data$gene_id
 #######################################################################################################################################
 # File path to gene stages
+# Version 1
 file_genes_Stage_I   <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_I.tsv",sep="")
 file_genes_Stage_II   <-  paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_II.tsv",sep="")
 file_genes_Stage_III   <- paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_III.tsv",sep="")
+
+# Version 2
+file_genes_Stage_I     <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_I",".tsv",sep="")
+file_genes_Stage_II    <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_II",".tsv",sep="")
+file_genes_Stage_III   <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_III",".tsv",sep="")
 
 # Gene table
 genes_Stage_I       <-read.table(file = file_genes_Stage_I, sep = '\t', header = TRUE,fill=TRUE)         

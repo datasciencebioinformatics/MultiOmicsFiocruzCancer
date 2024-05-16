@@ -96,7 +96,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=0.05), which(log2change_Stage_i$log2change>=threshold_tumor)),"Category"]<-paste("Per stage genes", sep="")
 	
 	# Selected genes based on FDR, log2foldchange
-	selected_genes<-log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=0.05), which(log2change_Stage_i$log2change>=threshold_tumor)),"gene"]	
+	selected_genes<-log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=0.05), which(log2change_Stage_i$log2change>=threshold_stage)),"gene"]	
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3
 	write_tsv(na.omit(log2change_Stage_i[selected_genes,]), paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))			####################################################################################################################		

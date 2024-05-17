@@ -94,3 +94,5 @@ png(filename=paste(output_dir,"Volcano_plot_Tumor_Normal.png",sep=""), width = 1
 	p1
 dev.off() 
 #######################################################################################################################################
+write_tsv(log2change_tumor_control, paste(output_dir,"log2change_tumor_control_table.tsv",sep=""))			
+####################################################################################################################		

@@ -120,5 +120,5 @@ for (comparisson_index in rownames(df_table_comparisson))
 	#######################################################################################################################################		
 	png(filename=paste(output_dir,"Volcano_plot_",gsub('sample_s', 'S' ,Stage_i),".png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
 		p1
-	dev.off() 
+	dev.off()
 }

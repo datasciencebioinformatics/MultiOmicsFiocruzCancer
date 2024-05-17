@@ -88,7 +88,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	for (gene in log2change_Stage_i$gene)
 	{
 		# Take p-value
-		log2change_Stage_i[gene,"Pvalue"]<-t.test(x=as.numeric(unstranded_rpkm[gene,paired_sample_df$tumor]), y=as.numeric(unstranded_rpkm[gene,paired_sample_df$normal]), paired = TRUE, alternative = "two.sided")$p.value	
+		log2change_Stage_i[gene,"Pvalue"]<-t.test(x=as.numeric(unstranded_rpkm[gene,Stage_i_samples]), y=as.numeric(unstranded_rpkm[gene,Stages_ii_and_iii_sample]), paired = FALSE, alternative = "two.sided")$p.value	
 	}
 	# FRD 
 	log2change_Stage_i$FDR<-p.adjust(log2change_Stage_i$Pvalue, method="BH")

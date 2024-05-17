@@ -30,17 +30,13 @@ stages_str<-c("stage_I","stage_II","stage_III")
 sample_stage_I  <-colData_tumor[colData_tumor$stages=="Stage I","patient_id"]                                                                     #
 sample_stage_II <-colData_tumor[colData_tumor$stages=="Stage II","patient_id"]                                                                    #
 sample_stage_III<-colData_tumor[colData_tumor$stages=="Stage III","patient_id"]                                                                   #
-
-sample_stages_II_III<-colData_tumor[colData_tumor$stages=="Stage II" | colData_tumor$stages=="Stage III","patient_id"]                                  #
-sample_stages_I_III<-colData_tumor[colData_tumor$stages=="Stage I" | colData_tumor$stages=="Stage III","patient_id"]                                    #
-sample_stages_I_II<-colData_tumor[colData_tumor$stages=="Stage I" | colData_tumor$stages=="Stage II","patient_id"]                                      #
 #######################################################################################################################################
-df_table_comparisson=rbind(data.frame(Stage_i="sample_stage_I",Stages_ii="sample_stage_II"),
-data.frame(Stage_i="sample_stage_I",Stages_ii="sample_stage_III"),
-data.frame(Stage_i="sample_stage_II",Stages_ii="sample_stage_I"),
-data.frame(Stage_i="sample_stage_II",Stages_ii="sample_stage_III"),
-data.frame(Stage_i="sample_stage_III",Stages_ii="sample_stage_I"),
-data.frame(Stage_i="sample_stage_III",Stages_ii="sample_stage_II"))
+df_table_comparisson=rbind(data.frame(Stage_i="sample_stage_I",Stage_ii="sample_stage_II"),
+data.frame(Stage_i="sample_stage_I",Stage_ii="sample_stage_III"),
+data.frame(Stage_i="sample_stage_II",Stage_ii="sample_stage_I"),
+data.frame(Stage_i="sample_stage_II",Stage_ii="sample_stage_III"),
+data.frame(Stage_i="sample_stage_III",Stage_ii="sample_stage_I"),
+data.frame(Stage_i="sample_stage_III",Stage_ii="sample_stage_II"))
 ####################################################################################################################
 list_of_comparisson=list(sample_stage_I=sample_stage_I,sample_stage_II=sample_stage_II,sample_stage_III=sample_stage_III)
 #list_of_genes=list(genes_stage_I=df_stage_I_data$Gene,genes_stage_II=df_stage_II_data$Gene,genes_stage_III=df_stage_III_data$Gene)
@@ -93,10 +89,10 @@ for (comparisson_index in rownames(df_table_comparisson))
 	for (gene in log2change_Stage_i$gene)
 	{
 		# Take p-value
-		log2change_Stage_i[gene,"Pvalue"]<-t.test(x=as.numeric(unstranded_rpkm[gene,paired_sample_df$tumor]), y=as.numeric(unstranded_rpkm[gene,paired_sample_df$normal]), paired = TRUE, alternative = "two.sided")$p.value	
+		log2change_Stage_i[gene,"Pvalue"]<-t.test(x=as.numeric(unstranded_rpkm[gene,Stage_i_samples]), y=as.numeric(unstranded_rpkm[gene,Stage_ii_samples]), paired = FALSE, alternative = "two.sided")$p.value	
 	}
 	# FRD 
-	log2change_Stage_i$FDR<-p.adjust(log2change_Stage_i$Pvalue, method="BH")
+	log2change_Stage_i$FDR<-p.adjust(log2change_Stage_i$Pvalue, method="fdr")
 
 	# Categorize genes if log2foldchange >= threshold_tumor
 	log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=0.05), which(log2change_Stage_i$log2change>=threshold_tumor)),"Category"]<-paste("Per stage genes", sep="")
@@ -110,8 +106,9 @@ for (comparisson_index in rownames(df_table_comparisson))
 	write_tsv(na.omit(log2change_Stage_i[selected_genes,]), paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))			####################################################################################################################		
 	cat(print(paste("\nNumber of tumor genes per stage for ",Stage_i, " : ",length(selected_genes))),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
 
+	
 	#######################################################################################################################################
-	write_tsv(log2change_Stage_i, paste(output_dir,gsub('sample_s', 'S' ,Stage_i),"log2change_Stage_i_table.tsv",sep=""))			
+	write_tsv(log2change_Stage_i, paste(output_dir,paste(gsub('sample_s', 'S' ,Stage_i),"_",gsub('sample_s', 'S' ,Stage_ii)),"log2change_table.tsv",sep=""))			
 	####################################################################################################################	
 	# Create volcano plot
 	p1 <- ggplot(log2change_Stage_i, aes(log2change, -log(FDR,10))) +  geom_point(size = 2/5) +  theme_bw()
@@ -123,7 +120,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	  scale_color_manual(values = c("black", "red")) +
 	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("Unpaired t-test, RPKM of samples from ", gsub('sample_s', 'S' ,Stage_i), "\nlog2foldchange >=",threshold_tumor, " and FRD <= 0.05", sep="")) + guides(fill="none")
 	#######################################################################################################################################		
-	png(filename=paste(output_dir,"Volcano_plot_",gsub('sample_s', 'S' ,Stage_i),".png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
+	png(filename=paste(output_dir,"Volcano_plot_",paste(gsub('sample_s', 'S' ,Stage_i),"_",gsub('sample_s', 'S' ,Stage_ii)),".png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
 		p1
 	dev.off()
 }

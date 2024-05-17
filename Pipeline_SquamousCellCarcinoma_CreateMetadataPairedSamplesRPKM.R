@@ -7,13 +7,9 @@
 # Output : merged_data_patient_info.tsv
 ###########################################################################################################################
 merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
-colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
 ###########################################################################################################################
 merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#
-colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
-rownames(colData_data)            <-colData$patient_id                                                                   #
 #######################################################################################################################################
-colData<-na.omit(colData)                                                                                                             #
 merged_data_patient_info_data<-merged_data_patient_info_data[which(merged_data_patient_info_data$patient_id %in% colData$patient_id),]#
 #######################################################################################################################################
 # Paired samples                                                                                                         
@@ -46,8 +42,8 @@ for (case in unique(merged_data_patient_info_data$case))
 }
 #######################################################################################################################################
 # Take control and normal samples
-colData_Normal <-colData[colData$tumor_normal=="Solid Tissue Normal",]
-colData_Tumor  <-colData[colData$tumor_normal=="Primary Tumor",]
+samples_Tumor  <-colData[colData$tumor_normal=="Primary Tumor","patient_id"]
+samples_Normal  <-colData[colData$tumor_normal=="Solid Tissue Normal","patient_id"]
 #######################################################################################################################################
 # folchange=Expr(Stage i)/Expr(Stage ii and II)
 # folchange=rowMeans(unstranded_rpkm[,paired_sample_df$tumor])-rowMeans(unstranded_rpkm[,paired_sample_df$normal])
@@ -61,7 +57,7 @@ colData_Tumor  <-colData[colData$tumor_normal=="Primary Tumor",]
 LOG_CONSTANT=0.001
 log2change=rowMeans(log(unstranded_rpkm[,paired_sample_df$tumor]+LOG_CONSTANT,2))/rowMeans(log(unstranded_rpkm[,paired_sample_df$normal]+LOG_CONSTANT,2))
 log2change=log( (rowMeans(unstranded_rpkm[,paired_sample_df$tumor]+LOG_CONSTANT)/rowMeans(unstranded_rpkm[,paired_sample_df$normal]+LOG_CONSTANT)),2)	
-log2change=log( (rowMeans(unstranded_rpkm[,paired_sample_df$tumor]+LOG_CONSTANT)/rowMeans(unstranded_rpkm[,paired_sample_df$normal]+LOG_CONSTANT)),2)	
+log2change=log( (rowMeans(unstranded_rpkm[,samples_Tumor]+LOG_CONSTANT)/rowMeans(unstranded_rpkm[,samples_Normal]+LOG_CONSTANT)),2)	
 
 # log2change data
 log2change_tumor_control=na.omit(data.frame(gene=names(log2change),log2change=log2change))

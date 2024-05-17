@@ -48,13 +48,15 @@ for (case in unique(merged_data_patient_info_data$case))
 # folchange=Expr(Stage i)/Expr(Stage ii and II)
 # folchange=rowMeans(unstranded_rpkm[,paired_sample_df$tumor])-rowMeans(unstranded_rpkm[,paired_sample_df$normal])
 # folchange=rowMeans(unstranded_rpkm[,paired_sample_df$tumor])/rowMeans(unstranded_rpkm[,paired_sample_df$normal])
-# log2change=l/og(folchange,2)	
-# Log(FC) = mean(log2(Group1)) - mean(log2(Group2))
+# log2change=log(folchange,2)	
+# Log(FC) = mean(log2(Group1)) / mean(log2(Group2))
+# Log(FC) = log2(mean(Group1)/(mean(Group2)))
 # Paired t-test, RPKM of paired tumor/normal samples
 # Plot with 15208 genes.
 # Log2foldchange
 LOG_CONSTANT=0.001
 log2change=rowMeans(log(unstranded_rpkm[,paired_sample_df$tumor]+LOG_CONSTANT,2))/rowMeans(log(unstranded_rpkm[,paired_sample_df$normal]+LOG_CONSTANT,2))
+log2change=log(rowMeans(unstranded_rpkm[,paired_sample_df$tumor]+LOG_CONSTANT,2)/rowMeans(unstranded_rpkm[,paired_sample_df$normal]+LOG_CONSTANT,2),2)
 
 # log2change data
 log2change_tumor_control=na.omit(data.frame(gene=names(log2change),log2change=log2change))

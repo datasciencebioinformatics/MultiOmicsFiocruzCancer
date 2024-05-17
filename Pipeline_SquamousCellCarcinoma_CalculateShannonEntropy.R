@@ -42,17 +42,16 @@ df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_St
 #df_stage_II_filtered<-filter_low_var(t(df_correlation_net_stage_II), pct = 0.75, type = c("mean"))
 #df_stage_III_filtered<-filter_low_var(t(df_correlation_net_stage_III), pct = 0.75, type = c("mean"))
 
-df_stage_I_filtered<-t(df_correlation_net_stage_I)
-df_stage_II_filtered<-t(df_correlation_net_stage_II)
-df_stage_III_filtered<-t(df_correlation_net_stage_III)
-
-
 # Set threshold
 upper_weight_th = threshold_cor
 
 net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "spearman", use = "complete.obs")
 net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "spearman", use = "complete.obs")
 net_stage_III   <- cor(t(df_correlation_net_stage_III), method = "spearman", use = "complete.obs")
+
+net_stage_I   <- cor(df_stage_I_filtered, method = "spearman", use = "complete.obs")
+net_stage_II   <- cor(df_stage_II_filtered, method = "spearman", use = "complete.obs")
+net_stage_III   <- cor(df_stage_III_filtered, method = "spearman", use = "complete.obs")
 
 net_stage_I[lower.tri(net_stage_I)] <- NA
 net_stage_II[lower.tri(net_stage_II)] <- NA

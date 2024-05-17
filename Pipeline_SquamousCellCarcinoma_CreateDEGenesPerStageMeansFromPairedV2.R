@@ -103,6 +103,9 @@ for (comparisson_index in rownames(df_table_comparisson))
 	write_tsv(na.omit(log2change_Stage_i[selected_genes,]), paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))			####################################################################################################################		
 	cat(print(paste("\nNumber of tumor genes per stage for ",Stage_i, " : ",length(selected_genes))),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
 
+	#######################################################################################################################################
+	write_tsv(log2change_Stage_i, paste(output_dir,gsub('sample_s', 'S' ,Stage_i),"log2change_Stage_i_table.tsv",sep=""))			
+	####################################################################################################################	
 	# Create volcano plot
 	p1 <- ggplot(log2change_Stage_i, aes(log2change, -log(FDR,10))) +  geom_point(size = 2/5) +  theme_bw()
 		

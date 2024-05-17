@@ -46,6 +46,8 @@ list_of_genes=list(genes_stage_I=rownames(na.omit(unstranded_data_filter)),genes
 # Create bck for colData_bck
 colData_bck<-colData
 
+threshold_FDR=1
+
 # for each pair of stage.
 for (comparisson_index in rownames(df_table_comparisson))
 {	
@@ -88,18 +90,17 @@ for (comparisson_index in rownames(df_table_comparisson))
 	for (gene in log2change_Stage_i$gene)
 	{
 		# Take p-value
-		log2change_Stage_i[gene,"Pvalue"]<-t.test(x=as.numeric(unstranded_rpkm[gene,Stage_i_samples]), y=as.numeric(unstranded_rpkm[gene,Stages_ii_and_iii_sample]), paired = FALSE, alternative = "two.sided")$p.value	
+		log2change_Stage_i[gene,"Pvalue"]<-t.test(x=as.numeric(unstranded_data[gene,Stage_i_samples]), y=as.numeric(unstranded_data[gene,Stages_ii_and_iii_sample]), paired = FALSE, alternative = "two.sided")$p.value	
 	}
 	# FRD 
-	log2change_Stage_i$FDR<-p.adjust(log2change_Stage_i$Pvalue, method="BH")
+	log2change_Stage_i$FDR<-p.adjust(log2change_Stage_i$Pvalue, method="fdr")
 
 	# Categorize genes if log2foldchange >= threshold_tumor
-	log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=0.05), which(log2change_Stage_i$log2change>=threshold_tumor)),"Category"]<-paste("Per stage genes", sep="")
+	log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=threshold_FDR), which(log2change_Stage_i$log2change>=threshold_tumor)),"Category"]<-paste("Per stage genes", sep="")
 	#log2change_Stage_i[which(log2change_Stage_i$FDR<=0.05),"Category"]<-paste("Per stage genes", sep="")
 	
 	# Selected genes based on FDR, log2foldchange
-	selected_genes<-log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=0.05), which(log2change_Stage_i$log2change>=threshold_stage)),"gene"]	
-	#selected_genes<-log2change_Stage_i[ which(log2change_Stage_i$log2change>=threshold_stage),"gene"]	
+	selected_genes<-log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=threshold_FDR), which(log2change_Stage_i$log2change>=threshold_stage)),"gene"]	
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3
 	write_tsv(na.omit(log2change_Stage_i[selected_genes,]), paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))			####################################################################################################################		
@@ -116,7 +117,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	  xlab("log2FoldChange") + 
 	  ylab("-log10(padj)") +
 	  scale_color_manual(values = c("black", "red")) +
-	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("Unpaired t-test, RPKM of samples from ", gsub('sample_s', 'S' ,Stage_i), "\nlog2foldchange >=",threshold_tumor, " and FRD <= 0.05", sep="")) + guides(fill="none")
+	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("Unpaired t-test, RPKM of samples from ", gsub('sample_s', 'S' ,Stage_i), "\nlog2foldchange >=",threshold_tumor, " and FRD <= ",threshold_FDR, sep="")) + guides(fill="none")
 	#######################################################################################################################################		
 	png(filename=paste(output_dir,"Volcano_plot_",gsub('sample_s', 'S' ,Stage_i),".png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
 		p1

@@ -39,7 +39,7 @@ df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_St
 #######################################################################################################################################
 # Filter by low variability
 df_stage_I_filtered<-filter_low_var(t(df_correlation_net_stage_I), pct = 0.75, type = c("median"))
-df_stage_II_filtered<-filter_low_var(t(df_correlation_net_stage_II), pct = 0.75,0 type = c("median"))
+df_stage_II_filtered<-filter_low_var(t(df_correlation_net_stage_II), pct = 0.75,type = c("median"))
 df_stage_III_filtered<-filter_low_var(t(df_correlation_net_stage_III), pct = 0.75, type = c("median"))
 
 # Set threshold

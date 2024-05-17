@@ -103,10 +103,8 @@ for (comparisson_index in rownames(df_table_comparisson))
 	#selected_genes<-log2change_Stage_i[ which(log2change_Stage_i$log2change>=threshold_stage),"gene"]	
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3
-	write_tsv(na.omit(log2change_Stage_i[selected_genes,]), paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))			####################################################################################################################		
-	cat(print(paste("\nNumber of tumor genes per stage for ",Stage_i, " : ",length(selected_genes))),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
-
-	
+	write_tsv(na.omit(log2change_Stage_i[selected_genes,]), paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))			
+	####################################################################################################################			
 	#######################################################################################################################################
 	write_tsv(log2change_Stage_i, paste(output_dir,paste(gsub('sample_s', 'S' ,Stage_i),"_",gsub('sample_s', 'S' ,Stage_ii)),"log2change_table.tsv",sep=""))			
 	####################################################################################################################	
@@ -124,3 +122,5 @@ for (comparisson_index in rownames(df_table_comparisson))
 		p1
 	dev.off()
 }
+
+cat(print(paste("\nNumber of tumor genes per stage for ",Stage_i, " : ",length(selected_genes))),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)

@@ -75,7 +75,7 @@ for (gene in log2change_tumor_control$gene)
 	log2change_tumor_control[gene,"Pvalue"]<-t.test(x=as.numeric(unstranded_rpkm[gene,paired_sample_df$tumor]), y=as.numeric(unstranded_rpkm[gene,paired_sample_df$normal]), paired = FALSE, alternative = "two.sided")$p.value	
 }
 # FRD 
-log2change_tumor_control$FDR<-p.adjust(log2change_tumor_control$Pvalue, method="BH")
+log2change_tumor_control$FDR<-p.adjust(log2change_tumor_control$Pvalue, method="fdr")
 
 # Categorize genes if log2foldchange >= threshold_tumor
 log2change_tumor_control[intersect(which(log2change_tumor_control$FDR<=0.05), which(log2change_tumor_control$log2change>=threshold_tumor)),"Category"]<-paste("Tumor genes", sep="")

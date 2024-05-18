@@ -72,7 +72,7 @@ log2change_tumor_control$Pvalue<-1
 for (gene in log2change_tumor_control$gene)
 {
 	# Take p-value
-	log2change_tumor_control[gene,"Pvalue"]<-t.test(x=as.numeric(unstranded_rpkm[gene,paired_sample_df$tumor]), y=as.numeric(unstranded_rpkm[gene,paired_sample_df$normal]), paired = FALSE, alternative = "two.sided")$p.value	
+	log2change_tumor_control[gene,"Pvalue"]<-t.test(x=as.numeric(unstranded_rpkm[gene,samples_Tumor]), y=as.numeric(unstranded_rpkm[gene,samples_Normal]), paired = FALSE, alternative = "two.sided")$p.value	
 }
 # FRD 
 log2change_tumor_control$FDR<-p.adjust(log2change_tumor_control$Pvalue, method="fdr")
@@ -86,7 +86,7 @@ p1 <- ggplot(log2change_tumor_control, aes(log2change, -log(FDR,10))) +  geom_po
 # Adding color to differentially expressed genes (DEGs)
 p1 <- ggplot(log2change_tumor_control, aes(log2change, -log(FDR),color = Category)) + geom_point(size = 2/5,aes(color = Category))  +
   xlab("log2FoldChange") + 
-  ylab("-log10(padj)") +
+  ylab("-log10(FDR)") +
   scale_color_manual(values = c("black", "red")) +
   guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("Paired t-test, RPKM of paired tumor/normal samples\nlog2foldchange >=",threshold_tumor, " and FRD <= 0.05", sep="")) + guides(fill="none")
 #######################################################################################################################################

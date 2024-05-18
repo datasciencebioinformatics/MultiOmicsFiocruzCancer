@@ -46,7 +46,7 @@ list_of_genes=list(genes_stage_I=rownames(na.omit(unstranded_data_filter)),genes
 # Create bck for colData_bck
 colData_bck<-colData
 
-threshold_FDR=0.05
+threshold_FDR=1
 
 # for each pair of stage.
 for (comparisson_index in rownames(df_table_comparisson))

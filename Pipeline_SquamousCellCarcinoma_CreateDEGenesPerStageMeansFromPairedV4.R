@@ -46,7 +46,8 @@ list_of_genes=list(genes_stage_I=rownames(na.omit(unstranded_data_filter)),genes
 # Create bck for colData_bck
 colData_bck<-colData
 
-threshold_FDR=1
+threshold_FDR=0.1
+
 
 # for each pair of stage.
 for (comparisson_index in rownames(df_table_comparisson))
@@ -76,7 +77,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	LOG_CONSTANT=0.001
 	log2change=rowMeans(log(Stage_i_samples_expr+LOG_CONSTANT,2))/rowMeans(log(Stages_ii_and_iii_sample_expr+LOG_CONSTANT,2))
 	log2change=log( (rowMeans(Stage_i_samples_expr+LOG_CONSTANT)/rowMeans(Stages_ii_and_iii_sample_expr+LOG_CONSTANT)),2)	
-  logfchange= (rowMeans(Stage_i_samples_expr+LOG_CONSTANT)/rowMeans(Stages_ii_and_iii_sample_expr+LOG_CONSTANT))
+ 	logfchange= (rowMeans(Stage_i_samples_expr+LOG_CONSTANT)/rowMeans(Stages_ii_and_iii_sample_expr+LOG_CONSTANT))
 	
 	# log2change data
 	log2change_Stage_i=na.omit(data.frame(gene=names(log2change),log2change=logfchange))

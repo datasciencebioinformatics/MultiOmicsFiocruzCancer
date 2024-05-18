@@ -46,8 +46,6 @@ for (comparisson_index in rownames(df_table_comparisson))
 	Stage_i          <-df_table_comparisson[comparisson_index,"Stage_i"]
 	Stage_ii         <-df_table_comparisson[comparisson_index,"Stage_ii"]
 	
-	print(names(list_of_genes)[as.integer(comparisson_index)])
-	
 	# Take gens of corresponding stage
 	DE_genes        <- rownames(na.omit(unstranded_data_filter))
 	

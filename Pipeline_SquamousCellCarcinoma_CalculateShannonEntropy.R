@@ -46,9 +46,9 @@ df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_St
 # Set threshold
 upper_weight_th = threshold_cor
 
-net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "spearman", use = "complete.obs")
-net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "spearman", use = "complete.obs")
-net_stage_III   <- cor(t(df_correlation_net_stage_III), method = "spearman", use = "complete.obs")
+net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "pearson", use = "complete.obs")
+net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "pearson", use = "complete.obs")
+net_stage_III   <- cor(t(df_correlation_net_stage_III), method = "pearson", use = "complete.obs")
 
 #net_stage_I   <- cor(df_stage_I_filtered, method = "pearson", use = "complete.obs")
 #net_stage_II   <- cor(df_stage_II_filtered, method = "pearson", use = "complete.obs")

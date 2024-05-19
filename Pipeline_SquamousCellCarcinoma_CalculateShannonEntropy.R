@@ -9,33 +9,30 @@ Table1_data <- Table1_data[match(unique(Table1_data$gene_id), Table1_data$gene_i
 rownames(Table1_data)<-Table1_data$gene_id
 #######################################################################################################################################
 # File path to gene stages
-# Version 1
+# Version 1 -Only genes unique to each stage are used.
 file_genes_Stage_I   <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_I.tsv",sep="")
 file_genes_Stage_II   <-  paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_II.tsv",sep="")
 file_genes_Stage_III   <- paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_III.tsv",sep="")
 
-# Version 2
-#file_genes_Stage_I     <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_I",".tsv",sep="")
-#file_genes_Stage_II    <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_II",".tsv",sep="")
-#file_genes_Stage_III   <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_III",".tsv",sep="")
-
-# Gene table
+# Gene table - genes from each stage are sabe in tables
 genes_Stage_I       <-read.table(file = file_genes_Stage_I, sep = '\t', header = TRUE,fill=TRUE)         
 genes_Stage_II      <-read.table(file = file_genes_Stage_II, sep = '\t', header = TRUE,fill=TRUE)
 genes_Stage_III     <-read.table(file = file_genes_Stage_III, sep = '\t', header = TRUE,fill=TRUE) 
 #######################################################################################################################################
-# Select only tumor
+# Select only tumor metadata
 colDta_tumor<-colData[colData$tissue_type=="Tumor",]
-colDta_tumor<-colData
 
-# Samples of each stage stored in colData                                                                                             #
-sample_stage_I  <-colDta_tumor[colDta_tumor$stages=="Stage I","patient_id"]                                                                     #
-sample_stage_II <-colDta_tumor[colDta_tumor$stages=="Stage II","patient_id"]                                                                    #
-sample_stage_III<-colDta_tumor[colDta_tumor$stages=="Stage III","patient_id"]                                                                   #
+# Select only tumor samples id's
+tumor_samples<-colDta_tumor$patient_id
+
+# Select samples of each stage stored in colData                                                                                             #
+sample_stage_I  <-colDta_tumor[colDta_tumor$stages=="Stage I","patient_id"]                                                                  #
+sample_stage_II <-colDta_tumor[colDta_tumor$stages=="Stage II","patient_id"]                                                                 #
+sample_stage_III<-colDta_tumor[colDta_tumor$stages=="Stage III","patient_id"]                                                                #
 #######################################################################################################################################
-df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,]))
-df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,]))
-df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,]))
+df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,tumor_samples]))
+df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,tumor_samples]))
+df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,tumor_samples]))
 #######################################################################################################################################
 # Filter by low variability
 # Incosistency of low-variability genes.
@@ -58,7 +55,6 @@ net_stage_I_correlation_network<-melt(net_stage_I)
 net_stage_II_correlation_network<-melt(net_stage_II)
 net_stage_III_correlation_network<-melt(net_stage_III)
 
-upper_weight_th<-0.5
 net_stage_I_correlation_network<-na.omit(net_stage_I_correlation_network[net_stage_I_correlation_network$value>=upper_weight_th,])
 net_stage_II_correlation_network<-na.omit(net_stage_II_correlation_network[net_stage_II_correlation_network$value>=upper_weight_th,])
 net_stage_III_correlation_network<-na.omit(net_stage_III_correlation_network[net_stage_III_correlation_network$value>=upper_weight_th,])

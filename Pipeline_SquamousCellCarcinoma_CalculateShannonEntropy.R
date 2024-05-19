@@ -39,10 +39,6 @@ df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_St
 #######################################################################################################################################
 # Filter by low variability
 # Incosistency of low-variability genes.
-# df_stage_I_filtered<-filter_low_var(t(df_correlation_net_stage_I), pct = 0.75, type = c("median"))
-# df_stage_II_filtered<-filter_low_var(t(df_correlation_net_stage_II), pct = 0.75,type = c("median"))
-# df_stage_III_filtered<-filter_low_var(t(df_correlation_net_stage_III), pct = 0.75, type = c("median"))
-
 # Set threshold
 upper_weight_th = threshold_cor
 
@@ -50,18 +46,19 @@ net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "spearman", use = "
 net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "spearman", use = "complete.obs")
 net_stage_III   <- cor(t(df_correlation_net_stage_III), method = "spearman", use = "complete.obs")
 
-net_stage_I    <- build_net(t(df_correlation_net_stage_I), n_threads = 1, network_type="unsigned",keep_matrices="both", cor_func ="spearman")
-net_stage_II   <- build_net(t(df_correlation_net_stage_II), n_threads = 1,network_type="unsigned",keep_matrices="both", cor_func ="spearman")
-net_stage_III  <- build_net(t(df_correlation_net_stage_III), n_threads = 1, network_type="unsigned",keep_matrices="both",cor_func="spearman")
+net_stage_I[lower.tri(net_stage_I)] <- 0
+net_stage_II[lower.tri(net_stage_II)] <- 0
+net_stage_III[lower.tri(net_stage_III)] <- 0
 
-net_stage_I[lower.tri(net_stage_I)] <- NA
-net_stage_II[lower.tri(net_stage_II)] <- NA
-net_stage_III[lower.tri(net_stage_III)] <- NA
+diag(net_stage_I)<-0
+diag(net_stage_II)<-0
+diag(net_stage_III)<-0
 
 net_stage_I_correlation_network<-melt(net_stage_I)
 net_stage_II_correlation_network<-melt(net_stage_II)
 net_stage_III_correlation_network<-melt(net_stage_III)
 
+upper_weight_th<-0.5
 net_stage_I_correlation_network<-na.omit(net_stage_I_correlation_network[net_stage_I_correlation_network$value>=upper_weight_th,])
 net_stage_II_correlation_network<-na.omit(net_stage_II_correlation_network[net_stage_II_correlation_network$value>=upper_weight_th,])
 net_stage_III_correlation_network<-na.omit(net_stage_III_correlation_network[net_stage_III_correlation_network$value>=upper_weight_th,])

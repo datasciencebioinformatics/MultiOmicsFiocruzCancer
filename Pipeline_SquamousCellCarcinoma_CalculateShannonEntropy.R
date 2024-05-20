@@ -22,11 +22,6 @@ file_genes_Stage_III   <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_
 genes_Stage_I       <-read.table(file = file_genes_Stage_I, sep = '\t', header = TRUE,fill=TRUE)         
 genes_Stage_II      <-read.table(file = file_genes_Stage_II, sep = '\t', header = TRUE,fill=TRUE)
 genes_Stage_III     <-read.table(file = file_genes_Stage_III, sep = '\t', header = TRUE,fill=TRUE) 
-
-genes_Stage_I  <- list_stage_specific_genes[["sample_stage_I"]]
-genes_Stage_II <- list_stage_specific_genes[["sample_stage_II"]]
-genes_Stage_III <- list_stage_specific_genes[["sample_stage_III"]]
-
 #######################################################################################################################################
 # Select only tumor metadata
 colDta_tumor<-colData[colData$tissue_type=="Tumor",]
@@ -43,9 +38,9 @@ df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stag
 df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,tumor_samples]))
 df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,tumor_samples]))
 
-df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stage_I,tumor_samples]))
-df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II,tumor_samples]))
-df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III,tumor_samples]))
+df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,tumor_samples]))
+df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,tumor_samples]))
+df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,tumor_samples]))
 #######################################################################################################################################
 # Filter by low variability
 # Incosistency of low-variability genes.

@@ -108,7 +108,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	  scale_color_manual(values = c("black", "red")) +
 	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("Unpaired t-test, RPKM of samples from ", gsub('sample_s', 'S' ,Stage_i), "\nlog2foldchange >=",threshold_tumor, " and FRD <= 0.05", sep="")) + guides(fill="none")
 	#######################################################################################################################################		
-	png(filename=paste(output_dir,"Volcano_plot_",paste(gsub('sample_s', 'S' ,Stage_i),"_",gsub('sample_s', 'S' ,Stage_ii)),".png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
+	png(filename=paste(output_dir,"Volcano_plot_",paste(gsub('sample_s', 'S' ,Stage_i),"_",gsub('sample_s', 'S' ,Stage_ii),sep=""),".png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
 		p1
 	dev.off()
 	cat(print(paste("\nNumber of tumor genes per stage for ",Stage_i, " : ",length(selected_genes))),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)

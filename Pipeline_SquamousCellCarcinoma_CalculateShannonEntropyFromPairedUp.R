@@ -26,6 +26,13 @@ file_genes_Stage_I   <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_un
 file_genes_Stage_II   <-  paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_II.tsv",sep="")
 file_genes_Stage_III   <- paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_III.tsv",sep="")
 
+file_genes_Stage_I     <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_I",".tsv",sep="")
+file_genes_Stage_II    <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_II",".tsv",sep="")
+file_genes_Stage_III   <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_III",".tsv",sep="")
+
+
+
+
 # Gene table
 genes_Stage_I       <-read.table(file = file_genes_Stage_I, sep = '\t', header = TRUE,fill=TRUE)         
 genes_Stage_II      <-read.table(file = file_genes_Stage_II, sep = '\t', header = TRUE,fill=TRUE)
@@ -104,63 +111,24 @@ genes_interactome_stage_I  <-genes_id_vector_stage_I[genes_id_vector_stage_I %in
 genes_interactome_stage_II <-genes_id_vector_stage_II[genes_id_vector_stage_II %in% genes_ids]
 genes_interactome_stage_III<-genes_id_vector_stage_III[genes_id_vector_stage_III %in% genes_ids]
 
-# Set interactome
-df_interactome_stage_I<-data.frame(Gene1=c(),Gene2=c())
-df_interactome_stage_II<-data.frame(Gene1=c(),Gene2=c())
-df_interactome_stage_III<-data.frame(Gene1=c(),Gene2=c())
-
-# For each edge check if both vertex
-for (edge_i in rownames(interactome_data))
-{
-  # Take vertex_i and vertex_ii
-  vertex_i <-interactome_data[edge_i,"Gene1"]
-  vertex_ii<-interactome_data[edge_i,"Gene2"]
-
-  # Void reduntancy
-  if (vertex_i!=vertex_ii)
-  {
-    # Check if both genes are in the pair 
-    if(vertex_i %in% genes_interactome_stage_I & vertex_ii %in% genes_interactome_stage_I)
-    {
-        # Add interactome_stage_I
-        df_interactome_stage_I<-rbind(df_interactome_stage_I,data.frame(Gene1=vertex_i,Gene2=vertex_ii))
-    }
-    # Check if both genes are in the pair 
-    if(vertex_i %in% genes_interactome_stage_II & vertex_ii %in% genes_interactome_stage_II)
-    {
-        # Add interactome_stage_I
-        df_interactome_stage_II<-rbind(df_interactome_stage_II,data.frame(Gene1=vertex_i,Gene2=vertex_ii))
-    }
-    # Check if both genes are in the pair 
-    if(vertex_i %in% genes_interactome_stage_III & vertex_ii %in% genes_interactome_stage_III)
-    {
-        # Add interactome_stage_I
-        df_interactome_stage_III<-rbind(df_interactome_stage_III,data.frame(Gene1=vertex_i,Gene2=vertex_ii))
-    }    
-  }
-}
-interactome_stage_I<-df_interactome_stage_I
-interactome_stage_II<-df_interactome_stage_II
-interactome_stage_III<-df_interactome_stage_III
-
 # A vector with all genes of the interactome,full_interactome<-unique(c(genes_interactome_stage_I$Gene1,genes_interactome_stage_I$Gene2))
 # Calculate all pairwise combinations of genes, without redunctancy
-#full_interactome_stage_I<- data.frame(expand.grid.unique(x = genes_interactome_stage_I, y = genes_interactome_stage_I,include.equals=FALSE))
-#full_interactome_stage_II<- data.frame(expand.grid.unique(x = genes_interactome_stage_II, y = genes_interactome_stage_II,include.equals=FALSE))
-#full_interactome_stage_III<- data.frame(expand.grid.unique(x = genes_interactome_stage_III, y = genes_interactome_stage_III,include.equals=FALSE))
+full_interactome_stage_I<- data.frame(expand.grid.unique(x = genes_interactome_stage_I, y = genes_interactome_stage_I,include.equals=FALSE))
+full_interactome_stage_II<- data.frame(expand.grid.unique(x = genes_interactome_stage_II, y = genes_interactome_stage_II,include.equals=FALSE))
+full_interactome_stage_III<- data.frame(expand.grid.unique(x = genes_interactome_stage_III, y = genes_interactome_stage_III,include.equals=FALSE))
 
 # set colnames
-#colnames(full_interactome_stage_I)<-c("Gene1","Gene2")
-#colnames(full_interactome_stage_II)<-c("Gene1","Gene2")
-#colnames(full_interactome_stage_III)<-c("Gene1","Gene2")
+colnames(full_interactome_stage_I)<-c("Gene1","Gene2")
+colnames(full_interactome_stage_II)<-c("Gene1","Gene2")
+colnames(full_interactome_stage_III)<-c("Gene1","Gene2")
 
-#rownames(full_interactome_stage_I)<-paste(full_interactome_stage_I$Gene1,full_interactome_stage_I$Gene2,sep="-")
-#rownames(full_interactome_stage_II)<-paste(full_interactome_stage_II$Gene1,full_interactome_stage_II$Gene2,sep="-")
-#rownames(full_interactome_stage_III)<-paste(full_interactome_stage_III$Gene1,full_interactome_stage_III$Gene2,sep="-")
+rownames(full_interactome_stage_I)<-paste(full_interactome_stage_I$Gene1,full_interactome_stage_I$Gene2,sep="-")
+rownames(full_interactome_stage_II)<-paste(full_interactome_stage_II$Gene1,full_interactome_stage_II$Gene2,sep="-")
+rownames(full_interactome_stage_III)<-paste(full_interactome_stage_III$Gene1,full_interactome_stage_III$Gene2,sep="-")
 #######################################################################################################
-#interactome_stage_I  <-interactome_data_inv[which(rownames(interactome_data_inv) %in% rownames(full_interactome_stage_I)),]
-#interactome_stage_II <-interactome_data_inv[which(rownames(interactome_data_inv) %in% rownames(full_interactome_stage_II)),]
-#interactome_stage_III<-interactome_data_inv[which(rownames(interactome_data_inv) %in% rownames(full_interactome_stage_III)),]
+interactome_stage_I  <-interactome_data_inv[which(rownames(interactome_data_inv) %in% rownames(full_interactome_stage_I)),]
+interactome_stage_II <-interactome_data_inv[which(rownames(interactome_data_inv) %in% rownames(full_interactome_stage_II)),]
+interactome_stage_III<-interactome_data_inv[which(rownames(interactome_data_inv) %in% rownames(full_interactome_stage_III)),]
 ########################################################################################################################################
 df_stageI_connectivity   <-unique(data.frame(Conectivity=table(c(interactome_stage_I$Gene1,interactome_stage_I$Gene2))))
 df_stageII_connectivity  <-unique(data.frame(Conectivity=table(c(interactome_stage_II$Gene1,interactome_stage_II$Gene2))))

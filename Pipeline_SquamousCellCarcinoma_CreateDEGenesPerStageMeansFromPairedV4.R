@@ -94,9 +94,9 @@ for (comparisson_index in rownames(df_table_comparisson))
 	log2change_Stage_i[which(log2change_Stage_i$FDR<=2),"Category"]<-paste("Per stage genes", sep="")
 	
 	# Selected genes based on FDR, log2foldchange
-	#selected_genes<-log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=0.05), which(log2change_Stage_i$log2change>=threshold_stage)),"gene"]		
+	selected_genes<-log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=1), which(log2change_Stage_i$log2change>=threshold_stage)),"gene"]		
 	#selected_genes<-log2change_Stage_i[ which(log2change_Stage_i$log2change>=threshold_stage),"gene"]	
-	selected_genes<-log2change_Stage_i[which(log2change_Stage_i$FDR<=0.25),"gene"]	
+	#selected_genes<-log2change_Stage_i[which(log2change_Stage_i$FDR<=0.01),"gene"]	
 	####################################################################################################################	
 	if(length(selected_genes)>0)
 	{
@@ -105,7 +105,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	}
 	####################################################################################################################		
 	# Save TSV file with genes from Stage3
-	write_tsv(data.frame(na.omit(log2change_Stage_i[which(log2change_Stage_i$FDR<=0.25),"gene"])), paste(output_dir,paste(Stage_i,Stage_ii,sep=".","tsv"),sep=""))			
+	write_tsv(data.frame(na.omit(log2change_Stage_i[which(log2change_Stage_i$FDR<=0.01),"gene"])), paste(output_dir,paste(Stage_i,Stage_ii,sep=".","tsv"),sep=""))			
 	####################################################################################################################			
 	#######################################################################################################################################
 	#write_tsv(data.frame(log2change_Stage_i), paste(output_dir,paste(gsub('sample_s', 'S' ,Stage_i),"_",gsub('sample_s', 'S' ,Stage_ii)),"log2change_table.tsv",sep=""))			

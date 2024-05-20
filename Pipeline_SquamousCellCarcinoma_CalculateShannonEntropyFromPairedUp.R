@@ -116,24 +116,28 @@ for (edge_i in rownames(interactome_data))
   vertex_i <-interactome_data[edge_i,"Gene1"]
   vertex_ii<-interactome_data[edge_i,"Gene2"]
 
-  # Check if both genes are in the pair 
-  if(vertex_i %in% genes_interactome_stage_I & vertex_ii %in% genes_interactome_stage_I)
+  # Void reduntancy
+  if (vertex_i!=vertex_ii)
   {
-      # Add interactome_stage_I
-      df_interactome_stage_I<-rbind(df_interactome_stage_I,data.frame(Gene1=vertex_i,Gene2=vertex_ii))
+    # Check if both genes are in the pair 
+    if(vertex_i %in% genes_interactome_stage_I & vertex_ii %in% genes_interactome_stage_I)
+    {
+        # Add interactome_stage_I
+        df_interactome_stage_I<-rbind(df_interactome_stage_I,data.frame(Gene1=vertex_i,Gene2=vertex_ii))
+    }
+    # Check if both genes are in the pair 
+    if(vertex_i %in% genes_interactome_stage_II & vertex_ii %in% genes_interactome_stage_II)
+    {
+        # Add interactome_stage_I
+        df_interactome_stage_II<-rbind(df_interactome_stage_II,data.frame(Gene1=vertex_i,Gene2=vertex_ii))
+    }
+    # Check if both genes are in the pair 
+    if(vertex_i %in% genes_interactome_stage_III & vertex_ii %in% genes_interactome_stage_III)
+    {
+        # Add interactome_stage_I
+        df_interactome_stage_III<-rbind(df_interactome_stage_III,data.frame(Gene1=vertex_i,Gene2=vertex_ii))
+    }    
   }
-  # Check if both genes are in the pair 
-  if(vertex_i %in% genes_interactome_stage_II & vertex_ii %in% genes_interactome_stage_II)
-  {
-      # Add interactome_stage_I
-      df_interactome_stage_II<-rbind(df_interactome_stage_II,data.frame(Gene1=vertex_i,Gene2=vertex_ii))
-  }
-  # Check if both genes are in the pair 
-  if(vertex_i %in% genes_interactome_stage_III & vertex_ii %in% genes_interactome_stage_III)
-  {
-      # Add interactome_stage_I
-      df_interactome_stage_III<-rbind(df_interactome_stage_III,data.frame(Gene1=vertex_i,Gene2=vertex_ii))
-  }    
 }
 interactome_stage_I<-df_interactome_stage_I
 interactome_stage_II<-df_interactome_stage_II

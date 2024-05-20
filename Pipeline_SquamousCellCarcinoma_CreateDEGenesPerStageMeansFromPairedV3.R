@@ -84,8 +84,8 @@ for (comparisson_index in rownames(df_table_comparisson))
 	# FRD 
 	log2change_Stage_i$FDR<-p.adjust(log2change_Stage_i$Pvalue, method="fdr")
 
-	# Categorize genes if log2foldchange >= threshold_tumor
-	log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=0.05), which(log2change_Stage_i$log2change>=threshold_tumor)),"Category"]<-paste("Per stage genes", sep="")
+	# Categorize genes if log2foldchange >= threshold_
+	log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=0.05), which(log2change_Stage_i$log2change>=threshold_stage)),"Category"]<-paste("Per stage genes", sep="")
 	#log2change_Stage_i[which(log2change_Stage_i$FDR<=0.05),"Category"]<-paste("Per stage genes", sep="")
 	
 	# Selected genes based on FDR, log2foldchange
@@ -106,7 +106,7 @@ for (comparisson_index in rownames(df_table_comparisson))
 	  xlab("log2FoldChange") + 
 	  ylab("-log10(padj)") +
 	  scale_color_manual(values = c("black", "red")) +
-	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("Unpaired t-test, RPKM of samples from ", gsub('sample_s', 'S' ,Stage_i), "\nlog2foldchange >=",threshold_tumor, " and FRD <= 0.05", sep="")) + guides(fill="none")
+	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("Unpaired t-test, RPKM of samples from ", gsub('sample_s', 'S' ,Stage_i), "\nlog2foldchange >=",threshold_stage, " and FRD <= 0.05", sep="")) + guides(fill="none")
 	#######################################################################################################################################		
 	png(filename=paste(output_dir,"Volcano_plot_",paste(gsub('sample_s', 'S' ,Stage_i),"_",gsub('sample_s', 'S' ,Stage_ii),sep=""),".png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
 		p1

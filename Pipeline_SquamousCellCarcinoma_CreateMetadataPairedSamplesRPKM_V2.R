@@ -72,7 +72,7 @@ log2change_tumor_control$Pvalue<-1
 for (gene in log2change_tumor_control$gene)
 {
 	# Take p-value
-	log2change_tumor_control[gene,"Pvalue"]<-t.test(x=as.numeric(unstranded_rpkm[gene,samples_Tumor]), y=as.numeric(unstranded_rpkm[gene,samples_Normal]), paired = FALSE, alternative = "two.sided")$p.value	
+	log2change_tumor_control[gene,"Pvalue"]<-t.test(x=as.numeric(unstranded_rpkm[gene,paired_sample_df$tumor]), y=as.numeric(unstranded_rpkm[gene,paired_sample_df$normal]), paired = FALSE, alternative = "two.sided")$p.value	
 }
 # FRD 
 log2change_tumor_control$FDR<-p.adjust(log2change_tumor_control$Pvalue, method="fdr")

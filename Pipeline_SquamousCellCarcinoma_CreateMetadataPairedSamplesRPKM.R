@@ -2,8 +2,8 @@
 # Comments : from the GDC metadata, samples from each case are split according to tissue_type=Normal,tissue_type=Tumor.
 # the paired samples are combinations of tissue_type=Normal,tissue_type=Tumor from the same case.
 # To plot: 
-# heatmap 45 control vs. 45 tumor, Genes log2foldchange>=1, FDR<=0.05
-# PCA     45 control vs. 45 tumor, Genes log2foldchange>=1, FDR<=0.05
+# heatmap all control vs. all tumor, Genes log2foldchange>=1, FDR<=0.05
+# PCA     all control vs. all tumor, Genes log2foldchange>=1, FDR<=0.05
 ###########################################################################################################################
 # A R script to create metadata from gdc files.
 # Inputs:

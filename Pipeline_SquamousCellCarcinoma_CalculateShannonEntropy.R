@@ -85,9 +85,13 @@ interactome_data_stage_I<-unique(interactome_data_stage_I[,c("Gene1","Gene2")])
 interactome_data_stage_II<-unique(interactome_data_stage_II[,c("Gene1","Gene2")])
 interactome_data_stage_III<-unique(interactome_data_stage_III[,c("Gene1","Gene2")])
 ########################################################################################################################################
-df_stageI_connectivity   <-unique(data.frame(Conectivity=table(c(interactome_data_stage_I$Gene1,interactome_data_stage_I$Gene2))))
-df_stageII_connectivity  <-unique(data.frame(Conectivity=table(c(interactome_data_stage_II$Gene1,interactome_data_stage_II$Gene2))))
-df_stageIII_connectivity <-unique(data.frame(Conectivity=table(c(interactome_data_stage_III$Gene1,interactome_data_stage_III$Gene2))))
+stage_I_genes_factor  <-factor(c(interactome_data_stage_I$Gene1,interactome_data_stage_I$Gene2),level=unique(c(interactome_data_stage_I$Gene1,interactome_data_stage_I$Gene2)))
+stage_II_genes_factor <-factor(c(interactome_data_stage_II$Gene1,interactome_data_stage_II$Gene2),level=unique(c(interactome_data_stage_II$Gene1,interactome_data_stage_II$Gene2)))
+stage_III_genes_factor<-factor(c(interactome_data_stage_III$Gene1,interactome_data_stage_III$Gene2),level=unique(c(interactome_data_stage_III$Gene1,interactome_data_stage_III$Gene2)))
+   
+df_stageI_connectivity   <-unique(data.frame(Conectivity=table(stage_I_genes_factor)))
+df_stageII_connectivity  <-unique(data.frame(Conectivity=table(stage_II_genes_factor)))
+df_stageIII_connectivity <-unique(data.frame(Conectivity=table(stage_III_genes_factor)))
 ########################################################################################################################################
 colnames(df_stageI_connectivity)<-c("Gene","Conectivity")
 colnames(df_stageII_connectivity)<-c("Gene","Conectivity")
@@ -133,6 +137,8 @@ write_tsv(interactome_data_stage_I, paste(output_dir,"df_stageI_interactome",".t
 write_tsv(interactome_data_stage_II, paste(output_dir,"df_stageII_interactome",".tsv",sep=""))
 write_tsv(interactome_data_stage_III, paste(output_dir,"df_stageIII_interactome",".tsv",sep=""))
 ########################################################################################################################################
-cat(print(paste("\nNº of vertex/Nº/Entropy of edges, co-expression network for Stage I: ",  paste(length(df_stageI_connectivity$Gene),dim(unique(interactome_data_stage_I))[1],round(Entropy_stage_I_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
-cat(print(paste("\nNº of vertex/Nº/Entropy of edges, co-expression network for Stage II: ", paste(length(df_stageII_connectivity$Gene),dim(unique(interactome_data_stage_II))[1],round(Entropy_stage_II_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
-cat(print(paste("\nNº of vertex/Nº/Entropy of edges, co-expression network for Stage III: ",paste(length(df_stageIII_connectivity$Gene),dim(unique(interactome_data_stage_III))[1],round(Entropy_stage_III_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
+cat(print(paste("\nNº of vertex/Nº/Entropy of edges, co-expression network for Stage I: ",  paste(length(unique(c(interactome_data_stage_I$Gene1,interactome_data_stage_I$Gene2))),dim(unique(interactome_data_stage_I))[1],round(Entropy_stage_I_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
+cat(print(paste("\nNº of vertex/Nº/Entropy of edges, co-expression network for Stage II: ", paste(length(unique(c(interactome_data_stage_II$Gene1,interactome_data_stage_II$Gene2))),dim(unique(interactome_data_stage_II))[1],round(Entropy_stage_II_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
+cat(print(paste("\nNº of vertex/Nº/Entropy of edges, co-expression network for Stage III: ",paste(length(unique(c(interactome_data_stage_III$Gene1,interactome_data_stage_III$Gene2))),dim(unique(interactome_data_stage_III))[1],round(Entropy_stage_III_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
+
+

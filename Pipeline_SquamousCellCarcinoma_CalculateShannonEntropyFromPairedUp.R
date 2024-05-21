@@ -138,9 +138,9 @@ df_stageI_connectivity   <-unique(data.frame(Conectivity=table(stage_I_genes_fac
 df_stageII_connectivity  <-unique(data.frame(Conectivity=table(stage_II_genes_factor)))
 df_stageIII_connectivity <-unique(data.frame(Conectivity=table(stage_III_genes_factor)))
 
-df_stageI_connectivity   <-unique(data.frame(Conectivity=table(c(interactome_stage_I$Gene1,interactome_stage_I$Gene2))))
-df_stageII_connectivity  <-unique(data.frame(Conectivity=table(c(interactome_stage_II$Gene1,interactome_stage_II$Gene2))))
-df_stageIII_connectivity <-unique(data.frame(Conectivity=table(c(interactome_stage_III$Gene1,interactome_stage_III$Gene2))))
+#df_stageI_connectivity   <-unique(data.frame(Conectivity=table(c(interactome_stage_I$Gene1,interactome_stage_I$Gene2))))
+#df_stageII_connectivity  <-unique(data.frame(Conectivity=table(c(interactome_stage_II$Gene1,interactome_stage_II$Gene2))))
+#df_stageIII_connectivity <-unique(data.frame(Conectivity=table(c(interactome_stage_III$Gene1,interactome_stage_III$Gene2))))
 ########################################################################################################################################
 colnames(df_stageI_connectivity)<-c("Gene","Conectivity")
 colnames(df_stageII_connectivity)<-c("Gene","Conectivity")

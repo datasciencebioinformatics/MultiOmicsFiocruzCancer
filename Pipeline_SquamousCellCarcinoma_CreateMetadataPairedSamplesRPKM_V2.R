@@ -85,7 +85,7 @@ for (gene in log2change_tumor_control$gene)
 log2change_tumor_control$FDR<-p.adjust(log2change_tumor_control$Pvalue, method="fdr")
 
 # Categorize genes if log2foldchange >= threshold_tumor
-log2change_tumor_control[intersect(which(log2change_tumor_control$FDR<=0.05), which(log2change_tumor_control$log2change>=threshold_tumor)),"Category"]<-paste("Tumor genes", sep="")
+log2change_tumor_control[intersect(which(log2change_tumor_control$FDR<=threshold_FDR), which(log2change_tumor_control$log2change>=threshold_tumor)),"Category"]<-paste("Tumor genes", sep="")
 #######################################################################################################################################
 # Create volcano plot
 p1 <- ggplot(log2change_tumor_control, aes(log2change, -log(FDR,10))) +  geom_point(size = 2/5) +  theme_bw()

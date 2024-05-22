@@ -1,0 +1,27 @@
+#outfile="/home/felipe/Documentos/LungPortal/output//trheshold1_1_trheshold2_1_trheshold3_1_trheshold4_0.75/outfile.txt"
+#outfile="/home/felipe/Documentos/LungPortal/output//trheshold1_5_trheshold2_1_trheshold3_1_trheshold4_0.75/outfile.txt"
+#outfile="/home/felipe/Documentos/LungPortal/output//trheshold1_10_trheshold2_1_trheshold3_1_trheshold4_0.75/outfile.txt"
+#outfile="/home/felipe/Documentos/LungPortal/output//trheshold1_1_trheshold2_15_trheshold3_15_trheshold4_0.75/outfile.txt"
+#outfile="/home/felipe/Documentos/LungPortal/output//trheshold1_5_trheshold2_15_trheshold3_15_trheshold4_0.75/outfile.txt"
+#outfile="/home/felipe/Documentos/LungPortal/output//trheshold1_10_trheshold2_15_trheshold3_15_trheshold4_0.75/outfile.txt"
+outfile="/home/felipe/Documentos/LungPortal/output//trheshold1_1_trheshold2_1_trheshold3_1_trheshold4_0.99/outfile.txt"
+outfile="/home/felipe/Documentos/LungPortal/output//trheshold1_5_trheshold2_1_trheshold3_1_trheshold4_0.99/outfile.txt"
+outfile="/home/felipe/Documentos/LungPortal/output//trheshold1_10_trheshold2_1_trheshold3_1_trheshold4_0.99/outfile.txt"
+outfile="/home/felipe/Documentos/LungPortal/output//trheshold1_1_trheshold2_15_trheshold3_15_trheshold4_0.99/outfile.txt"
+outfile="/home/felipe/Documentos/LungPortal/output//trheshold1_5_trheshold2_15_trheshold3_15_trheshold4_0.99/outfile.txt"
+outfile="/home/felipe/Documentos/LungPortal/output//trheshold1_10_trheshold2_15_trheshold3_15_trheshold4_0.99_V4/outfile.txt"
+
+n_tumor=$(cat $outfile | grep "Number of up-regulated tumor-genes :" | awk '{print $6}')
+n_StageI=$(cat $outfile | grep "Number of tumor genes per stage for Stage I :" | awk '{print $11}')
+n_StageII=$(cat $outfile | grep "Number of tumor genes per stage for Stage II :" | awk '{print $11}')
+n_StageIII=$(cat $outfile | grep "Number of tumor genes per stage for Stage III :" | awk '{print $11}')
+n_co_expression_StageI=$(cat $outfile | grep "Nº of vertex/Nº/Entropy of edges, co-expression network for Stage I:" | awk '{print $11}')
+n_co_expression_StageII=$(cat $outfile | grep "Nº of vertex/Nº/Entropy of edges, co-expression network for Stage II:" | awk '{print $11}')
+n_co_expression_StageIII=$(cat $outfile | grep "Nº of vertex/Nº/Entropy of edges, co-expression network for Stage III:" | awk '{print $11}')
+n_interactome_StageI=$(cat $outfile | grep "Nº of vertex/Nº/Entropy of edges, sub-interactome network for Stage I:" | awk '{print $11}')
+n_interactome_StageII=$(cat $outfile | grep "Nº of vertex/Nº/Entropy of edges, sub-interactome network for Stage II:" | awk '{print $11}')
+n_interactome_StageIII=$(cat $outfile | grep "Nº of vertex/Nº/Entropy of edges, sub-interactome network for Stage III:" | awk '{print $11}')
+echo -e $n_tumor"\t"$n_StageI"\t"$n_StageII"\t"$n_StageIII"\t"$n_co_expression_StageI"\t"$n_co_expression_StageII"\t"$n_co_expression_StageIII"\t"$n_interactome_StageI"\t"$n_interactome_StageII"\t"$n_interactome_StageIII
+
+
+

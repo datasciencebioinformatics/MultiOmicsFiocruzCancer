@@ -46,7 +46,6 @@ list_of_genes=list(genes_stage_I=rownames(na.omit(unstranded_data_filter)),genes
 # Create bck for colData_bck
 colData_bck<-colData
 
-threshold_FDR=1
 
 # for each pair of stage.
 for (comparisson_index in rownames(df_table_comparisson))
@@ -96,11 +95,11 @@ for (comparisson_index in rownames(df_table_comparisson))
 	log2change_Stage_i$FDR<-p.adjust(log2change_Stage_i$Pvalue, method="fdr")
 
 	# Categorize genes if log2foldchange >= threshold_tumor
-	log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=0.05), which(log2change_Stage_i$log2change>=threshold_stage)),"Category"]<-paste("Per stage genes", sep="")
+	log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=threshold_FDR), which(log2change_Stage_i$log2change>=threshold_stage)),"Category"]<-paste("Per stage genes", sep="")
 	#log2change_Stage_i[which(log2change_Stage_i$FDR<=0.05),"Category"]<-paste("Per stage genes", sep="")
 	
 	# Selected genes based on FDR, log2foldchange
-	selected_genes<-log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=0.05), which(log2change_Stage_i$log2change>=threshold_stage)),"gene"]	
+	selected_genes<-log2change_Stage_i[intersect(which(log2change_Stage_i$FDR<=threshold_FDR), which(log2change_Stage_i$log2change>=threshold_stage)),"gene"]	
 	####################################################################################################################	
 	# Save TSV file with genes from Stage3
 	write_tsv(na.omit(log2change_Stage_i[selected_genes,]), paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_",Stage_i,".tsv",sep=""))			####################################################################################################################		

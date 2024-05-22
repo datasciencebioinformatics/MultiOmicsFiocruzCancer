@@ -108,17 +108,4 @@ for (comparisson_index in rownames(df_table_comparisson))
 	#######################################################################################################################################
 	write_tsv(log2change_Stage_i, paste(output_dir,gsub('sample_s', 'S' ,Stage_i),"log2change_Stage_i_table.tsv",sep=""))			
 	####################################################################################################################	
-	# Create volcano plot
-	p1 <- ggplot(log2change_Stage_i, aes(log2change, -log(FDR,10))) +  geom_point(size = 2/5) +  theme_bw()
-		
-	# Adding color to differentially expressed genes (DEGs)
-	p1 <- ggplot(log2change_Stage_i, aes(log2change, -log(FDR),color = Category)) + geom_point(size = 2/5,aes(color = Category))  +
-	  xlab("log2FoldChange") + 
-	  ylab("-log10(padj)") +
-	  scale_color_manual(values = c("black", "red")) +
-	  guides(colour = guide_legend(override.aes = list(size=1.5))) + theme_bw() + ggtitle(paste("Unpaired t-test, RPKM of samples from ", gsub('sample_s', 'S' ,Stage_i), "\nlog2foldchange >=",threshold_tumor, " and FRD <= ",threshold_FDR, sep="")) + guides(fill="none")
-	#######################################################################################################################################		
-	png(filename=paste(output_dir,"Volcano_plot_",gsub('sample_s', 'S' ,Stage_i),".png",sep=""), width = 16, height = 16, res=600, units = "cm")                                                                                                    #
-		p1
-	dev.off()
 }

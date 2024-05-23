@@ -182,9 +182,9 @@ write_tsv(df_stageII_connectivity, paste(output_dir,"df_stageII_connectivity_II_
 write_tsv(df_stageIII_connectivity, paste(output_dir,"df_stageIII_connectivity_III_interactome",".tsv",sep=""))
 
 # Save TSV file with genes from Stage1
-write_tsv(interactome_data_stage_I, paste(output_dir,"df_stageI_interactome_interactome",".tsv",sep=""))
-write_tsv(interactome_data_stage_II, paste(output_dir,"df_stageII_interactome_interactome",".tsv",sep=""))
-write_tsv(interactome_data_stage_III, paste(output_dir,"df_stageIII_interactome_interactome",".tsv",sep=""))
+write_tsv(interactome_stage_I, paste(output_dir,"df_stageI_interactome_interactome",".tsv",sep=""))
+write_tsv(interactome_stage_II, paste(output_dir,"df_stageII_interactome_interactome",".tsv",sep=""))
+write_tsv(interactome_stage_III, paste(output_dir,"df_stageIII_interactome_interactome",".tsv",sep=""))
 ########################################################################################################################################
 cat(print(paste("\nNº of vertex/Nº/Entropy of edges, sub-interactome network for Stage I: ",  paste(length(df_stageI_connectivity$Gene),dim(unique(interactome_stage_I))[1],round(Entropy_stage_I_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)
 cat(print(paste("\nNº of vertex/Nº/Entropy of edges, sub-interactome network for Stage II: ", paste(length(df_stageII_connectivity$Gene),dim(unique(interactome_stage_II))[1],round(Entropy_stage_II_value_Carels,4),sep="/"),sep="")),file=paste(output_dir,"outfile.txt",sep="/"),append=TRUE)

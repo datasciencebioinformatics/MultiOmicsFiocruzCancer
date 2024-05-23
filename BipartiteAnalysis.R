@@ -88,10 +88,40 @@ dev.off()
 png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_III.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
   plot(coexpression_network_Stage_III,layout=layout_with_dh, edge.color	="black")
 dev.off() 
-
+############################################################################################################################################
 # Sub-interactome network for stage I
 # Sub-interactome network for stage II
 # Sub-interactome network for stage III
+
+# Set colour
+nb.cols  <- max(c(length(unique(membership(cluster_interactome_stage_I))),length(unique(membership(cluster_interactome_stage_II))), length(unique(membership(cluster_interactome_stage_III)))))
+mycolors <- data.frame(colour=colorRampPalette(brewer.pal(8, "Set3"))(nb.cols))
+
+# Generate colors based on media type:
+V(interactome_network_Stage_I)$color  <- mycolors[as.numeric( membership(cluster_interactome_stage_I)),]
+V(interactome_network_Stage_II)$color <- mycolors[as.numeric( membership(cluster_interactome_stage_II)),]
+V(interactome_network_Stage_III)$color<- mycolors[as.numeric( membership(cluster_interactome_stage_III)),]
+
+# Set node size based on audience size:
+V(interactome_network_Stage_I)$size <- degree(interactome_network_Stage_I)
+V(interactome_network_Stage_II)$size <- degree(interactome_network_Stage_II)
+V(interactome_network_Stage_III)$size <- degree(interactome_network_Stage_III)
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_I.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
+  plot(interactome_network_Stage_I,layout=layout_with_dh, edge.color	="black", vertex.label=NA)
+dev.off() 
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_II.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
+  plot(interactome_network_Stage_II,layout=layout_with_dh, edge.color	="black", vertex.label=NA)
+dev.off() 
+
+# FindClusters_resolution                                                                                                                                                                                                   #
+png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_III.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
+  plot(interactome_network_Stage_III,layout=layout_with_dh, edge.color	="black", vertex.label=NA)
+dev.off() 
+
 
 # Bi-partite Co-expression vs. Sub-interactome network for stage I
 # Bi-partite Co-expression vs. Sub-interactome network for stage II

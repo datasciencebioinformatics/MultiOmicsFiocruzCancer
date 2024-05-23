@@ -55,10 +55,6 @@ net_stage_I[lower.tri(net_stage_I)] <- 0
 net_stage_II[lower.tri(net_stage_II)] <- 0
 net_stage_III[lower.tri(net_stage_III)] <- 0
 
-diag(net_stage_I)<-0
-diag(net_stage_II)<-0
-diag(net_stage_III)<-0
-
 net_stage_I_correlation_network<-melt(net_stage_I)
 net_stage_II_correlation_network<-melt(net_stage_II)
 net_stage_III_correlation_network<-melt(net_stage_III)
@@ -66,6 +62,23 @@ net_stage_III_correlation_network<-melt(net_stage_III)
 net_stage_I_correlation_network<-na.omit(net_stage_I_correlation_network[net_stage_I_correlation_network$value>=upper_weight_th,])
 net_stage_II_correlation_network<-na.omit(net_stage_II_correlation_network[net_stage_II_correlation_network$value>=upper_weight_th,])
 net_stage_III_correlation_network<-na.omit(net_stage_III_correlation_network[net_stage_III_correlation_network$value>=upper_weight_th,])
+
+
+# using subset function
+net_stage_I_correlation_network <- subset(net_stage_I_correlation_network, Var1 != Var2,select=c(Var1, Var2))
+net_stage_II_correlation_network <- subset(net_stage_II_correlation_network, Var1 != Var2,select=c(Var1, Var2))
+net_stage_III_correlation_network <- subset(net_stage_III_correlation_network, Var1 != Var2,select=c(Var1, Var2))
+
+
+# Remove edges where gene 1 equal gene 2
+for (line in rownames(net_stage_I_correlation_network))
+{
+   # If gene 1 equal to gene 2
+   if(net_stage_I_correlation_network$Var1 != net_stage_I_correlation_network$Var2)
+   {
+      
+   }
+}
 #######################################################################################################################################
 # If at least one of the genes in the pair are in the interactome
 interactome_data_stage_I<-net_stage_I_correlation_network[,1:2]

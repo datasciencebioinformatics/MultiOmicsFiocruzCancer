@@ -75,17 +75,17 @@ V(coexpression_network_Stage_II)$size <- degree(coexpression_network_Stage_II)
 V(coexpression_network_Stage_III)$size <- degree(coexpression_network_Stage_III)
 
 # FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_I.png",sep=""), width = 30, height = 30, res=1200, units = "cm")                                                                                                    #
+png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_I.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
   plot(coexpression_network_Stage_I,layout=layout_with_dh, edge.color	="black")
 dev.off() 
 
 # FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_II.png",sep=""), width = 30, height = 30, res=1200, units = "cm")                                                                                                    #
+png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_II.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
   plot(coexpression_network_Stage_II,layout=layout_with_dh, edge.color	="black")
 dev.off() 
 
 # FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_III.png",sep=""), width = 30, height = 30, res=1200, units = "cm")                                                                                                    #
+png(filename=paste(output_dir,"Panel_subgraph_igraph_stage_III.png",sep=""), width = 20, height = 20, res=1200, units = "cm")                                                                                                    #
   plot(coexpression_network_Stage_III,layout=layout_with_dh, edge.color	="black")
 dev.off() 
 

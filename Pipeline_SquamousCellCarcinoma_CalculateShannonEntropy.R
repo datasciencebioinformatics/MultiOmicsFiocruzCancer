@@ -55,6 +55,10 @@ net_stage_I[lower.tri(net_stage_I)] <- 0
 net_stage_II[lower.tri(net_stage_II)] <- 0
 net_stage_III[lower.tri(net_stage_III)] <- 0
 
+diag(net_stage_I)<-0
+diag(net_stage_II)<-0
+diag(net_stage_III)<-0
+
 net_stage_I_correlation_network<-melt(net_stage_I)
 net_stage_II_correlation_network<-melt(net_stage_II)
 net_stage_III_correlation_network<-melt(net_stage_III)

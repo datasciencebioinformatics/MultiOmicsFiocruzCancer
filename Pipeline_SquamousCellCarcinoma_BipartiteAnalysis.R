@@ -116,7 +116,8 @@ dev.off()
 # Bi-partite Co-expression vs. Sub-interactome network for stage II
 # Bi-partite Co-expression vs. Sub-interactome network for stage III
 ################################################################################################
-# 
+# Combine genes_unique_Stage_I with genes_unique_Stage_III
+unique(c(genes_id_vector_stage_I,genes_id_vector_stage_III))
 ################################################################################################
 # Planejamento igraph networks
 # 1- Primeira análise, rede de coexpressão e rede de subinteractomas para cada estágio, juntamente com redes bipartidas.

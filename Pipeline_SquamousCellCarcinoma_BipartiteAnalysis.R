@@ -60,19 +60,19 @@ genes_id_vector_stage_II<-c()
 genes_id_vector_stage_III<-c()
 
 # For each gene in stage I
-for (gene_id in genes_Stage_I$gene)
+for (gene_id in genes_unique_Stage_I$gene)
 {
   # Store gene id in the vector
   genes_id_vector_stage_I<-c(genes_id_vector_stage_I,strsplit(gene_id, split = "\\.")[[1]][1])
 }
 # For each gene in stage II
-for (gene_id in genes_Stage_II$gene)
+for (gene_id in genes_unique_Stage_II$gene)
 {
   # Store gene id in the vector
   genes_id_vector_stage_II<-c(genes_id_vector_stage_II,strsplit(gene_id, split = "\\.")[[1]][1])
 }
 # For each gene in stage III
-for (gene_id in genes_Stage_III$gene)
+for (gene_id in genes_unique_Stage_III$gene)
 {
   # Store gene id in the vector
   genes_id_vector_stage_III<-c(genes_id_vector_stage_III,strsplit(gene_id, split = "\\.")[[1]][1])
@@ -91,29 +91,32 @@ V(interactome_network_Stage_I)$size <- log(degree(interactome_network_Stage_I)+0
 V(interactome_network_Stage_II)$size <- log(degree(interactome_network_Stage_II)+0.0001,2)*2
 V(interactome_network_Stage_III)$size <- log(degree(interactome_network_Stage_III)+0.0001,2)*2
 
-sum(rownames(data.frame(V(interactome_network_Stage_I)))  %in% genes_id_vector_stage_I)
-sum(rownames(data.frame(V(interactome_network_Stage_II)))  %in% genes_id_vector_stage_II)
-sum(rownames(data.frame(V(interactome_network_Stage_III)))  %in% genes_id_vector_stage_III)
+V(interactome_network_Stage_I)$color<-"grey50"
+V(interactome_network_Stage_II)$color<-"grey50"
+V(interactome_network_Stage_III)$color<-"grey50"
+
+V(interactome_network_Stage_I)$color <- ifelse(V(interactome_network_Stage_I)$name %in% genes_id_vector_stage_I, "black", "grey50")
+V(interactome_network_Stage_II)$color <- ifelse(V(interactome_network_Stage_II)$name %in% genes_id_vector_stage_II, "black", "grey50")
+V(interactome_network_Stage_III)$color <- ifelse(V(interactome_network_Stage_III)$name %in% genes_id_vector_stage_III, "black", "grey50")
 ########################################################################################################################################
 # FindClusters_resolution                                                                                                                                                                                                   #
 png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_I.png",sep=""), width = 30, height = 30, res=600, units = "cm")                                                                                                    #    
-  plot(interactome_network_Stage_I,layout=    layout_with_mds, edge.color	="black", vertex.color	="grey", vertex.label=NA)
+  plot(interactome_network_Stage_I,layout=    layout_with_mds, edge.color	="black", vertex.label=NA)
 dev.off() 
-
 # FindClusters_resolution                                                                                                                                                                                                   #
 png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_II.png",sep=""), width = 30, height = 30, res=600, units = "cm")                                                                                                    #    
-  plot(interactome_network_Stage_I,layout=    layout_with_mds, edge.color	="black", vertex.color	="grey", vertex.label=NA)
+  plot(interactome_network_Stage_II,layout=    layout_with_mds, edge.color	="black", vertex.label=NA)
 dev.off() 
-
 # FindClusters_resolution                                                                                                                                                                                                   #
 png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_III.png",sep=""), width = 30, height = 30, res=600, units = "cm")                                                                                                    #    
-  plot(interactome_network_Stage_I,layout=    layout_with_mds, edge.color	="black", vertex.color	="grey", vertex.label=NA)
+  plot(interactome_network_Stage_III,layout=    layout_with_mds, edge.color	="black", vertex.label=NA)
 dev.off() 
-
-
+########################################################################################################################################
 # Bi-partite Co-expression vs. Sub-interactome network for stage I
 # Bi-partite Co-expression vs. Sub-interactome network for stage II
 # Bi-partite Co-expression vs. Sub-interactome network for stage III
+################################################################################################
+# 
 ################################################################################################
 # Planejamento igraph networks
 # 1- Primeira análise, rede de coexpressão e rede de subinteractomas para cada estágio, juntamente com redes bipartidas.

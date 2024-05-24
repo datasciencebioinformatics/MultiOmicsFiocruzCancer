@@ -61,21 +61,18 @@ V(interactome_network_Stage_II)$size <- log(degree(interactome_network_Stage_II)
 V(interactome_network_Stage_III)$size <- log(degree(interactome_network_Stage_III)+0.0001,2)*2
 
 # FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_I.png",sep=""), width = 20, height = 20, res=600, units = "cm")                                                                                                    #
-  plot(interactome_network_Stage_I,layout=  layout_nicely, edge.color	="black", vertex.label=NA)
-  plot(interactome_network_Stage_I,layout=    layout_with_ge, edge.color	="black", vertex.label=NA)
-  plot(interactome_network_Stage_I,layout=    layout_with_graphopt, edge.color	="black", vertex.label=NA)
-
+png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_I.png",sep=""), width = 30, height = 30, res=600, units = "cm")                                                                                                    #    
+  plot(interactome_network_Stage_I,layout=    layout_with_mds, edge.color	="black", vertex.label=NA)
 dev.off() 
 
 # FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_II.png",sep=""), width = 20, height = 20, res=600, units = "cm")                                                                                                    #
-  plot(interactome_network_Stage_II,layout=layout_with_dh, edge.color	="black", vertex.label=NA)
+png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_II.png",sep=""), width = 30, height = 30, res=600, units = "cm")                                                                                                    #    
+  plot(interactome_network_Stage_II,layout=    layout_with_mds, edge.color	="black", vertex.label=NA)
 dev.off() 
 
 # FindClusters_resolution                                                                                                                                                                                                   #
-png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_III.png",sep=""), width = 20, height = 20, res=600, units = "cm")                                                                                                    #
-  plot(interactome_network_Stage_III,layout=layout_with_dh, edge.color	="black", vertex.label=NA)
+png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_III.png",sep=""), width = 30, height = 30, res=600, units = "cm")                                                                                                    #    
+  plot(interactome_network_Stage_III,layout=    layout_with_mds, edge.color	="black", vertex.label=NA)
 dev.off() 
 
 

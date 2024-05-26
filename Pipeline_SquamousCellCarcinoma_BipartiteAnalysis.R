@@ -128,6 +128,9 @@ V(interactome_network_Stage_I)$size <- log(degree(interactome_network_Stage_I)+0
 V(interactome_network_Stage_II)$size <- log(degree(interactome_network_Stage_II)+0.0001,2)
 V(interactome_network_Stage_III)$size <- log(degree(interactome_network_Stage_III)+0.0001,2)
 ########################################################################################################################################
+write_tsv(df_colours_stage_I, paste(output_dir,"df_colours_stage_I.tsv",sep=""))
+write_tsv(df_colours_stage_II, paste(output_dir,"df_colours_stage_II.tsv",sep=""))
+write_tsv(df_colours_stage_III, paste(output_dir,"df_colours_stage_III.tsv",sep=""))
 
 
 ########################################################################################################################################

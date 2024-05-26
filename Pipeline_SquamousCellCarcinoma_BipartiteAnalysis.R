@@ -61,23 +61,129 @@ cluster_Stage_I = cluster_fast_greedy(interactome_network_Stage_I)
 cluster_Stage_II = cluster_fast_greedy(interactome_network_Stage_II)
 cluster_Stage_III = cluster_fast_greedy(interactome_network_Stage_III)
 
-V(interactome_network_Stage_I)$color <- membership(cluster_Stage_I)
-V(interactome_network_Stage_II)$color <- membership(cluster_Stage_II)
-V(interactome_network_Stage_III)$color <- membership(cluster_Stage_III)
+########################################################################################################################################
+# Colour pallets - R
+library("viridis")
+viridis(10)
+
+df_colours_stage_I<-data.frame(Colour=viridis(length(unique(membership(cluster_Stage_I)))),Cluster=unique(membership(cluster_Stage_I)))
+df_colours_stage_II<-data.frame(Colour=viridis(length(unique(membership(cluster_Stage_II)))),Cluster=unique(membership(cluster_Stage_II)))
+df_colours_stage_III<-data.frame(Colour=viridis(length(unique(membership(cluster_Stage_III)))),Cluster=unique(membership(cluster_Stage_III)))
+
+# Set colours according to membership
+df_colours_stage_I<-df_colours_stage_I[order(df_colours_stage_I$Cluster),]
+df_colours_stage_II<-df_colours_stage_II[order(df_colours_stage_II$Cluster),]
+df_colours_stage_III<-df_colours_stage_III[order(df_colours_stage_III$Cluster),]
+
+# Set colours according to membership
+rownames(df_colours_stage_I)<-df_colours_stage_I$Cluster
+rownames(df_colours_stage_II)<-df_colours_stage_II$Cluster
+rownames(df_colours_stage_III)<-df_colours_stage_III$Cluster
+
+V(interactome_network_Stage_I)$color <- df_colours_stage_I[membership(cluster_Stage_I),"Colour"]
+V(interactome_network_Stage_II)$color <- df_colours_stage_I[membership(cluster_Stage_II),"Colour"]
+V(interactome_network_Stage_III)$color <- df_colours_stage_I[membership(cluster_Stage_III),"Colour"]
+
+# Add n genes per clucster
+df_genes_per_stage_I<-data.frame(table(membership(cluster_Stage_I)))
+df_genes_per_stage_II<-data.frame(table(membership(cluster_Stage_II)))
+df_genes_per_stage_III<-data.frame(table(membership(cluster_Stage_III)))
+
+rownames(df_genes_per_stage_I)<-df_genes_per_stage_I$Var1
+rownames(df_genes_per_stage_II)<-df_genes_per_stage_II$Var1
+rownames(df_genes_per_stage_III)<-df_genes_per_stage_III$Var1
+
+df_colours_stage_I$Genes<-df_genes_per_stage_I[df_colours_stage_I$Cluster,"Freq"]
+df_colours_stage_II$Genes<-df_genes_per_stage_II[df_colours_stage_II$Cluster,"Freq"]
+df_colours_stage_III$Genes<-df_genes_per_stage_III[df_colours_stage_III$Cluster,"Freq"]
+########################################################################################################################################
+# Set number of edges
+df_colours_stage_I$nEdges<-0
+df_colours_stage_II$nEdges<-0
+df_colours_stage_III$nEdges<-0
+
+# Calculate number of edges per cluster
+for (cluster_stage_I in rownames(df_colours_stage_I))
+{
+  # Set number of edges
+  df_colours_stage_I[cluster_stage_I,"nEdges"]<-length(E(subgraph(interactome_network_Stage_I, vids=names(membership(cluster_Stage_I)[membership(cluster_Stage_I)==cluster_stage_I]))))
+}
+# Calculate number of edges per cluster
+for (cluster_stage_II in rownames(df_colours_stage_II))
+{
+  # Set number of edges
+  df_colours_stage_II[cluster_stage_II,"nEdges"]<-length(E(subgraph(interactome_network_Stage_II, vids=names(membership(cluster_Stage_II)[membership(cluster_Stage_II)==cluster_stage_II]))))
+}
+# Calculate number of edges per cluster
+for (cluster_stage_III in rownames(df_colours_stage_III))
+{
+  # Set number of edges
+  df_colours_stage_III[cluster_stage_III,"nEdges"]<-length(E(subgraph(interactome_network_Stage_III, vids=names(membership(cluster_Stage_III)[membership(cluster_Stage_III)==cluster_stage_III]))))
+}
+
+
+
+########################################################################################################################################
+V(interactome_network_Stage_I)$size <- log(degree(interactome_network_Stage_I)+0.0001,2)
+V(interactome_network_Stage_II)$size <- log(degree(interactome_network_Stage_II)+0.0001,2)
+V(interactome_network_Stage_III)$size <- log(degree(interactome_network_Stage_III)+0.0001,2)
+########################################################################################################################################
+
+
 ########################################################################################################################################
 # FindClusters_resolution                                                                                                                                                                                                   #
 png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_I.png",sep=""), width = 30, height = 30, res=600, units = "cm")                                                                                                    #    
-  plot(interactome_network_Stage_I,layout=    layout_with_mds, edge.color	="black", vertex.label=NA)
+  plot(interactome_network_Stage_I,layout=    layout_with_mds, edge.color	="grey50", vertex.label=NA, main="Stage I")          
+  legend("right", legend = paste("Cluster ",df_colours_stage_I$Cluster, " :",df_colours_stage_I$Genes,"/",df_colours_stage_I$nEdges,sep=""), pch=21, col=df_colours_stage_I$Colour, pt.bg=df_colours_stage_I$Colour, pt.cex=1, cex=.8, bty="n", ncol=1, title="Nº of genes and edges per cluster")
 dev.off() 
 # FindClusters_resolution                                                                                                                                                                                                   #
 png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_II.png",sep=""), width = 30, height = 30, res=600, units = "cm")                                                                                                    #    
-  plot(interactome_network_Stage_II,layout=    layout_with_mds, edge.color	="black", vertex.label=NA)
+  plot(interactome_network_Stage_II,layout=    layout_with_mds, edge.color	="grey50", vertex.label=NA, main="Stage II")          
+  legend("right", legend = paste("Cluster ",df_colours_stage_II$Cluster, " :",df_colours_stage_II$Genes,"/",df_colours_stage_II$nEdges,sep=""), pch=21, col=df_colours_stage_I$Colour, pt.bg=df_colours_stage_II$Colour, pt.cex=1, cex=.8, bty="n", ncol=1, title="Nº of genes and edges per cluster")
 dev.off() 
 # FindClusters_resolution                                                                                                                                                                                                   #
 png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_III.png",sep=""), width = 30, height = 30, res=600, units = "cm")                                                                                                    #    
-  plot(interactome_network_Stage_III,layout=    layout_with_mds, edge.color	="black", vertex.label=NA)
+  plot(interactome_network_Stage_III,layout=    layout_with_mds, edge.color	="grey50", vertex.label=NA, main="Stage III")          
+  legend("right", legend = paste("Cluster ",df_colours_stage_III$Cluster, " :",df_colours_stage_III$Genes,"/",df_colours_stage_III$nEdges,sep=""), pch=21, col=df_colours_stage_I$Colour, pt.bg=df_colours_stage_II$Colour, pt.cex=1, cex=.8, bty="n", ncol=1, title="Nº of genes and edges per cluster")
 dev.off() 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ########################################################################################################################################
+library(ggraph)
+library(tidygraph)
+
+data.frame(interactome_network_Stage_I)
+
+# Create graph of highschool friendships
+graph <- as_tbl_graph(highschool) |>  mutate(Popularity = centrality_degree(mode = 'in'))
+
+# plot using ggraph
+ggraph(graph, layout = 'kk') + 
+    geom_edge_fan(aes(alpha = after_stat(index)), show.legend = FALSE) + 
+    geom_node_point(aes(size = Popularity)) + 
+    facet_edges(~year) + 
+    theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
+
+
 # Bi-partite Co-expression vs. Sub-interactome network for stage I
 # Bi-partite Co-expression vs. Sub-interactome network for stage II
 # Bi-partite Co-expression vs. Sub-interactome network for stage III

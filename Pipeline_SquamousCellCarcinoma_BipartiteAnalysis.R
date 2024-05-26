@@ -55,52 +55,15 @@ symbols_Stage_III      <-merge_interactome_gene_symbol[genes_Stage_III$gene,"gen
 interactome_network_Stage_I<-graph_from_data_frame(interactome_network_Stage_I, directed = FALSE, vertices = NULL)
 interactome_network_Stage_II<-graph_from_data_frame(interactome_network_Stage_II, directed = FALSE, vertices = NULL)
 interactome_network_Stage_III<-graph_from_data_frame(interactome_network_Stage_III, directed = FALSE, vertices = NULL)
-############################################################################################################################################
-# Store genes stage I, II and III
-# Vectors to store gene ids from each stage
-genes_id_vector_stage_I<-c()
-genes_id_vector_stage_II<-c()
-genes_id_vector_stage_III<-c()
 
-# For each gene in stage I
-for (gene_id in genes_unique_Stage_I$gene)
-{
-  # Store gene id in the vector
-  genes_id_vector_stage_I<-c(genes_id_vector_stage_I,strsplit(gene_id, split = "\\.")[[1]][1])
-}
-# For each gene in stage II
-for (gene_id in genes_unique_Stage_II$gene)
-{
-  # Store gene id in the vector
-  genes_id_vector_stage_II<-c(genes_id_vector_stage_II,strsplit(gene_id, split = "\\.")[[1]][1])
-}
-# For each gene in stage III
-for (gene_id in genes_unique_Stage_III$gene)
-{
-  # Store gene id in the vector
-  genes_id_vector_stage_III<-c(genes_id_vector_stage_III,strsplit(gene_id, split = "\\.")[[1]][1])
-}
-# 
-#genes_id_vector_stage_I   <-merge_interactome_gene_symbol[genes_id_vector_stage_I,"gene_symbol"]
-#genes_id_vector_stage_II  <-merge_interactome_gene_symbol[genes_id_vector_stage_II,"gene_symbol"]
-#genes_id_vector_stage_III <-merge_interactome_gene_symbol[genes_id_vector_stage_III,"gene_symbol"]
-########################################################################################################################################
-# Set colour
-nb.cols  <- max(c(length(unique(membership(cluster_interactome_stage_I))),length(unique(membership(cluster_interactome_stage_II))), length(unique(membership(cluster_interactome_stage_III)))))
-mycolors <- data.frame(colour=colorRampPalette(brewer.pal(8, "Set3"))(nb.cols))
+# greedy method (hiearchical, fast method)
+cluster_Stage_I = cluster_fast_greedy(interactome_network_Stage_I)
+cluster_Stage_II = cluster_fast_greedy(interactome_network_Stage_II)
+cluster_Stage_III = cluster_fast_greedy(interactome_network_Stage_III)
 
-# Set node size based on audience size:
-V(interactome_network_Stage_I)$size <- log(degree(interactome_network_Stage_I)+0.0001,2)*2
-V(interactome_network_Stage_II)$size <- log(degree(interactome_network_Stage_II)+0.0001,2)*2
-V(interactome_network_Stage_III)$size <- log(degree(interactome_network_Stage_III)+0.0001,2)*2
-
-V(interactome_network_Stage_I)$color<-"grey50"
-V(interactome_network_Stage_II)$color<-"grey50"
-V(interactome_network_Stage_III)$color<-"grey50"
-
-V(interactome_network_Stage_I)$color <- ifelse(V(interactome_network_Stage_I)$name %in% genes_id_vector_stage_I, "black", "grey50")
-V(interactome_network_Stage_II)$color <- ifelse(V(interactome_network_Stage_II)$name %in% genes_id_vector_stage_II, "black", "grey50")
-V(interactome_network_Stage_III)$color <- ifelse(V(interactome_network_Stage_III)$name %in% genes_id_vector_stage_III, "black", "grey50")
+V(interactome_network_Stage_I)$color <- membership(cluster_Stage_I)
+V(interactome_network_Stage_II)$color <- membership(cluster_Stage_II)
+V(interactome_network_Stage_III)$color <- membership(cluster_Stage_III)
 ########################################################################################################################################
 # FindClusters_resolution                                                                                                                                                                                                   #
 png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_I.png",sep=""), width = 30, height = 30, res=600, units = "cm")                                                                                                    #    

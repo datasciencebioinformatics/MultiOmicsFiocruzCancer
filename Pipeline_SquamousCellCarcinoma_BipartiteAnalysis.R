@@ -172,9 +172,29 @@ png(filename=paste(output_folder,"Plot_ceclular_function.png",sep=""), width = 2
 	plot_cc
 dev.off()
 #######################################################################################################################################
-## convert gene ID to Symbol
-edox <- setReadable(edo, 'org.Hs.eg.db', 'ENTREZID')
-p1 <- cnetplot(edox, foldChange=geneList)
+# FindClusters_resolution
+png(filename=paste(output_folder,"cnetplot_stage_I.png",sep=""), width = 30, height = 30, res=600, units = "cm")
+	cnetplot(gse_ALL_Stage_I,color_category = "black",color_gene = "blue")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"cnetplot_stage_II.png",sep=""), width = 30, height = 30, res=600, units = "cm")
+	cnetplot(gse_ALL_Stage_II,color_category = "black",color_gene = "blue")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"cnetplot_stage_III.png",sep=""), width = 30, height = 30, res=600, units = "cm")
+	cnetplot(gse_ALL_Stage_III,color_category = "black",color_gene = "blue")
+dev.off()
+
+
+       
+       ,
+
+
+
+
+
+
+
 
 
 t1 <- try(system(paste("rm -r /home/felipe/Documentos/LungPortal/output/threhold_RPKM_3_threhold_log2foldchange_1.0_FDR_0.05_threhold_correlation_0.99/clusters/",sep=""), intern = TRUE))
@@ -299,6 +319,48 @@ png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_III.png",sep="")
   plot(interactome_network_Stage_III,layout=    layout_with_mds, edge.color	="grey50", vertex.label=NA, main="Stage III")          
   legend("right", legend = paste("Cluster ",df_colours_stage_III$Cluster, " :",df_colours_stage_III$Genes,"/",df_colours_stage_III$nEdges,sep=""), pch=21, col=df_colours_stage_I$Colour, pt.bg=df_colours_stage_II$Colour, pt.cex=1, cex=.8, bty="n", ncol=1, title="Nº of genes and edges per cluster")
 dev.off() 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

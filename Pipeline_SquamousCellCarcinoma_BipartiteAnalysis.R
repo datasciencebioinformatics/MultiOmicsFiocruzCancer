@@ -192,7 +192,8 @@ dev.off()
 
 
 
-
+edo <- pairwise_termsim(gse_ALL_Stage_I)
+emapplot(gse_ALL_Stage_I)
 
 
 

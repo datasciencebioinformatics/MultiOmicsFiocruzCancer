@@ -1,6 +1,4 @@
 ############################################################################################################################################
-library(RCy3)
-library(RColorBrewer)
 # cyrestGET(operation = NULL, parameters = NULL, base.url = "http://localhost:1234")
 # Analyses with the combination of parameter line 119 of the document Parametrization.xlsx
 # ≥3	≥1	≤0.05	≥0.85	5456	1798/25	1887/70	1991/182	204/191/1.3396	225/207/1.4054	242/206/1.2978	1276/3819/3.7205	1345/4143/3.7816	1440/4646/3.8299
@@ -187,14 +185,19 @@ dev.off()
 
 
        
-       ,
 
-
-
-
-edo <- pairwise_termsim(gse_ALL_Stage_I)
-emapplot(gse_ALL_Stage_I)
-
+# FindClusters_resolution
+png(filename=paste(output_folder,"emapplot_stage_I.png",sep=""), width = 25, height = 25, res=600, units = "cm")
+	emapplot(pairwise_termsim(gse_ALL_Stage_I))+ ggtitle("Stage I")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"emapplot_stage_II.png",sep=""), width = 25, height = 25, res=600, units = "cm")
+	emapplot(pairwise_termsim(gse_ALL_Stage_II))+ ggtitle("Stage II")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"emapplot_stage_III.png",sep=""), width = 25, height = 25, res=600, units = "cm")
+	emapplot(pairwise_termsim(gse_ALL_Stage_III))+ ggtitle("Stage III")
+dev.off()
 
 
 

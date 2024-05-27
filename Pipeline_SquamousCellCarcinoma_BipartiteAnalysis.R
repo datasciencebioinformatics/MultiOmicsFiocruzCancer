@@ -62,32 +62,93 @@ cluster_Stage_II = cluster_fast_greedy(interactome_network_Stage_II)
 cluster_Stage_III = cluster_fast_greedy(interactome_network_Stage_III)
 
 ########################################################################################################################################
-t1 <- try(system(paste("rm -r ",output_dir,"/clusters/",sep=""), intern = TRUE))
-t1 <- try(system(paste("mkdir ",output_dir,"/clusters/",sep=""), intern = TRUE))
+# Calculate gse all stages
+# Gene Set Enrichment
+# First, I will create go terms per stage using gseGO. 
+# Second, I will create dotplots with functional annotation per stage.
+# Third, enrichment map will be created.
+# Fourth, category netplots and ridgeplot will be created.
+
+# Techinical comments.
+# GSE says keytype is not supported. I have tried :
+# ENSMBL has been tried and the message remains.
+# The identifier with and withour the variant has been tried.
+# I am reluctantly to convert the identifiers without testing a valid case. And example:
+# I have converted the ids to 101927581,6046,1588,142,3010,57054
+
+# For each gene in stage I
+genes_ids_stage_I<-c()
+genes_ids_stage_II<-c()
+genes_ids_stage_III<-c()
+
+for (gene_id in genes_Stage_I$gene)
+{
+  # Store gene id in the vector
+  genes_ids_stage_I<-c(genes_ids_stage_I,strsplit(gene_id, split = "\\.")[[1]][1])
+}
+# For each gene in stage II
+for (gene_id in genes_Stage_II$gene)
+{
+  # Store gene id in the vector
+  genes_ids_stage_II<-c(genes_ids_stage_II,strsplit(gene_id, split = "\\.")[[1]][1])
+}
+# For each gene in stage III
+for (gene_id in genes_Stage_III$gene)
+{
+  # Store gene id in the vector
+  genes_ids_stage_III<-c(genes_ids_stage_III,strsplit(gene_id, split = "\\.")[[1]][1])
+}
 ########################################################################################################################################
+# ids_stage_I
+ids_stage_I   <-bitr(genes_ids_stage_I, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb=organism)
+ids_stage_II  <-bitr(genes_ids_stage_II, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb=organism)
+ids_stage_III  <-bitr(genes_ids_stage_III, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb=organism)
+
+gse_ALL_Stage_I  <- enrichGO(gene = ids_stage_I$ENTREZID, universe = ids_stage_I$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
+gse_ALL_Stage_II <- enrichGO(gene = ids_stage_II$ENTREZID, universe = ids_stage_II$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
+gse_ALL_Stage_III <- enrichGO(gene = ids_stage_III$ENTREZID, universe = ids_stage_III$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
+########################################################################################################################################
+
+
+gse_all_stages <- gseGO(geneList=t, ont ="ALL", keyType = "ENSEMBL", nPerm = 10000, minGSSize = 3, maxGSSize = 800, pvalueCutoff = 0.05, verbose = TRUE,  OrgDb = organism,pAdjustMethod = "none")
+
+
+# Calculate gse all stages
+dotplot(gse_all_stages, showCategory=10, split=".sign") + facet_grid(.~.sign)
+########################################################################################################################################
+t1 <- try(system(paste("rm -r /home/felipe/Documentos/LungPortal/output/threhold_RPKM_3_threhold_log2foldchange_1.0_FDR_0.05_threhold_correlation_0.99/clusters/",sep=""), intern = TRUE))
+t1 <- try(system(paste("mkdir /home/felipe/Documentos/LungPortal/output/threhold_RPKM_3_threhold_log2foldchange_1.0_FDR_0.05_threhold_correlation_0.99/clusters/",sep=""), intern = TRUE))
+########################################################################################################################################
+# List of the in stage I
+genes_stage_I_per_cluster<-list()
+
 # for each cluster, sabe in file
 for (cluster in membership(cluster_Stage_I))
 {
-  write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_I)==cluster))), paste("membership_stage_","I","_cluster_",cluster,sep=""))
+  write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_I)==cluster))), paste(output_dir,"/clusters/stage_I_cluster_",cluster,".tsv",sep=""))  
+  genes_stage_I_per_cluster[[cluster]]<-names(which(membership(cluster_Stage_I)==cluster))
 }
+genes_stage_I_annotation <- gseGO(geneList=genes_stage_I_per_cluster,  ont ="ALL",  keyType = "ENSEMBL",  nPerm = 10000,  minGSSize = 3,  maxGSSize = 800,pvalueCutoff = 0.05, verbose = TRUE, OrgDb = organism, pAdjustMethod = "none")
+########################################################################################################################################
+# List of the in stage II
+genes_stage_II_per_cluster<-list()
+
 # for each cluster, sabe in file
 for (cluster in membership(cluster_Stage_II))
 {
-  write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_II)==cluster))), paste("membership_stage_","II","_cluster_",cluster,sep=""))
+  write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_I)==cluster))), paste(output_dir,"/clusters/stage_II_cluster_",cluster,".tsv",sep=""))
 }
+########################################################################################################################################
+# List of the in stage III
+genes_stage_II_per_cluster<-list()
+
 # for each cluster, sabe in file
-for (cluster in membership(cluster_Stage_III))
+for (cluster in membership(cluster_Stage_II))
 {
-  write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_III)==cluster))), paste("membership_stage_","III","_cluster_",cluster,sep=""))
+  write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_I)==cluster))), paste(output_dir,"/clusters/stage_III_cluster_",cluster,".tsv",sep=""))
 }
 ########################################################################################################################################
 
-
-
-
-
-write_tsv(data.frame(membership(cluster_Stage_II)), paste(output_dir,"/cluster_membership_Stage_I.tsv",sep=""))
-write_tsv(data.frame(membership(cluster_Stage_III)), paste(output_dir,"/cluster_membership_Stage_I.tsv",sep=""))
 
 ########################################################################################################################################
 # Colour pallets - R

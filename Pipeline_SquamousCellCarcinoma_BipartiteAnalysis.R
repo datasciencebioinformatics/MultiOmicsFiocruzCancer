@@ -182,10 +182,7 @@ dev.off()
 png(filename=paste(output_folder,"cnetplot_stage_III.png",sep=""), width = 30, height = 30, res=600, units = "cm")
 	cnetplot(gse_ALL_Stage_III,color_category = "black",color_gene = "blue")
 dev.off()
-
-
-       
-
+#######################################################################################################################################    
 # FindClusters_resolution
 png(filename=paste(output_folder,"emapplot_stage_I.png",sep=""), width = 25, height = 25, res=600, units = "cm")
 	emapplot(pairwise_termsim(gse_ALL_Stage_I))+ ggtitle("Stage I")
@@ -198,6 +195,30 @@ dev.off()
 png(filename=paste(output_folder,"emapplot_stage_III.png",sep=""), width = 25, height = 25, res=600, units = "cm")
 	emapplot(pairwise_termsim(gse_ALL_Stage_III))+ ggtitle("Stage III")
 dev.off()
+########################################################################################################################################
+ridgeplot(gse_ALL_Stage_I) + labs(x = "enrichment distribution for Stage I")
+
+x <- gseDO(ids_stage_I)
+
+ridgeplot(ego)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

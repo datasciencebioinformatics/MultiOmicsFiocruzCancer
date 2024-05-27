@@ -23,6 +23,7 @@ library("gtools")
 library(tidyr)
 library(dplyr)
 library("clusterProfiler")
+library("org.Hs.eg.db")
 
 # Function to expand.grid.unique without redundancy
 expand.grid.unique <- function(x, y, include.equals=FALSE)

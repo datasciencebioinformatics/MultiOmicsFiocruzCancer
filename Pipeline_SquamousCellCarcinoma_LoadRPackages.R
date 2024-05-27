@@ -22,6 +22,7 @@ library("xlsx")
 library("gtools")
 library(tidyr)
 library(dplyr)
+library("clusterProfiler")
 
 # Function to expand.grid.unique without redundancy
 expand.grid.unique <- function(x, y, include.equals=FALSE)

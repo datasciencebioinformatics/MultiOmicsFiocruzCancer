@@ -199,8 +199,9 @@ dev.off()
 ridgeplot(gse_ALL_Stage_I) + labs(x = "enrichment distribution for Stage I")
 
 x <- gseDO(ids_stage_I)
-
 ridgeplot(ego)
+
+ridgeplot(gse_ALL_Stage_I)
 
 
 

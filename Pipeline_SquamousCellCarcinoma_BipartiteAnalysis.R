@@ -80,6 +80,7 @@ cluster_Stage_III = cluster_fast_greedy(interactome_network_Stage_III)
 genes_ids_stage_I<-c()
 genes_ids_stage_II<-c()
 genes_ids_stage_III<-c()
+genes_ids_all<-c()
 
 for (gene_id in genes_Stage_I$gene)
 {
@@ -98,21 +99,24 @@ for (gene_id in genes_Stage_III$gene)
   # Store gene id in the vector
   genes_ids_stage_III<-c(genes_ids_stage_III,strsplit(gene_id, split = "\\.")[[1]][1])
 }
+# For each gene in stage III
+for (gene_id in rownames(unstranded_data_filter))
+{
+  # Store gene id in the vector
+  genes_ids_all<-c(genes_ids_all,strsplit(gene_id, split = "\\.")[[1]][1])
+}
 ########################################################################################################################################
 # ids_stage_I
 ids_stage_I   <-bitr(genes_ids_stage_I, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb=organism)
 ids_stage_II  <-bitr(genes_ids_stage_II, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb=organism)
 ids_stage_III  <-bitr(genes_ids_stage_III, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb=organism)
+genes_ids_all  <-bitr(genes_ids_all, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb=organism)
 
-gse_ALL_Stage_I  <- enrichGO(gene = ids_stage_I$ENTREZID, universe = ids_stage_I$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
-gse_ALL_Stage_II <- enrichGO(gene = ids_stage_II$ENTREZID, universe = ids_stage_II$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
-gse_ALL_Stage_III <- enrichGO(gene = ids_stage_III$ENTREZID, universe = ids_stage_III$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
+gse_ALL_Stage_I  <- enrichGO(gene = ids_stage_I$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
+gse_ALL_Stage_II <- enrichGO(gene = ids_stage_II$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
+gse_ALL_Stage_III <- enrichGO(gene = ids_stage_III$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
 ########################################################################################################################################
-
-
 gse_all_stages <- gseGO(geneList=t, ont ="ALL", keyType = "ENSEMBL", nPerm = 10000, minGSSize = 3, maxGSSize = 800, pvalueCutoff = 0.05, verbose = TRUE,  OrgDb = organism,pAdjustMethod = "none")
-
-
 # Calculate gse all stages
 dotplot(gse_all_stages, showCategory=10, split=".sign") + facet_grid(.~.sign)
 ########################################################################################################################################

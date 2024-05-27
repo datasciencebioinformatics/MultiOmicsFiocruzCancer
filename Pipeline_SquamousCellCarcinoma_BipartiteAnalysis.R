@@ -62,6 +62,34 @@ cluster_Stage_II = cluster_fast_greedy(interactome_network_Stage_II)
 cluster_Stage_III = cluster_fast_greedy(interactome_network_Stage_III)
 
 ########################################################################################################################################
+t1 <- try(system(paste("rm -r ",output_dir,"/clusters/",sep=""), intern = TRUE))
+t1 <- try(system(paste("mkdir ",output_dir,"/clusters/",sep=""), intern = TRUE))
+########################################################################################################################################
+# for each cluster, sabe in file
+for (cluster in membership(cluster_Stage_I))
+{
+  write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_I)==cluster))), paste("membership_stage_","I","_cluster_",cluster,sep=""))
+}
+# for each cluster, sabe in file
+for (cluster in membership(cluster_Stage_II))
+{
+  write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_II)==cluster))), paste("membership_stage_","II","_cluster_",cluster,sep=""))
+}
+# for each cluster, sabe in file
+for (cluster in membership(cluster_Stage_III))
+{
+  write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_III)==cluster))), paste("membership_stage_","III","_cluster_",cluster,sep=""))
+}
+########################################################################################################################################
+
+
+
+
+
+write_tsv(data.frame(membership(cluster_Stage_II)), paste(output_dir,"/cluster_membership_Stage_I.tsv",sep=""))
+write_tsv(data.frame(membership(cluster_Stage_III)), paste(output_dir,"/cluster_membership_Stage_I.tsv",sep=""))
+
+########################################################################################################################################
 # Colour pallets - R
 library("viridis")
 viridis(10)

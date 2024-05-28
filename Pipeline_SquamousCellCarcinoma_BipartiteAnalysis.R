@@ -110,9 +110,9 @@ ids_stage_II  <-bitr(genes_ids_stage_II, fromType = "ENSEMBL", toType = "ENTREZI
 ids_stage_III  <-bitr(genes_ids_stage_III, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
 genes_ids_all  <-bitr(genes_ids_all, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
 
-gse_ALL_Stage_I  <- enrichGO(gene = ids_stage_I$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
-gse_ALL_Stage_II <- enrichGO(gene = ids_stage_II$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
-gse_ALL_Stage_III <- enrichGO(gene = ids_stage_III$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
+gse_ALL_Stage_I  <- enrichGO(gene = ids_stage_I$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,    ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
+gse_ALL_Stage_II <- enrichGO(gene = ids_stage_II$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
+gse_ALL_Stage_III <- enrichGO(gene = ids_stage_III$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db, ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
 
 gse_MF_Stage_I   <-gse_ALL_Stage_I[gse_ALL_Stage_I$ONTOLOGY=="MF",]
 gse_MF_Stage_II  <-gse_ALL_Stage_II[gse_ALL_Stage_II$ONTOLOGY=="MF",]
@@ -126,32 +126,20 @@ gse_CC_Stage_I   <-gse_ALL_Stage_I[gse_ALL_Stage_I$ONTOLOGY=="CC",]
 gse_CC_Stage_II  <-gse_ALL_Stage_II[gse_ALL_Stage_II$ONTOLOGY=="CC",]
 gse_CC_Stage_III  <-gse_ALL_Stage_III[gse_ALL_Stage_III$ONTOLOGY=="CC",]
 
-gse_MF_Stage_I$Stage<-"Stage I"
-gse_MF_Stage_II$Stage<-"Stage II"
-gse_MF_Stage_III$Stage<-"Stage III"
-
-gse_BP_Stage_I$Stage<-"Stage I"
-gse_BP_Stage_II$Stage<-"Stage II"
-gse_BP_Stage_III$Stage<-"Stage III"
-
-gse_CC_Stage_I$Stage<-"Stage I"
-gse_CC_Stage_II$Stage<-"Stage II"
-gse_CC_Stage_III$Stage<-"Stage III"
-
 # Biological process
-gse_BP_Stages<-data.frame(rbind(gse_BP_Stage_I[order(gse_BP_Stage_I$p.adjust),][1:50,],
+gse_BP_Stages<-na.omit(data.frame(rbind(gse_BP_Stage_I[order(gse_BP_Stage_I$p.adjust),][1:50,],
 gse_BP_Stage_II[order(gse_BP_Stage_II$p.adjust),][1:50,],
-gse_BP_Stage_III[order(gse_BP_Stage_III$p.adjust),][1:50,]))
+gse_BP_Stage_III[order(gse_BP_Stage_III$p.adjust),][1:50,])))
 
 # Molecular function
-gse_MF_Stages<-data.frame(rbind(gse_MF_Stage_I[order(gse_MF_Stage_I$p.adjust),][1:50,],
-gse_MF_Stage_II[order(gse_MF_Stage_II$p.adjust),][1:50,],
-gse_MF_Stage_III[order(gse_MF_Stage_III$p.adjust),][1:50,]))
+gse_MF_Stages<-na.omit(data.frame(rbind(gse_MF_Stage_I[order(gse_MF_Stage_I$p.adjust),][1:length(gse_MF_Stage_I$p.adjust),],
+gse_MF_Stage_II[order(gse_MF_Stage_II$p.adjust),][1:length(gse_MF_Stage_II$p.adjust),],
+gse_MF_Stage_III[order(gse_MF_Stage_III$p.adjust),][1:length(gse_MF_Stage_III$p.adjust),])))
 
 # Celular function  
-gse_CC_Stages<-data.frame(rbind(gse_CC_Stage_I[order(gse_CC_Stage_I$p.adjust),][1:50,],
+gse_CC_Stages<-na.omit(data.frame(rbind(gse_CC_Stage_I[order(gse_CC_Stage_I$p.adjust),][1:50,],
 gse_CC_Stage_II[order(gse_CC_Stage_II$p.adjust),][1:50,],
-gse_CC_Stage_III[order(gse_CC_Stage_III$p.adjust),][1:50,]))
+gse_CC_Stage_III[order(gse_CC_Stage_III$p.adjust),][1:50,])))
 ########################################################################################################################################
 plot_bp<-ggplot(gse_BP_Stages, aes(x=Description, y=Count, label=Count)) +geom_bar(stat='identity', aes(fill=p.adjust), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("Biological process")
 plot_mf<-ggplot(gse_MF_Stages, aes(x=Description, y=Count, label=Count)) +geom_bar(stat='identity', aes(fill=p.adjust), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("Molecular function")

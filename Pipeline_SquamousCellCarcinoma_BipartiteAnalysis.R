@@ -110,9 +110,9 @@ ids_stage_II  <-bitr(genes_ids_stage_II, fromType = "ENSEMBL", toType = "ENTREZI
 ids_stage_III  <-bitr(genes_ids_stage_III, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
 genes_ids_all  <-bitr(genes_ids_all, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
 
-gse_ALL_Stage_I  <- enrichGO(gene = ids_stage_I$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
-gse_ALL_Stage_II <- enrichGO(gene = ids_stage_II$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
-gse_ALL_Stage_III <- enrichGO(gene = ids_stage_III$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
+gse_ALL_Stage_I  <- enrichGO(gene = ids_stage_I$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
+gse_ALL_Stage_II <- enrichGO(gene = ids_stage_II$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
+gse_ALL_Stage_III <- enrichGO(gene = ids_stage_III$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)
 
 gse_MF_Stage_I   <-gse_ALL_Stage_I[gse_ALL_Stage_I$ONTOLOGY=="MF",]
 gse_MF_Stage_II  <-gse_ALL_Stage_II[gse_ALL_Stage_II$ONTOLOGY=="MF",]
@@ -280,22 +280,7 @@ png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_III.png",sep="")
   legend("right", legend = paste("Cluster ",df_colours_stage_III$Cluster, " :",df_colours_stage_III$Genes,"/",df_colours_stage_III$nEdges,sep=""), pch=21, col=df_colours_stage_I$Colour, pt.bg=df_colours_stage_II$Colour, pt.cex=1, cex=.8, bty="n", ncol=1, title="Nº of genes and edges per cluster")
 dev.off() 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-########################################################################################################################################
+#######################################################################################################################################
 library(ggraph)
 library(tidygraph)
 # Bi-partite Co-expression vs. Sub-interactome network for stage I
@@ -318,99 +303,119 @@ df_results_per_cluster_MF<-data.frame(ONTOLOGY=c(), ID=c(), Description=c(), Gen
 df_results_per_cluster_CC<-data.frame(ONTOLOGY=c(), ID=c(), Description=c(), GeneRatio=c(), BgRatio=c() , pvalue=c(), p.adjust=c(), qvalue=c(), geneID=c(), Count=c(),Stage=c(),Cluster=c())
 
 # for each cluster, sabe in file
-for (cluster in membership(cluster_Stage_I))
+for (cluster in unique(membership(cluster_Stage_I)))
 {	
-	write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_I)==cluster))), paste(output_dir,"/clusters/stage_I_cluster_",cluster,".tsv",sep=""))
+	print(cluster)
+	#write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_I)==cluster))), paste(output_dir,"/clusters/stage_I_cluster_",cluster,".tsv",sep=""))
 	ids_stage_cluster   <-bitr(names(which(membership(cluster_Stage_I)==cluster)), fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")	
-	genes_stage_annotation_BP <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "BP",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)	
-	genes_stage_annotation_MF <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "MF",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)	
-	genes_stage_annotation_CC <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "CC",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)	
+	genes_stage_annotation_BP <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "BP",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)@result	
+	genes_stage_annotation_MF <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "MF",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)@result		
+	genes_stage_annotation_CC <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "CC",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)@result		
 
+	# Celular function  
 	# if table not null
 	if(!is.null(genes_stage_annotation_BP))
 	{
-		genes_stage_annotation_BP@result$Stage    <-"Stage I"		
-		genes_stage_annotation_BP@result$Cluster  <-cluster
-		df_results_per_cluster_BP<-rbind(df_results_per_cluster_BP,genes_stage_annotation_BP@result)
+		genes_stage_annotation_BP<-genes_stage_annotation_BP[order(genes_stage_annotation_BP$p.adjust),][1:50,]
+		genes_stage_annotation_BP$Stage    <-"Stage I"		
+		genes_stage_annotation_BP$Cluster  <-cluster
+		df_results_per_cluster_BP<-rbind(df_results_per_cluster_BP,genes_stage_annotation_BP)
 	}
 	# if table not null
 	if(!is.null(genes_stage_annotation_MF))
 	{
-		genes_stage_annotation_MF@result$Stage    <-"Stage I"		
-		genes_stage_annotation_MF@result$Cluster  <-cluster
-		df_results_per_cluster_MF<-rbind(df_results_per_cluster_MF,genes_stage_annotation_MF@result)
+		genes_stage_annotation_MF<-genes_stage_annotation_MF[order(genes_stage_annotation_MF$p.adjust),][1:50,]
+		genes_stage_annotation_MF$Stage    <-"Stage I"		
+		genes_stage_annotation_MF$Cluster  <-cluster
+		df_results_per_cluster_MF<-rbind(df_results_per_cluster_MF,genes_stage_annotation_MF)
 	}
 	# if table not null
 	if(!is.null(genes_stage_annotation_CC))
 	{
-		genes_stage_annotation_CC@result$Stage    <-"Stage I"		
-		genes_stage_annotation_CC@result$Cluster  <-cluster
-		df_results_per_cluster_CC<-rbind(df_results_per_cluster_CC,genes_stage_annotation_CC@result)
+		genes_stage_annotation_CC<-genes_stage_annotation_CC[order(genes_stage_annotation_CC$p.adjust),][1:50,]
+		genes_stage_annotation_CC$Stage    <-"Stage I"		
+		genes_stage_annotation_CC$Cluster  <-cluster
+		df_results_per_cluster_CC<-rbind(df_results_per_cluster_CC,genes_stage_annotation_CC)
 	}		
 }
-# for each cluster, sabe in file
-for (cluster in membership(cluster_Stage_II))
-{	
-	write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_I)==cluster))), paste(output_dir,"/clusters/stage_I_cluster_",cluster,".tsv",sep=""))
-	ids_stage_cluster   <-bitr(names(which(membership(cluster_Stage_I)==cluster)), fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")	
-	genes_stage_annotation_BP <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "BP",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)	
-	genes_stage_annotation_MF <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "MF",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)	
-	genes_stage_annotation_CC <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "CC",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)	
 
-	# if table not null
-	if(!is.null(genes_stage_annotation_BP))
-	{
-		genes_stage_annotation_BP@result$Stage    <-"Stage II"		
-		genes_stage_annotation_BP@result$Cluster  <-cluster
-		df_results_per_cluster_BP<-rbind(df_results_per_cluster_BP,genes_stage_annotation_BP@result)
-	}
-	# if table not null
-	if(!is.null(genes_stage_annotation_MF))
-	{
-		genes_stage_annotation_MF@result$Stage    <-"Stage II"		
-		genes_stage_annotation_MF@result$Cluster  <-cluster
-		df_results_per_cluster_MF<-rbind(df_results_per_cluster_MF,genes_stage_annotation_MF@result)
-	}
-	# if table not null
-	if(!is.null(genes_stage_annotation_CC))
-	{
-		genes_stage_annotation_CC@result$Stage    <-"Stage II"		
-		genes_stage_annotation_CC@result$Cluster  <-cluster
-		df_results_per_cluster_CC<-rbind(df_results_per_cluster_CC,genes_stage_annotation_CC@result)
-	}		
-}
 
 # for each cluster, sabe in file
-for (cluster in membership(cluster_Stage_III))
+for (cluster in unique(membership(cluster_Stage_II)))
 {	
-	write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_I)==cluster))), paste(output_dir,"/clusters/stage_I_cluster_",cluster,".tsv",sep=""))
-	ids_stage_cluster   <-bitr(names(which(membership(cluster_Stage_I)==cluster)), fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")	
-	genes_stage_annotation_BP <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "BP",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)	
-	genes_stage_annotation_MF <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "MF",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)	
-	genes_stage_annotation_CC <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "CC",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)	
+	print(cluster)
+	#write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_II)==cluster))), paste(output_dir,"/clusters/stage_II_cluster_",cluster,".tsv",sep=""))
+	ids_stage_cluster   <-bitr(names(which(membership(cluster_Stage_II)==cluster)), fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")	
+	genes_stage_annotation_BP <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "BP",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)@result	
+	genes_stage_annotation_MF <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "MF",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)@result		
+	genes_stage_annotation_CC <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "CC",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)@result		
 
+	# Celular function  
 	# if table not null
 	if(!is.null(genes_stage_annotation_BP))
 	{
-		genes_stage_annotation_BP@result$Stage    <-"Stage III"		
-		genes_stage_annotation_BP@result$Cluster  <-cluster
-		df_results_per_cluster_BP<-rbind(df_results_per_cluster_BP,genes_stage_annotation_BP@result)
+		genes_stage_annotation_BP<-genes_stage_annotation_BP[order(genes_stage_annotation_BP$p.adjust),][1:50,]
+		genes_stage_annotation_BP$Stage    <-"Stage I"		
+		genes_stage_annotation_BP$Cluster  <-cluster
+		df_results_per_cluster_BP<-rbind(df_results_per_cluster_BP,genes_stage_annotation_BP)
 	}
 	# if table not null
 	if(!is.null(genes_stage_annotation_MF))
 	{
-		genes_stage_annotation_MF@result$Stage    <-"Stage III"		
-		genes_stage_annotation_MF@result$Cluster  <-cluster
-		df_results_per_cluster_MF<-rbind(df_results_per_cluster_MF,genes_stage_annotation_MF@result)
+		genes_stage_annotation_MF<-genes_stage_annotation_MF[order(genes_stage_annotation_MF$p.adjust),][1:50,]
+		genes_stage_annotation_MF$Stage    <-"Stage I"		
+		genes_stage_annotation_MF$Cluster  <-cluster
+		df_results_per_cluster_MF<-rbind(df_results_per_cluster_MF,genes_stage_annotation_MF)
 	}
 	# if table not null
 	if(!is.null(genes_stage_annotation_CC))
 	{
-		genes_stage_annotation_CC@result$Stage    <-"Stage III"		
-		genes_stage_annotation_CC@result$Cluster  <-cluster
-		df_results_per_cluster_CC<-rbind(df_results_per_cluster_CC,genes_stage_annotation_CC@result)
+		genes_stage_annotation_CC<-genes_stage_annotation_CC[order(genes_stage_annotation_CC$p.adjust),][1:50,]
+		genes_stage_annotation_CC$Stage    <-"Stage I"		
+		genes_stage_annotation_CC$Cluster  <-cluster
+		df_results_per_cluster_CC<-rbind(df_results_per_cluster_CC,genes_stage_annotation_CC)
 	}		
 }
+
+
+# for each cluster, sabe in file
+for (cluster in unique(membership(cluster_Stage_III)))
+{	
+	print(cluster)
+	#write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_III)==cluster))), paste(output_dir,"/clusters/stage_III_cluster_",cluster,".tsv",sep=""))
+	ids_stage_cluster   <-bitr(names(which(membership(cluster_Stage_III)==cluster)), fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")	
+	genes_stage_annotation_BP <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "BP",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)@result	
+	genes_stage_annotation_MF <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "MF",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)@result		
+	genes_stage_annotation_CC <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "CC",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)@result		
+
+	# Celular function  
+	# if table not null
+	if(!is.null(genes_stage_annotation_BP))
+	{
+		genes_stage_annotation_BP<-genes_stage_annotation_BP[order(genes_stage_annotation_BP$p.adjust),][1:50,]
+		genes_stage_annotation_BP$Stage    <-"Stage I"		
+		genes_stage_annotation_BP$Cluster  <-cluster
+		df_results_per_cluster_BP<-rbind(df_results_per_cluster_BP,genes_stage_annotation_BP)
+	}
+	# if table not null
+	if(!is.null(genes_stage_annotation_MF))
+	{
+		genes_stage_annotation_MF<-genes_stage_annotation_MF[order(genes_stage_annotation_MF$p.adjust),][1:50,]
+		genes_stage_annotation_MF$Stage    <-"Stage I"		
+		genes_stage_annotation_MF$Cluster  <-cluster
+		df_results_per_cluster_MF<-rbind(df_results_per_cluster_MF,genes_stage_annotation_MF)
+	}
+	# if table not null
+	if(!is.null(genes_stage_annotation_CC))
+	{
+		genes_stage_annotation_CC<-genes_stage_annotation_CC[order(genes_stage_annotation_CC$p.adjust),][1:50,]
+		genes_stage_annotation_CC$Stage    <-"Stage I"		
+		genes_stage_annotation_CC$Cluster  <-cluster
+		df_results_per_cluster_CC<-rbind(df_results_per_cluster_CC,genes_stage_annotation_CC)
+	}		
+}
+
+
 write.xlsx(df_results_per_cluster_BP, "Biological_Function", file=paste(output_dir,"/clusters/stage_all_clusters.tsv",sep=""),append = FALSE) # where x is a data.frame with a Date column.
 write.xlsx(df_results_per_cluster_MF, "Molecular_Function", file=paste(output_dir,"/clusters/stage_all_clusters.tsv",sep=""),append = TRUE)   # where x is a data.frame with a Date column.
 write.xlsx(df_results_per_cluster_CC, "Celular_Component", file=paste(output_dir,"/clusters/stage_all_clusters.tsv",sep=""),append = TRUE)    # where x is a data.frame with a Date column.

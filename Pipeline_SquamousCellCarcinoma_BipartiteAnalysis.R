@@ -196,68 +196,6 @@ png(filename=paste(output_folder,"emapplot_stage_III.png",sep=""), width = 25, h
 	emapplot(pairwise_termsim(gse_ALL_Stage_III))+ ggtitle("Stage III")
 dev.off()
 ########################################################################################################################################
-ridgeplot(gse_ALL_Stage_I) + labs(x = "enrichment distribution for Stage I")
-
-x <- gseDO(ids_stage_I)
-ridgeplot(ego)
-
-ridgeplot(gse_ALL_Stage_I)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-t1 <- try(system(paste("rm -r /home/felipe/Documentos/LungPortal/output/threhold_RPKM_3_threhold_log2foldchange_1.0_FDR_0.05_threhold_correlation_0.99/clusters/",sep=""), intern = TRUE))
-t1 <- try(system(paste("mkdir /home/felipe/Documentos/LungPortal/output/threhold_RPKM_3_threhold_log2foldchange_1.0_FDR_0.05_threhold_correlation_0.99/clusters/",sep=""), intern = TRUE))
-########################################################################################################################################
-# List of the in stage I
-genes_stage_I_per_cluster<-list()
-
-# for each cluster, sabe in file
-for (cluster in membership(cluster_Stage_I))
-{
-  write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_I)==cluster))), paste(output_dir,"/clusters/stage_I_cluster_",cluster,".tsv",sep=""))  
-  genes_stage_I_per_cluster[[cluster]]<-names(which(membership(cluster_Stage_I)==cluster))
-}
-genes_stage_I_annotation <- gseGO(geneList=genes_stage_I_per_cluster,  ont ="ALL",  keyType = "ENSEMBL",  nPerm = 10000,  minGSSize = 3,  maxGSSize = 800,pvalueCutoff = 0.05, verbose = TRUE, OrgDb = organism, pAdjustMethod = "none")
-########################################################################################################################################
-# List of the in stage II
-genes_stage_II_per_cluster<-list()
-
-# for each cluster, sabe in file
-for (cluster in membership(cluster_Stage_II))
-{
-  write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_I)==cluster))), paste(output_dir,"/clusters/stage_II_cluster_",cluster,".tsv",sep=""))
-}
-########################################################################################################################################
-# List of the in stage III
-genes_stage_II_per_cluster<-list()
-
-# for each cluster, sabe in file
-for (cluster in membership(cluster_Stage_II))
-{
-  write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_I)==cluster))), paste(output_dir,"/clusters/stage_III_cluster_",cluster,".tsv",sep=""))
-}
-########################################################################################################################################
-
-
-########################################################################################################################################
 # Colour pallets - R
 library("viridis")
 viridis(10)
@@ -317,8 +255,6 @@ for (cluster_stage_III in rownames(df_colours_stage_III))
   df_colours_stage_III[cluster_stage_III,"nEdges"]<-length(E(subgraph(interactome_network_Stage_III, vids=names(membership(cluster_Stage_III)[membership(cluster_Stage_III)==cluster_stage_III]))))
 }
 
-
-
 ########################################################################################################################################
 V(interactome_network_Stage_I)$size <- log(degree(interactome_network_Stage_I)+0.0001,2)
 V(interactome_network_Stage_II)$size <- log(degree(interactome_network_Stage_II)+0.0001,2)
@@ -327,8 +263,6 @@ V(interactome_network_Stage_III)$size <- log(degree(interactome_network_Stage_II
 write_tsv(df_colours_stage_I, paste(output_dir,"df_colours_stage_I.tsv",sep=""))
 write_tsv(df_colours_stage_II, paste(output_dir,"df_colours_stage_II.tsv",sep=""))
 write_tsv(df_colours_stage_III, paste(output_dir,"df_colours_stage_III.tsv",sep=""))
-
-
 ########################################################################################################################################
 # FindClusters_resolution                                                                                                                                                                                                   #
 png(filename=paste(output_dir,"Panel_subgraph_interactome_stage_I.png",sep=""), width = 30, height = 30, res=600, units = "cm")                                                                                                    #    
@@ -411,20 +345,6 @@ dev.off()
 ########################################################################################################################################
 library(ggraph)
 library(tidygraph)
-
-data.frame(interactome_network_Stage_I)
-
-# Create graph of highschool friendships
-graph <- as_tbl_graph(highschool) |>  mutate(Popularity = centrality_degree(mode = 'in'))
-
-# plot using ggraph
-ggraph(graph, layout = 'kk') + 
-    geom_edge_fan(aes(alpha = after_stat(index)), show.legend = FALSE) + 
-    geom_node_point(aes(size = Popularity)) + 
-    facet_edges(~year) + 
-    theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
-
-
 # Bi-partite Co-expression vs. Sub-interactome network for stage I
 # Bi-partite Co-expression vs. Sub-interactome network for stage II
 # Bi-partite Co-expression vs. Sub-interactome network for stage III
@@ -437,6 +357,29 @@ unique(c(genes_id_vector_stage_I,genes_id_vector_stage_III))
 # Rede co-expressão Estágio I <-> Bipartite co-expressão com sub-interactoma Estágio I <-> Rede sub-interactoma Estágio I
 # Rede co-expressão Estágio II <-> Bipartite co-expressão com sub-interactoma Estágio II <-> Rede sub-interactoma Estágio II
 # Rede co-expressão Estágio III <-> Bipartite co-expressão com sub-interactoma Estágio II <-> Rede sub-interactoma Estágio III
-
 # 2- Segunda análise, rede para cada estágio, juntamente com redes bipartidas para cada par de estágios
-Rede estágio I- Bipartite estagios I e II - Rede estágio II - bipartites II e III - Rede estágio III
+#Rede estágio I- Bipartite estagios I e II - Rede estágio II - bipartites II e III - Rede estágio III
+########################################################################################################################################
+df_results_per_cluster_BP<-data.frame(ONTOLOGY=c(), ID=c(), Description=c(), GeneRatio=c(), BgRatio=c() , pvalue=c(), p.adjust=c(), qvalue=c(), geneID=c(), Count=c(),Stage=c(),Cluster=c())
+df_results_per_cluster_MF<-data.frame(ONTOLOGY=c(), ID=c(), Description=c(), GeneRatio=c(), BgRatio=c() , pvalue=c(), p.adjust=c(), qvalue=c(), geneID=c(), Count=c(),Stage=c(),Cluster=c())
+df_results_per_cluster_CC<-data.frame(ONTOLOGY=c(), ID=c(), Description=c(), GeneRatio=c(), BgRatio=c() , pvalue=c(), p.adjust=c(), qvalue=c(), geneID=c(), Count=c(),Stage=c(),Cluster=c())
+
+# for each cluster, sabe in file
+for (cluster in membership(cluster_Stage_I))
+{
+	
+	write_tsv(data.frame(Genes=names(which(membership(cluster_Stage_I)==cluster))), paste(output_dir,"/clusters/stage_I_cluster_",cluster,".tsv",sep=""))
+	ids_stage_cluster   <-bitr(names(which(membership(cluster_Stage_I)==cluster)), fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")	
+	genes_stage_I_annotation_BP <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "BP",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)	
+	genes_stage_I_annotation_MF <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "MF",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)	
+	genes_stage_I_annotation_CC <- enrichGO(gene = ids_stage_cluster$ENTREZID, universe = genes_ids_all,  OrgDb  = org.Hs.eg.db,   ont = "CC",  pAdjustMethod = "BH",pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,readable = TRUE)	
+	genes_stage_I_annotation_BP@result$Stage    <-"Stage I"
+	genes_stage_I_annotation_MF@result$Stage    <-"Stage I"
+	genes_stage_I_annotation_CC@result$Stage    <-"Stage I"	
+	genes_stage_I_annotation_BP@result$Cluster  <-cluster
+	genes_stage_I_annotation_MF@result$Cluster  <-cluster
+	genes_stage_I_annotation_CC@result$Cluster  <-cluster	
+	df_results_per_cluster_BP<-rbind(df_results_per_cluster_BP,genes_stage_I_annotation_BP@result)
+	df_results_per_cluster_MF<-rbind(df_results_per_cluster_BP,genes_stage_I_annotation_MF@result)
+	df_results_per_cluster_CC<-rbind(df_results_per_cluster_CC,genes_stage_I_annotation_CC@result)
+}

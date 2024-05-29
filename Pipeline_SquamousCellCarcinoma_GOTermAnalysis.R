@@ -60,6 +60,12 @@ cluster_Stage_II = cluster_fast_greedy(interactome_network_Stage_II)
 cluster_Stage_III = cluster_fast_greedy(interactome_network_Stage_III)
 
 ########################################################################################################################################
+# gene_id
+genes_Stage_I$gene_id                   <-""
+genes_Stage_II$gene_id                  <-""
+genes_Stage_III$gene_id                 <-""
+log2change_tumor_control$gene_id        <-""
+
 # Calculate gse all stages
 # Gene Set Enrichment
 # First, I will create go terms per stage using gseGO. 
@@ -80,35 +86,41 @@ genes_ids_stage_II<-c()
 genes_ids_stage_III<-c()
 genes_ids_all<-c()
 
-for (gene_id in genes_Stage_I$gene)
-{
-  # Store gene id in the vector
-  genes_ids_stage_I<-c(genes_ids_stage_I,strsplit(gene_id, split = "\\.")[[1]][1])
+# For each gene, add gene_id
+for (gene_row in rownames(genes_Stage_I))
+{	
+	# Store gene id in the vector
+	genes_Stage_I[gene_row,"gene_id"]<-strsplit(genes_Stage_I[gene_row,"gene"], split = "\\.")[[1]][1]
+	
 }
-# For each gene in stage II
-for (gene_id in genes_Stage_II$gene)
-{
-  # Store gene id in the vector
-  genes_ids_stage_II<-c(genes_ids_stage_II,strsplit(gene_id, split = "\\.")[[1]][1])
+# For each gene, add gene_id
+for (gene_row in rownames(genes_Stage_II))
+{	
+	# Store gene id in the vector
+	genes_Stage_II[gene_row,"gene_id"]<-strsplit(genes_Stage_II[gene_row,"gene"], split = "\\.")[[1]][1]
+	
 }
-# For each gene in stage III
-for (gene_id in genes_Stage_III$gene)
-{
-  # Store gene id in the vector
-  genes_ids_stage_III<-c(genes_ids_stage_III,strsplit(gene_id, split = "\\.")[[1]][1])
+# For each gene, add gene_id
+for (gene_row in rownames(genes_Stage_III))
+{	
+	# Store gene id in the vector
+	genes_Stage_III[gene_row,"gene_id"]<-strsplit(genes_Stage_III[gene_row,"gene"], split = "\\.")[[1]][1]
+	
 }
-# For each gene in stage III
-for (gene_id in rownames(unstranded_data_filter))
+# For each gene, add gene_id
+for (gene_row in rownames(log2change_tumor_control))
 {
-  # Store gene id in the vector
-  genes_ids_all<-c(genes_ids_all,strsplit(gene_id, split = "\\.")[[1]][1])
+	# Store gene id in the vector
+	log2change_tumor_control[gene_row,"gene_id"]<-strsplit(log2change_tumor_control[gene_row,"gene"], split = "\\.")[[1]][1]
 }
+
+
 ########################################################################################################################################
 # ids_stage_I
-ids_stage_I   <-bitr(genes_ids_stage_I, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
-ids_stage_II  <-bitr(genes_ids_stage_II, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
-ids_stage_III  <-bitr(genes_ids_stage_III, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
-genes_ids_all  <-bitr(genes_ids_all, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
+ids_stage_I   <-bitr(genes_Stage_I$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
+ids_stage_II  <-bitr(genes_Stage_II$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
+ids_stage_III  <-bitr(genes_Stage_III$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
+genes_ids_all  <-bitr(log2change_tumor_control$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
 
 gse_ALL_Stage_I  <- enrichGO(gene = ids_stage_I$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,    ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
 gse_ALL_Stage_II <- enrichGO(gene = ids_stage_II$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result

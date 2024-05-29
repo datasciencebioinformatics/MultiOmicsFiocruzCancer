@@ -115,8 +115,8 @@ for (gene_row in rownames(log2change_tumor_control))
 }
 ########################################################################################################################################
 # ids_stage_I
-ids_stage_I   <-bitr(genes_Stage_I$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
-ids_stage_II  <-bitr(genes_Stage_II$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
+ids_stage_I    <-bitr(genes_Stage_I$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
+ids_stage_II   <-bitr(genes_Stage_II$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
 ids_stage_III  <-bitr(genes_Stage_III$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
 genes_ids_all  <-bitr(log2change_tumor_control$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
 

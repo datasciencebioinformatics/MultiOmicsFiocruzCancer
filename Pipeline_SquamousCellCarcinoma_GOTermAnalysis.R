@@ -114,6 +114,10 @@ gse_ALL_Stage_I  <- enrichGO(gene = ids_stage_I$ENTREZID, universe = genes_ids_a
 gse_ALL_Stage_II <- enrichGO(gene = ids_stage_II$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
 gse_ALL_Stage_III <- enrichGO(gene = ids_stage_III$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db, ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
 
+gse_ALL_Stage_I$Stage<-"Stage I"
+gse_ALL_Stage_II$Stage<-"Stage II"
+gse_ALL_Stage_III$Stage<-"Stage III"
+
 gse_MF_Stage_I   <-gse_ALL_Stage_I[gse_ALL_Stage_I$ONTOLOGY=="MF",]
 gse_MF_Stage_II  <-gse_ALL_Stage_II[gse_ALL_Stage_II$ONTOLOGY=="MF",]
 gse_MF_Stage_III  <-gse_ALL_Stage_III[gse_ALL_Stage_III$ONTOLOGY=="MF",]
@@ -143,7 +147,7 @@ gse_CC_Stage_III[order(gse_CC_Stage_III$p.adjust),][1:50,])))
 ########################################################################################################################################
 plot_bp<-ggplot(gse_BP_Stages, aes(x=Description, y=Count, label=Count)) +geom_bar(stat='identity', aes(fill=p.adjust), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("Biological process")
 plot_mf<-ggplot(gse_MF_Stages, aes(x=Description, y=Count, label=Count)) +geom_bar(stat='identity', aes(fill=p.adjust), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("Molecular function")
-plot_cc<-ggplot(gse_CC_Stages, aes(x=Description, y=Count, label=Count)) +geom_bar(stat='identity', aes(fill=p.adjust), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("Celular function")
+plot_cc<-ggplot(gse_CC_Stages, aes(x=Description, y=Count, label=Count)) +geom_bar(stat='identity', aes(fill=p.adjust), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("Celular component")
 #######################################################################################################################################
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_biological_process.png",sep=""), width = 23, height = 16, res=600, units = "cm")
@@ -343,7 +347,7 @@ for (cluster in unique(membership(cluster_Stage_II)))
 	if(!is.null(genes_stage_annotation_BP))
 	{
 		genes_stage_annotation_BP<-genes_stage_annotation_BP[order(genes_stage_annotation_BP$p.adjust),][1:50,]
-		genes_stage_annotation_BP$Stage    <-"Stage I"		
+		genes_stage_annotation_BP$Stage    <-"Stage II"		
 		genes_stage_annotation_BP$Cluster  <-cluster
 		df_results_per_cluster_BP<-rbind(df_results_per_cluster_BP,genes_stage_annotation_BP)
 	}
@@ -351,7 +355,7 @@ for (cluster in unique(membership(cluster_Stage_II)))
 	if(!is.null(genes_stage_annotation_MF))
 	{
 		genes_stage_annotation_MF<-genes_stage_annotation_MF[order(genes_stage_annotation_MF$p.adjust),][1:50,]
-		genes_stage_annotation_MF$Stage    <-"Stage I"		
+		genes_stage_annotation_MF$Stage    <-"Stage II"		
 		genes_stage_annotation_MF$Cluster  <-cluster
 		df_results_per_cluster_MF<-rbind(df_results_per_cluster_MF,genes_stage_annotation_MF)
 	}
@@ -359,7 +363,7 @@ for (cluster in unique(membership(cluster_Stage_II)))
 	if(!is.null(genes_stage_annotation_CC))
 	{
 		genes_stage_annotation_CC<-genes_stage_annotation_CC[order(genes_stage_annotation_CC$p.adjust),][1:50,]
-		genes_stage_annotation_CC$Stage    <-"Stage I"		
+		genes_stage_annotation_CC$Stage    <-"Stage II"		
 		genes_stage_annotation_CC$Cluster  <-cluster
 		df_results_per_cluster_CC<-rbind(df_results_per_cluster_CC,genes_stage_annotation_CC)
 	}		
@@ -381,7 +385,7 @@ for (cluster in unique(membership(cluster_Stage_III)))
 	if(!is.null(genes_stage_annotation_BP))
 	{
 		genes_stage_annotation_BP<-genes_stage_annotation_BP[order(genes_stage_annotation_BP$p.adjust),][1:50,]
-		genes_stage_annotation_BP$Stage    <-"Stage I"		
+		genes_stage_annotation_BP$Stage    <-"Stage III"		
 		genes_stage_annotation_BP$Cluster  <-cluster
 		df_results_per_cluster_BP<-rbind(df_results_per_cluster_BP,genes_stage_annotation_BP)
 	}
@@ -389,7 +393,7 @@ for (cluster in unique(membership(cluster_Stage_III)))
 	if(!is.null(genes_stage_annotation_MF))
 	{
 		genes_stage_annotation_MF<-genes_stage_annotation_MF[order(genes_stage_annotation_MF$p.adjust),][1:50,]
-		genes_stage_annotation_MF$Stage    <-"Stage I"		
+		genes_stage_annotation_MF$Stage    <-"Stage III"		
 		genes_stage_annotation_MF$Cluster  <-cluster
 		df_results_per_cluster_MF<-rbind(df_results_per_cluster_MF,genes_stage_annotation_MF)
 	}
@@ -397,13 +401,11 @@ for (cluster in unique(membership(cluster_Stage_III)))
 	if(!is.null(genes_stage_annotation_CC))
 	{
 		genes_stage_annotation_CC<-genes_stage_annotation_CC[order(genes_stage_annotation_CC$p.adjust),][1:50,]
-		genes_stage_annotation_CC$Stage    <-"Stage I"		
+		genes_stage_annotation_CC$Stage    <-"Stage III"		
 		genes_stage_annotation_CC$Cluster  <-cluster
 		df_results_per_cluster_CC<-rbind(df_results_per_cluster_CC,genes_stage_annotation_CC)
 	}		
 }
-
-
-write.xlsx(df_results_per_cluster_BP, "Biological_Function", file=paste(output_dir,"/clusters/stage_all_clusters.tsv",sep=""),append = FALSE) # where x is a data.frame with a Date column.
-write.xlsx(df_results_per_cluster_MF, "Molecular_Function", file=paste(output_dir,"/clusters/stage_all_clusters.tsv",sep=""),append = TRUE)   # where x is a data.frame with a Date column.
-write.xlsx(df_results_per_cluster_CC, "Celular_Component", file=paste(output_dir,"/clusters/stage_all_clusters.tsv",sep=""),append = TRUE)    # where x is a data.frame with a Date column.
+write.xlsx(na.omit(df_results_per_cluster_BP), "Biological_Function", file=paste(output_dir,"/clusters/stage_all_clusters.xlsx",sep=""),append = FALSE) # where x is a data.frame with a Date column.
+write.xlsx(na.omit(df_results_per_cluster_MF), "Molecular_Function", file=paste(output_dir,"/clusters/stage_all_clusters.xlsx",sep=""),append = TRUE)   # where x is a data.frame with a Date column.
+write.xlsx(na.omit(df_results_per_cluster_CC), "Celular_Component", file=paste(output_dir,"/clusters/stage_all_clusters.xlsx",sep=""),append = TRUE)    # where x is a data.frame with a Date column.

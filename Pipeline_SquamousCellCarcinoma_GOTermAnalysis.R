@@ -113,8 +113,6 @@ for (gene_row in rownames(log2change_tumor_control))
 	# Store gene id in the vector
 	log2change_tumor_control[gene_row,"gene_id"]<-strsplit(log2change_tumor_control[gene_row,"gene"], split = "\\.")[[1]][1]
 }
-
-
 ########################################################################################################################################
 # ids_stage_I
 ids_stage_I   <-bitr(genes_Stage_I$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
@@ -122,9 +120,35 @@ ids_stage_II  <-bitr(genes_Stage_II$gene_id, fromType = "ENSEMBL", toType = "ENT
 ids_stage_III  <-bitr(genes_Stage_III$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
 genes_ids_all  <-bitr(log2change_tumor_control$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
 
-gse_ALL_Stage_I  <- enrichGO(gene = ids_stage_I$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,    ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
-gse_ALL_Stage_II <- enrichGO(gene = ids_stage_II$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
-gse_ALL_Stage_III <- enrichGO(gene = ids_stage_III$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db, ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
+colnames(ids_stage_I)<-c("gene_id","ENTREZID")
+colnames(ids_stage_II)<-c("gene_id","ENTREZID")
+colnames(ids_stage_III)<-c("gene_id","ENTREZID")
+colnames(genes_ids_all)<-c("gene_id","ENTREZID")
+
+genes_Stage_I  <-merge(genes_Stage_I,ids_stage_I,by="gene_id")
+genes_Stage_II <-merge(genes_Stage_II,ids_stage_II,by="gene_id")
+genes_Stage_III<-merge(genes_Stage_III,ids_stage_III,by="gene_id")
+genes_ALL      <-merge(log2change_tumor_control,genes_ids_all,by="gene_id")
+
+# Create vector Stage_I
+vector_stage_I<-genes_Stage_I$ENTREZID
+names(vector_stage_I)<-genes_Stage_I$log2change
+
+# Create vector Stage_II
+vector_stage_II<-genes_Stage_II$ENTREZID
+names(vector_stage_II)<-genes_Stage_II$log2change
+
+# Create vector Stage_III
+vector_stage_III<-genes_Stage_III$ENTREZID
+names(vector_stage_III)<-genes_Stage_III$log2change
+
+# Create vector Stage all
+vector_all<-genes_ALL$ENTREZID
+names(vector_all)<-genes_ALL$log2change
+
+gse_ALL_Stage_I  <- enrichGO(gene = vector_stage_I, universe = vector_all,  OrgDb  = org.Hs.eg.db,    ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
+gse_ALL_Stage_II <- enrichGO(gene = vector_stage_II, universe = vector_all,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
+gse_ALL_Stage_III <- enrichGO(gene = vector_stage_III, universe = vector_all,  OrgDb  = org.Hs.eg.db, ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
 
 gse_ALL_Stage_I$Stage<-"Stage I"
 gse_ALL_Stage_II$Stage<-"Stage II"

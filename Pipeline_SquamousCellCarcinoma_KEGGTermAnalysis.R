@@ -60,6 +60,12 @@ cluster_Stage_II = cluster_fast_greedy(interactome_network_Stage_II)
 cluster_Stage_III = cluster_fast_greedy(interactome_network_Stage_III)
 
 ########################################################################################################################################
+# gene_id
+genes_Stage_I$gene_id                   <-""
+genes_Stage_II$gene_id                  <-""
+genes_Stage_III$gene_id                 <-""
+log2change_tumor_control$gene_id        <-""
+
 # Calculate gse all stages
 # Gene Set Enrichment
 # First, I will create go terms per stage using gseGO. 
@@ -80,45 +86,67 @@ genes_ids_stage_II<-c()
 genes_ids_stage_III<-c()
 genes_ids_all<-c()
 
-for (gene_id in genes_Stage_I$gene)
-{
-  # Store gene id in the vector
-  genes_ids_stage_I<-c(genes_ids_stage_I,strsplit(gene_id, split = "\\.")[[1]][1])
+# For each gene, add gene_id
+for (gene_row in rownames(genes_Stage_I))
+{	
+	# Store gene id in the vector
+	genes_Stage_I[gene_row,"gene_id"]<-strsplit(genes_Stage_I[gene_row,"gene"], split = "\\.")[[1]][1]
+	
 }
-# For each gene in stage II
-for (gene_id in genes_Stage_II$gene)
-{
-  # Store gene id in the vector
-  genes_ids_stage_II<-c(genes_ids_stage_II,strsplit(gene_id, split = "\\.")[[1]][1])
+# For each gene, add gene_id
+for (gene_row in rownames(genes_Stage_II))
+{	
+	# Store gene id in the vector
+	genes_Stage_II[gene_row,"gene_id"]<-strsplit(genes_Stage_II[gene_row,"gene"], split = "\\.")[[1]][1]
+	
 }
-# For each gene in stage III
-for (gene_id in genes_Stage_III$gene)
-{
-  # Store gene id in the vector
-  genes_ids_stage_III<-c(genes_ids_stage_III,strsplit(gene_id, split = "\\.")[[1]][1])
+# For each gene, add gene_id
+for (gene_row in rownames(genes_Stage_III))
+{	
+	# Store gene id in the vector
+	genes_Stage_III[gene_row,"gene_id"]<-strsplit(genes_Stage_III[gene_row,"gene"], split = "\\.")[[1]][1]
+	
 }
-# For each gene in stage III
-for (gene_id in rownames(unstranded_data_filter))
+# For each gene, add gene_id
+for (gene_row in rownames(log2change_tumor_control))
 {
-  # Store gene id in the vector
-  genes_ids_all<-c(genes_ids_all,strsplit(gene_id, split = "\\.")[[1]][1])
+	# Store gene id in the vector
+	log2change_tumor_control[gene_row,"gene_id"]<-strsplit(log2change_tumor_control[gene_row,"gene"], split = "\\.")[[1]][1]
 }
 ########################################################################################################################################
 # ids_stage_I
-ids_stage_I   <-bitr(genes_ids_stage_I, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
-ids_stage_II  <-bitr(genes_ids_stage_II, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
-ids_stage_III  <-bitr(genes_ids_stage_III, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
-genes_ids_all  <-bitr(genes_ids_all, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
+ids_stage_I   <-bitr(genes_Stage_I$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
+ids_stage_II  <-bitr(genes_Stage_II$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
+ids_stage_III  <-bitr(genes_Stage_III$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
+genes_ids_all  <-bitr(log2change_tumor_control$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
 
-gse_ALL_Stage_I  <- enrichGO(gene = ids_stage_I$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,    ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
-gse_ALL_Stage_II <- enrichGO(gene = ids_stage_II$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
-gse_ALL_Stage_III <- enrichGO(gene = ids_stage_III$ENTREZID, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db, ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
+colnames(ids_stage_I)<-c("gene_id","ENTREZID")
+colnames(ids_stage_II)<-c("gene_id","ENTREZID")
+colnames(ids_stage_III)<-c("gene_id","ENTREZID")
+colnames(genes_ids_all)<-c("gene_id","ENTREZID")
 
-gse_ALL_Stage_I <- gseKEGG(geneList     = ids_stage_I$ENTREZID, organism     = "hsa", nPerm        = 10000, minGSSize    = 3,  maxGSSize    = 800,          pvalueCutoff = 0.05, pAdjustMethod = "BH",keyType       = "ncbi-geneid")
-gse_ALL_Stage_II <- gseKEGG(geneList     = ids_stage_I$ENTREZID, organism     = "hsa", nPerm        = 10000, minGSSize    = 3,  maxGSSize    = 800,          pvalueCutoff = 0.05, pAdjustMethod = "BH",keyType       = "ncbi-geneid")
-gse_ALL_Stage_III <- gseKEGG(geneList     = ids_stage_I$ENTREZID, organism     = "hsa", nPerm        = 10000, minGSSize    = 3,  maxGSSize    = 800,          pvalueCutoff = 0.05, pAdjustMethod = "BH",keyType       = "ncbi-geneid")
+genes_Stage_I  <-merge(genes_Stage_I,ids_stage_I,by="gene_id")
+genes_Stage_II <-merge(genes_Stage_II,ids_stage_II,by="gene_id")
+genes_Stage_III<-merge(genes_Stage_III,ids_stage_III,by="gene_id")
+genes_ALL      <-merge(log2change_tumor_control,genes_ids_all,by="gene_id")
 
-kk2 <- gseKEGG(geneList     = geneList,organism     = 'hsa',       minGSSize    = 120,     pvalueCutoff = 0.05,         verbose      = FALSE)
+# Create vector Stage_I
+vector_stage_I<-genes_Stage_I$ENTREZID
+names(vector_stage_I)<-genes_Stage_I$log2change
+
+# Create vector Stage_II
+vector_stage_II<-genes_Stage_II$ENTREZID
+names(vector_stage_II)<-genes_Stage_II$log2change
+
+# Create vector Stage_III
+vector_stage_III<-genes_Stage_III$ENTREZID
+names(vector_stage_III)<-genes_Stage_III$log2change
+
+# Create vector Stage all
+vector_all<-genes_ALL$ENTREZID
+names(vector_all)<-genes_ALL$log2change
+
+gse_ALL_Stage_I <- gseKEGG(geneList= vector_stage_I, organism= vector_all, nPerm        = 10000,minGSSize    = 3, maxGSSize    = 800,    pvalueCutoff = 0.05,              pAdjustMethod = "none",               keyType       = "ncbi-geneid")gse_ALL_Stage_I <- gseKEGG(geneList= vector_stage_I, organism= vector_all, nPerm        = 10000,minGSSize    = 3, maxGSSize    = 800,    pvalueCutoff = 0.05,              pAdjustMethod = "none",               keyType       = "ncbi-geneid")
 
 gse_ALL_Stage_I$Stage<-"Stage I"
 gse_ALL_Stage_II$Stage<-"Stage II"

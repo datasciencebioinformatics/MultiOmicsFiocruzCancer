@@ -100,9 +100,14 @@ pathwaysDF <- msigdbr("human")
 pathways <- split(as.character(pathwaysDF$entrez_gene), pathwaysDF$gs_name)
 
 # Run fast gsea 
-gesecaRes_stage_I <- geseca(pathways, expr_stage_I, minSize = 5, maxSize = 500)
+gesecaRes_stage_I <- fgsea(pathways, expr_stage_I, minSize = 5, maxSize = 500)
 gesecaRes_stage_II <- geseca(pathways, expr_stage_II, minSize = 5, maxSize = 500)
 gesecaRes_stage_III <- geseca(pathways, expr_stage_III, minSize = 5, maxSize = 500)
+
+fgseaRes <- fgsea(examplePathways, exampleRanks, minSize=15, maxSize=500)
+
+topPathways <- fgseaRes[head(order(pval), n=15)][order(NES), pathway]
+plotGseaTable(examplePathways[topPathways], exampleRanks, fgseaRes, gseaParam=0.5)
 #######################################################################################################################################
 # Here I must check 
 plotGesecaTable(gesecaRes_stage_I, pathways[gesecaRes_stage_I$pathway], E=expr_stage_I) + theme(axis.text.x = element_blank(),axis.text.y = element_blank(), axis.ticks = element_blank())

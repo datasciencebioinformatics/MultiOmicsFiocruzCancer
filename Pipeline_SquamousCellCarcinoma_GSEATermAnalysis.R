@@ -98,21 +98,31 @@ pathwaysDF <- msigdbr("human")
 
 # Split name of pathways
 pathways <- split(as.character(pathwaysDF$entrez_gene), pathwaysDF$gs_name)
+#######################################################################################################################################
+# Split name of pathways
+stage_I_l2fc<-genes_unique_Stage_I$log2change
+names(stage_I_l2fc)<-df_expr_stage_I[genes_unique_Stage_I$gene,"ENTREZID"]
 
-# Run fast gsea 
-gesecaRes_stage_I <- fgsea(pathways, expr_stage_I, minSize = 5, maxSize = 500)
-gesecaRes_stage_II <- geseca(pathways, expr_stage_II, minSize = 5, maxSize = 500)
-gesecaRes_stage_III <- geseca(pathways, expr_stage_III, minSize = 5, maxSize = 500)
+# Split name of pathways
+stage_II_l2fc<-genes_unique_Stage_II$log2change
+names(stage_II_l2fc)<-df_expr_stage_II[genes_unique_Stage_II$gene,"ENTREZID"]
 
-fgseaRes <- fgsea(examplePathways, exampleRanks, minSize=15, maxSize=500)
+# Split name of pathways
+stage_III_l2fc<-genes_unique_Stage_III$log2change
+names(stage_III_l2fc)<-df_expr_stage_III[genes_unique_Stage_II$gene,"ENTREZID"]
+#######################################################################################################################################
 
-topPathways <- fgseaRes[head(order(pval), n=15)][order(NES), pathway]
-plotGseaTable(examplePathways[topPathways], exampleRanks, fgseaRes, gseaParam=0.5)
+# Calculate fgsea
+fgsaRes_stage_I    <- fgsea(pathways, stage_I_l2fc, minSize=5, maxSize=500)
+
+plotGseaTable(pathways, stage_I_l2fc,fgsaRes_stage_I, gseaParam=0.5)
+
+
 #######################################################################################################################################
 # Here I must check 
-plotGesecaTable(gesecaRes_stage_I, pathways[gesecaRes_stage_I$pathway], E=expr_stage_I) + theme(axis.text.x = element_blank(),axis.text.y = element_blank(), axis.ticks = element_blank())
-plotGesecaTable(gesecaRes_stage_II, pathways[gesecaRes_stage_II$pathway], E=expr_stage_II) + theme(axis.text.x = element_blank(),axis.text.y = element_blank(), axis.ticks = element_blank())
-plotGesecaTable(gesecaRes_stage_III, pathways[gesecaRes_stage_III$pathway], E=expr_stage_III) + theme(axis.text.x = element_blank(),axis.text.y = element_blank(), axis.ticks = element_blank())
+plotGseaTable(gesecaRes_stage_I, pathways[gesecaRes_stage_I$pathway], E=expr_stage_I) + theme(axis.text.x = element_blank(),axis.text.y = element_blank(), axis.ticks = element_blank())
+plotGseaTable(gesecaRes_stage_II, pathways[gesecaRes_stage_II$pathway], E=expr_stage_II) + theme(axis.text.x = element_blank(),axis.text.y = element_blank(), axis.ticks = element_blank())
+plotGseaTable(gesecaRes_stage_III, pathways[gesecaRes_stage_III$pathway], E=expr_stage_III) + theme(axis.text.x = element_blank(),axis.text.y = element_blank(), axis.ticks = element_blank())
 #######################################################################################################################################
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_KEGG.png",sep=""), width = 23, height = 16, res=600, units = "cm")

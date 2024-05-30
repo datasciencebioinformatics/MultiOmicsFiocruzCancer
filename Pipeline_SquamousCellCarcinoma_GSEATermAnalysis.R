@@ -44,6 +44,7 @@ rownames(df_expr_stage_I)<-df_expr_stage_I$Genes
 
 # Keep only first occcurance
 df_expr_stage_I <- df_expr_stage_I[match(unique(df_expr_stage_I$genes_id), df_expr_stage_I$genes_id),]
+df_expr_stage_I <- df_expr_stage_I[match(unique(df_expr_stage_I$ENTREZID), df_expr_stage_I$ENTREZID),]
 
 # Filter dataset
 expr_stage_I<-expr_stage_I[df_expr_stage_I$Genes,]
@@ -51,50 +52,10 @@ expr_stage_I<-expr_stage_I[df_expr_stage_I$Genes,]
 # Set rownames on expr_stage_I
 rownames(expr_stage_I)<-df_expr_stage_I[rownames(expr_stage_I),"ENTREZID"]
 #######################################################################################################################################
-# Here I must check if the conversion is convering all the genes.
-# For each gene, add gene_id
-for (gene_row in rownames(df_expr_stage_II))
-{	
-	# Convert genes_id and ENTREZID
-	df_expr_stage_II[gene_row,"genes_id"]<-strsplit(df_expr_stage_II[gene_row,"Genes"], split = "\\.")[[1]][1]
-	try(df_expr_stage_II[gene_row,"ENTREZID"]<-bitr(df_expr_stage_II[gene_row,"genes_id"], fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")[1,"ENTREZID"], silent = TRUE)
-}
-# Set rownames
-rownames(df_expr_stage_II)<-df_expr_stage_II$Genes
-
-# Keep only first occcurance
-df_expr_stage_II <- df_expr_stage_II[match(unique(df_expr_stage_II$genes_id), df_expr_stage_II$genes_id),]
-
-# Filter dataset
-expr_stage_II<-expr_stage_II[df_expr_stage_II$Genes,]
-
-# Set rownames on expr_stage_I
-rownames(expr_stage_II)<-df_expr_stage_II[rownames(expr_stage_II),"ENTREZID"]
-#######################################################################################################################################
-# Here I must check if the conversion is convering all the genes.
-# For each gene, add gene_id
-for (gene_row in rownames(df_expr_stage_III))
-{	
-	# Convert genes_id and ENTREZID
-	df_expr_stage_III[gene_row,"genes_id"]<-strsplit(df_expr_stage_III[gene_row,"Genes"], split = "\\.")[[1]][1]
-	try(df_expr_stage_III[gene_row,"ENTREZID"]<-bitr(df_expr_stage_III[gene_row,"genes_id"], fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")[1,"ENTREZID"], silent = TRUE)
-}
-# Set rownames
-rownames(df_expr_stage_III)<-df_expr_stage_III$Genes
-
-# Keep only first occcurance
-df_expr_stage_III <- df_expr_stage_III[match(unique(df_expr_stage_III$genes_id), df_expr_stage_III$genes_id),]
-
-# Filter dataset
-expr_stage_III<-expr_stage_III[df_expr_stage_III$Genes,]
-
-# Set rownames on expr_stage_I
-rownames(expr_stage_III)<-df_expr_stage_III[rownames(expr_stage_III),"ENTREZID"]
-#######################################################################################################################################
 # Here I must check if if I use all the msigdbr databases or any in particulart
 # Run GSEA 
 # First, all msigdbr
-pathwaysDF <- msigdbr("human")
+pathwaysDF <- msigdbr(species = "Homo sapiens", category = "C6")
 
 # Split name of pathways
 pathways <- split(as.character(pathwaysDF$entrez_gene), pathwaysDF$gs_name)
@@ -102,32 +63,13 @@ pathways <- split(as.character(pathwaysDF$entrez_gene), pathwaysDF$gs_name)
 # Split name of pathways
 stage_I_l2fc<-genes_Stage_I$log2change
 names(stage_I_l2fc)<-df_expr_stage_I[genes_Stage_I$gene,"ENTREZID"]
-
-# Split name of pathways
-stage_II_l2fc<-genes_unique_Stage_II$log2change
-names(stage_II_l2fc)<-df_expr_stage_II[genes_Stage_II$gene,"ENTREZID"]
-
-# Split name of pathways
-stage_III_l2fc<-genes_unique_Stage_III$log2change
-names(stage_III_l2fc)<-df_expr_stage_III[genes_Stage_III$gene,"ENTREZID"]
 #######################################################################################################################################
 # Calculate fgsea
 fgsaRes_stage_I      <- fgsea(pathways, stage_I_l2fc, minSize=5, maxSize=500)
-fgsaRes_stage_II     <- fgsea(pathways, stage_II_l2fc, minSize=5, maxSize=500)
-fgsaRes_stage_III    <- fgsea(pathways, stage_III_l2fc, minSize=5, maxSize=500)
-
-plotGseaTable(pathways[fgsaRes_stage_I$pathway],  stage_I_l2fc,fgsaRes_stage_I, gseaParam=0.5)
-plotGseaTable(pathways[fgsaRes_stage_II$pathway], stage_II_l2fc,fgsaRes_stage_II, gseaParam=0.5)
-plotGseaTable(pathways[fgsaRes_stage_III$pathway],stage_III_l2fc,fgsaRes_stage_III, gseaParam=0.5)
-#######################################################################################################################################
-# Here I must check 
-plotGseaTable(gesecaRes_stage_I, pathways[gesecaRes_stage_I$pathway], E=expr_stage_I) + theme(axis.text.x = element_blank(),axis.text.y = element_blank(), axis.ticks = element_blank())
-plotGseaTable(gesecaRes_stage_II, pathways[gesecaRes_stage_II$pathway], E=expr_stage_II) + theme(axis.text.x = element_blank(),axis.text.y = element_blank(), axis.ticks = element_blank())
-plotGseaTable(gesecaRes_stage_III, pathways[gesecaRes_stage_III$pathway], E=expr_stage_III) + theme(axis.text.x = element_blank(),axis.text.y = element_blank(), axis.ticks = element_blank())
 #######################################################################################################################################
 # FindClusters_resolution
-png(filename=paste(output_folder,"Plot_KEGG.png",sep=""), width = 23, height = 16, res=600, units = "cm")
-	plot_KEGG
+png(filename=paste(output_folder,"plotGseaTable_Stage_I.png",sep=""), width = 23, height = 16, res=600, units = "cm")
+	plotGseaTable(pathways[fgsaRes_stage_I$pathway],  stage_I_l2fc,fgsaRes_stage_I, gseaParam=0.5)
 dev.off()
 #######################################################################################################################################
 write.xlsx(na.omit(gse_KEGG), "KEGG_PATHWAYS", file=paste(output_dir,"/clusters/kegg_pathways.xlsx",sep=""),append = FALSE) # where x is a data.frame with a Date column.

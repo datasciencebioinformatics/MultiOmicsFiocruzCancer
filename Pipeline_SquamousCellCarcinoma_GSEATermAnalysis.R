@@ -63,13 +63,23 @@ pathways <- split(as.character(pathwaysDF$entrez_gene), pathwaysDF$gs_name)
 # Split name of pathways
 stage_I_l2fc<-genes_Stage_I$log2change
 names(stage_I_l2fc)<-df_expr_stage_I[genes_Stage_I$gene,"ENTREZID"]
+stage_I_l2fc<-stage_I_l2fc[which(stage_I_l2fc>0)]
+stage_I_l2fc<-stage_I_l2fc[which(names(stage_I_l2fc)!="<NA>")]
 #######################################################################################################################################
 # Calculate fgsea
-fgsaRes_stage_I      <- fgsea(pathways, stage_I_l2fc, minSize=5, maxSize=500)
+fgsaRes_stage_I        <- fgsea(pathways, stage_I_l2fc, minSize=5, maxSize=500)
 #######################################################################################################################################
+# Calculate fgsea
+TOP_stage_I        <- fgsaRes_stage_I[head(order(pval), n=25)][order(NES), pathway]
+#######################################################################################################################################
+write.xlsx(data.frame(fgsaRes_stage_I[fgsaRes_stage_I$pathway %in% TOP_stage_I,]), "STAGE_I", file=paste(output_dir,"/clusters/fgsaRes_stage_I.xlsx",sep=""),append = FALSE) # where x is a data.frame with a Date column.
+write.table(data.frame(data.frame(fgsaRes_stage_I[fgsaRes_stage_I$pathway %in% TOP_stage_I,])[,1:7]), file = paste(output_dir,"/clusters/fgsaRes_stage_I.tsv",sep=""), row.names=FALSE, sep="\t")
+#######################################################################################################################################
+
+
 # FindClusters_resolution
 png(filename=paste(output_folder,"plotGseaTable_Stage_I.png",sep=""), width = 23, height = 16, res=600, units = "cm")
-	plotGseaTable(pathways[fgsaRes_stage_I$pathway],  stage_I_l2fc,fgsaRes_stage_I, gseaParam=0.5)
+	print(plotGseaTable(TOP_stage_I,  stage_I_l2fc[which(stage_I_l2fc[names(stage_I_l2fc)!="NA"]>0)], fgsaRes_stage_I[fgsaRes_stage_I$pathway %in% TOP_stage_I,], gseaParam=0.5))
 dev.off()
 #######################################################################################################################################
 write.xlsx(na.omit(gse_KEGG), "KEGG_PATHWAYS", file=paste(output_dir,"/clusters/kegg_pathways.xlsx",sep=""),append = FALSE) # where x is a data.frame with a Date column.

@@ -22,9 +22,9 @@ genes_unique_Stage_III       <-read.table(file = file_unique_gene_stages_III, se
 #######################################################################################################################################
 # Here I must check what set of genes to use in the GSEA
 # if the complete set of genes, or if only the selected set of genes
-expr_stage_I    <-unstranded_rpkm[genes_unique_Stage_I$gene,]
-expr_stage_II   <-unstranded_rpkm[genes_unique_Stage_II$gene,]
-expr_stage_III  <-unstranded_rpkm[genes_unique_Stage_III$gene,]
+expr_stage_I    <-unstranded_rpkm[genes_Stage_I$gene,]
+expr_stage_II   <-unstranded_rpkm[genes_Stage_II$gene,]
+expr_stage_III  <-unstranded_rpkm[genes_Stage_III$gene,]
 
 # Data frame for id conversion
 df_expr_stage_I<-data.frame(Genes=rownames(expr_stage_I),ENTREZID="",genes_id="")
@@ -100,24 +100,25 @@ pathwaysDF <- msigdbr("human")
 pathways <- split(as.character(pathwaysDF$entrez_gene), pathwaysDF$gs_name)
 #######################################################################################################################################
 # Split name of pathways
-stage_I_l2fc<-genes_unique_Stage_I$log2change
-names(stage_I_l2fc)<-df_expr_stage_I[genes_unique_Stage_I$gene,"ENTREZID"]
+stage_I_l2fc<-genes_Stage_I$log2change
+names(stage_I_l2fc)<-df_expr_stage_I[genes_Stage_I$gene,"ENTREZID"]
 
 # Split name of pathways
 stage_II_l2fc<-genes_unique_Stage_II$log2change
-names(stage_II_l2fc)<-df_expr_stage_II[genes_unique_Stage_II$gene,"ENTREZID"]
+names(stage_II_l2fc)<-df_expr_stage_II[genes_Stage_II$gene,"ENTREZID"]
 
 # Split name of pathways
 stage_III_l2fc<-genes_unique_Stage_III$log2change
-names(stage_III_l2fc)<-df_expr_stage_III[genes_unique_Stage_II$gene,"ENTREZID"]
+names(stage_III_l2fc)<-df_expr_stage_III[genes_Stage_III$gene,"ENTREZID"]
 #######################################################################################################################################
-
 # Calculate fgsea
-fgsaRes_stage_I    <- fgsea(pathways, stage_I_l2fc, minSize=5, maxSize=500)
+fgsaRes_stage_I      <- fgsea(pathways, stage_I_l2fc, minSize=5, maxSize=500)
+fgsaRes_stage_II     <- fgsea(pathways, stage_II_l2fc, minSize=5, maxSize=500)
+fgsaRes_stage_III    <- fgsea(pathways, stage_III_l2fc, minSize=5, maxSize=500)
 
-plotGseaTable(pathways, stage_I_l2fc,fgsaRes_stage_I, gseaParam=0.5)
-
-
+plotGseaTable(pathways[fgsaRes_stage_I$pathway],  stage_I_l2fc,fgsaRes_stage_I, gseaParam=0.5)
+plotGseaTable(pathways[fgsaRes_stage_II$pathway], stage_II_l2fc,fgsaRes_stage_II, gseaParam=0.5)
+plotGseaTable(pathways[fgsaRes_stage_III$pathway],stage_III_l2fc,fgsaRes_stage_III, gseaParam=0.5)
 #######################################################################################################################################
 # Here I must check 
 plotGseaTable(gesecaRes_stage_I, pathways[gesecaRes_stage_I$pathway], E=expr_stage_I) + theme(axis.text.x = element_blank(),axis.text.y = element_blank(), axis.ticks = element_blank())

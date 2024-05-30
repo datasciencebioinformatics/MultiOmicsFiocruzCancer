@@ -22,9 +22,9 @@ genes_unique_Stage_III       <-read.table(file = file_unique_gene_stages_III, se
 #######################################################################################################################################
 # Here I must check what set of genes to use in the GSEA
 # if the complete set of genes, or if only the selected set of genes
-expr_stage_I    <-na.omit(unstranded_data_filter[genes_unique_Stage_I$gene,])
-expr_stage_II   <-na.omit(unstranded_data_filter[genes_unique_Stage_II$gene,])
-expr_stage_III  <-na.omit(unstranded_data_filter[genes_unique_Stage_III$gene,])
+expr_stage_I    <-unstranded_rpkm[genes_unique_Stage_I$gene,]
+expr_stage_II   <-unstranded_rpkm[genes_unique_Stage_II$gene,]
+expr_stage_III  <-unstranded_rpkm[genes_unique_Stage_III$gene,]
 
 # Data frame for id conversion
 df_expr_stage_I<-data.frame(Genes=rownames(expr_stage_I),ENTREZID="",genes_id="")
@@ -39,6 +39,57 @@ for (gene_row in rownames(df_expr_stage_I))
 	df_expr_stage_I[gene_row,"genes_id"]<-strsplit(df_expr_stage_I[gene_row,"Genes"], split = "\\.")[[1]][1]
 	try(df_expr_stage_I[gene_row,"ENTREZID"]<-bitr(df_expr_stage_I[gene_row,"genes_id"], fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")[1,"ENTREZID"], silent = TRUE)
 }
+# Set rownames
+rownames(df_expr_stage_I)<-df_expr_stage_I$Genes
+
+# Keep only first occcurance
+df_expr_stage_I <- df_expr_stage_I[match(unique(df_expr_stage_I$genes_id), df_expr_stage_I$genes_id),]
+
+# Filter dataset
+expr_stage_I<-expr_stage_I[df_expr_stage_I$Genes,]
+
+# Set rownames on expr_stage_I
+rownames(expr_stage_I)<-df_expr_stage_I[rownames(expr_stage_I),"ENTREZID"]
+#######################################################################################################################################
+# Here I must check if the conversion is convering all the genes.
+# For each gene, add gene_id
+for (gene_row in rownames(df_expr_stage_II))
+{	
+	# Convert genes_id and ENTREZID
+	df_expr_stage_II[gene_row,"genes_id"]<-strsplit(df_expr_stage_II[gene_row,"Genes"], split = "\\.")[[1]][1]
+	try(df_expr_stage_II[gene_row,"ENTREZID"]<-bitr(df_expr_stage_II[gene_row,"genes_id"], fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")[1,"ENTREZID"], silent = TRUE)
+}
+# Set rownames
+rownames(df_expr_stage_II)<-df_expr_stage_II$Genes
+
+# Keep only first occcurance
+df_expr_stage_II <- df_expr_stage_II[match(unique(df_expr_stage_II$genes_id), df_expr_stage_II$genes_id),]
+
+# Filter dataset
+expr_stage_II<-expr_stage_II[df_expr_stage_II$Genes,]
+
+# Set rownames on expr_stage_I
+rownames(expr_stage_II)<-df_expr_stage_II[rownames(expr_stage_II),"ENTREZID"]
+#######################################################################################################################################
+# Here I must check if the conversion is convering all the genes.
+# For each gene, add gene_id
+for (gene_row in rownames(df_expr_stage_III))
+{	
+	# Convert genes_id and ENTREZID
+	df_expr_stage_III[gene_row,"genes_id"]<-strsplit(df_expr_stage_III[gene_row,"Genes"], split = "\\.")[[1]][1]
+	try(df_expr_stage_III[gene_row,"ENTREZID"]<-bitr(df_expr_stage_III[gene_row,"genes_id"], fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")[1,"ENTREZID"], silent = TRUE)
+}
+# Set rownames
+rownames(df_expr_stage_III)<-df_expr_stage_III$Genes
+
+# Keep only first occcurance
+df_expr_stage_III <- df_expr_stage_III[match(unique(df_expr_stage_III$genes_id), df_expr_stage_III$genes_id),]
+
+# Filter dataset
+expr_stage_III<-expr_stage_III[df_expr_stage_III$Genes,]
+
+# Set rownames on expr_stage_I
+rownames(expr_stage_III)<-df_expr_stage_III[rownames(expr_stage_III),"ENTREZID"]
 #######################################################################################################################################
 # Here I must check if if I use all the msigdbr databases or any in particulart
 # Run GSEA 
@@ -49,10 +100,14 @@ pathwaysDF <- msigdbr("human")
 pathways <- split(as.character(pathwaysDF$entrez_gene), pathwaysDF$gs_name)
 
 # Run fast gsea 
-gesecaRes <- geseca(pathways, expr_stage_I, minSize = 5, maxSize = 500)
+gesecaRes_stage_I <- geseca(pathways, expr_stage_I, minSize = 5, maxSize = 500)
+gesecaRes_stage_II <- geseca(pathways, expr_stage_II, minSize = 5, maxSize = 500)
+gesecaRes_stage_III <- geseca(pathways, expr_stage_III, minSize = 5, maxSize = 500)
 #######################################################################################################################################
 # Here I must check 
-plotGesecaTable(gesecaRes , pathways, E=expr_stage_I) + theme(axis.text.x = element_blank(),axis.text.y = element_blank(), axis.ticks = element_blank())
+plotGesecaTable(gesecaRes_stage_I, pathways[gesecaRes_stage_I$pathway], E=expr_stage_I) + theme(axis.text.x = element_blank(),axis.text.y = element_blank(), axis.ticks = element_blank())
+plotGesecaTable(gesecaRes_stage_II, pathways[gesecaRes_stage_II$pathway], E=expr_stage_II) + theme(axis.text.x = element_blank(),axis.text.y = element_blank(), axis.ticks = element_blank())
+plotGesecaTable(gesecaRes_stage_III, pathways[gesecaRes_stage_III$pathway], E=expr_stage_III) + theme(axis.text.x = element_blank(),axis.text.y = element_blank(), axis.ticks = element_blank())
 #######################################################################################################################################
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_KEGG.png",sep=""), width = 23, height = 16, res=600, units = "cm")

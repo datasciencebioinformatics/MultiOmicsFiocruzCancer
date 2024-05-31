@@ -136,8 +136,6 @@ TOP_stage_I        <- fgsaRes_stage_I[head(order(pval), n=25)][order(NES), pathw
 write.xlsx(data.frame(fgsaRes_stage_I[fgsaRes_stage_I$pathway %in% TOP_stage_I,]), "STAGE_I", file=paste(output_dir,"/clusters/fgsaRes_stage_I.xlsx",sep=""),append = FALSE) # where x is a data.frame with a Date column.
 write.table(data.frame(data.frame(fgsaRes_stage_I[fgsaRes_stage_I$pathway %in% TOP_stage_I,])[,1:7]), file = paste(output_dir,"/clusters/fgsaRes_stage_I.tsv",sep=""), row.names=FALSE, sep="\t")
 #######################################################################################################################################
-
-
 # FindClusters_resolution
 png(filename=paste(output_folder,"plotGseaTable_Stage_I.png",sep=""), width = 23, height = 16, res=600, units = "cm")
 	print(plotGseaTable(TOP_stage_I,  stage_I_l2fc[which(stage_I_l2fc[names(stage_I_l2fc)!="NA"]>0)], fgsaRes_stage_I[fgsaRes_stage_I$pathway %in% TOP_stage_I,], gseaParam=0.5))

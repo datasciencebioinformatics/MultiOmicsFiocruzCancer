@@ -203,14 +203,14 @@ fgsaRes_pathways_C5_BP_stage_II    <-   fgsaRes_pathways_C5_BP_stage_II[head(ord
 fgsaRes_pathways_C5_BP_stage_III   <-   fgsaRes_pathways_C5_BP_stage_III[head(order(padj), n=25)][order(NES), ]  
 
 # Calculate fgsea
-fgsaRes_pathways_C6_CP_stage_I     <- fgsaRes_pathways_C6_CP_stage_I[head(order(padj), n=25)][order(NES), ]
-fgsaRes_pathways_C6_CP_stage_II    <- fgsaRes_pathways_C6_CP_stage_II[head(order(padj), n=25)][order(NES),] 
-fgsaRes_pathways_C6_CP_stage_III   <- fgsaRes_pathways_C6_CP_stage_III[head(order(padj), n=25)][order(NES),] 
+fgsaRes_pathways_C6_stage_I     <- fgsaRes_pathways_C6_stage_I[head(order(padj), n=25)][order(NES), ]
+fgsaRes_pathways_C6_stage_II    <- fgsaRes_pathways_C6_stage_II[head(order(padj), n=25)][order(NES),] 
+fgsaRes_pathways_C6_stage_III   <- fgsaRes_pathways_C6_stage_III[head(order(padj), n=25)][order(NES),] 
 
 # Calculate fgsea
-fgsaRes_pathways_C7_CP_stage_I     <- fgsaRes_pathways_C7_CP_stage_I[head(order(padj), n=25)][order(NES), ]
-fgsaRes_pathways_C7_CP_stage_II    <- fgsaRes_pathways_C7_CP_stage_II[head(order(padj), n=25)][order(NES),] 
-fgsaRes_pathways_C7_CP_stage_III   <- fgsaRes_pathways_C7_CP_stage_III[head(order(padj), n=25)][order(NES),] 
+fgsaRes_pathways_C7_stage_I     <- fgsaRes_pathways_C7_stage_I[head(order(padj), n=25)][order(NES), ]
+fgsaRes_pathways_C7_stage_II    <- fgsaRes_pathways_C7_stage_II[head(order(padj), n=25)][order(NES),] 
+fgsaRes_pathways_C7_stage_III   <- fgsaRes_pathways_C7_stage_III[head(order(padj), n=25)][order(NES),] 
 #######################################################################################################################################
 fgsaRes_pathways_C2_CP_stage_I$Stage="Stage I"
 fgsaRes_pathways_C2_CP_stage_II$Stage="Stage II"
@@ -264,21 +264,49 @@ write.xlsx(data.frame(fgsaRes_pathways_C5_BP_all_stage[,col_names], "fgsaRes_pat
 write.xlsx(data.frame(fgsaRes_pathways_C5_CC_all_stage[,col_names], "fgsaRes_pathways_C5_CC_all_stage", file=paste(output_dir,"/clusters/fgsaRes_pathways_all.xlsx",sep=""),append = TRUE) # where x is a data.frame with a Date column.
 write.xlsx(data.frame(fgsaRes_pathways_C6_all_stage)[,col_names], "fgsaRes_pathways_C6_all_stage", file=paste(output_dir,"/clusters/fgsaRes_pathways_all.xlsx",sep=""),append = FALSE) # where x is a data.frame with a Date column.
 write.xlsx(data.frame(fgsaRes_pathways_C7_all_stage)[,col_names], "fgsaRes_pathways_C7_all_stage", file=paste(output_dir,"/clusters/fgsaRes_pathways_all.xlsx",sep=""),append = FALSE) # where x is a data.frame with a Date column.
-#######################################################################################################################################
-   
-plot_pathways_C2_CP<-ggplot(data.frame(fgsaRes_pathways_C2_CP_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C2_CP")
-plot_pathways_C4_CGN<-ggplot(data.frame(fgsaRes_pathways_C2_CP_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C4_CGN")
-plot_pathways_C4_CM<-ggplot(data.frame(fgsaRes_pathways_C4_CM_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C4_CM")
-plot_pathways_C5_MF<-ggplot(data.frame(fgsaRes_pathways_C5_MF_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C5_MF")
-plot_pathways_C5_BP<-ggplot(data.frame(fgsaRes_pathways_C5_BP_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C5_BP")
-plot_pathways_C5_CC<-ggplot(data.frame(fgsaRes_pathways_C5_CC_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C5_CC")
-plot_pathways_C6<-ggplot(data.frame(fgsaRes_pathways_C6_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C6")
-plot_pathways_C7<-ggplot(data.frame(fgsaRes_pathways_C7_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C7")
+####################################################################################################################################### 
+plot_pathways_C2_CP<-ggplot(data.frame(fgsaRes_pathways_C2_CP_all_stage), aes(x=substr(pathway,1,25), y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C2_CP")
+plot_pathways_C4_CGN<-ggplot(data.frame(fgsaRes_pathways_C2_CP_all_stage), aes(x=substr(pathway,1,25), y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C4_CGN")
+plot_pathways_C4_CM<-ggplot(data.frame(fgsaRes_pathways_C4_CM_all_stage), aes(x=substr(pathway,1,25), y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C4_CM")
+plot_pathways_C5_MF<-ggplot(data.frame(fgsaRes_pathways_C5_MF_all_stage), aes(x=substr(pathway,1,25), y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C5_MF")
+plot_pathways_C5_BP<-ggplot(data.frame(fgsaRes_pathways_C5_BP_all_stage), aes(x=substr(pathway,1,25), y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C5_BP")
+plot_pathways_C5_CC<-ggplot(data.frame(fgsaRes_pathways_C5_CC_all_stage), aes(x=substr(pathway,1,25), y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C5_CC")
+plot_pathways_C6<-ggplot(data.frame(fgsaRes_pathways_C6_all_stage), aes(x=substr(pathway,1,25), y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C6")
+plot_pathways_C7<-ggplot(data.frame(fgsaRes_pathways_C7_all_stage), aes(x=substr(pathway,1,25), y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C7")
 #######################################################################################################################################
 # FindClusters_resolution
-png(filename=paste(output_folder,"plotGseaTable_Stage_I.png",sep=""), width = 23, height = 16, res=600, units = "cm")
-	print( (TOP_stage_I,  stage_I_l2fc[which(stage_I_l2fc[names(stage_I_l2fc)!="NA"]>0)], fgsaRes_stage_I[fgsaRes_stage_I$pathway %in% TOP_stage_I,], gseaParam=0.5))
+png(filename=paste(output_folder,"plot_pathways_C2_CP.png",sep=""), width = 23, height = 16, res=600, units = "cm")
+	plot_pathways_C2_CP
 dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"plot_pathways_C4_CGN.png",sep=""), width = 23, height = 16, res=600, units = "cm")
+	plot_pathways_C4_CGN
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"plot_pathways_C4_CM.png",sep=""), width = 23, height = 16, res=600, units = "cm")
+	plot_pathways_C4_CM
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"plot_pathways_C5_MF.png",sep=""), width = 23, height = 16, res=600, units = "cm")
+	plot_pathways_C5_MF
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"plot_pathways_C5_BP.png",sep=""), width = 23, height = 16, res=600, units = "cm")
+	plot_pathways_C5_BP
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"plot_pathways_C5_CC.png",sep=""), width = 23, height = 16, res=600, units = "cm")
+	plot_pathways_C5_CC
+dev.off()	   
+# FindClusters_resolution
+png(filename=paste(output_folder,"plot_pathways_C6.png",sep=""), width = 23, height = 16, res=600, units = "cm")
+	plot_pathways_C6
+dev.off()	   
+# FindClusters_resolution
+png(filename=paste(output_folder,"plot_pathways_C7.png",sep=""), width = 23, height = 16, res=600, units = "cm")
+	plot_pathways_C7
+dev.off()	   	   
 #######################################################################################################################################
 write.xlsx(na.omit(gse_KEGG), "KEGG_PATHWAYS", file=paste(output_dir,"/clusters/kegg_pathways.xlsx",sep=""),append = FALSE) # where x is a data.frame with a Date column.
 #######################################################################################################################################
+plotGseaTable(pathways_C2_CP[fgsaRes_pathways_C2_CP_stage_I$pathway], stage_I_l2fc,              fgsaRes_pathways_C2_CP_stage_I, gseaParam=0.5)

@@ -103,6 +103,8 @@ pathways_C4_CM        <- msigdbr(species = "Homo sapiens", category = "C4", subc
 pathways_C5_MF        <- msigdbr(species = "Homo sapiens", category = "C5", subcategory="MF")
 pathways_C5_CC        <- msigdbr(species = "Homo sapiens", category = "C5", subcategory="CC")
 pathways_C5_BP        <- msigdbr(species = "Homo sapiens", category = "C5", subcategory="BP")
+pathways_C6           <- msigdbr(species = "Homo sapiens", category = "C6")
+pathways_C7           <- msigdbr(species = "Homo sapiens", category = "C7")
 
 
 # Split name of pathways
@@ -112,33 +114,170 @@ pathways_C4_CM <- split(as.character(pathways_C4_CM$entrez_gene), pathways_C4_CM
 pathways_C5_MF <- split(as.character(pathways_C5_MF$entrez_gene), pathways_C5_MF$gs_name)
 pathways_C5_CC <- split(as.character(pathways_C5_CC$entrez_gene), pathways_C5_CC$gs_name)
 pathways_C5_BP <- split(as.character(pathways_C5_BP$entrez_gene), pathways_C5_BP$gs_name)
+pathways_C6 <- split(as.character(pathways_C7$entrez_gene), pathways_C6$gs_name)
+pathways_C7 <- split(as.character(pathways_C7$entrez_gene), pathways_C7$gs_name)
 #######################################################################################################################################
 # Split name of pathways Stage I
 stage_I_l2fc<-genes_Stage_I$log2change
 names(stage_I_l2fc)<-df_expr_stage_I[genes_Stage_I$gene,"ENTREZID"]
+stage_I_l2fc<-stage_I_l2fc[which(!is.na(names(stage_I_l2fc)))]
 
 # Split name of pathways Stage II
 stage_II_l2fc<-genes_Stage_II$log2change
 names(stage_II_l2fc)<-df_expr_stage_II[genes_Stage_II$gene,"ENTREZID"]
+stage_II_l2fc<-stage_II_l2fc[which(!is.na(names(stage_II_l2fc)))]
 
 # Split name of pathways Stage III
 stage_III_l2fc<-genes_Stage_III$log2change
 names(stage_III_l2fc)<-df_expr_stage_III[genes_Stage_III$gene,"ENTREZID"]
+stage_III_l2fc<-stage_III_l2fc[which(!is.na(names(stage_III_l2fc)))]
 #######################################################################################################################################
-# Calculate fgsea
+# Calculate fgsea C2_CP
 fgsaRes_pathways_C2_CP_stage_I     <- fgsea(pathways_C2_CP, stage_I_l2fc, minSize=5, maxSize=500)
 fgsaRes_pathways_C2_CP_stage_II    <- fgsea(pathways_C2_CP, stage_II_l2fc, minSize=5, maxSize=500)
 fgsaRes_pathways_C2_CP_stage_III   <- fgsea(pathways_C2_CP, stage_III_l2fc, minSize=5, maxSize=500)
+
+# Calculate fgsea pathways_C4_CGN
+fgsaRes_pathways_C4_CGN_stage_I     <- fgsea(pathways_C4_CGN, stage_I_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C4_CGN_stage_II    <- fgsea(pathways_C4_CGN, stage_II_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C4_CGN_stage_III   <- fgsea(pathways_C4_CGN, stage_III_l2fc, minSize=5, maxSize=500)
+
+# Calculate fgsea pathways_C4_CGN
+fgsaRes_pathways_C4_CM_stage_I     <- fgsea(pathways_C4_CM, stage_I_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C4_CM_stage_II    <- fgsea(pathways_C4_CM, stage_II_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C4_CM_stage_III   <- fgsea(pathways_C4_CM, stage_III_l2fc, minSize=5, maxSize=500)
+
+# Calculate fgsea pathways_C4_CGN
+fgsaRes_pathways_C5_MF_stage_I     <- fgsea(pathways_C5_MF, stage_I_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C5_MF_stage_II    <- fgsea(pathways_C5_MF, stage_II_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C5_MF_stage_III   <- fgsea(pathways_C5_MF, stage_III_l2fc, minSize=5, maxSize=500)
+
+# Calculate fgsea pathways_C5_CC
+fgsaRes_pathways_C5_CC_stage_I     <- fgsea(pathways_C5_CC, stage_I_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C5_CC_stage_II    <- fgsea(pathways_C5_CC, stage_II_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C5_CC_stage_III   <- fgsea(pathways_C5_CC, stage_III_l2fc, minSize=5, maxSize=500)
+
+# Calculate fgsea pathways_C5_BP
+fgsaRes_pathways_C5_BP_stage_I     <- fgsea(pathways_C5_BP, stage_I_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C5_BP_stage_II    <- fgsea(pathways_C5_BP, stage_II_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C5_BP_stage_III   <- fgsea(pathways_C5_BP, stage_III_l2fc, minSize=5, maxSize=500)
+
+# Calculate fgsea pathways_C6
+fgsaRes_pathways_C6_stage_I     <- fgsea(pathways_C6, stage_I_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C6_stage_II    <- fgsea(pathways_C6, stage_II_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C6_stage_III   <- fgsea(pathways_C6, stage_III_l2fc, minSize=5, maxSize=500)
+
+# Calculate fgsea pathways_C7
+fgsaRes_pathways_C7_stage_I     <- fgsea(pathways_C7, stage_I_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C7_stage_II    <- fgsea(pathways_C7, stage_II_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C7_stage_III   <- fgsea(pathways_C7, stage_III_l2fc, minSize=5, maxSize=500)
 #######################################################################################################################################
 # Calculate fgsea
-TOP_stage_I        <- fgsaRes_stage_I[head(order(pval), n=25)][order(NES), pathway]
+fgsaRes_pathways_C2_CP_stage_I     <- fgsaRes_pathways_C2_CP_stage_I[head(order(padj), n=25)][order(NES), ]
+fgsaRes_pathways_C2_CP_stage_II    <- fgsaRes_pathways_C2_CP_stage_II[head(order(padj), n=25)][order(NES),] 
+fgsaRes_pathways_C2_CP_stage_III   <- fgsaRes_pathways_C2_CP_stage_III[head(order(padj), n=25)][order(NES),] 
+
+# Calculate fgsea pathways_C4_CGN
+fgsaRes_pathways_C4_CGN_stage_I     <- fgsaRes_pathways_C4_CGN_stage_I[head(order(padj), n=25)][order(NES), ]
+fgsaRes_pathways_C4_CGN_stage_II    <- fgsaRes_pathways_C4_CGN_stage_II[head(order(padj), n=25)][order(NES), ]
+fgsaRes_pathways_C4_CGN_stage_III   <- fgsaRes_pathways_C4_CGN_stage_III[head(order(padj), n=25)][order(NES), ]
+
+# Calculate fgsea pathways_C4_CM
+fgsaRes_pathways_C4_CM_stage_I     <- fgsaRes_pathways_C4_CM_stage_I[head(order(padj), n=25)][order(NES), ] 
+fgsaRes_pathways_C4_CM_stage_II    <- fgsaRes_pathways_C4_CM_stage_II[head(order(padj), n=25)][order(NES), ] 
+fgsaRes_pathways_C4_CM_stage_III   <- fgsaRes_pathways_C4_CM_stage_III[head(order(padj), n=25)][order(NES), ] 
+
+# Calculate fgsea pathways_C4_CGN
+fgsaRes_pathways_C5_MF_stage_I     <- fgsaRes_pathways_C5_MF_stage_I[head(order(padj), n=25)][order(NES), ]  
+fgsaRes_pathways_C5_MF_stage_II    <- fgsaRes_pathways_C5_MF_stage_II[head(order(padj), n=25)][order(NES), ]   
+fgsaRes_pathways_C5_MF_stage_III   <- fgsaRes_pathways_C5_MF_stage_III[head(order(padj), n=25)][order(NES), ]    
+
+# Calculate fgsea pathways_C5_CC
+fgsaRes_pathways_C5_CC_stage_I     <-  fgsaRes_pathways_C5_CC_stage_I[head(order(padj), n=25)][order(NES), ]  
+fgsaRes_pathways_C5_CC_stage_II    <-  fgsaRes_pathways_C5_CC_stage_II[head(order(padj), n=25)][order(NES), ]  
+fgsaRes_pathways_C5_CC_stage_III   <-  fgsaRes_pathways_C5_CC_stage_III[head(order(padj), n=25)][order(NES), ]  
+
+# Calculate fgsea pathways_C5_BP
+fgsaRes_pathways_C5_BP_stage_I     <-   fgsaRes_pathways_C5_BP_stage_I[head(order(padj), n=25)][order(NES), ]  
+fgsaRes_pathways_C5_BP_stage_II    <-   fgsaRes_pathways_C5_BP_stage_II[head(order(padj), n=25)][order(NES), ]  
+fgsaRes_pathways_C5_BP_stage_III   <-   fgsaRes_pathways_C5_BP_stage_III[head(order(padj), n=25)][order(NES), ]  
+
+# Calculate fgsea
+fgsaRes_pathways_C6_CP_stage_I     <- fgsaRes_pathways_C6_CP_stage_I[head(order(padj), n=25)][order(NES), ]
+fgsaRes_pathways_C6_CP_stage_II    <- fgsaRes_pathways_C6_CP_stage_II[head(order(padj), n=25)][order(NES),] 
+fgsaRes_pathways_C6_CP_stage_III   <- fgsaRes_pathways_C6_CP_stage_III[head(order(padj), n=25)][order(NES),] 
+
+# Calculate fgsea
+fgsaRes_pathways_C7_CP_stage_I     <- fgsaRes_pathways_C7_CP_stage_I[head(order(padj), n=25)][order(NES), ]
+fgsaRes_pathways_C7_CP_stage_II    <- fgsaRes_pathways_C7_CP_stage_II[head(order(padj), n=25)][order(NES),] 
+fgsaRes_pathways_C7_CP_stage_III   <- fgsaRes_pathways_C7_CP_stage_III[head(order(padj), n=25)][order(NES),] 
 #######################################################################################################################################
-write.xlsx(data.frame(fgsaRes_stage_I[fgsaRes_stage_I$pathway %in% TOP_stage_I,]), "STAGE_I", file=paste(output_dir,"/clusters/fgsaRes_stage_I.xlsx",sep=""),append = FALSE) # where x is a data.frame with a Date column.
-write.table(data.frame(data.frame(fgsaRes_stage_I[fgsaRes_stage_I$pathway %in% TOP_stage_I,])[,1:7]), file = paste(output_dir,"/clusters/fgsaRes_stage_I.tsv",sep=""), row.names=FALSE, sep="\t")
+fgsaRes_pathways_C2_CP_stage_I$Stage="Stage I"
+fgsaRes_pathways_C2_CP_stage_II$Stage="Stage II"
+fgsaRes_pathways_C2_CP_stage_III$Stage="Stage III"
+
+fgsaRes_pathways_C4_CGN_stage_I$Stage="Stage I"
+fgsaRes_pathways_C4_CGN_stage_II$Stage="Stage II"
+fgsaRes_pathways_C4_CGN_stage_III$Stage="Stage III"
+
+fgsaRes_pathways_C4_CM_stage_I$Stage="Stage I"
+fgsaRes_pathways_C4_CM_stage_II$Stage="Stage II"
+fgsaRes_pathways_C4_CM_stage_III$Stage="Stage III"
+
+fgsaRes_pathways_C5_MF_stage_I$Stage="Stage I"
+fgsaRes_pathways_C5_MF_stage_II$Stage="Stage II"
+fgsaRes_pathways_C5_MF_stage_III$Stage="Stage III"
+
+fgsaRes_pathways_C5_BP_stage_I$Stage="Stage I"
+fgsaRes_pathways_C5_BP_stage_II$Stage="Stage II"
+fgsaRes_pathways_C5_BP_stage_III$Stage="Stage III"
+
+fgsaRes_pathways_C5_CC_stage_I$Stage="Stage I"
+fgsaRes_pathways_C5_CC_stage_II$Stage="Stage II"
+fgsaRes_pathways_C5_CC_stage_III$Stage="Stage III"
+
+fgsaRes_pathways_C6_stage_I$Stage="Stage I"
+fgsaRes_pathways_C6_stage_II$Stage="Stage II"
+fgsaRes_pathways_C6_stage_III$Stage="Stage III"
+
+fgsaRes_pathways_C7_stage_I$Stage="Stage I"
+fgsaRes_pathways_C7_stage_II$Stage="Stage II"
+fgsaRes_pathways_C7_stage_III$Stage="Stage III"
+
+fgsaRes_pathways_C2_CP_all_stage <-rbind(fgsaRes_pathways_C2_CP_stage_I,fgsaRes_pathways_C2_CP_stage_II,fgsaRes_pathways_C2_CP_stage_III)
+fgsaRes_pathways_C4_CGN_all_stage<-rbind(fgsaRes_pathways_C4_CGN_stage_I,fgsaRes_pathways_C4_CGN_stage_II,fgsaRes_pathways_C4_CGN_stage_III)
+fgsaRes_pathways_C4_CM_all_stage<-rbind(fgsaRes_pathways_C4_CM_stage_I,fgsaRes_pathways_C4_CM_stage_II,fgsaRes_pathways_C4_CM_stage_III)
+fgsaRes_pathways_C5_MF_all_stage<-rbind(fgsaRes_pathways_C5_MF_stage_I,fgsaRes_pathways_C5_MF_stage_II,fgsaRes_pathways_C5_MF_stage_III)
+fgsaRes_pathways_C5_BP_all_stage<-rbind(fgsaRes_pathways_C5_BP_stage_I,fgsaRes_pathways_C5_BP_stage_II,fgsaRes_pathways_C5_BP_stage_III)
+fgsaRes_pathways_C5_CC_all_stage<-rbind(fgsaRes_pathways_C5_CC_stage_I,fgsaRes_pathways_C5_CC_stage_II,fgsaRes_pathways_C5_CC_stage_III)
+fgsaRes_pathways_C6_all_stage<-rbind(fgsaRes_pathways_C6_stage_I,fgsaRes_pathways_C6_stage_II,fgsaRes_pathways_C6_stage_III)
+fgsaRes_pathways_C7_all_stage<-rbind(fgsaRes_pathways_C7_stage_I,fgsaRes_pathways_C7_stage_II,fgsaRes_pathways_C7_stage_III)
+
+# Col names
+col_names<-c("pathway", "pval", "padj", "log2err", "ES", "NES", "size", "Stage")
+
+write.xlsx(data.frame(fgsaRes_pathways_C2_CP_all_stage)[,col_names], "fgsaRes_pathways_C2_CP_all_stage", file=paste(output_dir,"/clusters/fgsaRes_pathways_all.xlsx",sep=""),append = FALSE) # where x is a data.frame with a Date column.
+write.xlsx(data.frame(fgsaRes_pathways_C4_CGN_all_stage)[,col_names], "fgsaRes_pathways_C4_CGN_all_stage", file=paste(output_dir,"/clusters/fgsaRes_pathways_all.xlsx",sep=""),append = TRUE) # where x is a data.frame with a Date column.
+write.xlsx(data.frame(fgsaRes_pathways_C4_CM_all_stage)[,col_names], "fgsaRes_pathways_C4_CM_all_stage", file=paste(output_dir,"/clusters/fgsaRes_pathways_all.xlsx",sep=""),append = TRUE) # where x is a data.frame with a Date column.
+write.xlsx(data.frame(fgsaRes_pathways_C5_MF_all_stage)[,col_names], "fgsaRes_pathways_C5_MF_all_stage", file=paste(output_dir,"/clusters/fgsaRes_pathways_all.xlsx",sep=""),append = TRUE) # where x is a data.frame with a Date column.
+write.xlsx(data.frame(fgsaRes_pathways_C5_BP_all_stage[,col_names], "fgsaRes_pathways_C5_BP_all_stage", file=paste(output_dir,"/clusters/fgsaRes_pathways_all.xlsx",sep=""),append = TRUE) # where x is a data.frame with a Date column.
+write.xlsx(data.frame(fgsaRes_pathways_C5_CC_all_stage[,col_names], "fgsaRes_pathways_C5_CC_all_stage", file=paste(output_dir,"/clusters/fgsaRes_pathways_all.xlsx",sep=""),append = TRUE) # where x is a data.frame with a Date column.
+write.xlsx(data.frame(fgsaRes_pathways_C6_all_stage)[,col_names], "fgsaRes_pathways_C6_all_stage", file=paste(output_dir,"/clusters/fgsaRes_pathways_all.xlsx",sep=""),append = FALSE) # where x is a data.frame with a Date column.
+write.xlsx(data.frame(fgsaRes_pathways_C7_all_stage)[,col_names], "fgsaRes_pathways_C7_all_stage", file=paste(output_dir,"/clusters/fgsaRes_pathways_all.xlsx",sep=""),append = FALSE) # where x is a data.frame with a Date column.
+#######################################################################################################################################
+   
+plot_pathways_C2_CP<-ggplot(data.frame(fgsaRes_pathways_C2_CP_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C2_CP")
+plot_pathways_C4_CGN<-ggplot(data.frame(fgsaRes_pathways_C2_CP_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C4_CGN")
+plot_pathways_C4_CM<-ggplot(data.frame(fgsaRes_pathways_C4_CM_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C4_CM")
+plot_pathways_C5_MF<-ggplot(data.frame(fgsaRes_pathways_C5_MF_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C5_MF")
+plot_pathways_C5_BP<-ggplot(data.frame(fgsaRes_pathways_C5_BP_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C5_BP")
+plot_pathways_C5_CC<-ggplot(data.frame(fgsaRes_pathways_C5_CC_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C5_CC")
+plot_pathways_C6<-ggplot(data.frame(fgsaRes_pathways_C6_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C6")
+plot_pathways_C7<-ggplot(data.frame(fgsaRes_pathways_C7_all_stage), aes(x=pathway, y=-log(padj,10), label=pathway)) +geom_bar(stat='identity', aes(fill=padj), width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("pathways_C7")
 #######################################################################################################################################
 # FindClusters_resolution
 png(filename=paste(output_folder,"plotGseaTable_Stage_I.png",sep=""), width = 23, height = 16, res=600, units = "cm")
-	print(plotGseaTable(TOP_stage_I,  stage_I_l2fc[which(stage_I_l2fc[names(stage_I_l2fc)!="NA"]>0)], fgsaRes_stage_I[fgsaRes_stage_I$pathway %in% TOP_stage_I,], gseaParam=0.5))
+	print( (TOP_stage_I,  stage_I_l2fc[which(stage_I_l2fc[names(stage_I_l2fc)!="NA"]>0)], fgsaRes_stage_I[fgsaRes_stage_I$pathway %in% TOP_stage_I,], gseaParam=0.5))
 dev.off()
 #######################################################################################################################################
 write.xlsx(na.omit(gse_KEGG), "KEGG_PATHWAYS", file=paste(output_dir,"/clusters/kegg_pathways.xlsx",sep=""),append = FALSE) # where x is a data.frame with a Date column.

@@ -61,7 +61,7 @@ for (gene_row in rownames(df_expr_stage_II))
 	try(df_expr_stage_II[gene_row,"ENTREZID"]<-bitr(df_expr_stage_II[gene_row,"genes_id"], fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")[1,"ENTREZID"], silent = TRUE)
 }
 # Set rownames
-rownames(df_expr_stage_II)<-df_expr_stage_I$Genes
+rownames(df_expr_stage_II)<-df_expr_stage_II$Genes
 
 # Keep only first occcurance
 df_expr_stage_II <- df_expr_stage_II[match(unique(df_expr_stage_II$genes_id), df_expr_stage_II$genes_id),]

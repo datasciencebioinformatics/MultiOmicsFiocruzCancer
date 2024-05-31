@@ -52,22 +52,83 @@ expr_stage_I<-expr_stage_I[df_expr_stage_I$Genes,]
 # Set rownames on expr_stage_I
 rownames(expr_stage_I)<-df_expr_stage_I[rownames(expr_stage_I),"ENTREZID"]
 #######################################################################################################################################
+# Here I must check if the conversion is convering all the genes.
+# For each gene, add gene_id
+for (gene_row in rownames(df_expr_stage_II))
+{	
+	# Convert genes_id and ENTREZID
+	df_expr_stage_II[gene_row,"genes_id"]<-strsplit(df_expr_stage_II[gene_row,"Genes"], split = "\\.")[[1]][1]
+	try(df_expr_stage_II[gene_row,"ENTREZID"]<-bitr(df_expr_stage_II[gene_row,"genes_id"], fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")[1,"ENTREZID"], silent = TRUE)
+}
+# Set rownames
+rownames(df_expr_stage_II)<-df_expr_stage_I$Genes
+
+# Keep only first occcurance
+df_expr_stage_II <- df_expr_stage_II[match(unique(df_expr_stage_II$genes_id), df_expr_stage_II$genes_id),]
+df_expr_stage_II <- df_expr_stage_II[match(unique(df_expr_stage_II$ENTREZID), df_expr_stage_II$ENTREZID),]
+
+# Filter dataset
+expr_stage_II<-expr_stage_II[df_expr_stage_II$Genes,]
+
+# Set rownames on expr_stage_I
+rownames(expr_stage_II)<-df_expr_stage_II[rownames(expr_stage_II),"ENTREZID"]
+#######################################################################################################################################
+# Here I must check if the conversion is convering all the genes.
+# For each gene, add gene_id
+for (gene_row in rownames(df_expr_stage_III))
+{	
+	# Convert genes_id and ENTREZID
+	df_expr_stage_III[gene_row,"genes_id"]<-strsplit(df_expr_stage_III[gene_row,"Genes"], split = "\\.")[[1]][1]
+	try(df_expr_stage_III[gene_row,"ENTREZID"]<-bitr(df_expr_stage_III[gene_row,"genes_id"], fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")[1,"ENTREZID"], silent = TRUE)
+}
+# Set rownames
+rownames(df_expr_stage_III)<-df_expr_stage_III$Genes
+
+# Keep only first occcurance
+df_expr_stage_III <- df_expr_stage_III[match(unique(df_expr_stage_III$genes_id), df_expr_stage_III$genes_id),]
+df_expr_stage_III <- df_expr_stage_III[match(unique(df_expr_stage_III$ENTREZID), df_expr_stage_III$ENTREZID),]
+
+# Filter dataset
+expr_stage_III<-expr_stage_III[df_expr_stage_III$Genes,]
+
+# Set rownames on expr_stage_I
+rownames(expr_stage_III)<-df_expr_stage_III[rownames(expr_stage_III),"ENTREZID"]
+#######################################################################################################################################
 # Here I must check if if I use all the msigdbr databases or any in particulart
 # Run GSEA 
 # First, all msigdbr
-pathwaysDF <- msigdbr(species = "Homo sapiens", category = "C6")
+pathways_C2_CP        <- msigdbr(species = "Homo sapiens", category = "C2", subcategory="CP")
+pathways_C4_CGN       <- msigdbr(species = "Homo sapiens", category = "C4", subcategory="CGN")
+pathways_C4_CM        <- msigdbr(species = "Homo sapiens", category = "C4", subcategory="CM")
+pathways_C5_MF        <- msigdbr(species = "Homo sapiens", category = "C5", subcategory="MF")
+pathways_C5_CC        <- msigdbr(species = "Homo sapiens", category = "C5", subcategory="CC")
+pathways_C5_BP        <- msigdbr(species = "Homo sapiens", category = "C5", subcategory="BP")
+
 
 # Split name of pathways
-pathways <- split(as.character(pathwaysDF$entrez_gene), pathwaysDF$gs_name)
+pathways_C2_CP <- split(as.character(pathways_C2_CP$entrez_gene), pathways_C2_CP$gs_name)
+pathways_C4_CGN <- split(as.character(pathways_C4_CGN$entrez_gene), pathways_C4_CGN$gs_name)
+pathways_C4_CM <- split(as.character(pathways_C4_CM$entrez_gene), pathways_C4_CM$gs_name)
+pathways_C5_MF <- split(as.character(pathways_C5_MF$entrez_gene), pathways_C5_MF$gs_name)
+pathways_C5_CC <- split(as.character(pathways_C5_CC$entrez_gene), pathways_C5_CC$gs_name)
+pathways_C5_BP <- split(as.character(pathways_C5_BP$entrez_gene), pathways_C5_BP$gs_name)
 #######################################################################################################################################
-# Split name of pathways
+# Split name of pathways Stage I
 stage_I_l2fc<-genes_Stage_I$log2change
 names(stage_I_l2fc)<-df_expr_stage_I[genes_Stage_I$gene,"ENTREZID"]
-stage_I_l2fc<-stage_I_l2fc[which(stage_I_l2fc>0)]
-stage_I_l2fc<-stage_I_l2fc[which(names(stage_I_l2fc)!="<NA>")]
+
+# Split name of pathways Stage II
+stage_II_l2fc<-genes_Stage_II$log2change
+names(stage_II_l2fc)<-df_expr_stage_II[genes_Stage_II$gene,"ENTREZID"]
+
+# Split name of pathways Stage III
+stage_III_l2fc<-genes_Stage_III$log2change
+names(stage_III_l2fc)<-df_expr_stage_III[genes_Stage_III$gene,"ENTREZID"]
 #######################################################################################################################################
 # Calculate fgsea
-fgsaRes_stage_I        <- fgsea(pathways, stage_I_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C2_CP_stage_I     <- fgsea(pathways_C2_CP, stage_I_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C2_CP_stage_II    <- fgsea(pathways_C2_CP, stage_II_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C2_CP_stage_III   <- fgsea(pathways_C2_CP, stage_III_l2fc, minSize=5, maxSize=500)
 #######################################################################################################################################
 # Calculate fgsea
 TOP_stage_I        <- fgsaRes_stage_I[head(order(pval), n=25)][order(NES), pathway]

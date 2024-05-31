@@ -310,3 +310,10 @@ dev.off()
 write.xlsx(na.omit(gse_KEGG), "KEGG_PATHWAYS", file=paste(output_dir,"/clusters/kegg_pathways.xlsx",sep=""),append = FALSE) # where x is a data.frame with a Date column.
 #######################################################################################################################################
 plotGseaTable(pathways_C2_CP[fgsaRes_pathways_C2_CP_stage_I$pathway], stage_I_l2fc,              fgsaRes_pathways_C2_CP_stage_I, gseaParam=0.5)
+	   
+
+	   
+
+	   
+
+	   

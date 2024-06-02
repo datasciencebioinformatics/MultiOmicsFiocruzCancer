@@ -310,11 +310,3 @@ dev.off()
 #######################################################################################################################################
 plotGseaTable(pathways_C2_CP[fgsaRes_pathways_C2_CP_stage_I$pathway], stage_I_l2fc,              fgsaRes_pathways_C2_CP_stage_I, gseaParam=0.5)  
 #######################################################################################################################################
-fgsaRes_pathways_C2_CP_all_stage$Database<-"C2_CP"
-fgsaRes_pathways_C4_CGN_all_stage$Database<-"C4_CGN"
-fgsaRes_pathways_C4_CM_all_stage$Database<-"C4_CM"
-fgsaRes_pathways_C5_MF_all_stage$Database<-"C5_MF"
-fgsaRes_pathways_C5_BP_all_stage$Database<-"C5_BP"
-fgsaRes_pathways_C5_CC_all_stage$Database<-"C5_CC"
-fgsaRes_pathways_C6_all_stage$Database<-"C6"
-fgsaRes_pathways_C7_all_stage$Database<-"C7"

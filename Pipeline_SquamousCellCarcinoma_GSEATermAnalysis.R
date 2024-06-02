@@ -133,44 +133,44 @@ names(stage_III_l2fc)<-df_expr_stage_III[genes_Stage_III$gene,"ENTREZID"]
 stage_III_l2fc<-stage_III_l2fc[which(!is.na(names(stage_III_l2fc)))]
 #######################################################################################################################################
 # Calculate fgsea C2_CP
-fgsaRes_pathways_C2_CP_stage_I     <- fgsea(pathways_C2_CP, stage_I_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C2_CP_stage_II    <- fgsea(pathways_C2_CP, stage_II_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C2_CP_stage_III   <- fgsea(pathways_C2_CP, stage_III_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C2_CP_stage_I     <- fgsea(pathways_C2_CP, stage_I_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C2_CP_stage_II    <- fgsea(pathways_C2_CP, stage_II_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C2_CP_stage_III   <- fgsea(pathways_C2_CP, stage_III_l2fc, minSize=15, maxSize=500)
 
 # Calculate fgsea pathways_C4_CGN
-fgsaRes_pathways_C4_CGN_stage_I     <- fgsea(pathways_C4_CGN, stage_I_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C4_CGN_stage_II    <- fgsea(pathways_C4_CGN, stage_II_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C4_CGN_stage_III   <- fgsea(pathways_C4_CGN, stage_III_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C4_CGN_stage_I     <- fgsea(pathways_C4_CGN, stage_I_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C4_CGN_stage_II    <- fgsea(pathways_C4_CGN, stage_II_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C4_CGN_stage_III   <- fgsea(pathways_C4_CGN, stage_III_l2fc, minSize=15, maxSize=500)
 
 # Calculate fgsea pathways_C4_CGN
-fgsaRes_pathways_C4_CM_stage_I     <- fgsea(pathways_C4_CM, stage_I_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C4_CM_stage_II    <- fgsea(pathways_C4_CM, stage_II_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C4_CM_stage_III   <- fgsea(pathways_C4_CM, stage_III_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C4_CM_stage_I     <- fgsea(pathways_C4_CM, stage_I_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C4_CM_stage_II    <- fgsea(pathways_C4_CM, stage_II_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C4_CM_stage_III   <- fgsea(pathways_C4_CM, stage_III_l2fc, minSize=15, maxSize=500)
 
 # Calculate fgsea pathways_C4_CGN
-fgsaRes_pathways_C5_MF_stage_I     <- fgsea(pathways_C5_MF, stage_I_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C5_MF_stage_II    <- fgsea(pathways_C5_MF, stage_II_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C5_MF_stage_III   <- fgsea(pathways_C5_MF, stage_III_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C5_MF_stage_I     <- fgsea(pathways_C5_MF, stage_I_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C5_MF_stage_II    <- fgsea(pathways_C5_MF, stage_II_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C5_MF_stage_III   <- fgsea(pathways_C5_MF, stage_III_l2fc, minSize=15, maxSize=500)
 
 # Calculate fgsea pathways_C5_CC
-fgsaRes_pathways_C5_CC_stage_I     <- fgsea(pathways_C5_CC, stage_I_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C5_CC_stage_II    <- fgsea(pathways_C5_CC, stage_II_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C5_CC_stage_III   <- fgsea(pathways_C5_CC, stage_III_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C5_CC_stage_I     <- fgsea(pathways_C5_CC, stage_I_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C5_CC_stage_II    <- fgsea(pathways_C5_CC, stage_II_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C5_CC_stage_III   <- fgsea(pathways_C5_CC, stage_III_l2fc, minSize=15, maxSize=500)
 
 # Calculate fgsea pathways_C5_BP
-fgsaRes_pathways_C5_BP_stage_I     <- fgsea(pathways_C5_BP, stage_I_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C5_BP_stage_II    <- fgsea(pathways_C5_BP, stage_II_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C5_BP_stage_III   <- fgsea(pathways_C5_BP, stage_III_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C5_BP_stage_I     <- fgsea(pathways_C5_BP, stage_I_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C5_BP_stage_II    <- fgsea(pathways_C5_BP, stage_II_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C5_BP_stage_III   <- fgsea(pathways_C5_BP, stage_III_l2fc, minSize=15, maxSize=500)
 
 # Calculate fgsea pathways_C6
-fgsaRes_pathways_C6_stage_I     <- fgsea(pathways_C6, stage_I_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C6_stage_II    <- fgsea(pathways_C6, stage_II_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C6_stage_III   <- fgsea(pathways_C6, stage_III_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C6_stage_I     <- fgsea(pathways_C6, stage_I_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C6_stage_II    <- fgsea(pathways_C6, stage_II_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C6_stage_III   <- fgsea(pathways_C6, stage_III_l2fc, minSize=15, maxSize=500)
 
 # Calculate fgsea pathways_C7
-fgsaRes_pathways_C7_stage_I     <- fgsea(pathways_C7, stage_I_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C7_stage_II    <- fgsea(pathways_C7, stage_II_l2fc, minSize=5, maxSize=500)
-fgsaRes_pathways_C7_stage_III   <- fgsea(pathways_C7, stage_III_l2fc, minSize=5, maxSize=500)
+fgsaRes_pathways_C7_stage_I     <- fgsea(pathways_C7, stage_I_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C7_stage_II    <- fgsea(pathways_C7, stage_II_l2fc, minSize=15, maxSize=500)
+fgsaRes_pathways_C7_stage_III   <- fgsea(pathways_C7, stage_III_l2fc, minSize=15, maxSize=500)
 #######################################################################################################################################
 # Calculate fgsea
 # Calculate fgsea

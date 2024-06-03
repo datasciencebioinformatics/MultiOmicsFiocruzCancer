@@ -97,27 +97,6 @@ expr_stage_III<-expr_stage_III[df_expr_stage_III$Genes,]
 # Set rownames on expr_stage_I
 rownames(expr_stage_III)<-df_expr_stage_III[rownames(expr_stage_III),"ENTREZID"]
 #######################################################################################################################################
-# Here I must check if the conversion is convering all the genes.
-# For each gene, add gene_id
-for (gene_row in rownames(unstranded_data_filter))
-{	
-	# Convert genes_id and ENTREZID
-	df_expr_all[gene_row,"genes_id"]<-strsplit(df_expr_all[gene_row,"Genes"], split = "\\.")[[1]][1]
-	try(df_expr_all[gene_row,"ENTREZID"]<-bitr(df_expr_all[gene_row,"genes_id"], fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")[1,"ENTREZID"], silent = TRUE)
-}
-# Set rownames
-rownames(df_expr_all)<-df_expr_all$Genes
-
-# Keep only first occcurance
-df_expr_all <- df_expr_all[match(unique(df_expr_all$genes_id), df_expr_all$genes_id),]
-df_expr_all <- df_expr_all[match(unique(df_expr_all$ENTREZID), df_expr_all$ENTREZID),]
-
-# Filter dataset
-expr_all<-expr_all[df_expr_all$Genes,]
-
-# Set rownames on expr_stage_I
-rownames(expr_all)<-df_expr_all[rownames(expr_all),"ENTREZID"]
-
 #######################################################################################################################################
 # Here I must check if if I use all the msigdbr databases or any in particulart
 # Run GSEA 
@@ -166,27 +145,43 @@ plot_MF<-ggplot(clusterProfiler_MF_Stage, aes(x=Description, y=Count, label=Coun
 #######################################################################################################################################
 # GroupGO
 # CC
-clusterProfiler_CC_Stage_I   <- enrichGO(gene     = df_expr_stage_I$ENTREZID, universe=, OrgDb    = org.Hs.eg.db, pAdjustMethod = "BH",   pvalueCutoff  = 0.01,qvalueCutoff  = 0.05,  readable = TRUE))@result
-clusterProfiler_CC_Stage_II  <- enrichGO(gene     = df_expr_stage_II$ENTREZID, OrgDb    = org.Hs.eg.db, ont      = "CC", level    = 2,   readable = TRUE)@result
-clusterProfiler_CC_Stage_III <- enrichGO(gene     = df_expr_stage_III$ENTREZID, OrgDb    = org.Hs.eg.db, ont      = "CC", level    = 2,   readable = TRUE)@result
+clusterProfiler_CC_Stage_I     <- enrichGO(gene     = df_expr_stage_I$ENTREZID,universe=genes_ids_all$ENTREZ, OrgDb    = org.Hs.eg.db, pAdjustMethod = "BH",   pvalueCutoff  = 0.011, qvalueCutoff  = 0.01,  readable = TRUE,ont      = "CC")@result
+clusterProfiler_CC_Stage_II    <- enrichGO(gene     = df_expr_stage_II$ENTREZID,universe=genes_ids_all$ENTREZ, OrgDb    = org.Hs.eg.db, pAdjustMethod = "BH",   pvalueCutoff  = 0.011, qvalueCutoff  = 0.01,  readable = TRUE,ont      = "CC")@result
+clusterProfiler_CC_Stage_III   <- enrichGO(gene     = df_expr_stage_III$ENTREZID,universe=genes_ids_all$ENTREZ, OrgDb    = org.Hs.eg.db, pAdjustMethod = "BH",   pvalueCutoff  = 0.011, qvalueCutoff  = 0.01,  readable = TRUE,ont      = "CC")@result
+
+clusterProfiler_CC_Stage_I$Stage<-"Stage I"
+clusterProfiler_CC_Stage_II$Stage<-"Stage II"
+clusterProfiler_CC_Stage_III$Stage<-"Stage III"
 
 # MF
-clusterProfiler_MF_Stage_I   <- groupGO(gene     = df_expr_stage_I$ENTREZID, OrgDb    = org.Hs.eg.db, ont      = "MF", level    = 2,   readable = TRUE)@result
-clusterProfiler_MF_Stage_II  <- groupGO(gene     = df_expr_stage_II$ENTREZID, OrgDb    = org.Hs.eg.db, ont      = "MF", level    = 2,   readable = TRUE)@result
-clusterProfiler_MF_Stage_III <- groupGO(gene     = df_expr_stage_III$ENTREZID, OrgDb    = org.Hs.eg.db, ont      = "MF", level    = 2,   readable = TRUE)@result
+clusterProfiler_MF_Stage_I     <- enrichGO(gene     = df_expr_stage_I$ENTREZID,universe=genes_ids_all$ENTREZ, OrgDb    = org.Hs.eg.db, pAdjustMethod = "BH",   pvalueCutoff  = 0.011, qvalueCutoff  = 0.01,  readable = TRUE,ont      = "MF")@result
+clusterProfiler_MF_Stage_II    <- enrichGO(gene     = df_expr_stage_II$ENTREZID,universe=genes_ids_all$ENTREZ, OrgDb    = org.Hs.eg.db, pAdjustMethod = "BH",   pvalueCutoff  = 0.011, qvalueCutoff  = 0.01,  readable = TRUE,ont      = "MF")@result
+clusterProfiler_MF_Stage_III   <- enrichGO(gene     = df_expr_stage_III$ENTREZID,universe=genes_ids_all$ENTREZ, OrgDb    = org.Hs.eg.db, pAdjustMethod = "BH",   pvalueCutoff  = 0.011, qvalueCutoff  = 0.01,  readable = TRUE,ont      = "MF")@result
+
+clusterProfiler_MF_Stage_I$Stage<-"Stage I"
+clusterProfiler_MF_Stage_II$Stage<-"Stage II"
+clusterProfiler_MF_Stage_III$Stage<-"Stage III"
 
 # BP
-clusterProfiler_BP_Stage_I   <- groupGO(gene     = df_expr_stage_I$ENTREZID, OrgDb    = org.Hs.eg.db, ont      = "BP", level    = 2,   readable = TRUE)@result
-clusterProfiler_BP_Stage_II  <- groupGO(gene     = df_expr_stage_II$ENTREZID, OrgDb    = org.Hs.eg.db, ont      = "BP", level    = 2,   readable = TRUE)@result
-clusterProfiler_BP_Stage_III <- groupGO(gene     = df_expr_stage_III$ENTREZID, OrgDb    = org.Hs.eg.db, ont      = "BP", level    = 2,   readable = TRUE)@result
+clusterProfiler_BP_Stage_I     <- enrichGO(gene     = df_expr_stage_I$ENTREZID,universe=genes_ids_all$ENTREZ, OrgDb    = org.Hs.eg.db, pAdjustMethod = "BH",   pvalueCutoff  = 0.011, qvalueCutoff  = 0.01,  readable = TRUE,ont      = "BP")@result
+clusterProfiler_BP_Stage_II    <- enrichGO(gene     = df_expr_stage_II$ENTREZID,universe=genes_ids_all$ENTREZ, OrgDb    = org.Hs.eg.db, pAdjustMethod = "BH",   pvalueCutoff  = 0.011, qvalueCutoff  = 0.01,  readable = TRUE,ont      = "BP")@result
+clusterProfiler_BP_Stage_III   <- enrichGO(gene     = df_expr_stage_III$ENTREZID,universe=genes_ids_all$ENTREZ, OrgDb    = org.Hs.eg.db, pAdjustMethod = "BH",   pvalueCutoff  = 0.011, qvalueCutoff  = 0.01,  readable = TRUE,ont      = "BP")@result
 
 
+clusterProfiler_BP_Stage_I$Stage<-"Stage I"
+clusterProfiler_CC_Stage_II$Stage<-"Stage II"
+clusterProfiler_MF_Stage_III$Stage<-"Stage III"
+#######################################################################################################################################
+# Biological process
+gse_BP_Stages<-na.omit(data.frame(rbind(clusterProfiler_BP_Stage_I,clusterProfiler_BP_Stage_II,clusterProfiler_BP_Stage_III)))
 
-ego <- enrichGO(gene          = gene,
-                universe      = names(geneList),
-                OrgDb         = org.Hs.eg.db,
-                ont           = "CC",
-                pAdjustMethod = "BH",
-                pvalueCutoff  = 0.01,
-                qvalueCutoff  = 0.05,
-        readable      = TRUE)
+# Celular component
+gse_CC_Stages<-na.omit(data.frame(rbind(clusterProfiler_CC_Stage_I,clusterProfiler_CC_Stage_II,clusterProfiler_CC_Stage_III)))
+
+# Celular component
+gse_MF_Stages<-na.omit(data.frame(rbind(clusterProfiler_MF_Stage_I,clusterProfiler_MF_Stage_II,clusterProfiler_MF_Stage_III)))
+#######################################################################################################################################
+plot_cc<-ggplot(gse_CC_Stages, aes(x=Description, y=Count, label=Count)) +geom_bar(stat='identity', width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("Celular component")
+plot_bp<-ggplot(gse_BP_Stages, aes(x=Description, y=Count, label=Count)) +geom_bar(stat='identity', width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("Biological process")
+plot_mf<-ggplot(gse_MF_Stages, aes(x=Description, y=Count, label=Count)) +geom_bar(stat='identity', width=.5) + coord_flip() + facet_grid(cols = vars(Stage))+ theme_bw() + ggtitle("Molecular function")
+#######################################################################################################################################

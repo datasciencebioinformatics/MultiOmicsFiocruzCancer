@@ -12,13 +12,13 @@ interactome_network_Stage_I        <-read.table(file = interactome_network_Stage
 interactome_network_Stage_II       <-read.table(file = interactome_network_Stage_II, sep = '\t', header = TRUE,fill=TRUE)    #
 interactome_network_Stage_III      <-read.table(file = interactome_network_Stage_III, sep = '\t', header = TRUE,fill=TRUE)    #
 #######################################################################################################################################
-file_unique_gene_stages_I    <-"/home/felipe/Documentos/LungPortal/output/threhold_RPKM_3_threhold_log2foldchange_1.0_FDR_0.05_threhold_correlation_0.99/DE_GenesPerStageMeansFromPairedUp_unique_stage_I.tsv"
-file_unique_gene_stages_II   <-"/home/felipe/Documentos/LungPortal/output/threhold_RPKM_3_threhold_log2foldchange_1.0_FDR_0.05_threhold_correlation_0.99/DE_GenesPerStageMeansFromPairedUp_unique_stage_II.tsv"
-file_unique_gene_stages_III  <-"/home/felipe/Documentos/LungPortal/output/threhold_RPKM_3_threhold_log2foldchange_1.0_FDR_0.05_threhold_correlation_0.99/DE_GenesPerStageMeansFromPairedUp_unique_stage_III.tsv"
+file_unique_gene_stages_I    <- paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_I",".tsv",sep="")
+file_unique_gene_stages_II   <- paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_II",".tsv",sep="")
+file_unique_gene_stages_III  <- paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_III",".tsv",sep="")
 
-file_gene_stages_I    <-"/home/felipe/Documentos/LungPortal/output/threhold_RPKM_3_threhold_log2foldchange_1.0_FDR_0.05_threhold_correlation_0.99/DE_GenesPerStageMeansFromPairedUp_Stage_sample_stage_I.tsv"
-file_gene_stages_II   <-"/home/felipe/Documentos/LungPortal/output/threhold_RPKM_3_threhold_log2foldchange_1.0_FDR_0.05_threhold_correlation_0.99/DE_GenesPerStageMeansFromPairedUp_Stage_sample_stage_II.tsv"
-file_gene_stages_III  <-"/home/felipe/Documentos/LungPortal/output/threhold_RPKM_3_threhold_log2foldchange_1.0_FDR_0.05_threhold_correlation_0.99/DE_GenesPerStageMeansFromPairedUp_Stage_sample_stage_III.tsv"
+file_gene_stages_I    <-paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_I",".tsv",sep="")
+file_gene_stages_II   <-paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_II",".tsv",sep="")
+file_gene_stages_III  <-paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_III",".tsv",sep="")
 
 genes_Stage_I                <-read.table(file = file_gene_stages_I, sep = '\t', header = TRUE,fill=TRUE)    #
 genes_Stage_II               <-read.table(file = file_gene_stages_II, sep = '\t', header = TRUE,fill=TRUE)    #
@@ -35,11 +35,6 @@ merge_interactome_gene_symbol <- merge_interactome_gene_symbol[match(unique(merg
 rownames(merge_interactome_gene_symbol)<-merge_interactome_gene_symbol$gene_id
 
 # Converted gene_ids
-intractome_network_Stage_I    <-data.frame(Gene1=merge_interactome_gene_symbol[interactome_network_Stage_I$Gene1,"gene_symbol"],Gene2=merge_interactome_gene_symbol[interactome_network_Stage_I$Gene2,"gene_symbol"])
-intractome_network_Stage_II   <-data.frame(Gene1=merge_interactome_gene_symbol[interactome_network_Stage_II$Gene1,"gene_symbol"],Gene2=merge_interactome_gene_symbol[interactome_network_Stage_II$Gene2,"gene_symbol"])
-intractome_network_Stage_III  <-data.frame(Gene1=merge_interactome_gene_symbol[interactome_network_Stage_III$Gene1,"gene_symbol"],Gene2=merge_interactome_gene_symbol[interactome_network_Stage_III$Gene2,"gene_symbol"])
-
-# Converted gene_ids
 symbols_unique_Stage_I        <-merge_interactome_gene_symbol[genes_unique_Stage_I$gene,"gene_symbol"]
 symbols_unique_Stage_II       <-merge_interactome_gene_symbol[genes_unique_Stage_II$gene,"gene_symbol"]
 symbols_unique_Stage_III      <-merge_interactome_gene_symbol[genes_unique_Stage_III$gene,"gene_symbol"]
@@ -49,16 +44,6 @@ symbols_Stage_I        <-merge_interactome_gene_symbol[genes_Stage_I$gene,"gene_
 symbols_Stage_II       <-merge_interactome_gene_symbol[genes_Stage_II$gene,"gene_symbol"]
 symbols_Stage_III      <-merge_interactome_gene_symbol[genes_Stage_III$gene,"gene_symbol"]
 #######################################################################################################################################
-# Read igraph
-interactome_network_Stage_I<-graph_from_data_frame(interactome_network_Stage_I, directed = FALSE, vertices = NULL)
-interactome_network_Stage_II<-graph_from_data_frame(interactome_network_Stage_II, directed = FALSE, vertices = NULL)
-interactome_network_Stage_III<-graph_from_data_frame(interactome_network_Stage_III, directed = FALSE, vertices = NULL)
-
-# greedy method (hiearchical, fast method)
-cluster_Stage_I = cluster_fast_greedy(interactome_network_Stage_I)
-cluster_Stage_II = cluster_fast_greedy(interactome_network_Stage_II)
-cluster_Stage_III = cluster_fast_greedy(interactome_network_Stage_III)
-
 ########################################################################################################################################
 # gene_id
 genes_Stage_I$gene_id                   <-""
@@ -87,25 +72,23 @@ genes_ids_stage_III<-c()
 genes_ids_all<-c()
 
 # For each gene, add gene_id
-for (gene_row in rownames(genes_Stage_I))
+for (gene_row in rownames(genes_unique_Stage_I))
 {	
 	# Store gene id in the vector
-	genes_Stage_I[gene_row,"gene_id"]<-strsplit(genes_Stage_I[gene_row,"gene"], split = "\\.")[[1]][1]
+	genes_unique_Stage_I[gene_row,"gene_id"]<-strsplit(genes_unique_Stage_I[gene_row,"gene"], split = "\\.")[[1]][1]
 	
 }
 # For each gene, add gene_id
-for (gene_row in rownames(genes_Stage_II))
+for (gene_row in rownames(genes_unique_Stage_II))
 {	
 	# Store gene id in the vector
-	genes_Stage_II[gene_row,"gene_id"]<-strsplit(genes_Stage_II[gene_row,"gene"], split = "\\.")[[1]][1]
-	
+	genes_unique_Stage_II[gene_row,"gene_id"]<-strsplit(genes_unique_Stage_II[gene_row,"gene"], split = "\\.")[[1]][1]	
 }
 # For each gene, add gene_id
-for (gene_row in rownames(genes_Stage_III))
+for (gene_row in rownames(genes_unique_Stage_III))
 {	
 	# Store gene id in the vector
-	genes_Stage_III[gene_row,"gene_id"]<-strsplit(genes_Stage_III[gene_row,"gene"], split = "\\.")[[1]][1]
-	
+	genes_unique_Stage_III[gene_row,"gene_id"]<-strsplit(genes_unique_Stage_III[gene_row,"gene"], split = "\\.")[[1]][1]	
 }
 # For each gene, add gene_id
 for (gene_row in rownames(log2change_tumor_control))
@@ -115,9 +98,9 @@ for (gene_row in rownames(log2change_tumor_control))
 }
 ########################################################################################################################################
 # ids_stage_I
-ids_stage_I   <-bitr(genes_Stage_I$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
-ids_stage_II  <-bitr(genes_Stage_II$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
-ids_stage_III  <-bitr(genes_Stage_III$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
+ids_stage_I   <-bitr(genes_unique_Stage_I$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
+ids_stage_II  <-bitr(genes_unique_Stage_II$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
+ids_stage_III  <-bitr(genes_unique_Stage_III$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
 genes_ids_all  <-bitr(log2change_tumor_control$gene_id, fromType = "ENSEMBL", toType = "ENTREZID", OrgDb="org.Hs.eg.db")
 
 colnames(ids_stage_I)<-c("gene_id","ENTREZID")
@@ -146,13 +129,27 @@ names(vector_stage_III)<-genes_Stage_III$log2change
 vector_all<-genes_ALL$ENTREZID
 names(vector_all)<-genes_ALL$log2change
 
-gse_ALL_Stage_I  <- enrichGO(gene = vector_stage_I, universe = vector_all,  OrgDb  = org.Hs.eg.db,    ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
-gse_ALL_Stage_II <- enrichGO(gene = vector_stage_II, universe = vector_all,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
-gse_ALL_Stage_III <- enrichGO(gene = vector_stage_III, universe = vector_all,  OrgDb  = org.Hs.eg.db, ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)@result
+gse_ALL_Stage_I  <- enrichGO(gene = ids_stage_I$ENTREZ, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,    ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)
+gse_ALL_Stage_II <- enrichGO(gene = ids_stage_II$ENTREZ, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db,   ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)
+gse_ALL_Stage_III <- enrichGO(gene = ids_stage_III$ENTREZ, universe = genes_ids_all$ENTREZID,  OrgDb  = org.Hs.eg.db, ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE)
 
 gse_ALL_Stage_I$Stage<-"Stage I"
 gse_ALL_Stage_II$Stage<-"Stage II"
 gse_ALL_Stage_III$Stage<-"Stage III"
+
+# FindClusters_resolution
+png(filename=paste(output_folder,"Plot_cnept_plot_Stage_I.png",sep=""), width = 15, height = 15, res=600, units = "cm")
+	cnetplot(gse_ALL_Stage_I, showCategory = 5, layout = "kk") + ggtitle("Stage I") 
+dev.off()
+
+# FindClusters_resolution
+png(filename=paste(output_folder,"Plot_cnept_plot_Stage_II.png",sep=""), width = 15, height = 15, res=600, units = "cm")
+	cnetplot(gse_ALL_Stage_II, showCategory = 5, layout = "kk") + ggtitle("Stage II") 
+dev.off()
+
+
+
+
 
 gse_MF_Stage_I   <-gse_ALL_Stage_I[gse_ALL_Stage_I$ONTOLOGY=="MF",]
 gse_MF_Stage_II  <-gse_ALL_Stage_II[gse_ALL_Stage_II$ONTOLOGY=="MF",]

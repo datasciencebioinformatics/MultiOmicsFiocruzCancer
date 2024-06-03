@@ -74,3 +74,7 @@ png(filename=paste(output_folder,"Plot_cnept_plot_Stage_III.png",sep=""), width 
 	cnetplot(gse_ALL_Stage_III, showCategory = 10, layout = "kk") + ggtitle("Stage III") 
 dev.off()
 ########################################################################################################################################
+write.xlsx(x=genes_Stage_I,file=paste(output_dir,"unique_genes",".xlsx",sep=""), sheet="Stage I")
+write.xlsx(x=genes_Stage_II,file=paste(output_dir,"unique_genes",".xlsx",sep=""), sheet="Stage II")
+write.xlsx(x=genes_Stage_III,file=paste(output_dir,"unique_genes",".xlsx",sep=""), sheet="Stage III")
+

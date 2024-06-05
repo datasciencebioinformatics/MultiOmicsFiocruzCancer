@@ -56,10 +56,13 @@ colnames(ids_stage_III) <-c("gene_id","ENTREZID")
 genes_Stage_I  <-merge(genes_unique_Stage_I,ids_stage_I,by="gene_id")
 genes_Stage_II <-merge(genes_unique_Stage_II,ids_stage_II,by="gene_id")
 genes_Stage_III<-merge(genes_unique_Stage_III,ids_stage_III,by="gene_id")
+
+genes_Stage_ALL<-rbind(genes_Stage_I,genes_Stage_II,genes_Stage_III)
 ########################################################################################################################################
 gse_ALL_Stage_I    <- enrichGO(gene = ids_stage_I$ENTREZ,  OrgDb  = org.Hs.eg.db,      ont = "ALL", pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3)
-gse_ALL_Stage_II   <- enrichGO(gene = ids_stage_II$ENTREZ, OrgDb  = org.Hs.eg.db,     ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3)
-gse_ALL_Stage_III  <- enrichGO(gene = ids_stage_III$ENTREZ,OrgDb  = org.Hs.eg.db,    ont = "ALL",   pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3)
+gse_ALL_Stage_II   <- enrichGO(gene = ids_stage_II$ENTREZ, OrgDb  = org.Hs.eg.db,      ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3)
+gse_ALL_Stage_III  <- enrichGO(gene = ids_stage_III$ENTREZ,OrgDb  = org.Hs.eg.db,      ont = "ALL",   pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3)
+genes_Stage_ALL    <- enrichGO(gene = genes_Stage_ALL$ENTREZ,OrgDb  = org.Hs.eg.db,    ont = "ALL",   pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3)
 ########################################################################################################################################
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_cnept_plot_Stage_I.png",sep=""), width = 20, height = 20, res=600, units = "cm")
@@ -73,6 +76,12 @@ dev.off()
 png(filename=paste(output_folder,"Plot_cnept_plot_Stage_III.png",sep=""), width = 20, height = 20, res=600, units = "cm")
 	cnetplot(gse_ALL_Stage_III, showCategory = 10, layout = "kk") + ggtitle("Stage III") 
 dev.off()
+
+# FindClusters_resolution
+png(filename=paste(output_folder,"Plot_cnept_genes_Stage_ALL.png",sep=""), width = 30, height = 30, res=600, units = "cm")
+	cnetplot(genes_Stage_ALL, showCategory = 10, layout = "kk",color_gene = "black") + ggtitle("All stages") 
+dev.off()
+
 ########################################################################################################################################
 write.xlsx(x=genes_Stage_I,file=paste(output_dir,"unique_genes",".xlsx",sep=""), sheet="Stage I")
 write.xlsx(x=genes_Stage_II,file=paste(output_dir,"unique_genes",".xlsx",sep=""), sheet="Stage II")

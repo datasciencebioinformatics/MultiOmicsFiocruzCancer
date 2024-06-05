@@ -64,17 +64,24 @@ gse_ALL_Stage_II   <- enrichGO(gene = ids_stage_II$ENTREZ, OrgDb  = org.Hs.eg.db
 gse_ALL_Stage_III  <- enrichGO(gene = ids_stage_III$ENTREZ,OrgDb  = org.Hs.eg.db,      ont = "ALL",   pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3)
 genes_Stage_ALL    <- enrichGO(gene = genes_Stage_ALL$ENTREZ,OrgDb  = org.Hs.eg.db,    ont = "ALL",   pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3)
 ########################################################################################################################################
+gse_ALL_Stage_I    <- enrichKEGG(gene = ids_stage_I$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
+gse_ALL_Stage_II   <- enrichKEGG(gene = ids_stage_II$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
+gse_ALL_Stage_III  <- enrichKEGG(gene = ids_stage_III$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
+genes_Stage_ALL    <- enrichKEGG(gene = genes_Stage_ALL$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
+
+
+
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_cnept_plot_Stage_I.png",sep=""), width = 20, height = 20, res=600, units = "cm")
 	cnetplot(gse_ALL_Stage_I, showCategory = 10, layout = "kk") + ggtitle("Stage I") 
 dev.off()
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_cnept_plot_Stage_II.png",sep=""), width = 20, height = 20, res=600, units = "cm")
-	cnetplot(gse_ALL_Stage_II, showCategory = 10, layout = "kk") + ggtitle("Stage II") 
+	cnetplot(gse_ALL_Stage_II, showCategory = 5, layout = "kk") + ggtitle("Stage II") 
 dev.off()
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_cnept_plot_Stage_III.png",sep=""), width = 20, height = 20, res=600, units = "cm")
-	cnetplot(gse_ALL_Stage_III, showCategory = 10, layout = "kk") + ggtitle("Stage III") 
+	cnetplot(gse_ALL_Stage_III, showCategory = 5, layout = "kk") + ggtitle("Stage III") 
 dev.off()
 
 # FindClusters_resolution

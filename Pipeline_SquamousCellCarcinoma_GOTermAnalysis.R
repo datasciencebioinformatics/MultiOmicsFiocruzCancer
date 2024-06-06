@@ -56,18 +56,20 @@ colnames(ids_stage_III) <-c("gene_id","ENTREZID")
 genes_Stage_I  <-merge(genes_unique_Stage_I,ids_stage_I,by="gene_id")
 genes_Stage_II <-merge(genes_unique_Stage_II,ids_stage_II,by="gene_id")
 genes_Stage_III<-merge(genes_unique_Stage_III,ids_stage_III,by="gene_id")
-
 genes_Stage_ALL<-rbind(genes_Stage_I,genes_Stage_II,genes_Stage_III)
 ########################################################################################################################################
-gse_ALL_Stage_I    <- enrichGO(gene = ids_stage_I$ENTREZ,  OrgDb  = org.Hs.eg.db,      ont = "ALL", pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3)
-gse_ALL_Stage_II   <- enrichGO(gene = ids_stage_II$ENTREZ, OrgDb  = org.Hs.eg.db,      ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3)
-gse_ALL_Stage_III  <- enrichGO(gene = ids_stage_III$ENTREZ,OrgDb  = org.Hs.eg.db,      ont = "ALL",   pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3)
-genes_Stage_ALL    <- enrichGO(gene = genes_Stage_ALL$ENTREZ,OrgDb  = org.Hs.eg.db,    ont = "ALL",   pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3)
+go_ALL_Stage_I    <- enrichGO(gene = ids_stage_I$ENTREZ,  OrgDb  = org.Hs.eg.db,      ont = "ALL", pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3,keyType = "ENTREZID")
+go_ALL_Stage_II   <- enrichGO(gene = ids_stage_II$ENTREZ, OrgDb  = org.Hs.eg.db,      ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3)
+go_ALL_Stage_III  <- enrichGO(gene = ids_stage_III$ENTREZ,OrgDb  = org.Hs.eg.db,      ont = "ALL",   pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3)
+go_ALL_Stage      <- enrichGO(gene = genes_Stage_ALL$ENTREZ,OrgDb  = org.Hs.eg.db,    ont = "ALL",   pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3)
 ########################################################################################################################################
-gse_ALL_Stage_I    <- enrichKEGG(gene = ids_stage_I$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
-gse_ALL_Stage_II   <- enrichKEGG(gene = ids_stage_II$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
-gse_ALL_Stage_III  <- enrichKEGG(gene = ids_stage_III$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
-genes_Stage_ALL    <- enrichKEGG(gene = genes_Stage_ALL$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
+kegg_ALL_Stage_I    <- enrichKEGG(gene = ids_stage_I$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
+kegg_ALL_Stage_II   <- enrichKEGG(gene = ids_stage_II$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
+kegg_ALL_Stage_III  <- enrichKEGG(gene = ids_stage_III$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
+kegg_ALL_Stage      <- enrichKEGG(gene = genes_Stage_ALL$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
+########################################################################################################################################
+# convert ids
+genes_Stage_ALL[genes_Stage_ALL$ENTREZID %in% kegg_ALL_Stage_I@result$geneID ,]
 
 
 

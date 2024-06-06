@@ -74,6 +74,11 @@ reactome_ALL_Stage_II   <- enrichPathway(gene=ids_stage_II$ENTREZ, pvalueCutoff 
 reactome_ALL_Stage_III  <- enrichPathway(gene=ids_stage_III$ENTREZ, pvalueCutoff = 0.20, readable=TRUE)
 reactome_ALL_Stage      <- enrichPathway(gene = genes_Stage_ALL$ENTREZ,pvalueCutoff = 0.05, readable=TRUE)
 ########################################################################################################################################
+enrichDO_Stage_I <- enrichNCG(gene          =  genes_Stage_ALL$ENTREZ), ont           = "DO",  pvalueCutoff  = 0.15, pAdjustMethod = "BH",       minGSSize     = 1, maxGSSize     = 500, qvalueCutoff  = 0.05, readable      = FALSE)
+enrichDO_Stage_II <- enrichDO(gene          =  ids_stage_I$ENTREZ, ont           = "DO",  pvalueCutoff  = 0.05, pAdjustMethod = "BH",      minGSSize     = 3, maxGSSize     = 500, qvalueCutoff  = 0.05, readable      = FALSE)
+enrichDO_Stage_III <- enrichDO(gene          =  genes_Stage_ALL$ENTREZ, ont           = "DO",  pvalueCutoff  = 0.05, pAdjustMethod = "BH",      minGSSize     = 3, maxGSSize     = 500, qvalueCutoff  = 0.05, readable      = FALSE)
+
+
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_KEGG_all_Stage.png",sep=""), width = 45, height = 15, res=600, units = "cm")
 	p1<-cnetplot(kegg_ALL_Stage_I, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("KEGG pathway - Stage I") 
@@ -102,4 +107,3 @@ dev.off()
 write.xlsx(x=genes_Stage_I,file=paste(output_dir,"unique_genes",".xlsx",sep=""), sheet="Stage I")
 write.xlsx(x=genes_Stage_II,file=paste(output_dir,"unique_genes",".xlsx",sep=""), sheet="Stage II")
 write.xlsx(x=genes_Stage_III,file=paste(output_dir,"unique_genes",".xlsx",sep=""), sheet="Stage III")
-

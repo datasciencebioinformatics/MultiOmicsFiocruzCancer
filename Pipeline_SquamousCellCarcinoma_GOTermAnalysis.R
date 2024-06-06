@@ -76,21 +76,28 @@ reactome_ALL_Stage      <- enrichPathway(gene = genes_Stage_ALL$ENTREZ,pvalueCut
 ########################################################################################################################################
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_KEGG_all_Stage.png",sep=""), width = 45, height = 15, res=600, units = "cm")
-	p1<-cnetplot(kegg_ALL_Stage_I, showCategory = 3, layout = "kk",color.params = list(gene =c("#B3B3B3","#B3B3B3"))) + ggtitle("KEGG pathway - Stage I") 
-	p2<-cnetplot(kegg_ALL_Stage_II, showCategory = 3, layout = "kk",color.params = list(gene =c("#B3B3B3","#B3B3B3"))) + ggtitle("KEGG pathway - Stage II") 
-	p3<-cnetplot(kegg_ALL_Stage_III, showCategory = 3, layout = "kk",color.params = list(gene =c("#B3B3B3","#B3B3B3"))) + ggtitle("KEGG pathway - Stage III") 
-	grid.arrange(p1, p2,p3, nrow = 1)
+	p1<-cnetplot(kegg_ALL_Stage_I, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("KEGG pathway - Stage I") 
+	p2<-cnetplot(kegg_ALL_Stage_II, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("KEGG pathway - Stage II") 
+	p3<-cnetplot(kegg_ALL_Stage_III, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("KEGG pathway - Stage III") 
+	grid.arrange(p1, p2,p3, nrow = 1)	
 dev.off()
 
 # FindClusters_resolution
-png(filename=paste(output_folder,"Plot_Reactome_all_Stage.png",sep=""), width = 20, height = 20, res=600, units = "cm")
-	cnetplot(reactome_ALL_Stage, showCategory = 3, layout = "kk",color.params = list(gene =c("#B3B3B3","#B3B3B3"))) + ggtitle("Reactome pathway - all stages") 
+png(filename=paste(output_folder,"Plot_GO_all_Stage.png",sep=""), width = 45, height = 15, res=600, units = "cm")
+	p1<-cnetplot(go_ALL_Stage_I, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("GO terms - Stage I") 
+	p2<-cnetplot(go_ALL_Stage_II, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("GO terms - Stage II") 
+	p3<-cnetplot(go_ALL_Stage_III, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("GO terms - Stage III") 
+	grid.arrange(p1, p2,p3, nrow = 1)	
 dev.off()
 
 # FindClusters_resolution
-png(filename=paste(output_folder,"Plot_GO_all_Stage.png",sep=""), width = 20, height = 20, res=600, units = "cm")
-	cnetplot(go_ALL_Stage, showCategory = 3, layout = "kk") + ggtitle("KEGG pathway - all stages") 
+png(filename=paste(output_folder,"Plot_Reactome_all_Stage.png",sep=""), width = 45, height = 15, res=600, units = "cm")
+	p1<-cnetplot(reactome_ALL_Stage_I, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("Reactome pathway - Stage I") 
+	p2<-cnetplot(reactome_ALL_Stage_II, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("Reactome pathway - Stage II") 
+	p3<-cnetplot(reactome_ALL_Stage_III, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("Reactome pathway - Stage III") 
+	grid.arrange(p1, p2,p3, nrow = 1)	
 dev.off()
+
 ########################################################################################################################################
 write.xlsx(x=genes_Stage_I,file=paste(output_dir,"unique_genes",".xlsx",sep=""), sheet="Stage I")
 write.xlsx(x=genes_Stage_II,file=paste(output_dir,"unique_genes",".xlsx",sep=""), sheet="Stage II")

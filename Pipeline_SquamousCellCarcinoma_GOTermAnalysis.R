@@ -69,9 +69,9 @@ kegg_ALL_Stage_II   <- enrichKEGG(gene = ids_stage_II$ENTREZ,  organism     = 'h
 kegg_ALL_Stage_III  <- enrichKEGG(gene = ids_stage_III$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
 kegg_ALL_Stage      <- enrichKEGG(gene = genes_Stage_ALL$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
 ########################################################################################################################################
-reactome_ALL_Stage_I <- enrichPathway(gene=ids_stage_I$ENTREZ, pvalueCutoff = 0.05, readable=TRUE)
-reactome_ALL_Stage_II <- enrichPathway(gene=ids_stage_II$ENTREZ, pvalueCutoff = 0.05, readable=TRUE)
-reactome_ALL_Stage_III <- enrichPathway(gene=ids_stage_III$ENTREZ, pvalueCutoff = 0.05, readable=TRUE)
+reactome_ALL_Stage_I <- enrichPathway(gene=ids_stage_I$ENTREZ, pvalueCutoff = 0.15, readable=TRUE)
+reactome_ALL_Stage_II <- enrichPathway(gene=ids_stage_II$ENTREZ, pvalueCutoff = 0.15, readable=TRUE)
+reactome_ALL_Stage_III <- enrichPathway(gene=ids_stage_III$ENTREZ, pvalueCutoff = 0.15, readable=TRUE)
 ########################################################################################################################################
 # Convert symbols
 #kegg_ALL_Stage_I@result$geneID<-genes_Stage_ALL[kegg_ALL_Stage_I@result$geneID ,"SYMBOL"]

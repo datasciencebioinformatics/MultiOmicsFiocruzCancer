@@ -67,25 +67,22 @@ go_ALL_Stage      <- enrichGO(gene = genes_Stage_ALL$SYMBOL,OrgDb  = org.Hs.eg.d
 kegg_ALL_Stage_I    <- enrichKEGG(gene = ids_stage_I$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
 kegg_ALL_Stage_II   <- enrichKEGG(gene = ids_stage_II$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
 kegg_ALL_Stage_III  <- enrichKEGG(gene = ids_stage_III$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
-kegg_ALL_Stage      <- enrichKEGG(gene = genes_Stage_ALL$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
+kegg_ALL_Stage      <- enrichKEGG(gene = genes_Stage_ALL$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.05)
 ########################################################################################################################################
-reactome_ALL_Stage_I <- enrichPathway(gene=ids_stage_I$ENTREZ, pvalueCutoff = 0.15, readable=TRUE)
-reactome_ALL_Stage_II <- enrichPathway(gene=ids_stage_II$ENTREZ, pvalueCutoff = 0.15, readable=TRUE)
-reactome_ALL_Stage_III <- enrichPathway(gene=ids_stage_III$ENTREZ, pvalueCutoff = 0.15, readable=TRUE)
-########################################################################################################################################
-# Convert symbols
-#kegg_ALL_Stage_I@result$geneID<-genes_Stage_ALL[kegg_ALL_Stage_I@result$geneID ,"SYMBOL"]
-#kegg_ALL_Stage_II@result$geneID<-genes_Stage_ALL[kegg_ALL_Stage_II@result$geneID ,"SYMBOL"]
-#kegg_ALL_Stage_III@result$geneID<-genes_Stage_ALL[kegg_ALL_Stage_III@result$geneID ,"SYMBOL"]
-#kegg_ALL_Stage@result$geneID<-genes_Stage_ALL[kegg_ALL_Stage@result$geneID ,"SYMBOL"]
+reactome_ALL_Stage_I    <- enrichPathway(gene=ids_stage_I$ENTREZ, pvalueCutoff = 0.20, readable=TRUE)
+reactome_ALL_Stage_II   <- enrichPathway(gene=ids_stage_II$ENTREZ, pvalueCutoff = 0.20, readable=TRUE)
+reactome_ALL_Stage_III  <- enrichPathway(gene=ids_stage_III$ENTREZ, pvalueCutoff = 0.20, readable=TRUE)
+reactome_ALL_Stage      <- enrichPathway(gene = genes_Stage_ALL$ENTREZ,pvalueCutoff = 0.05, readable=TRUE)
 ########################################################################################################################################
 # FindClusters_resolution
-png(filename=paste(output_folder,"Plot_cnept_plot_Stage_I.png",sep=""), width = 20, height = 20, res=600, units = "cm")
-	cnetplot(kegg_ALL_Stage, showCategory = 3, layout = "kk") + ggtitle("KEGG pathway - all stages") 
+png(filename=paste(output_folder,"Plot_KEGG_all_Stage.png",sep=""), width = 20, height = 20, res=600, units = "cm")
+	cnetplot(kegg_ALL_Stage, showCategory = 3, layout = "kk",color.params = list(gene =c("#B3B3B3","#B3B3B3"))) + ggtitle("KEGG pathway - all stages") 
 dev.off()
+
+
 # FindClusters_resolution
-png(filename=paste(output_folder,"Plot_cnept_plot_Stage_II.png",sep=""), width = 20, height = 20, res=600, units = "cm")
-	cnetplot(go_ALL_Stage, showCategory = 3, layout = "kk") + ggtitle("GO Terms - all stages") 
+png(filename=paste(output_folder,"Plot_KEGG_Stage_I.png",sep=""), width = 20, height = 20, res=600, units = "cm")
+	cnetplot(kegg_ALL_Stage, showCategory = 3, layout = "kk") + ggtitle("KEGG pathway - all stages") 
 dev.off()
 ########################################################################################################################################
 write.xlsx(x=genes_Stage_I,file=paste(output_dir,"unique_genes",".xlsx",sep=""), sheet="Stage I")

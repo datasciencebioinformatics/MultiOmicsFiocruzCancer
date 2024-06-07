@@ -107,9 +107,9 @@ reactome_results_Stage_II$Stage<-"Stage II"
 reactome_results_Stage_III$Stage<-"Stage III"
 
 # Merge all stages
-go_results_all_Stages         <-rbind(rbind(go_results_Stage_I,go_results_Stage_II,go_results_Stage_III)[,c("ID","p.adjust","Description","Count","Stage")]
-kegg_results_all_Stages       <-rbind(kegg_results_Stage_I,kegg_results_Stage_II,kegg_results_Stage_III)[,c("ID","p.adjust","Description","Count","Stage")]
-reactome_results_all_Stages   <-rbind(reactome_results_Stage_I,reactome_results_Stage_II,reactome_results_Stage_III)[,c("ID","p.adjust","Description","Count","Stage")]
+go_results_all_Stages         <-rbind(go_results_Stage_I,go_results_Stage_II,go_results_Stage_III)[,c("ID","p.adjust","Description","geneID","Count","Stage")]
+kegg_results_all_Stages       <-rbind(kegg_results_Stage_I,kegg_results_Stage_II,kegg_results_Stage_III)[,c("ID","p.adjust","Description","geneID","Count","Stage")]
+reactome_results_all_Stages   <-rbind(reactome_results_Stage_I,reactome_results_Stage_II,reactome_results_Stage_III)[,c("ID","p.adjust","Description","geneID","Count","Stage")]
 
 # Merge all stages
 go_results_all_Stages$Layer<-"GO"
@@ -119,7 +119,48 @@ reactome_results_all_Stages$Layer<-"Reactome"
 # Merge all tables
 all_anotation_results<-rbind(go_results_all_Stages,kegg_results_all_Stages,reactome_results_all_Stages)
 ######################################################################################################################
-for rowrownames(go_results_all_Stages)
+# A data.frame to store all results
+df_all_annotation<-data.frame(ID=c(),p.adjust=c(),Description=c(),geneID=c(), SYMBOL=c(),Count=c(),Stage=c(),Layer=c())
+
+# For each annotation
+for (annotation in rownames(all_anotation_results))
+{
+
+	# Save all variables
+	ID            <- all_anotation_results[annotation,"ID"]   
+	p.adjust      <- all_anotation_results[annotation,"p.adjust"]   
+	Description   <- all_anotation_results[annotation,"Description"]   
+	geneID        <- all_anotation_results[annotation,"geneID"]   
+	Count         <- all_anotation_results[annotation,"Count"]   
+	Stage         <- all_anotation_results[annotation,"Stage"]   
+	Layer         <- all_anotation_results[annotation,"Layer"]   
+
+	# All genes of stage
+	all_genes_of_annotation<-strsplit(x=geneID,"/",fixed=T)[[1]]
+
+	# For all genes
+	for (genes in all_genes_of_annotation)
+	{
+		# If layer equal to Kegg
+		if(Layer=="KEGG")
+		{
+			# Make the id converstion			
+			gene_symbol<-genes_Stage_ALL[which(genes_Stage_ALL$ENTREZID %in% genes),"SYMBOL"]
+			genes_id<-genes_Stage_ALL[which(genes_Stage_ALL$ENTREZID %in% genes),"gene_id"]
+		}else # If not kegg 
+		{
+			# Make the id converstion			
+			gene_symbol<-genes_Stage_ALL[which(genes_Stage_ALL$SYMBOL %in% genes),"SYMBOL"]
+			genes_id<-genes_Stage_ALL[which(genes_Stage_ALL$SYMBOL %in% genes),"gene_id"]
+		}
+		# gene annotation
+		gene_annotation<-data.frame(ID=ID,p.adjust=p.adjust,Description=Description,geneID=genes_id, SYMBOL=gene_symbol,Count=Count,Stage=Stage,Layer=Layer)
+
+		# df_all_annotation
+		df_all_annotation<-rbind(df_all_annotation,gene_annotation)
+	}	
+}
+write.xlsx(x=df_all_annotation,file=paste(output_dir,"df_all_annotation",".xlsx",sep=""), sheet="annnotation")
 
 
 

@@ -166,7 +166,22 @@ write.xlsx(x=df_all_annotation,file=paste(output_dir,"df_all_annotation",".xlsx"
 # Load interactome
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadInteractomeUniqueGenes.R")
 ######################################################################################################################
-# A vector with 
+# Stage I
+df_all_annotation_per_stage<-df_all_annotation[which(df_all_annotation$Stage=="Stage I"),]
+
+# A vector with all gene symbols
+gene_symbols<-df_all_annotation_per_stage$SYMBOL
+
+# A vector with all gene symbols
+annotation_description_GO       <-df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"]
+annotation_description_KEGG     <-df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"]
+annotation_description_REACTOME <-df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"]
+
+# A vector with all gene symbols
+gene_Stage_I                    <-df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"]
+gene_Stage_II                    <-df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"]
+gene_Stage_III                    <-df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"]
+
 
 # All stages
 graph_all_stages <- graph_from_data_frame(d=df_all_annotation[,c("SYMBOL","Description")], vertices=unique(c(df_all_annotation$SYMBOL,df_all_annotation$Description)), directed=F) 

@@ -74,9 +74,59 @@ reactome_ALL_Stage_II   <- enrichPathway(gene=ids_stage_II$ENTREZ, pvalueCutoff 
 reactome_ALL_Stage_III  <- enrichPathway(gene=ids_stage_III$ENTREZ, pvalueCutoff = 0.20, readable=TRUE)
 reactome_ALL_Stage      <- enrichPathway(gene = genes_Stage_ALL$ENTREZ,pvalueCutoff = 0.05, readable=TRUE)
 ########################################################################################################################################
-enrichDO_Stage_I <- enrichNCG(gene          =  genes_Stage_ALL$ENTREZ), ont           = "DO",  pvalueCutoff  = 0.15, pAdjustMethod = "BH",       minGSSize     = 1, maxGSSize     = 500, qvalueCutoff  = 0.05, readable      = FALSE)
-enrichDO_Stage_II <- enrichDO(gene          =  ids_stage_I$ENTREZ, ont           = "DO",  pvalueCutoff  = 0.05, pAdjustMethod = "BH",      minGSSize     = 3, maxGSSize     = 500, qvalueCutoff  = 0.05, readable      = FALSE)
-enrichDO_Stage_III <- enrichDO(gene          =  genes_Stage_ALL$ENTREZ, ont           = "DO",  pvalueCutoff  = 0.05, pAdjustMethod = "BH",      minGSSize     = 3, maxGSSize     = 500, qvalueCutoff  = 0.05, readable      = FALSE)
+# A table with the associate go term per gene.
+# First, take the results per stage
+# Go terms
+go_results_Stage_I<-go_ALL_Stage_I@result
+go_results_Stage_II<-go_ALL_Stage_II@result
+go_results_Stage_III<-go_ALL_Stage_III@result
+
+# Kegg terms
+kegg_results_Stage_I<-kegg_ALL_Stage_I@result
+kegg_results_Stage_II<-kegg_ALL_Stage_II@result
+kegg_results_Stage_III<-kegg_ALL_Stage_III@result
+
+# Reactome terms
+reactome_results_Stage_I<-reactome_ALL_Stage_I@result
+reactome_results_Stage_II<-reactome_ALL_Stage_II@result
+reactome_results_Stage_III<-reactome_ALL_Stage_III@result
+
+# Second, add information about stage
+go_results_Stage_I$Stage<-"Stage I"
+go_results_Stage_II$Stage<-"Stage II"
+go_results_Stage_III$Stage<-"Stage III"
+
+# Second, add information about stage
+kegg_results_Stage_I$Stage<-"Stage I"
+kegg_results_Stage_II$Stage<-"Stage II"
+kegg_results_Stage_III$Stage<-"Stage III"
+
+# Second, add information about stage
+reactome_results_Stage_I$Stage<-"Stage I"
+reactome_results_Stage_II$Stage<-"Stage II"
+reactome_results_Stage_III$Stage<-"Stage III"
+
+# Merge all stages
+go_results_all_Stages         <-rbind(rbind(go_results_Stage_I,go_results_Stage_II,go_results_Stage_III)[,c("ID","p.adjust","Description","Count","Stage")]
+kegg_results_all_Stages       <-rbind(kegg_results_Stage_I,kegg_results_Stage_II,kegg_results_Stage_III)[,c("ID","p.adjust","Description","Count","Stage")]
+reactome_results_all_Stages   <-rbind(reactome_results_Stage_I,reactome_results_Stage_II,reactome_results_Stage_III)[,c("ID","p.adjust","Description","Count","Stage")]
+
+# Merge all stages
+go_results_all_Stages$Layer<-"GO"
+kegg_results_all_Stages$Layer<-"KEGG"
+reactome_results_all_Stages$Layer<-"Reactome"
+
+# Merge all tables
+all_anotation_results<-rbind(go_results_all_Stages,kegg_results_all_Stages,reactome_results_all_Stages)
+######################################################################################################################
+for rowrownames(go_results_all_Stages)
+
+
+
+
+
+
+
 
 
 # FindClusters_resolution

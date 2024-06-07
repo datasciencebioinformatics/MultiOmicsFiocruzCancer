@@ -120,7 +120,7 @@ reactome_results_all_Stages$Layer<-"Reactome"
 all_anotation_results<-rbind(go_results_all_Stages,kegg_results_all_Stages,reactome_results_all_Stages)
 
 # Filter by padj
-all_anotation_results<-all_anotation_results[which(all_anotation_results$p.adjust<0.15),]
+#all_anotation_results<-all_anotation_results[which(all_anotation_results$p.adjust<0.15),]
 ######################################################################################################################
 # A data.frame to store all results
 df_all_annotation<-data.frame(ID=c(),p.adjust=c(),Description=c(),geneID=c(), SYMBOL=c(),Count=c(),Stage=c(),Layer=c())
@@ -190,9 +190,12 @@ gene_Stage_I                 <-unique(df_all_annotation_per_stage[which(df_all_a
 gene_Stage_II                <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),"SYMBOL"])
 gene_Stage_III               <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage III"),"SYMBOL"])
 
+selection_GO      <-tail(sort(table_GO),n=10)
+selection_KEGG    <-tail(sort(table_KEGG),n=10)
+selection_REACTOM <-tail(sort(table_REACTOME),n=10)
+
 # All stages
 graph_all_stages <- graph_from_data_frame(d=df_all_annotation_per_stage[,c("SYMBOL","Description")], vertices=unique(c(df_all_annotation_per_stage$SYMBOL,df_all_annotation_per_stage$Description)), directed=F) 
-
 
 # Vertice colours of genes
 V(graph_all_stages)$color                                                                         <- "#0072b2"

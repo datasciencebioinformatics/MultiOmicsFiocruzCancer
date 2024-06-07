@@ -160,13 +160,19 @@ for (annotation in rownames(all_anotation_results))
 		df_all_annotation<-rbind(df_all_annotation,gene_annotation)
 	}	
 }
+# Save file 
 write.xlsx(x=df_all_annotation,file=paste(output_dir,"df_all_annotation",".xlsx",sep=""), sheet="annnotation")
+######################################################################################################################
+# Load interactome
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadInteractomeUniqueGenes.R")
+######################################################################################################################
+# A vector with 
+
+# All stages
+graph_all_stages <- graph_from_data_frame(d=df_all_annotation[,c("SYMBOL","Description")], vertices=unique(c(df_all_annotation$SYMBOL,df_all_annotation$Description)), directed=F) 
 
 
-
-
-
-
+V(graph_all_stages)
 
 
 

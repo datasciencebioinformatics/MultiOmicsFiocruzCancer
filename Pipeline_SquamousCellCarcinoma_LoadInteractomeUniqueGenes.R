@@ -123,8 +123,29 @@ interactome_stage_I  <-interactome_data_inv[which(rownames(interactome_data_inv)
 interactome_stage_II <-interactome_data_inv[which(rownames(interactome_data_inv) %in% rownames(full_interactome_stage_II)),]
 interactome_stage_III<-interactome_data_inv[which(rownames(interactome_data_inv) %in% rownames(full_interactome_stage_III)),]
 
+# If there is not interaction
+if (dim(interactome_stage_I)[1]==0)
+{
+  # Add edge to be removed
+  interactome_stage_I<-data.frame(Gene1="REMOVE",Gene2="REMOVE")
+}
+# If there is not interaction
+if (dim(interactome_stage_II)[1]==0)
+{
+  # Add edge to be removed
+  interactome_stage_II<-data.frame(Gene1="REMOVE",Gene2="REMOVE")
+}
+# If there is not interaction
+if (dim(interactome_stage_III)[1]==0)
+{
+  # Add edge to be removed
+  interactome_stage_III<-data.frame(Gene1="REMOVE",Gene2="REMOVE")
+}
 interactome_stage_I$Stage<-"Stage I"
 interactome_stage_II$Stage<-"Stage II"
 interactome_stage_III$Stage<-"Stage III"
 #######################################################################################################
-interactome_all_stage<-rbind(interactome_stage_II,interactome_stage_III)
+interactome_all_stage<-rbind(interactome_stage_I,interactome_stage_II,interactome_stage_III)
+
+# Remove edge
+interactome_all_stage<-interactome_all_stage[interactome_all_stage$Gene1!="REMOVE",]

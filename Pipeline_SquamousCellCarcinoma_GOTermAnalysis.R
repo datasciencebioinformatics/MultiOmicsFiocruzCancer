@@ -59,19 +59,19 @@ genes_Stage_III<-merge(genes_unique_Stage_III,ids_stage_III,by="gene_id")
 genes_Stage_ALL<-unique(rbind(ids_stage_I,ids_stage_II,ids_stage_III))
 rownames(genes_Stage_ALL)<-genes_Stage_ALL$ENTREZID
 ########################################################################################################################################
-go_ALL_Stage_I    <- enrichGO(gene = ids_stage_I$SYMBOL,  OrgDb  = org.Hs.eg.db,      ont = "ALL", pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3,keyType = "SYMBOL")
-go_ALL_Stage_II   <- enrichGO(gene = ids_stage_II$SYMBOL, OrgDb  = org.Hs.eg.db,      ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3,keyType = "SYMBOL")
-go_ALL_Stage_III  <- enrichGO(gene = ids_stage_III$SYMBOL,OrgDb  = org.Hs.eg.db,      ont = "ALL",   pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3,keyType = "SYMBOL")
-go_ALL_Stage      <- enrichGO(gene = genes_Stage_ALL$SYMBOL,OrgDb  = org.Hs.eg.db,    ont = "ALL",   pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05,readable = TRUE, minGSSize = 3,keyType = "SYMBOL")
+go_ALL_Stage_I    <- enrichGO(gene = ids_stage_I$SYMBOL,  OrgDb  = org.Hs.eg.db,      ont = "ALL", pAdjustMethod = "BH",pvalueCutoff  = 0.1,qvalueCutoff  = 0.15,readable = TRUE, minGSSize = 3,keyType = "SYMBOL")
+go_ALL_Stage_II   <- enrichGO(gene = ids_stage_II$SYMBOL, OrgDb  = org.Hs.eg.db,      ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.1,qvalueCutoff  = 0.15,readable = TRUE, minGSSize = 3,keyType = "SYMBOL")
+go_ALL_Stage_III  <- enrichGO(gene = ids_stage_III$SYMBOL,OrgDb  = org.Hs.eg.db,      ont = "ALL",   pAdjustMethod = "BH",pvalueCutoff  = 0.1,qvalueCutoff  = 0.15,readable = TRUE, minGSSize = 3,keyType = "SYMBOL")
+go_ALL_Stage      <- enrichGO(gene = genes_Stage_ALL$SYMBOL,OrgDb  = org.Hs.eg.db,    ont = "ALL",   pAdjustMethod = "BH",pvalueCutoff  = 0.1,qvalueCutoff  = 0.15,readable = TRUE, minGSSize = 3,keyType = "SYMBOL")
 ########################################################################################################################################
 kegg_ALL_Stage_I    <- enrichKEGG(gene = ids_stage_I$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
 kegg_ALL_Stage_II   <- enrichKEGG(gene = ids_stage_II$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
 kegg_ALL_Stage_III  <- enrichKEGG(gene = ids_stage_III$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
-kegg_ALL_Stage      <- enrichKEGG(gene = genes_Stage_ALL$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.05)
+kegg_ALL_Stage      <- enrichKEGG(gene = genes_Stage_ALL$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
 ########################################################################################################################################
-reactome_ALL_Stage_I    <- enrichPathway(gene=ids_stage_I$ENTREZ, pvalueCutoff = 0.20, readable=TRUE)
-reactome_ALL_Stage_II   <- enrichPathway(gene=ids_stage_II$ENTREZ, pvalueCutoff = 0.20, readable=TRUE)
-reactome_ALL_Stage_III  <- enrichPathway(gene=ids_stage_III$ENTREZ, pvalueCutoff = 0.20, readable=TRUE)
+reactome_ALL_Stage_I    <- enrichPathway(gene=ids_stage_I$ENTREZ, pvalueCutoff = 0.15, readable=TRUE)
+reactome_ALL_Stage_II   <- enrichPathway(gene=ids_stage_II$ENTREZ, pvalueCutoff = 0.15, readable=TRUE)
+reactome_ALL_Stage_III  <- enrichPathway(gene=ids_stage_III$ENTREZ, pvalueCutoff = 0.15, readable=TRUE)
 reactome_ALL_Stage      <- enrichPathway(gene = genes_Stage_ALL$ENTREZ,pvalueCutoff = 0.05, readable=TRUE)
 ########################################################################################################################################
 # A table with the associate go term per gene.
@@ -118,6 +118,9 @@ reactome_results_all_Stages$Layer<-"Reactome"
 
 # Merge all tables
 all_anotation_results<-rbind(go_results_all_Stages,kegg_results_all_Stages,reactome_results_all_Stages)
+
+# Filter by padj
+all_anotation_results<-all_anotation_results[which(all_anotation_results$p.adjust<0.15),]
 ######################################################################################################################
 # A data.frame to store all results
 df_all_annotation<-data.frame(ID=c(),p.adjust=c(),Description=c(),geneID=c(), SYMBOL=c(),Count=c(),Stage=c(),Layer=c())
@@ -169,53 +172,143 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 # Stage I
 df_all_annotation_per_stage<-df_all_annotation[which(df_all_annotation$Stage=="Stage I"),]
 
+# A table for the count of go terms
+table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"])
+table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"])
+table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
+
 # A vector with all gene symbols
 gene_symbols<-df_all_annotation_per_stage$SYMBOL
 
 # A vector with all gene symbols
-annotation_description_GO       <-df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"]
-annotation_description_KEGG     <-df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"]
-annotation_description_REACTOME <-df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"]
+annotation_description_GO       <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"])
+annotation_description_KEGG     <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"])
+annotation_description_REACTOME <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
 
 # A vector with all gene symbols
-gene_Stage_I                    <-df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"]
-gene_Stage_II                    <-df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"]
-gene_Stage_III                    <-df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"]
-
+gene_Stage_I                 <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage I"),"SYMBOL"])
+gene_Stage_II                <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),"SYMBOL"])
+gene_Stage_III               <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage III"),"SYMBOL"])
 
 # All stages
-graph_all_stages <- graph_from_data_frame(d=df_all_annotation[,c("SYMBOL","Description")], vertices=unique(c(df_all_annotation$SYMBOL,df_all_annotation$Description)), directed=F) 
+graph_all_stages <- graph_from_data_frame(d=df_all_annotation_per_stage[,c("SYMBOL","Description")], vertices=unique(c(df_all_annotation_per_stage$SYMBOL,df_all_annotation_per_stage$Description)), directed=F) 
 
 
-V(graph_all_stages)
+# Vertice colours of genes
+V(graph_all_stages)$color                                                                         <- "#0072b2"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$color       <- "#ff6347"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$color     <- "#ffd700"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$color <- "#7f7f7f"
 
-
-
-# FindClusters_resolution
-png(filename=paste(output_folder,"Plot_KEGG_all_Stage.png",sep=""), width = 45, height = 15, res=600, units = "cm")
-	p1<-cnetplot(kegg_ALL_Stage_I, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("KEGG pathway - Stage I") 
-	p2<-cnetplot(kegg_ALL_Stage_II, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("KEGG pathway - Stage II") 
-	p3<-cnetplot(kegg_ALL_Stage_III, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("KEGG pathway - Stage III") 
-	grid.arrange(p1, p2,p3, nrow = 1)	
-dev.off()
-
-# FindClusters_resolution
-png(filename=paste(output_folder,"Plot_GO_all_Stage.png",sep=""), width = 45, height = 15, res=600, units = "cm")
-	p1<-cnetplot(go_ALL_Stage_I, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("GO terms - Stage I") 
-	p2<-cnetplot(go_ALL_Stage_II, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("GO terms - Stage II") 
-	p3<-cnetplot(go_ALL_Stage_III, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("GO terms - Stage III") 
-	grid.arrange(p1, p2,p3, nrow = 1)	
-dev.off()
+# Vertice colours of genes
+V(graph_all_stages)$shape                                                                           <-"circle"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$shape        <- "square"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$shape      <- "square"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$shape  <- "square"
 
 # FindClusters_resolution
-png(filename=paste(output_folder,"Plot_Reactome_all_Stage.png",sep=""), width = 45, height = 15, res=600, units = "cm")
-	p1<-cnetplot(reactome_ALL_Stage_I, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("Reactome pathway - Stage I") 
-	p2<-cnetplot(reactome_ALL_Stage_II, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("Reactome pathway - Stage II") 
-	p3<-cnetplot(reactome_ALL_Stage_III, showCategory = 3, layout = "kk",color.params = list(gene =c("black"))) + ggtitle("Reactome pathway - Stage III") 
-	grid.arrange(p1, p2,p3, nrow = 1)	
+png(filename=paste(output_folder,"Plot_Stage_I.png",sep=""), width = 25, height = 25, res=600, units = "cm")
+	plot(graph_all_stages, layout=layout_with_kk)
 dev.off()
 
-########################################################################################################################################
-write.xlsx(x=genes_Stage_I,file=paste(output_dir,"unique_genes",".xlsx",sep=""), sheet="Stage I")
-write.xlsx(x=genes_Stage_II,file=paste(output_dir,"unique_genes",".xlsx",sep=""), sheet="Stage II")
-write.xlsx(x=genes_Stage_III,file=paste(output_dir,"unique_genes",".xlsx",sep=""), sheet="Stage III")
+
+
+
+
+
+
+
+
+
+######################################################################################################################
+# Stage I
+df_all_annotation_per_stage<-df_all_annotation[which(df_all_annotation$Stage=="Stage II"),]
+
+
+
+# A table for the count of go terms
+table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"])
+table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"])
+table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
+
+# A vector with all gene symbols
+gene_symbols<-df_all_annotation_per_stage$SYMBOL
+
+# A vector with all gene symbols
+annotation_description_GO       <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"])
+annotation_description_KEGG     <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"])
+annotation_description_REACTOME <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
+
+# A vector with all gene symbols
+gene_Stage_I                 <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage I"),"SYMBOL"])
+gene_Stage_II                <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),"SYMBOL"])
+gene_Stage_III               <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage III"),"SYMBOL"])
+
+# All stages
+graph_all_stages <- graph_from_data_frame(d=df_all_annotation_per_stage[,c("SYMBOL","Description")], vertices=unique(c(df_all_annotation_per_stage$SYMBOL,df_all_annotation_per_stage$Description)), directed=F) 
+
+
+# Vertice colours of genes
+V(graph_all_stages)$color                                                                         <- "#0072b2"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$color       <- "#ff6347"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$color     <- "#ffd700"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$color <- "#7f7f7f"
+
+# Vertice colours of genes
+V(graph_all_stages)$shape                                                                           <-"circle"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$shape        <- "square"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$shape      <- "square"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$shape  <- "square"
+
+# FindClusters_resolution
+png(filename=paste(output_folder,"Plot_Stage_II.png",sep=""), width = 25, height = 25, res=1200, units = "cm")
+	plot(graph_all_stages, layout=layout_with_kk)
+dev.off()
+
+
+
+
+######################################################################################################################
+# Stage I
+df_all_annotation_per_stage<-df_all_annotation[which(df_all_annotation$Stage=="Stage III"),]
+
+# A table for the count of go terms
+table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"])
+table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"])
+table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
+
+# A vector with all gene symbols
+gene_symbols<-df_all_annotation_per_stage$SYMBOL
+
+# A vector with all gene symbols
+annotation_description_GO       <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"])
+annotation_description_KEGG     <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"])
+annotation_description_REACTOME <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
+
+# A vector with all gene symbols
+gene_Stage_I                 <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage I"),"SYMBOL"])
+gene_Stage_II                <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),"SYMBOL"])
+gene_Stage_III               <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage III"),"SYMBOL"])
+
+# All stages
+graph_all_stages <- graph_from_data_frame(d=df_all_annotation_per_stage[,c("SYMBOL","Description")], vertices=unique(c(df_all_annotation_per_stage$SYMBOL,df_all_annotation_per_stage$Description)), directed=F) 
+
+
+# Vertice colours of genes
+V(graph_all_stages)$color                                                                         <- "#0072b2"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$color       <- "#ff6347"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$color     <- "#ffd700"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$color <- "#7f7f7f"
+
+# Vertice colours of genes
+V(graph_all_stages)$shape                                                                           <-"circle"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$shape        <- "square"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$shape      <- "square"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$shape  <- "square"
+
+# FindClusters_resolution
+png(filename=paste(output_folder,"Plot_Stage_III.png",sep=""), width = 25, height = 25, res=600, units = "cm")
+	plot(graph_all_stages, layout=layout_with_kk)
+dev.off()
+
+

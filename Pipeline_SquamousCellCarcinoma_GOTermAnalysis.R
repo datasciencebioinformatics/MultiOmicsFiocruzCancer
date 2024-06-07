@@ -170,109 +170,6 @@ write.xlsx(x=df_all_annotation,file=paste(output_dir,"df_all_annotation",".xlsx"
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadInteractomeUniqueGenes.R")
 ######################################################################################################################
 # Stage I
-df_all_annotation_per_stage<-df_all_annotation[which(df_all_annotation$Stage=="Stage I"),]
-
-# A table for the count of go terms
-table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"])
-table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"])
-table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
-
-# A vector with all gene symbols
-gene_symbols<-df_all_annotation_per_stage$SYMBOL
-
-# A vector with all gene symbols
-annotation_description_GO       <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"])
-annotation_description_KEGG     <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"])
-annotation_description_REACTOME <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
-
-# A vector with all gene symbols
-gene_Stage_I                 <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage I"),"SYMBOL"])
-gene_Stage_II                <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),"SYMBOL"])
-gene_Stage_III               <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage III"),"SYMBOL"])
-
-selection_GO      <-tail(sort(table_GO),n=10)
-selection_KEGG    <-tail(sort(table_KEGG),n=10)
-selection_REACTOM <-tail(sort(table_REACTOME),n=10)
-
-# All stages
-graph_all_stages <- graph_from_data_frame(d=df_all_annotation_per_stage[,c("SYMBOL","Description")], vertices=unique(c(df_all_annotation_per_stage$SYMBOL,df_all_annotation_per_stage$Description)), directed=F) 
-
-# Vertice colours of genes
-V(graph_all_stages)$color                                                                         <- "#0072b2"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$color       <- "#ff6347"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$color     <- "#ffd700"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$color <- "#7f7f7f"
-
-# Vertice colours of genes
-V(graph_all_stages)$shape                                                                           <-"circle"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$shape        <- "square"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$shape      <- "square"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$shape  <- "square"
-
-# FindClusters_resolution
-png(filename=paste(output_folder,"Plot_Stage_I.png",sep=""), width = 25, height = 25, res=600, units = "cm")
-	plot(graph_all_stages, layout=layout_with_kk)
-dev.off()
-
-
-
-
-
-
-
-
-
-
-######################################################################################################################
-# Stage I
-df_all_annotation_per_stage<-df_all_annotation[which(df_all_annotation$Stage=="Stage II"),]
-
-
-
-# A table for the count of go terms
-table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"])
-table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"])
-table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
-
-# A vector with all gene symbols
-gene_symbols<-df_all_annotation_per_stage$SYMBOL
-
-# A vector with all gene symbols
-annotation_description_GO       <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"])
-annotation_description_KEGG     <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"])
-annotation_description_REACTOME <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
-
-# A vector with all gene symbols
-gene_Stage_I                 <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage I"),"SYMBOL"])
-gene_Stage_II                <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),"SYMBOL"])
-gene_Stage_III               <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage III"),"SYMBOL"])
-
-# All stages
-graph_all_stages <- graph_from_data_frame(d=df_all_annotation_per_stage[,c("SYMBOL","Description")], vertices=unique(c(df_all_annotation_per_stage$SYMBOL,df_all_annotation_per_stage$Description)), directed=F) 
-
-
-# Vertice colours of genes
-V(graph_all_stages)$color                                                                         <- "#0072b2"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$color       <- "#ff6347"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$color     <- "#ffd700"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$color <- "#7f7f7f"
-
-# Vertice colours of genes
-V(graph_all_stages)$shape                                                                           <-"circle"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$shape        <- "square"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$shape      <- "square"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$shape  <- "square"
-
-# FindClusters_resolution
-png(filename=paste(output_folder,"Plot_Stage_II.png",sep=""), width = 25, height = 25, res=1200, units = "cm")
-	plot(graph_all_stages, layout=layout_with_kk)
-dev.off()
-
-
-
-
-######################################################################################################################
-# Stage I
 df_all_annotation_per_stage<-df_all_annotation[which(df_all_annotation$Stage=="Stage III"),]
 
 # A table for the count of go terms
@@ -293,9 +190,17 @@ gene_Stage_I                 <-unique(df_all_annotation_per_stage[which(df_all_a
 gene_Stage_II                <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),"SYMBOL"])
 gene_Stage_III               <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage III"),"SYMBOL"])
 
-# All stages
-graph_all_stages <- graph_from_data_frame(d=df_all_annotation_per_stage[,c("SYMBOL","Description")], vertices=unique(c(df_all_annotation_per_stage$SYMBOL,df_all_annotation_per_stage$Description)), directed=F) 
+selection_GO      <-names(tail(sort(table_GO),n=10))
+selection_KEGG    <-names(tail(sort(table_KEGG),n=10))
+selection_REACTOM <-names(tail(sort(table_REACTOME),n=10))
 
+df_all_annotation_selected_pathways<-rbind(df_all_annotation[which(df_all_annotation$Description %in% selection_GO),],
+df_all_annotation[which(df_all_annotation$Description %in% selection_KEGG),],
+df_all_annotation[which(df_all_annotation$Description %in% selection_REACTOM),])
+
+
+# All stages
+graph_all_stages <- graph_from_data_frame(d=df_all_annotation_selected_pathways[,c("SYMBOL","Description")], vertices=unique(c(df_all_annotation_selected_pathways$SYMBOL,df_all_annotation_selected_pathways$Description)), directed=F) 
 
 # Vertice colours of genes
 V(graph_all_stages)$color                                                                         <- "#0072b2"
@@ -313,5 +218,3 @@ V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description
 png(filename=paste(output_folder,"Plot_Stage_III.png",sep=""), width = 25, height = 25, res=600, units = "cm")
 	plot(graph_all_stages, layout=layout_with_kk)
 dev.off()
-
-

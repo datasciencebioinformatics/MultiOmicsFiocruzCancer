@@ -214,10 +214,27 @@ V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description
 V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$shape      <- "square"
 V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$shape  <- "square"
 
+# Set size of the node according to the dregree
+V(graph_all_stages)$size                                                                           <- degree(graph_all_stages)
+
+
 # FindClusters_resolution
-png(filename=paste(output_folder,"Plot_Stage_III.png",sep=""), width = 25, height = 25, res=600, units = "cm")
+png(filename=paste(output_folder,"Plot_Stage_III.png",sep=""), width = 30, height = 30, res=600, units = "cm")
 	plot(graph_all_stages, layout=layout_with_kk)
 dev.off()
 
 # Save file 
-write.xlsx(x=df_all_annotation,file=paste(output_dir,"df_all_annotation",".xlsx",sep=""), sheet="Stage III")
+write.xlsx(x=df_all_annotation_selected_pathways,file=paste(output_dir,"df_all_annotation",".xlsx",sep=""), sheet="Stage III")
+
+
+######################################################################################################################
+GO=
+KEGG=
+REACTOME=
+Gene=
+
+png(filename=paste(output_folder,"legend.png",sep=""), width = 5, height = 5, res=600, units = "cm")
+plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
+legend("topleft", legend =c('GO', 'KEGG', 'REACTOME','Gene'), pch=16, pt.cex=3, cex=1.5, bty='n',col = c('#ff6347', '#ffd700', '#7f7f7f', '#0072b2'))
+mtext("Legend", at=0.2, cex=2)
+dev.off()

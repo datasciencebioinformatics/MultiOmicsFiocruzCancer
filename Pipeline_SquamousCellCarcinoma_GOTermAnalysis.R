@@ -218,3 +218,6 @@ V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description
 png(filename=paste(output_folder,"Plot_Stage_III.png",sep=""), width = 25, height = 25, res=600, units = "cm")
 	plot(graph_all_stages, layout=layout_with_kk)
 dev.off()
+
+# Save file 
+write.xlsx(x=df_all_annotation,file=paste(output_dir,"df_all_annotation",".xlsx",sep=""), sheet="Stage III")

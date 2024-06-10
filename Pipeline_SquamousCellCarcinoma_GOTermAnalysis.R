@@ -210,16 +210,14 @@ annotation_description_REACTOME <-unique(df_all_annotation_per_stage[df_all_anno
 
 # A vector with all gene symbols
 gene_Stage_I                 <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage I"),"SYMBOL"])
-gene_Stage_II                <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),"SYMBOL"])
-gene_Stage_III               <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage III"),"SYMBOL"])
 
 selection_GO          <-names(tail(sort(table_GO),n=10))
 selection_KEGG        <-names(tail(sort(table_KEGG),n=10))
 selection_REACTOM     <-names(tail(sort(table_REACTOME),n=10))
 
-df_all_annotation_selected_pathways<-rbind(df_all_annotation[which(df_all_annotation$Description %in% selection_GO),],
-df_all_annotation[which(df_all_annotation$Description %in% selection_KEGG),],
-df_all_annotation[which(df_all_annotation$Description %in% selection_REACTOM),],
+df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Description %in% selection_GO),],
+df_all_annotation_per_stage[which(df_all_annotation_per_stage$Description %in% selection_KEGG),],
+df_all_annotation_per_stage[which(df_all_annotation_per_stage$Description %in% selection_REACTOM),],
 interactome_annotation_stage)
 ####################################################################################################################
 # All stages
@@ -260,7 +258,8 @@ png(filename=paste(output_folder,"Plot_Stage_I.png",sep=""), width = 30, height 
 dev.off()
 
 # Save file 
-write.xlsx(x=df_all_annotation_selected_pathways,file=paste(output_dir,"df_all_annotation",".xlsx",sep=""), sheet="Stage I", append=TRUE)
+write.xlsx(x=df_all_annotation_selected_pathways,file=paste(output_dir,"df_all_annotation",".xlsx",sep=""), sheet="Stage I", append=FALSE)
+######################################################################################################################
 ######################################################################################################################
 # Stage II
 Stage="Stage II"
@@ -289,17 +288,15 @@ annotation_description_KEGG     <-unique(df_all_annotation_per_stage[df_all_anno
 annotation_description_REACTOME <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
 
 # A vector with all gene symbols
-gene_Stage_I                 <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage I"),"SYMBOL"])
-gene_Stage_II                <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),"SYMBOL"])
-gene_Stage_III               <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage III"),"SYMBOL"])
+gene_Stage_II                 <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),"SYMBOL"])
 
 selection_GO          <-names(tail(sort(table_GO),n=10))
 selection_KEGG        <-names(tail(sort(table_KEGG),n=10))
 selection_REACTOM     <-names(tail(sort(table_REACTOME),n=10))
 
-df_all_annotation_selected_pathways<-rbind(df_all_annotation[which(df_all_annotation$Description %in% selection_GO),],
-df_all_annotation[which(df_all_annotation$Description %in% selection_KEGG),],
-df_all_annotation[which(df_all_annotation$Description %in% selection_REACTOM),],
+df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Description %in% selection_GO),],
+df_all_annotation_per_stage[which(df_all_annotation_per_stage$Description %in% selection_KEGG),],
+df_all_annotation_per_stage[which(df_all_annotation_per_stage$Description %in% selection_REACTOM),],
 interactome_annotation_stage)
 ####################################################################################################################
 # All stages
@@ -341,8 +338,13 @@ dev.off()
 
 # Save file 
 write.xlsx(x=df_all_annotation_selected_pathways,file=paste(output_dir,"df_all_annotation",".xlsx",sep=""), sheet="Stage II", append=TRUE)
-####################################################################################################################
-# Stage III
+######################################################################################################################
+
+
+
+
+######################################################################################################################
+# Stage II
 Stage="Stage III"
 
 # Store annotation of stage II
@@ -369,17 +371,15 @@ annotation_description_KEGG     <-unique(df_all_annotation_per_stage[df_all_anno
 annotation_description_REACTOME <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
 
 # A vector with all gene symbols
-gene_Stage_I                 <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage I"),"SYMBOL"])
-gene_Stage_II                <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),"SYMBOL"])
-gene_Stage_III               <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage III"),"SYMBOL"])
+gene_Stage_II                 <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage III"),"SYMBOL"])
 
 selection_GO          <-names(tail(sort(table_GO),n=10))
 selection_KEGG        <-names(tail(sort(table_KEGG),n=10))
 selection_REACTOM     <-names(tail(sort(table_REACTOME),n=10))
 
-df_all_annotation_selected_pathways<-rbind(df_all_annotation[which(df_all_annotation$Description %in% selection_GO),],
-df_all_annotation[which(df_all_annotation$Description %in% selection_KEGG),],
-df_all_annotation[which(df_all_annotation$Description %in% selection_REACTOM),],
+df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Description %in% selection_GO),],
+df_all_annotation_per_stage[which(df_all_annotation_per_stage$Description %in% selection_KEGG),],
+df_all_annotation_per_stage[which(df_all_annotation_per_stage$Description %in% selection_REACTOM),],
 interactome_annotation_stage)
 ####################################################################################################################
 # All stages
@@ -421,28 +421,7 @@ dev.off()
 
 # Save file 
 write.xlsx(x=df_all_annotation_selected_pathways,file=paste(output_dir,"df_all_annotation",".xlsx",sep=""), sheet="Stage III", append=TRUE)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ######################################################################################################################
-GO=
-KEGG=
-REACTOME=
-Gene=
-
 png(filename=paste(output_folder,"legend.png",sep=""), width = 5, height = 5, res=600, units = "cm")
 plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
 legend("topleft", legend =c('GO', 'KEGG', 'REACTOME','Gene'), pch=16, pt.cex=3, cex=1.5, bty='n',col = c('#ff6347', '#ffd700', '#7f7f7f', '#0072b2'))

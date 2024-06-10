@@ -1,3 +1,8 @@
+Results
+	- Stage-specific singnatures for squamous cell lung cancer
+	- Cancer progression measured by shannon entropy
+	- Stage-wise network and funtional analysis
+
 Stage-specific signatures were detetected followed by analysis of their respective sub-interactomes. For stages I, II and III respectivelly, AA, BB and CC genes were determined as potential biomarkers, but only DD, EE and FF were without overlapping, exclusive from each stage. From the stage-specific networks, shannon entropy was calculated to test whether there is more cancer information on expression of genes in the later stages compared to the first. Entropy values of CC, GG and HH for stages I, II and III shows that pehaps there is more information about cacer in genes specific of stage III. Stage-wise funcional analysis showed this, this and this.
 
 The log2folchange of tumor genes is defined as means(log2 of expression for tumor samples) - means(log2 of expression for normal samples). The log2folchange of stage-specific genes is defined as means(log2 of expression for Stage X samples) - means(log2 of expression for Stages Y and X samples).

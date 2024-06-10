@@ -251,7 +251,7 @@ E(graph_all_stages)$color                                                       
 E(graph_all_stages)[which(df_all_eges$names %in% selected_interactome)]$color                     <- "black"
 
 # FindClusters_resolution
-png(filename=paste(output_folder,"Plot_Stage_I.png",sep=""), width = 40, height = 40, res=600, units = "cm")
+png(filename=paste(output_folder,"Plot_Stage_I.png",sep=""), width = 30, height = 30, res=600, units = "cm")
 	plot(graph_all_stages, layout=layout_nicely) # Stage I
 	#plot(graph_all_stages, layout=  layout_with_kk) # Stage II
 	#plot(graph_all_stages, layout=   layout_nicely) # Stage II

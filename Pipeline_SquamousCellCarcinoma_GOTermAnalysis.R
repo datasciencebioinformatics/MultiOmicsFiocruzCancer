@@ -182,7 +182,7 @@ interactome_all_stage$Gene2<-genes_in_interactome[interactome_all_stage$Gene2,"S
 # gene annotation
 interactome_annotation<-data.frame(ID=rownames(interactome_all_stage),p.adjust=0,Description=interactome_all_stage$Gene1,geneID=interactome_all_stage$Gene2, SYMBOL=interactome_all_stage$Gene2,Count=0,Stage=interactome_all_stage$Stage,Layer="interactome")
 ######################################################################################################################
-# Stage II
+# Stage I
 Stage="Stage III"
 
 # Store annotation of stage II

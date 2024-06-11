@@ -242,7 +242,10 @@ V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description
 V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$shape  <- "square"
 
 # Set size of the node according to the dregree
-V(graph_all_stages)$size                                                                           <- degree(graph_all_stages)
+V(graph_all_stages)$size                                                                          <- 5
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$size        <- 10
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$size      <- 10
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$size  <- 10
 
 # Vertice colours of genes
 E(graph_all_stages)$color                                                                         <- "lightgray"
@@ -321,7 +324,11 @@ V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description
 V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$shape  <- "square"
 
 # Set size of the node according to the dregree
-V(graph_all_stages)$size                                                                           <- degree(graph_all_stages)
+V(graph_all_stages)$size                                                                          <- 5
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$size        <- 10
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$size      <- 10
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$size  <- 10
+
 
 # Vertice colours of genes
 E(graph_all_stages)$color                                                                         <- "lightgray"
@@ -404,7 +411,10 @@ V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description
 V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$shape  <- "square"
 
 # Set size of the node according to the dregree
-V(graph_all_stages)$size                                                                           <- degree(graph_all_stages)
+V(graph_all_stages)$size                                                                          <- 5
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$size        <- 10
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$size      <- 10
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$size  <- 10
 
 # Vertice colours of genes
 E(graph_all_stages)$color                                                                         <- "lightgray"
@@ -427,3 +437,4 @@ plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
 legend("topleft", legend =c('GO', 'KEGG', 'REACTOME','Gene'), pch=16, pt.cex=3, cex=1.5, bty='n',col = c('#ff6347', '#ffd700', '#7f7f7f', '#0072b2'))
 mtext("Legend", at=0.2, cex=2)
 dev.off()
+

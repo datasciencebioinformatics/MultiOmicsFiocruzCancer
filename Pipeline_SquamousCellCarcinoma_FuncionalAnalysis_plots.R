@@ -252,9 +252,10 @@ png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge.png",sep=""), width 
 	plot(graph_all_stages, layout=   layout_nicely, vertex.label=NA) # Stage II
 dev.off()
 
-com <- communities(graph_all_stages)
-eb <- cluster_edge_betweenness(graph_all_stages)
-plot(eb,graph_all_stages, layout=   layout_nicely, vertex.label=NA, vertex.color=V(g)$color)
+###########################################################################3
+c1 = cluster_fast_greedy(graph_all_stages)
+plot(graph_all_stages, layout=   layout_nicely, vertex.label=NA, vertex.color=V(graph_all_stages)$color)
+plot(graph_all_stages, layout=   layout_nicely, vertex.label=NA) # Stage II
 
 
 # FindClusters_resolution

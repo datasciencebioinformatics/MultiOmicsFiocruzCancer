@@ -54,7 +54,22 @@ for (annotation in rownames(annotation_stages_all))
 		df_all_annotation<-rbind(df_all_annotation,gene_annotation)
 	}	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ######################################################################################################################
+# The ten most abundant annotation terms in number of genes were selected for further inspection (see Figure Annotaton): Reactome:Intracellular signaling by second messengers (14), Reactome:PIP3 activates AKT signaling (14), Reactome:Regulation of expression of SLITs and ROBOs  (14), Reactome:Signaling by ROBO receptors (15), GO:mitochondrial matrix (16), GO:mitochondrial protein-containing complex (16), KEGG:Alzheimer disease (16), Reactome:Translation  (16), GO:mitochondrial inner membrane (17), Reactome:SARS-CoV Infections (18)
 # Load interactome
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadInteractomeUniqueGenes.R")
 
@@ -71,65 +86,6 @@ interactome_all_stage$Gene2<-genes_in_interactome[interactome_all_stage$Gene2,"S
 # gene annotation
 interactome_annotation<-data.frame(gene_id=rownames(interactome_all_stage),gene=rownames(interactome_all_stage),log2change=rownames(interactome_all_stage),Category=0,Pvalue=0,FDR=0,ENTREZID=0,Symbol=interactome_all_stage$Gene1,Description=0,genecards_Category=0,UniProt_ID=0,GIFtS=0,GC_id=0,GeneCards_Summary=0,Stage=interactome_all_stage$Stage,Layer="Interactome",CluterProfiler=interactome_all_stage$Gene2 )
 ######################################################################################################################
-n_top<-2
-
-# Stage I
-Stage="Stage I"
-
-# Store annotation of stage I
-df_all_annotation_per_stage<-df_all_annotation[which(df_all_annotation$Stage==Stage),]
-######################################################################################################################
-# A table for the count of go terms
-table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","CluterProfiler"])
-table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","CluterProfiler"])
-table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","CluterProfiler"])
-
-all_layers<-rbind(table_GO,table_KEGG,table_REACTOME)
-
-selection_GO_Stage_I          <-names(tail(sort(table_GO),n=n_top))
-selection_KEGG_Stage_I        <-names(tail(sort(table_KEGG),n=n_top))
-selection_REACTOM_Stage_I     <-names(tail(sort(table_REACTOME),n=n_top))
-######################################################################################################################
-# Stage II
-Stage="Stage II"
-
-# Store annotation of stage II
-df_all_annotation_per_stage<-df_all_annotation[which(df_all_annotation$Stage==Stage),]
-######################################################################################################################
-# A table for the count of go terms
-table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","CluterProfiler"])
-table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","CluterProfiler"])
-table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","CluterProfiler"])
-
-selection_GO_Stage_II          <-names(tail(sort(table_GO),n=n_top))
-selection_KEGG_Stage_II        <-names(tail(sort(table_KEGG),n=n_top))
-selection_REACTOM_Stage_II     <-names(tail(sort(table_REACTOME),n=n_top))
-######################################################################################################################
-# Stage III
-Stage="Stage III"
-
-# Store annotation of stage III
-df_all_annotation_per_stage<-df_all_annotation[which(df_all_annotation$Stage==Stage),]
-######################################################################################################################
-# A table for the count of go terms
-table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","CluterProfiler"])
-table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","CluterProfiler"])
-table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","CluterProfiler"])
-
-selection_GO_Stage_III          <-names(tail(sort(table_GO),n=n_top))
-selection_KEGG_Stage_III        <-names(tail(sort(table_KEGG),n=n_top))
-selection_REACTOM_Stage_III     <-names(tail(sort(table_REACTOME),n=n_top))
-
-
-
-
-
-
-
-
-
-
-######################################################################################################################
 # Store annotation of stages
 df_all_annotation_per_stage<-df_all_annotation
 
@@ -140,13 +96,19 @@ interactome_annotation_stage<-interactome_annotation
 selected_interactome<-c(paste(interactome_annotation_stage$Description,interactome_annotation_stage$SYMBOL,sep="-"),
 paste(interactome_annotation_stage$SYMBOL,interactome_annotation_stage$Description,sep="-"))
 ######################################################################################################################
-selection_GO          <-unique(c(selection_GO_Stage_I,selection_GO_Stage_II,selection_GO_Stage_III))
-selection_KEGG        <-unique(c(selection_KEGG_Stage_I,selection_KEGG_Stage_II,selection_KEGG_Stage_III))
-selection_REACTOM     <-unique(c(selection_REACTOM_Stage_I,selection_REACTOM_Stage_II,selection_REACTOM_Stage_III))
+# A table for the count of go terms
+table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","CluterProfiler"])
+table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","CluterProfiler"])
+table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","CluterProfiler"])
 
-all_selection<-c(selection_GO,selection_KEGG,selection_REACTOM)
+all_selection<-c(table_GO,table_KEGG,table_REACTOME)
 
-df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$CluterProfiler %in% all_selection),],
+selection_all         <-names(tail(sort(all_selection),n=10))
+
+# Count per selected term
+data.frame(n=tail(sort(all_selection),n=10))
+
+df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$CluterProfiler %in% selection_all),],
 interactome_annotation_stage)
 ####################################################################################################################
 # All stages
@@ -197,7 +159,6 @@ dev.off()
 
 # Save file 
 write.xlsx(x=df_all_annotation_selected_pathways,file=paste(output_dir,"df_all_annotation",".xlsx",sep=""), sheet="Stage I", append=FALSE)
-
 
 # Set legend
 png(filename=paste(output_folder,"legend.png",sep=""), width = 5, height = 5, res=600, units = "cm")

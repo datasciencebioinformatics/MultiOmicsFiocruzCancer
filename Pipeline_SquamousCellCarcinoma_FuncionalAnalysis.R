@@ -115,6 +115,9 @@ reactome_results_all_Stages$Layer<-"Reactome"
 
 # Merge all tables
 all_anotation_results<-rbind(go_results_all_Stages,kegg_results_all_Stages,reactome_results_all_Stages)
+
+# Filter by p.adjust
+all_anotation_results[which(all_anotation_results$p.adjust <0.05),"Stage"]
 ######################################################################################################################
 # A data.frame to store all results
 df_all_annotation<-data.frame(ID=c(),p.adjust=c(),Description=c(),geneID=c(), SYMBOL=c(),Count=c(),Stage=c(),Layer=c())

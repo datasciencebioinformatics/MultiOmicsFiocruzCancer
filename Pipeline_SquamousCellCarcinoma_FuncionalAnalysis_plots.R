@@ -1,3 +1,55 @@
+annotation_stages_all
+######################################################################################################################
+# A data.frame to store all results
+df_all_annotation<-data.frame(gene_id=c(),gene=c(),log2change=c(),Category=c(),Pvalue=c(),FDR=c(),ENTREZID=c(),Symbol=c(),Description=c(),genecards_Category=c(),UniProt_ID=c(),GIFtS=c(),GC_id=c(),GeneCards_Summary=c(),Stage=c(),CluterProfiler=c() )
+
+# For each annotation
+for (annotation in rownames(annotation_stages_all))
+{
+
+	# Save all variables
+	gene_id      <- annotation_stages_all[annotation,"gene_id"]   
+	gene         <- annotation_stages_all[annotation,"gene"]   
+	log2change   <- annotation_stages_all[annotation,"log2change"]   
+	Category     <- annotation_stages_all[annotation,"Category"]   
+	Pvalue       <- annotation_stages_all[annotation,"Pvalue"]   
+	FDR          <- annotation_stages_all[annotation,"FDR"]   
+	ENTREZID     <- annotation_stages_all[annotation,"ENTREZID"]   
+	Symbol       <- annotation_stages_all[annotation,"Symbol"]   
+	Description  <- annotation_stages_all[annotation,"Description"]   
+	genecards_Category   <- annotation_stages_all[annotation,"genecards_Category"]   
+	UniProt_ID           <- annotation_stages_all[annotation,"UniProt_ID"]   
+	GIFtS                <- annotation_stages_all[annotation,"GIFtS"]   
+	GC_id                <- annotation_stages_all[annotation,"GC_id"]   
+	GeneCards_Summary    <- annotation_stages_all[annotation,"GeneCards_Summary"]   
+	Stage                <- annotation_stages_all[annotation,"Stage"]   
+	CluterProfiler	     <- annotation_stages_all[annotation,"CluterProfiler"]   
+
+	# All genes of stage
+	all_genes_of_annotation<-strsplit(x=CluterProfiler,",",fixed=T)[[1]]
+
+	# For all genes
+	for (CluterProfiler_index in all_genes_of_annotation)
+	{
+		# If layer equal to Kegg
+		if(Layer=="KEGG")
+		{
+			# Make the id converstion			
+			gene_symbol<-genes_Stage_ALL[which(genes_Stage_ALL$ENTREZID %in% genes),"SYMBOL"]
+			genes_id<-genes_Stage_ALL[which(genes_Stage_ALL$ENTREZID %in% genes),"gene_id"]
+		}else # If not kegg 
+		{
+			# Make the id converstion			
+			gene_symbol<-genes_Stage_ALL[which(genes_Stage_ALL$SYMBOL %in% genes),"SYMBOL"]
+			genes_id<-genes_Stage_ALL[which(genes_Stage_ALL$SYMBOL %in% genes),"gene_id"]
+		}
+		# gene annotation
+		gene_annotation<-data.frame(gene_id=gene_id,gene=gene,log2change=log2change,Category=Category,Pvalue=Pvalue,FDR=FDR,ENTREZID=ENTREZID,Symbol=Symbol,Description=Description,genecards_Category=genecards_Category,UniProt_ID=UniProt_ID,GIFtS=GIFtS,GC_id=GC_id,GeneCards_Summary=GeneCards_Summary,Stage=Stage,CluterProfiler=CluterProfiler_index )
+
+		# df_all_annotation
+		df_all_annotation<-rbind(df_all_annotation,gene_annotation)
+	}	
+}
 ######################################################################################################################
 # Load interactome
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadInteractomeUniqueGenes.R")

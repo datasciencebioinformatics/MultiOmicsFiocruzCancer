@@ -66,8 +66,8 @@ for (annotation in rownames(annotation_stages_all))
 
 
 
-
-
+######################################################################################################################
+# The ten most abundant annotation terms in number of genes were selected for further inspection (see Figure Annotaton): Reactome:Intracellular signaling by second messengers (14), Reactome:PIP3 activates AKT signaling (14), Reactome:Regulation of expression of SLITs and ROBOs  (14), Reactome:Signaling by ROBO receptors (15), GO:mitochondrial matrix (16), GO:mitochondrial protein-containing complex (16), KEGG:Alzheimer disease (16), Reactome:Translation  (16), GO:mitochondrial inner membrane (17), Reactome:SARS-CoV Infections (18)
 ######################################################################################################################
 # The ten most abundant annotation terms in number of genes were selected for further inspection (see Figure Annotaton): Reactome:Intracellular signaling by second messengers (14), Reactome:PIP3 activates AKT signaling (14), Reactome:Regulation of expression of SLITs and ROBOs  (14), Reactome:Signaling by ROBO receptors (15), GO:mitochondrial matrix (16), GO:mitochondrial protein-containing complex (16), KEGG:Alzheimer disease (16), Reactome:Translation  (16), GO:mitochondrial inner membrane (17), Reactome:SARS-CoV Infections (18)
 # Load interactome
@@ -158,7 +158,7 @@ dev.off()
 
 
 # Save file 
-write.xlsx(x=df_all_annotation_selected_pathways,file=paste(output_dir,"df_all_annotation",".xlsx",sep=""), sheet="Stage I", append=FALSE)
+write.xlsx(x=df_all_annotation_selected_pathways,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="ten most abundant annotation", append=TRUE)
 
 # Set legend
 png(filename=paste(output_folder,"legend.png",sep=""), width = 5, height = 5, res=600, units = "cm")

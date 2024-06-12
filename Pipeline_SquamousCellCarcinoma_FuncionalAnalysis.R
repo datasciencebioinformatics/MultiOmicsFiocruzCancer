@@ -332,39 +332,37 @@ dev.off()
 
 #####################################################################################################
 # Sheet 1 - annotate each gene individually
-columns<-c("ACCNUM","ALIAS","ENSEMBL","ENSEMBLPROT","ENSEMBLTRANS","ENTREZID","ENZYME","EVIDENCE","EVIDENCEALL","GENENAME" ,"GENETYPE","GO","GOALL","IPI","MAP","OMIM","ONTOLOGY","ONTOLOGYALL","PATH","PFAM","PMID","PROSITE","REFSEQ","SYMBOL","UCSCKG","UNIPROT")
-
-df_all_annotation
-
-# for each gene
-
-
 # ids_stage_I
-ids_stage_I    <-bitr(genes_unique_Stage_I$gene_id, fromType = "ENSEMBL", toType = columns, OrgDb="org.Hs.eg.db")
-ids_stage_II   <-bitr(genes_unique_Stage_II$gene_id, fromType = "ENSEMBL", toType = columns, OrgDb="org.Hs.eg.db")
-ids_stage_III  <-bitr(genes_unique_Stage_III$gene_id, fromType = "ENSEMBL", toType = columns, OrgDb="org.Hs.eg.db")
+# Specify sheet by its name
+annotation_stage_I <- data.frame(read_excel("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/unique_genes_annotation.xlsx", sheet = "Stage I"))
+annotation_stage_II <- data.frame(read_excel("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/unique_genes_annotation.xlsx", sheet = "Stage II"))
+annotation_stage_III <- data.frame(read_excel("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/unique_genes_annotation.xlsx", sheet = "Stage III"))
 
-# Check if all ids are in the table, if not include with empty values
+annotation_stage_I$Stage<-"Stage I"
+annotation_stage_II$Stage<-"Stage II"
+annotation_stage_III$Stage<-"Stage III"
 
-#####################################################################################################
-# Add stage to table
-genes_Stage_I$Stage<-"Stage I"
-genes_Stage_II$Stage<-"Stage II"
-genes_Stage_III$Stage<-"Stage III"
+# bind all annotation
+annotation_stages_all<-rbind(annotation_stage_I,annotation_stage_II,annotation_stage_III)
 
-# Mege tables
-all_stages<-rbind(genes_Stage_I,genes_Stage_II,genes_Stage_III)
-#####################################################################################################
-all_anotation_results
+# A filed combining Layer and descriptions
+df_all_annotation$CluterProfiler=paste(df_all_annotation$Layer,":",df_all_annotation$Description,sep="")
 
-# Sheet 2 - complete table as it is per stage
-# Sheet 2 - complete table as it is per stage
+# Filed to add CluterProfiler
+annotation_stages_all$CluterProfiler<-""
+
+# For ech genes in annotation_stages_all
+for (gene_row in rownames(annotation_stages_all))
+{
+	# Take gene id from gene_row
+	gene<-annotation_stages_all[gene_row,"gene_id"]
+
+	# Add clusterProfiler
+	annotation_stages_all[gene_row,"CluterProfiler"]<-paste(df_all_annotation[which(df_all_annotation$geneID == gene),"CluterProfiler"],collapse=",")
+}
+# Save file 
+write.xlsx(x=annotation_stages_all,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="all_stages", append=FALSE)
 
 
-# Take all the annotated patways (unique)
-# Add genes of the pathway (per stage)
-# Add pvalues (per stage)
 
 
-# Save annotation
-write.table(table(all_anotation_results$Description, all_anotation_results$Stage), file = "/home/felipe/table_annotation.dat", row.names=TRUE, sep="\t") 

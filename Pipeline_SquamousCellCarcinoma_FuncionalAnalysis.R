@@ -193,6 +193,3 @@ for (gene_row in rownames(annotation_stages_all))
 # Save file 
 write.xlsx(x=annotation_stages_all,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="all_stages", append=FALSE)
 
-
-
-

@@ -334,8 +334,10 @@ dev.off()
 # Sheet 1 - annotate each gene individually
 columns<-c("ACCNUM","ALIAS","ENSEMBL","ENSEMBLPROT","ENSEMBLTRANS","ENTREZID","ENZYME","EVIDENCE","EVIDENCEALL","GENENAME" ,"GENETYPE","GO","GOALL","IPI","MAP","OMIM","ONTOLOGY","ONTOLOGYALL","PATH","PFAM","PMID","PROSITE","REFSEQ","SYMBOL","UCSCKG","UNIPROT")
 
-# Add all annotation collumns here
-df_all_annotation
+c
+
+# for each gene
+
 
 # ids_stage_I
 ids_stage_I    <-bitr(genes_unique_Stage_I$gene_id, fromType = "ENSEMBL", toType = columns, OrgDb="org.Hs.eg.db")
@@ -343,6 +345,7 @@ ids_stage_II   <-bitr(genes_unique_Stage_II$gene_id, fromType = "ENSEMBL", toTyp
 ids_stage_III  <-bitr(genes_unique_Stage_III$gene_id, fromType = "ENSEMBL", toType = columns, OrgDb="org.Hs.eg.db")
 
 # Check if all ids are in the table, if not include with empty values
+
 #####################################################################################################
 # Add stage to table
 ids_stage_I$Stage<-"Stage I"

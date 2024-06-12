@@ -3,7 +3,7 @@
 # Analyses with the combination of parameter line 119 of the document Parametrization.xlsx
 # ≥3	≥1	≤0.05	≥0.85	5456	1798/25	1887/70	1991/182	204/191/1.3396	225/207/1.4054	242/206/1.2978	1276/3819/3.7205	1345/4143/3.7816	1440/4646/3.8299
 # ENSEMBL ids were converted to ENTREZ ids. enrichGO on org.Hs.eg.db was used (pAdjustMethod = "BH",pvalueCutoff  = 0.05,qvalueCutoff  = 0.05, minGSSize = 3) to anotate 23, 62 and 169 genes from stages I, II and III, respectivelly. Then cnetplot was used to show asociations of genes to top 10 categories.
-#######################################################################################################################################
+###################################=c####################################################################################################
 file_unique_gene_stages_I    <- paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_I",".tsv",sep="")
 file_unique_gene_stages_II   <- paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_II",".tsv",sep="")
 file_unique_gene_stages_III  <- paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_III",".tsv",sep="")
@@ -45,13 +45,13 @@ for (gene_row in rownames(genes_unique_Stage_III))
 }
 ########################################################################################################################################
 # ids_stage_I
-ids_stage_I    <-bitr(genes_unique_Stage_I$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
-ids_stage_II   <-bitr(genes_unique_Stage_II$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
-ids_stage_III  <-bitr(genes_unique_Stage_III$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
+ids_stage_I    <-bitr(genes_unique_Stage_I$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL","GENENAME" ,"GO","GOALL"), OrgDb="org.Hs.eg.db")
+ids_stage_II    <-bitr(genes_unique_Stage_II$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL","GENENAME" ,"GO","GOALL"), OrgDb="org.Hs.eg.db")
+ids_stage_III    <-bitr(genes_unique_Stage_III$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL","GENENAME" ,"GO","GOALL"), OrgDb="org.Hs.eg.db")
 ########################################################################################################################################
-colnames(ids_stage_I)   <-c("gene_id","ENTREZID","SYMBOL")
-colnames(ids_stage_II)  <-c("gene_id","ENTREZID","SYMBOL")
-colnames(ids_stage_III) <-c("gene_id","ENTREZID","SYMBOL")
+colnames(ids_stage_I)   <-c("gene_id","ENTREZID","SYMBOL","GENENAME" ,"GO","GOALL")
+colnames(ids_stage_II)  <-c("gene_id","ENTREZID","SYMBOL","GENENAME" ,"GO","GOALL")
+colnames(ids_stage_III) <-c("gene_id","ENTREZID","SYMBOL","GENENAME" ,"GO","GOALL")
 ########################################################################################################################################
 genes_Stage_I  <-merge(genes_unique_Stage_I,ids_stage_I,by="gene_id")
 genes_Stage_II <-merge(genes_unique_Stage_II,ids_stage_II,by="gene_id")

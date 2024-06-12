@@ -1,7 +1,7 @@
 annotation_stages_all
 ######################################################################################################################
 # A data.frame to store all results
-df_all_annotation<-data.frame(gene_id=c(),gene=c(),log2change=c(),Category=c(),Pvalue=c(),FDR=c(),ENTREZID=c(),Symbol=c(),Description=c(),genecards_Category=c(),UniProt_ID=c(),GIFtS=c(),GC_id=c(),GeneCards_Summary=c(),Stage=c(),CluterProfiler=c() )
+df_all_annotation<-data.frame(gene_id=c(),gene=c(),log2change=c(),Category=c(),Pvalue=c(),FDR=c(),ENTREZID=c(),Symbol=c(),Description=c(),genecards_Category=c(),UniProt_ID=c(),GIFtS=c(),GC_id=c(),GeneCards_Summary=c(),Stage=c(),Layer=c(),CluterProfiler=c() )
 
 # For each annotation
 for (annotation in rownames(annotation_stages_all))
@@ -24,6 +24,7 @@ for (annotation in rownames(annotation_stages_all))
 	GeneCards_Summary    <- annotation_stages_all[annotation,"GeneCards_Summary"]   
 	Stage                <- annotation_stages_all[annotation,"Stage"]   
 	CluterProfiler	     <- annotation_stages_all[annotation,"CluterProfiler"]   
+	Layer       	     <- ""
 
 	# All genes of stage
 	all_genes_of_annotation<-strsplit(x=CluterProfiler,",",fixed=T)[[1]]
@@ -31,6 +32,9 @@ for (annotation in rownames(annotation_stages_all))
 	# For all genes
 	for (CluterProfiler_index in all_genes_of_annotation)
 	{
+		# Set layer
+		Layer<-strsplit(x=CluterProfiler_index,":",fixed=T)[[1]][[1]]
+		
 		# If layer equal to Kegg
 		if(Layer=="KEGG")
 		{
@@ -44,7 +48,7 @@ for (annotation in rownames(annotation_stages_all))
 			genes_id<-genes_Stage_ALL[which(genes_Stage_ALL$SYMBOL %in% genes),"gene_id"]
 		}
 		# gene annotation
-		gene_annotation<-data.frame(gene_id=gene_id,gene=gene,log2change=log2change,Category=Category,Pvalue=Pvalue,FDR=FDR,ENTREZID=ENTREZID,Symbol=Symbol,Description=Description,genecards_Category=genecards_Category,UniProt_ID=UniProt_ID,GIFtS=GIFtS,GC_id=GC_id,GeneCards_Summary=GeneCards_Summary,Stage=Stage,CluterProfiler=CluterProfiler_index )
+		gene_annotation<-data.frame(gene_id=gene_id,gene=gene,log2change=log2change,Category=Category,Pvalue=Pvalue,FDR=FDR,ENTREZID=ENTREZID,Symbol=Symbol,Description=Description,genecards_Category=genecards_Category,UniProt_ID=UniProt_ID,GIFtS=GIFtS,GC_id=GC_id,GeneCards_Summary=GeneCards_Summary,Stage=Stage,Layer=Layer,CluterProfiler=CluterProfiler_index )
 
 		# df_all_annotation
 		df_all_annotation<-rbind(df_all_annotation,gene_annotation)
@@ -65,7 +69,7 @@ interactome_all_stage$Gene1<-genes_in_interactome[interactome_all_stage$Gene1,"S
 interactome_all_stage$Gene2<-genes_in_interactome[interactome_all_stage$Gene2,"SYMBOL"]
 
 # gene annotation
-interactome_annotation<-data.frame(ID=rownames(interactome_all_stage),p.adjust=0,Description=interactome_all_stage$Gene1,geneID=interactome_all_stage$Gene2, SYMBOL=interactome_all_stage$Gene2,Count=0,Stage=interactome_all_stage$Stage,Layer="interactome")
+interactome_annotation<-data.frame(gene_id=rownames(interactome_all_stage),gene=rownames(interactome_all_stage),log2change=rownames(interactome_all_stage),Category=0,Pvalue=0,FDR=0,ENTREZID=0,Symbol=interactome_all_stage$Gene1,Description=0,genecards_Category=0,UniProt_ID=0,GIFtS=0,GC_id=0,GeneCards_Summary=0,Stage=interactome_all_stage$Stage,Layer="Interactome",CluterProfiler=interactome_all_stage$Gene2 )
 ######################################################################################################################
 n_top<-2
 
@@ -76,9 +80,11 @@ Stage="Stage I"
 df_all_annotation_per_stage<-df_all_annotation[which(df_all_annotation$Stage==Stage),]
 ######################################################################################################################
 # A table for the count of go terms
-table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"])
-table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"])
-table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
+table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","CluterProfiler"])
+table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","CluterProfiler"])
+table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","CluterProfiler"])
+
+all_layers<-rbind(table_GO,table_KEGG,table_REACTOME)
 
 selection_GO_Stage_I          <-names(tail(sort(table_GO),n=n_top))
 selection_KEGG_Stage_I        <-names(tail(sort(table_KEGG),n=n_top))
@@ -91,9 +97,9 @@ Stage="Stage II"
 df_all_annotation_per_stage<-df_all_annotation[which(df_all_annotation$Stage==Stage),]
 ######################################################################################################################
 # A table for the count of go terms
-table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"])
-table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"])
-table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
+table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","CluterProfiler"])
+table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","CluterProfiler"])
+table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","CluterProfiler"])
 
 selection_GO_Stage_II          <-names(tail(sort(table_GO),n=n_top))
 selection_KEGG_Stage_II        <-names(tail(sort(table_KEGG),n=n_top))
@@ -106,14 +112,22 @@ Stage="Stage III"
 df_all_annotation_per_stage<-df_all_annotation[which(df_all_annotation$Stage==Stage),]
 ######################################################################################################################
 # A table for the count of go terms
-table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"])
-table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"])
-table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
+table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","CluterProfiler"])
+table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","CluterProfiler"])
+table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","CluterProfiler"])
 
 selection_GO_Stage_III          <-names(tail(sort(table_GO),n=n_top))
 selection_KEGG_Stage_III        <-names(tail(sort(table_KEGG),n=n_top))
 selection_REACTOM_Stage_III     <-names(tail(sort(table_REACTOME),n=n_top))
-######################################################################################################################
+
+
+
+
+
+
+
+
+
 
 ######################################################################################################################
 # Store annotation of stages
@@ -126,35 +140,17 @@ interactome_annotation_stage<-interactome_annotation
 selected_interactome<-c(paste(interactome_annotation_stage$Description,interactome_annotation_stage$SYMBOL,sep="-"),
 paste(interactome_annotation_stage$SYMBOL,interactome_annotation_stage$Description,sep="-"))
 ######################################################################################################################
-# A table for the count of go terms
-table_GO<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"])
-table_KEGG<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"])
-table_REACTOME<-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
-
-# A vector with all gene symbols
-gene_symbols<-df_all_annotation_per_stage$SYMBOL
-
-# A vector with all gene symbols
-annotation_description_GO       <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="GO","Description"])
-annotation_description_KEGG     <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="KEGG","Description"])
-annotation_description_REACTOME <-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$Layer=="Reactome","Description"])
-
-# A vector with all gene symbols
-gene_Stage_I                  <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage I"),"SYMBOL"])
-gene_Stage_II                 <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),"SYMBOL"])
-gene_Stage_III                 <-unique(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage III"),"SYMBOL"])
-
 selection_GO          <-unique(c(selection_GO_Stage_I,selection_GO_Stage_II,selection_GO_Stage_III))
 selection_KEGG        <-unique(c(selection_KEGG_Stage_I,selection_KEGG_Stage_II,selection_KEGG_Stage_III))
 selection_REACTOM     <-unique(c(selection_REACTOM_Stage_I,selection_REACTOM_Stage_II,selection_REACTOM_Stage_III))
 
-df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$Description %in% selection_GO),],
-df_all_annotation_per_stage[which(df_all_annotation_per_stage$Description %in% selection_KEGG),],
-df_all_annotation_per_stage[which(df_all_annotation_per_stage$Description %in% selection_REACTOM),],
+all_selection<-c(selection_GO,selection_KEGG,selection_REACTOM)
+
+df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$CluterProfiler %in% all_selection),],
 interactome_annotation_stage)
 ####################################################################################################################
 # All stages
-graph_all_stages <- graph_from_data_frame(d=df_all_annotation_selected_pathways[,c("SYMBOL","Description")], vertices=unique(c(df_all_annotation_selected_pathways$SYMBOL,df_all_annotation_selected_pathways$Description)), directed=F)  
+graph_all_stages <- graph_from_data_frame(d=unique(df_all_annotation_selected_pathways[,c("Symbol","CluterProfiler")]), vertices=unique(c(df_all_annotation_selected_pathways$Symbol,df_all_annotation_selected_pathways$CluterProfiler)), directed=F)  
 
 # df_all_eges
 df_all_eges<-data.frame(get.edgelist(graph_all_stages))
@@ -163,27 +159,20 @@ df_all_eges<-data.frame(get.edgelist(graph_all_stages))
 df_all_eges$names<-paste(df_all_eges$X1,df_all_eges$X2,sep="-")
 ####################################################################################################################
 # Vertice colours of genes
-V(graph_all_stages)$color                                                                         <- "black"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$color       <- "gainsboro"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$color     <- "lightslategray"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$color <- "darkslategray"
+V(graph_all_stages)$color                                                                                                  <- "black"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways$CluterProfiler)]$color       <- "black"
 
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% gene_Stage_I)]$color       <- "#E69F00"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% gene_Stage_II)]$color      <- "#009E73"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% gene_Stage_III)]$color     <- "#D81B60"
-
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_I$SYMBOL)]$color       <- "#E69F00"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_II$SYMBOL)]$color      <- "#009E73"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_III$SYMBOL)]$color     <- "#D81B60"
 
 # Vertice colours of genes
-V(graph_all_stages)$shape                                                                           <-"circle"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$shape        <- "square"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$shape      <- "square"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$shape  <- "square"
+V(graph_all_stages)$shape                                                                                                                                                                                      <-"circle"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in%  df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$shape              <- "square"
 
 # Set size of the node according to the dregree
-V(graph_all_stages)$size                                                                          <- 5
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_GO)]$size        <- 7
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_KEGG)]$size      <- 7
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% annotation_description_REACTOME)]$size  <- 7
+V(graph_all_stages)$size                                                                                                                                                                               <- 5
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$size        <- 7
 
 # Vertice colours of genes
 E(graph_all_stages)$color                                                                         <- "black"

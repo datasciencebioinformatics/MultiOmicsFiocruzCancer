@@ -59,20 +59,17 @@ genes_Stage_III<-merge(genes_unique_Stage_III,ids_stage_III,by="gene_id")
 genes_Stage_ALL<-unique(rbind(ids_stage_I,ids_stage_II,ids_stage_III))
 rownames(genes_Stage_ALL)<-genes_Stage_ALL$ENTREZID
 ########################################################################################################################################
-go_ALL_Stage_I    <- enrichGO(gene = ids_stage_I$SYMBOL,  OrgDb  = org.Hs.eg.db,      ont = "ALL", pAdjustMethod = "BH",pvalueCutoff  = 0.1,qvalueCutoff  = 0.15,readable = TRUE, minGSSize = 3,keyType = "SYMBOL")
-go_ALL_Stage_II   <- enrichGO(gene = ids_stage_II$SYMBOL, OrgDb  = org.Hs.eg.db,      ont = "ALL",  pAdjustMethod = "BH",pvalueCutoff  = 0.1,qvalueCutoff  = 0.15,readable = TRUE, minGSSize = 3,keyType = "SYMBOL")
-go_ALL_Stage_III  <- enrichGO(gene = ids_stage_III$SYMBOL,OrgDb  = org.Hs.eg.db,      ont = "ALL",   pAdjustMethod = "BH",pvalueCutoff  = 0.1,qvalueCutoff  = 0.15,readable = TRUE, minGSSize = 3,keyType = "SYMBOL")
-go_ALL_Stage      <- enrichGO(gene = genes_Stage_ALL$SYMBOL,OrgDb  = org.Hs.eg.db,    ont = "ALL",   pAdjustMethod = "BH",pvalueCutoff  = 0.1,qvalueCutoff  = 0.15,readable = TRUE, minGSSize = 3,keyType = "SYMBOL")
+go_ALL_Stage_I    <- enrichGO(gene = ids_stage_I$SYMBOL,  OrgDb  = org.Hs.eg.db,      ont = "ALL", pAdjustMethod = "BH",readable = TRUE,keyType = "SYMBOL", minGSSize = 3)
+go_ALL_Stage_II   <- enrichGO(gene = ids_stage_II$SYMBOL, OrgDb  = org.Hs.eg.db,      ont = "ALL",  pAdjustMethod = "BH",readable = TRUE,keyType = "SYMBOL", minGSSize = 3)
+go_ALL_Stage_III  <- enrichGO(gene = ids_stage_III$SYMBOL,OrgDb  = org.Hs.eg.db,      ont = "ALL",   pAdjustMethod = "BH",readable = TRUE,keyType = "SYMBOL", minGSSize = 3)
 ########################################################################################################################################
-kegg_ALL_Stage_I    <- enrichKEGG(gene = ids_stage_I$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
-kegg_ALL_Stage_II   <- enrichKEGG(gene = ids_stage_II$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
-kegg_ALL_Stage_III  <- enrichKEGG(gene = ids_stage_III$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
-kegg_ALL_Stage      <- enrichKEGG(gene = genes_Stage_ALL$ENTREZ,  organism     = 'hsa',    pvalueCutoff = 0.15)
+kegg_ALL_Stage_I    <- enrichKEGG(gene = ids_stage_I$ENTREZ,  organism     = 'hsa', minGSSize = 3)
+kegg_ALL_Stage_II   <- enrichKEGG(gene = ids_stage_II$ENTREZ,  organism     = 'hsa', minGSSize = 3)
+kegg_ALL_Stage_III  <- enrichKEGG(gene = ids_stage_III$ENTREZ,  organism     = 'hsa', minGSSize = 3)
 ########################################################################################################################################
-reactome_ALL_Stage_I    <- enrichPathway(gene=ids_stage_I$ENTREZ, pvalueCutoff = 0.15, readable=TRUE)
-reactome_ALL_Stage_II   <- enrichPathway(gene=ids_stage_II$ENTREZ, pvalueCutoff = 0.15, readable=TRUE)
-reactome_ALL_Stage_III  <- enrichPathway(gene=ids_stage_III$ENTREZ, pvalueCutoff = 0.15, readable=TRUE)
-reactome_ALL_Stage      <- enrichPathway(gene = genes_Stage_ALL$ENTREZ,pvalueCutoff = 0.05, readable=TRUE)
+reactome_ALL_Stage_I    <- enrichPathway(gene=ids_stage_I$ENTREZ, readable=TRUE, minGSSize = 3)
+reactome_ALL_Stage_II   <- enrichPathway(gene=ids_stage_II$ENTREZ, readable=TRUE, minGSSize = 3)
+reactome_ALL_Stage_III  <- enrichPathway(gene=ids_stage_III$ENTREZ, readable=TRUE, minGSSize = 3)
 ########################################################################################################################################
 # A table with the associate go term per gene.
 # First, take the results per stage
@@ -118,9 +115,6 @@ reactome_results_all_Stages$Layer<-"Reactome"
 
 # Merge all tables
 all_anotation_results<-rbind(go_results_all_Stages,kegg_results_all_Stages,reactome_results_all_Stages)
-
-# Filter by padj
-#all_anotation_results<-all_anotation_results[which(all_anotation_results$p.adjust<0.15),]
 ######################################################################################################################
 # A data.frame to store all results
 df_all_annotation<-data.frame(ID=c(),p.adjust=c(),Description=c(),geneID=c(), SYMBOL=c(),Count=c(),Stage=c(),Layer=c())
@@ -163,8 +157,6 @@ for (annotation in rownames(all_anotation_results))
 		df_all_annotation<-rbind(df_all_annotation,gene_annotation)
 	}	
 }
-# Save file 
-write.xlsx(x=df_all_annotation,file=paste(output_dir,"df_all_annotation",".xlsx",sep=""), sheet="annnotation")
 ######################################################################################################################
 # Load interactome
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadInteractomeUniqueGenes.R")
@@ -325,16 +317,7 @@ dev.off()
 write.xlsx(x=df_all_annotation_selected_pathways,file=paste(output_dir,"df_all_annotation",".xlsx",sep=""), sheet="Stage I", append=FALSE)
 
 
-
-
-
-
-
-
-
-
-
-
+# Set legend
 png(filename=paste(output_folder,"legend.png",sep=""), width = 5, height = 5, res=600, units = "cm")
 plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
 legend("topleft", legend =c('GO', 'KEGG', 'REACTOME','Gene'), pch=16, pt.cex=3, cex=1.5, bty='n',col = c('#ff6347', '#ffd700', '#7f7f7f', '#0072b2'))
@@ -347,18 +330,30 @@ dev.off()
 
 
 
-
-
-
-
-
-
-
-
-
-
 #####################################################################################################
-# Sheet 1 - complete table as it is per stage
+# Sheet 1 - annotate each gene individually
+columns<-c("ACCNUM","ALIAS","ENSEMBL","ENSEMBLPROT","ENSEMBLTRANS","ENTREZID","ENZYME","EVIDENCE","EVIDENCEALL","GENENAME" ,"GENETYPE","GO","GOALL","IPI","MAP","OMIM","ONTOLOGY","ONTOLOGYALL","PATH","PFAM","PMID","PROSITE","REFSEQ","SYMBOL","UCSCKG","UNIPROT")
+
+# Add all annotation collumns here
+df_all_annotation
+
+# ids_stage_I
+ids_stage_I    <-bitr(genes_unique_Stage_I$gene_id, fromType = "ENSEMBL", toType = columns, OrgDb="org.Hs.eg.db")
+ids_stage_II   <-bitr(genes_unique_Stage_II$gene_id, fromType = "ENSEMBL", toType = columns, OrgDb="org.Hs.eg.db")
+ids_stage_III  <-bitr(genes_unique_Stage_III$gene_id, fromType = "ENSEMBL", toType = columns, OrgDb="org.Hs.eg.db")
+
+# Check if all ids are in the table, if not include with empty values
+#####################################################################################################
+# Add stage to table
+ids_stage_I$Stage<-"Stage I"
+ids_stage_II$Stage<-"Stage II"
+ids_stage_III$Stage<-"Stage III"
+
+# Mege tables
+all_stages<-rbind(ids_stage_I,ids_stage_II,ids_stage_III)
+#####################################################################################################
+all_anotation_results
+
 # Sheet 2 - complete table as it is per stage
 # Sheet 2 - complete table as it is per stage
 

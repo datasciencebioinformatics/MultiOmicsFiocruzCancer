@@ -45,13 +45,13 @@ for (gene_row in rownames(genes_unique_Stage_III))
 }
 ########################################################################################################################################
 # ids_stage_I
-ids_stage_I    <-bitr(genes_unique_Stage_I$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL","GENENAME" ,"GO","GOALL"), OrgDb="org.Hs.eg.db")
-ids_stage_II    <-bitr(genes_unique_Stage_II$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL","GENENAME" ,"GO","GOALL"), OrgDb="org.Hs.eg.db")
-ids_stage_III    <-bitr(genes_unique_Stage_III$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL","GENENAME" ,"GO","GOALL"), OrgDb="org.Hs.eg.db")
+ids_stage_I    <-bitr(genes_unique_Stage_I$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
+ids_stage_II    <-bitr(genes_unique_Stage_II$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
+ids_stage_III    <-bitr(genes_unique_Stage_III$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
 ########################################################################################################################################
-colnames(ids_stage_I)   <-c("gene_id","ENTREZID","SYMBOL","GENENAME" ,"GO","GOALL")
-colnames(ids_stage_II)  <-c("gene_id","ENTREZID","SYMBOL","GENENAME" ,"GO","GOALL")
-colnames(ids_stage_III) <-c("gene_id","ENTREZID","SYMBOL","GENENAME" ,"GO","GOALL")
+colnames(ids_stage_I)   <-c("gene_id","ENTREZID","SYMBOL")
+colnames(ids_stage_II)  <-c("gene_id","ENTREZID","SYMBOL")
+colnames(ids_stage_III) <-c("gene_id","ENTREZID","SYMBOL")
 ########################################################################################################################################
 genes_Stage_I  <-merge(genes_unique_Stage_I,ids_stage_I,by="gene_id")
 genes_Stage_II <-merge(genes_unique_Stage_II,ids_stage_II,by="gene_id")
@@ -334,7 +334,7 @@ dev.off()
 # Sheet 1 - annotate each gene individually
 columns<-c("ACCNUM","ALIAS","ENSEMBL","ENSEMBLPROT","ENSEMBLTRANS","ENTREZID","ENZYME","EVIDENCE","EVIDENCEALL","GENENAME" ,"GENETYPE","GO","GOALL","IPI","MAP","OMIM","ONTOLOGY","ONTOLOGYALL","PATH","PFAM","PMID","PROSITE","REFSEQ","SYMBOL","UCSCKG","UNIPROT")
 
-c
+df_all_annotation
 
 # for each gene
 
@@ -348,12 +348,12 @@ ids_stage_III  <-bitr(genes_unique_Stage_III$gene_id, fromType = "ENSEMBL", toTy
 
 #####################################################################################################
 # Add stage to table
-ids_stage_I$Stage<-"Stage I"
-ids_stage_II$Stage<-"Stage II"
-ids_stage_III$Stage<-"Stage III"
+genes_Stage_I$Stage<-"Stage I"
+genes_Stage_II$Stage<-"Stage II"
+genes_Stage_III$Stage<-"Stage III"
 
 # Mege tables
-all_stages<-rbind(ids_stage_I,ids_stage_II,ids_stage_III)
+all_stages<-rbind(genes_Stage_I,genes_Stage_II,genes_Stage_III)
 #####################################################################################################
 all_anotation_results
 

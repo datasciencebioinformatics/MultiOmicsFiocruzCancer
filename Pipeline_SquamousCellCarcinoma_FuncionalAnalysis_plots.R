@@ -196,23 +196,22 @@ selected_interactome<-c(paste(interactome_annotation_stage$Description,interacto
 paste(interactome_annotation_stage$SYMBOL,interactome_annotation_stage$Description,sep="-"))
 ######################################################################################################################
 # Se
-which(all_anotation_results$p.adjust <0.05)
-
 # A table for the count of go terms
 table_Stage_I   <-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage I","CluterProfiler"])
 table_Stage_II  <-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage II","CluterProfiler"])
 table_Stage_III <-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage III","CluterProfiler"])
 
-all_selection<-c(table_GO,table_KEGG,table_REACTOME)
+table_Stage_I<-table_Stage_I[which(table_Stage_I>1)]
+table_Stage_II<-table_Stage_II[which(table_Stage_II>1)]
+table_Stage_II<-table_Stage_III[which(table_Stage_III>1)]
 
-selection_all         <-names(tail(sort(table_Stage_I),n=3))
-selection_all         <-names(tail(sort(table_Stage_II),n=3))
-selection_all         <-names(tail(sort(table_Stage_III),n=3))
+
+selection_all <-unique(c(names(tail(sort(table_Stage_I),n=10)),names(tail(sort(table_Stage_II),n=10)),names(tail(sort(table_Stage_III),n=10))))
 
 # Count per selected term
 data.frame(n=tail(sort(all_selection),n=10))
 
-df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage,
+df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$CluterProfiler %in% selection_all),],
 interactome_annotation_stage)
 ####################################################################################################################
 # All stages
@@ -247,11 +246,16 @@ E(graph_all_stages)$color                                                       
 E(graph_all_stages)[which(df_all_eges$names %in% selected_interactome)]$color                     <- "lightgrey"
 
 # FindClusters_resolution
-png(filename=paste(output_folder,"Plot_Stage_all.png",sep=""), width = 30, height = 30, res=600, units = "cm")
+png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge.png",sep=""), width = 30, height = 30, res=600, units = "cm")
 	#plot(graph_all_stages, layout=layout_nicely, vertex.label=NA) # Stage I
 	#plot(graph_all_stages, layout=  layout_with_kk, vertex.label=NA) # Stage II
 	plot(graph_all_stages, layout=   layout_nicely, vertex.label=NA) # Stage II
 dev.off()
+
+com <- communities(graph_all_stages)
+eb <- cluster_edge_betweenness(graph_all_stages)
+plot(eb,graph_all_stages, layout=   layout_nicely, vertex.label=NA, vertex.color=V(g)$color)
+
 
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_Stage_label.png",sep=""), width = 30, height = 30, res=600, units = "cm")
@@ -262,7 +266,7 @@ dev.off()
 
 
 # Save file 
-write.xlsx(x=df_all_annotation_selected_pathways,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="ten most abundant annotation", append=TRUE)
+write.xlsx(x=df_all_annotation_selected_pathways,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="ten most abundant per stage", append=TRUE)
 
 # Set legend
 png(filename=paste(output_folder,"legend.png",sep=""), width = 5, height = 5, res=600, units = "cm")

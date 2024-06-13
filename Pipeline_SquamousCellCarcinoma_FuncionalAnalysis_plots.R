@@ -257,8 +257,25 @@ paste(names(which(boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c(
 # Genes in these terms
 names(which(boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")]))
 paste(df_all_annotation_per_stage[df_all_annotation_per_stage$CluterProfiler %in% names(which(boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),"Symbol"], collapse=", ")
-# paste(df_all_annotation_per_stage[df_all_annotation_per_stage$CluterProfiler %in% names(which(boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),"Symbol"], collapse=", ")
+# "LTF, OLFM4, NPL, COPB2, MOGS, RPN2, ADAM8, HSPA1A, ARF5, CAPN1, DERA, FUT8, TMED2, PSMD7, QPCT, SRD5A3, IDH1, CCT8, CCT8, CDA, B4GALT3, PSMC2"
 ######################################################################################################################
+# Question 2: terms in Stage I only
+paste(names(which(boolean_counts_terms[,c("Stage_I")] & !boolean_counts_terms[,c("Stage_II")] & !boolean_counts_terms[,c("Stage_III")])),collapse=", ")
+# Answer : GO:cytoplasmic stress granule, GO:specific granule lumen, GO:tertiary granule lumen
+######################################################################################################################
+# Question 3: terms in Stage II only
+paste(names(which(!boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c("Stage_II")] & !boolean_counts_terms[,c("Stage_III")])),collapse=", ")
+# Answer : there is not
+######################################################################################################################
+# Question 4: terms in Stages II and III
+paste(names(which(!boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),collapse=", ")
+# Answer : Reactome:Translation, Reactome:SARS-CoV Infection
+######################################################################################################################
+# Question 5: terms in Stages III only
+paste(names(which(!boolean_counts_terms[,c("Stage_I")] & !boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),collapse=", ")
+# Answer : Reactome:Mitotic G1 phase and G1/S transition, Reactome:Neddylation, Reactome:PCP/CE pathway, Reactome:PTEN Regulation, Reactome:TCF dependent signaling in response to WNT, GO:ribosome, KEGG:Amyotrophic lateral sclerosis, KEGG:Huntington disease, Reactome:Cellular response to chemical stress, Reactome:HIV Infection, Reactome:Intracellular signaling by second messengers, Reactome:PIP3 activates AKT signaling, Reactome:Signaling by WNT, KEGG:Pathways of neurodegeneration - multiple diseases, GO:mitochondrial matrix, GO:mitochondrial protein-containing complex, KEGG:Alzheimer disease, GO:mitochondrial inner membrane
+######################################################################################################################
+
 
 df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$CluterProfiler %in% selection_all),],
 interactome_annotation_stage)
@@ -294,12 +311,21 @@ E(graph_all_stages)$color                                                       
 # Set ronames
 E(graph_all_stages)[which(df_all_eges$names %in% selected_interactome)]$color                     <- "lightgrey"
 
+# Vertice colours of genes
+V(graph_all_stages)$label                                                                         <- ""                                                                                                                                                                                   <-"circle"
+
+
+
+
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge.png",sep=""), width = 30, height = 30, res=600, units = "cm")
 	#plot(graph_all_stages, layout=layout_nicely, vertex.label=NA) # Stage I
 	#plot(graph_all_stages, layout=  layout_with_kk, vertex.label=NA) # Stage II
 	plot(graph_all_stages, layout=   layout_nicely, vertex.label=NA) # Stage II
 dev.off()
+
+plot(graph_all_stages, layout=   layout_nicely, vertex.label=NA) # Stage II
+tkplot(graph_all_stages, layout=   layout_nicely, vertex.label=NA)
 
 ###########################################################################3
 # FindClusters_resolution

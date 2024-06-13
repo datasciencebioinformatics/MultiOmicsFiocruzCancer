@@ -274,6 +274,8 @@ paste(names(which(!boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c
 # Question 5: terms in Stages III only
 paste(names(which(!boolean_counts_terms[,c("Stage_I")] & !boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),collapse=", ")
 # Answer : Reactome:Mitotic G1 phase and G1/S transition, Reactome:Neddylation, Reactome:PCP/CE pathway, Reactome:PTEN Regulation, Reactome:TCF dependent signaling in response to WNT, GO:ribosome, KEGG:Amyotrophic lateral sclerosis, KEGG:Huntington disease, Reactome:Cellular response to chemical stress, Reactome:HIV Infection, Reactome:Intracellular signaling by second messengers, Reactome:PIP3 activates AKT signaling, Reactome:Signaling by WNT, KEGG:Pathways of neurodegeneration - multiple diseases, GO:mitochondrial matrix, GO:mitochondrial protein-containing complex, KEGG:Alzheimer disease, GO:mitochondrial inner membrane
+terms_stage_III<-names(which(!boolean_counts_terms[,c("Stage_I")] & !boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")]))
+genes_stage_III<-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$CluterProfiler %in% names(which(!boolean_counts_terms[,c("Stage_I")] & !boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),"Symbol"])
 ######################################################################################################################
 
 
@@ -312,16 +314,20 @@ E(graph_all_stages)$color                                                       
 E(graph_all_stages)[which(df_all_eges$names %in% selected_interactome)]$color                     <- "lightgrey"
 
 # Vertice colours of genes
-V(graph_all_stages)$label                                                                         <- ""                                                                                                                                                                                   <-"circle"
+V(graph_all_stages)$labels                                                                        <- ""                                                                                                                                                                                   <-"circle"
 
 
+terms_stage_III<-names(which(!boolean_counts_terms[,c("Stage_I")] & !boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")]))
+genes_stage_III<-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$CluterProfiler %in% names(which(!boolean_counts_terms[,c("Stage_I")] & !boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),"Symbol"])
 
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% terms_stage_III)]$labels    <- terms_stage_III
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% genes_stage_III)]$labels     <- genes_stage_III
 
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge.png",sep=""), width = 30, height = 30, res=600, units = "cm")
 	#plot(graph_all_stages, layout=layout_nicely, vertex.label=NA) # Stage I
 	#plot(graph_all_stages, layout=  layout_with_kk, vertex.label=NA) # Stage II
-	plot(graph_all_stages, layout=   layout_nicely, vertex.label=NA) # Stage II
+	plot(graph_all_stages, layout=   layout_nicely, vertex.label=V(graph_all_stages)$labels) # Stage II
 dev.off()
 
 plot(graph_all_stages, layout=   layout_nicely, vertex.label=NA) # Stage II

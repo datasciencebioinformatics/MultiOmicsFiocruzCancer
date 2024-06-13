@@ -205,11 +205,32 @@ table_Stage_I<-table_Stage_I[which(table_Stage_I>1)]
 table_Stage_II<-table_Stage_II[which(table_Stage_II>1)]
 table_Stage_II<-table_Stage_III[which(table_Stage_III>1)]
 
-
+# select terms
 selection_all <-unique(c(names(tail(sort(table_Stage_I),n=10)),names(tail(sort(table_Stage_II),n=10)),names(tail(sort(table_Stage_III),n=10))))
 
-# Count per selected term
-data.frame(n=tail(sort(all_selection),n=10))
+stage_I_anotation<-df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage I"),]
+stage_II_anotation<-df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),]
+stage_III_anotation<-df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage III"),]
+
+# df_count_terms
+df_count_terms<-data.frame(Term=selection_all,Stage_I=0,Stage_II=0,Stage_III=0)
+
+# Set rownames
+rownames(df_count_terms)<-df_count_terms$Term
+
+# for each term, count number of genes
+for (term in df_count_terms$Term)
+{	
+	# Save counts
+	df_count_terms[term,"Stage_I"]   <-length(unique(stage_I_anotation[(stage_I_anotation$CluterProfiler == term),"ENTREZID"]))
+	df_count_terms[term,"Stage_II"]  <-length(unique(stage_II_anotation[(stage_II_anotation$CluterProfiler == term),"ENTREZID"]))
+	df_count_terms[term,"Stage_III"] <-length(unique(stage_III_anotation[(stage_III_anotation$CluterProfiler == term),"ENTREZID"]))
+}
+# Boolean count per terms
+boolean_counts_terms<-df_count_terms>1
+######################################################################################################################
+
+
 
 df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$CluterProfiler %in% selection_all),],
 interactome_annotation_stage)

@@ -210,4 +210,9 @@ for (gene_row in rownames(annotation_stages_all))
 	annotation_stages_all[gene_row,"CluterProfiler"]<-paste(df_all_annotation[which(df_all_annotation$geneID == gene),"CluterProfiler"],collapse=",")
 }
 # Save file 
-write.xlsx(x=annotation_stages_all,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="all_stages", append=FALSE)
+write.xlsx(x=annotation_stages_all,file
+	   , sheet="all_stages", append=FALSE)
+write.xlsx(x=annotation_stage_I,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="Stage I", append=TRUE)
+write.xlsx(x=annotation_stage_II,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="Stage II", append=TRUE)
+write.xlsx(x=annotation_stage_III,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="Stage III", append=TRUE)
+#####################################################################################################

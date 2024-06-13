@@ -253,11 +253,6 @@ png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge.png",sep=""), width 
 dev.off()
 
 ###########################################################################3
-c1 = cluster_fast_greedy(graph_all_stages)
-plot(graph_all_stages, layout=   layout_nicely, vertex.label=NA, vertex.color=V(graph_all_stages)$color)
-plot(graph_all_stages, layout=   layout_nicely, vertex.label=NA) # Stage II
-
-
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_Stage_label.png",sep=""), width = 30, height = 30, res=600, units = "cm")
 	#plot(graph_all_stages, layout=layout_nicely) # Stage I

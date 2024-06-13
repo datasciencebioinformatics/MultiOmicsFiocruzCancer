@@ -178,6 +178,9 @@ annotation_stages_all<-rbind(annotation_stage_I,annotation_stage_II,annotation_s
 # A filed combining Layer and descriptions
 df_all_annotation$CluterProfiler=paste(df_all_annotation$Layer,":",df_all_annotation$Description,sep="")
 
+# Replace comman by -
+df_all_annotation$CluterProfiler<-gsub(",", "-", df_all_annotation$CluterProfiler)
+
 # Filed to add CluterProfiler
 annotation_stages_all$CluterProfiler<-""
 
@@ -192,4 +195,3 @@ for (gene_row in rownames(annotation_stages_all))
 }
 # Save file 
 write.xlsx(x=annotation_stages_all,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="all_stages", append=FALSE)
-

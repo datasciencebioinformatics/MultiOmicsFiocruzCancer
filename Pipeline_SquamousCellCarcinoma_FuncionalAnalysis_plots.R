@@ -206,7 +206,7 @@ table_Stage_II<-table_Stage_II[which(table_Stage_II>1)]
 table_Stage_II<-table_Stage_III[which(table_Stage_III>1)]
 
 # select terms
-selection_all <-unique(c(names(tail(sort(table_Stage_I),n=10)),names(tail(sort(table_Stage_II),n=10)),names(tail(sort(table_Stage_III),n=10))))
+selection_all <-unique(c(names(tail(sort(table_Stage_I),n=20)),names(tail(sort(table_Stage_II),n=20)),names(tail(sort(table_Stage_III),n=20))))
 
 stage_I_anotation<-df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage I"),]
 stage_II_anotation<-df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),]
@@ -222,15 +222,43 @@ rownames(df_count_terms)<-df_count_terms$Term
 for (term in df_count_terms$Term)
 {	
 	# Save counts
-	df_count_terms[term,"Stage_I"]   <-length(unique(stage_I_anotation[(stage_I_anotation$CluterProfiler == term),"ENTREZID"]))
-	df_count_terms[term,"Stage_II"]  <-length(unique(stage_II_anotation[(stage_II_anotation$CluterProfiler == term),"ENTREZID"]))
-	df_count_terms[term,"Stage_III"] <-length(unique(stage_III_anotation[(stage_III_anotation$CluterProfiler == term),"ENTREZID"]))
+	df_count_terms[term,"Stage_I"]   <-length(stage_I_anotation[stage_I_anotation$CluterProfiler==term,"Symbol"])
+	df_count_terms[term,"Stage_II"]  <-length(stage_II_anotation[stage_II_anotation$CluterProfiler==term,"Symbol"])
+	df_count_terms[term,"Stage_III"] <-length(stage_III_anotation[stage_III_anotation$CluterProfiler==term,"Symbol"])
 }
+###########################################################################################################################
+df_count_terms$Stage_I_Genes<-""
+df_count_terms$Stage_II_Genes<-""
+df_count_terms$Stage_III_Genes<-""
+
+# A table for the count of go terms
+table_Stage_I     <-df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage I",]
+table_Stage_II    <-df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage II",]
+table_Stage_III   <-df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage III",]
+
+
+# For each term 
+for (term in rownames(df_count_terms))
+{
+	df_count_terms[term,"Stage_I_Genes"]  <-paste(stage_I_anotation[stage_I_anotation$CluterProfiler==term,"Symbol"],collapse=",")
+	df_count_terms[term,"Stage_II_Genes"] <-paste(stage_II_anotation[stage_II_anotation$CluterProfiler==term,"Symbol"],collapse=",")
+	df_count_terms[term,"Stage_III_Genes"]<-paste(stage_III_anotation[stage_III_anotation$CluterProfiler==term,"Symbol"],collapse=",")
+}
+
+# Save file 
+write.xlsx(x=df_count_terms,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="genes and terms per stage", append=FALSE)
+
 # Boolean count per terms
-boolean_counts_terms<-df_count_terms>1
+boolean_counts_terms<-df_count_terms[,2:4]>1
+###########################################################################################################################
+# Question 1: terms in all stages
+paste(names(which(boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),collapse=", ")
+# Answer : Reactome:Asparagine N-linked glycosylation, Reactome:Neutrophil degranulation
+# Genes in these terms
+names(which(boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")]))
+paste(df_all_annotation_per_stage[df_all_annotation_per_stage$CluterProfiler %in% names(which(boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),"Symbol"], collapse=", ")
+# paste(df_all_annotation_per_stage[df_all_annotation_per_stage$CluterProfiler %in% names(which(boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),"Symbol"], collapse=", ")
 ######################################################################################################################
-
-
 
 df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$CluterProfiler %in% selection_all),],
 interactome_annotation_stage)

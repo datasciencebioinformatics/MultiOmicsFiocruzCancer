@@ -133,7 +133,7 @@ reactome_results_all_Stages$Layer<-"Reactome"
 all_anotation_results<-rbind(go_results_all_Stages,kegg_results_all_Stages,reactome_results_all_Stages)
 
 # Filter by p.adjust
-all_anotation_results<-all_anotation_results[which(all_anotation_results$p.adjust <0.05),"Stage"]
+all_anotation_results<-all_anotation_results[which(all_anotation_results$p.adjust <0.05),]
 ######################################################################################################################
 # A data.frame to store all results
 df_all_annotation<-data.frame(ID=c(),p.adjust=c(),Description=c(),geneID=c(), SYMBOL=c(),Count=c(),Stage=c(),Layer=c())
@@ -215,3 +215,5 @@ write.xlsx(x=annotation_stage_I,file=paste(output_dir,"unique_genes_annotation_c
 write.xlsx(x=annotation_stage_II,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="Stage II", append=TRUE)
 write.xlsx(x=annotation_stage_III,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="Stage III", append=TRUE)
 #####################################################################################################
+# Specify sheet by its name
+annotation_stage_all <- data.frame(read_excel("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/unique_genes_annotation_clusterProfiler_Genecards.xlsx"))

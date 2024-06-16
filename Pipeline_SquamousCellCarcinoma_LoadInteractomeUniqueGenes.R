@@ -109,19 +109,23 @@ genes_interactome_stage_III<-genes_id_vector_stage_III[genes_id_vector_stage_III
 full_interactome_stage_I<- data.frame(expand.grid.unique(x = genes_interactome_stage_I, y = genes_interactome_stage_I,include.equals=FALSE))
 full_interactome_stage_II<- data.frame(expand.grid.unique(x = genes_interactome_stage_II, y = genes_interactome_stage_II,include.equals=FALSE))
 full_interactome_stage_III<- data.frame(expand.grid.unique(x = genes_interactome_stage_III, y = genes_interactome_stage_III,include.equals=FALSE))
+full_interactome_stage_all<- data.frame(expand.grid.unique(x = c(genes_interactome_stage_I,genes_interactome_stage_II,genes_interactome_stage_III), y = c(genes_interactome_stage_I,genes_interactome_stage_II,genes_interactome_stage_III),include.equals=FALSE))
 
 # set colnames
 colnames(full_interactome_stage_I)<-c("Gene1","Gene2")
 colnames(full_interactome_stage_II)<-c("Gene1","Gene2")
 colnames(full_interactome_stage_III)<-c("Gene1","Gene2")
+colnames(full_interactome_stage_all)<-c("Gene1","Gene2")
 
 rownames(full_interactome_stage_I)<-paste(full_interactome_stage_I$Gene1,full_interactome_stage_I$Gene2,sep="-")
 rownames(full_interactome_stage_II)<-paste(full_interactome_stage_II$Gene1,full_interactome_stage_II$Gene2,sep="-")
 rownames(full_interactome_stage_III)<-paste(full_interactome_stage_III$Gene1,full_interactome_stage_III$Gene2,sep="-")
+rownames(full_interactome_stage_all)<-paste(full_interactome_stage_all$Gene1,full_interactome_stage_all$Gene2,sep="-")
 #######################################################################################################
 interactome_stage_I  <-interactome_data_inv[which(rownames(interactome_data_inv) %in% rownames(full_interactome_stage_I)),]
 interactome_stage_II <-interactome_data_inv[which(rownames(interactome_data_inv) %in% rownames(full_interactome_stage_II)),]
 interactome_stage_III<-interactome_data_inv[which(rownames(interactome_data_inv) %in% rownames(full_interactome_stage_III)),]
+interactome_stage_all<-interactome_data_inv[which(rownames(interactome_data_inv) %in% rownames(full_interactome_stage_all)),]
 
 # If there is not interaction
 if (dim(interactome_stage_I)[1]==0)
@@ -141,9 +145,17 @@ if (dim(interactome_stage_III)[1]==0)
   # Add edge to be removed
   interactome_stage_III<-data.frame(Gene1="REMOVE",Gene2="REMOVE")
 }
+# If there is not interaction
+if (dim(interactome_stage_all)[1]==0)
+{
+  # Add edge to be removed
+  interactome_stage_all<-data.frame(Gene1="REMOVE",Gene2="REMOVE")
+}
+
 interactome_stage_I$Stage<-"Stage I"
 interactome_stage_II$Stage<-"Stage II"
 interactome_stage_III$Stage<-"Stage III"
+interactome_stage_all$Stage<-"Stages all"
 #######################################################################################################
 interactome_all_stage<-rbind(interactome_stage_I,interactome_stage_II,interactome_stage_III)
 

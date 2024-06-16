@@ -271,8 +271,10 @@ png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge.png",sep=""), width 
 	plot(graph_all_stages, layout=   layout_nicely,vertex.label=NA ) # Stage II
 dev.off()
 
-plot(graph_all_stages, layout=   layout_nicely, vertex.label=NA) # Stage II
-tkplot(graph_all_stages, layout=   layout_nicely, vertex.label=NA)
+lou <- cluster_optimal(graph_all_stages)
+plot(lou, graph_all_stages, vertex.label = NA, vertex.size=5, edge.arrow.size = .2)
+
+
 
 ###########################################################################3
 # FindClusters_resolution

@@ -60,9 +60,9 @@ net_stage_II_correlation_network<-melt(net_stage_II)
 net_stage_III_correlation_network<-melt(net_stage_III)
 
 
-net_stage_I_correlation_network<-na.omit(net_stage_I_correlation_network[abs(net_stage_I_correlation_network$value)>=0.75,])
-net_stage_II_correlation_network<-na.omit(net_stage_II_correlation_network[abs(net_stage_II_correlation_network$value)>=0.75,])
-net_stage_III_correlation_network<-na.omit(net_stage_III_correlation_network[abs(net_stage_III_correlation_network$value)>=0.75,])
+net_stage_I_correlation_network<-na.omit(net_stage_I_correlation_network[abs(net_stage_I_correlation_network$value)>=0.50,])
+net_stage_II_correlation_network<-na.omit(net_stage_II_correlation_network[abs(net_stage_II_correlation_network$value)>=0.50,])
+net_stage_III_correlation_network<-na.omit(net_stage_III_correlation_network[abs(net_stage_III_correlation_network$value)>=0.50,])
 
 
 # using subset function

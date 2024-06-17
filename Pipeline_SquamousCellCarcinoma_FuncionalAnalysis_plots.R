@@ -65,6 +65,15 @@ for (annotation in rownames(annotation_stages_all))
 	{
 		# Set layer
 		Layer<-strsplit(x=all_CluterProfiler,":",fixed=T)[[1]][[1]]
+
+		# Save gene cards str
+		Genecards_str<-str_trim(Genecards_index, side="left")
+
+		# If layer equal to Kegg
+		Layer="Ontology"
+
+		# Genecards_str
+		Genecards_str<-gsub("GO", "Ontology", Genecards_str)		
 		
 		# If layer equal to Kegg
 		if(Layer=="KEGG")
@@ -79,7 +88,7 @@ for (annotation in rownames(annotation_stages_all))
 			genes_id<-genes_Stage_ALL[which(genes_Stage_ALL$SYMBOL %in% genes),"gene_id"]
 		}
 		# gene annotation
-		gene_annotation<-data.frame(gene_id=gene_id,gene=gene,log2change=log2change,Category=Category,Pvalue=Pvalue,FDR=FDR,ENTREZID=ENTREZID,Symbol=Symbol,Description=Description,genecards_Category=genecards_Category,UniProt_ID=UniProt_ID,GIFtS=GIFtS,GC_id=GC_id,GeneCards_Summary=GeneCards_Summary,Stage=Stage,Layer=Layer,CluterProfiler=str_trim(Genecards_index, side="left") )
+		gene_annotation<-data.frame(gene_id=gene_id,gene=gene,log2change=log2change,Category=Category,Pvalue=Pvalue,FDR=FDR,ENTREZID=ENTREZID,Symbol=Symbol,Description=Description,genecards_Category=genecards_Category,UniProt_ID=UniProt_ID,GIFtS=GIFtS,GC_id=GC_id,GeneCards_Summary=GeneCards_Summary,Stage=Stage,Layer=Layer,CluterProfiler=Genecards_str )
 	
 		# df_all_annotation
 		df_all_annotation<-rbind(df_all_annotation,gene_annotation)
@@ -134,19 +143,18 @@ table_Stage_I   <-table(df_all_annotation_per_stage[df_all_annotation_per_stage$
 table_Stage_II  <-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage II","CluterProfiler"])
 table_Stage_III <-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage III","CluterProfiler"])
 
-table_Stage_I<-table_Stage_I[which(table_Stage_I>1)]
-table_Stage_II<-table_Stage_II[which(table_Stage_II>1)]
-table_Stage_II<-table_Stage_III[which(table_Stage_III>1)]
-
-# select terms
-selection_all <-unique(c(names(tail(sort(table_Stage_I),n=20)),names(tail(sort(table_Stage_II),n=20)),names(tail(sort(table_Stage_III),n=20))))
+#table_Stage_I<-table_Stage_I[which(table_Stage_I>1)]
+#table_Stage_II<-table_Stage_II[which(table_Stage_II>1)]
+#table_Stage_II<-table_Stage_III[which(table_Stage_III>1)]
 
 stage_I_anotation<-df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage I"),]
 stage_II_anotation<-df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),]
 stage_III_anotation<-df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage III"),]
 
+selection<-c(names(table_Stage_I),names(table_Stage_II),names(table_Stage_III))
+
 # df_count_terms
-df_count_terms<-data.frame(Term=selection_all,Stage_I=0,Stage_II=0,Stage_III=0)
+df_count_terms<-data.frame(Term=unique(selection),Stage_I=0,Stage_II=0,Stage_III=0)
 
 # Set rownames
 rownames(df_count_terms)<-df_count_terms$Term
@@ -159,27 +167,14 @@ for (term in df_count_terms$Term)
 	df_count_terms[term,"Stage_II"]  <-length(stage_II_anotation[stage_II_anotation$CluterProfiler==term,"Symbol"])
 	df_count_terms[term,"Stage_III"] <-length(stage_III_anotation[stage_III_anotation$CluterProfiler==term,"Symbol"])
 }
+df_count_terms<-df_count_terms[rownames(df_count_terms)!="-",]
 ###########################################################################################################################
-df_count_terms$Stage_I_Genes<-""
-df_count_terms$Stage_II_Genes<-""
-df_count_terms$Stage_III_Genes<-""
-
-# A table for the count of go terms
-table_Stage_I     <-df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage I",]
-table_Stage_II    <-df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage II",]
-table_Stage_III   <-df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage III",]
-
-
-# For each term 
-for (term in rownames(df_count_terms))
-{
-	df_count_terms[term,"Stage_I_Genes"]  <-paste(stage_I_anotation[stage_I_anotation$CluterProfiler==term,"Symbol"],collapse=",")
-	df_count_terms[term,"Stage_II_Genes"] <-paste(stage_II_anotation[stage_II_anotation$CluterProfiler==term,"Symbol"],collapse=",")
-	df_count_terms[term,"Stage_III_Genes"]<-paste(stage_III_anotation[stage_III_anotation$CluterProfiler==term,"Symbol"],collapse=",")
-}
-
 # Save file 
-write.xlsx(x=df_count_terms,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="genes and terms per stage", append=FALSE)
+write.xlsx(x=df_count_terms,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="genes and terms per stage", append=FALSE)
+
+
+# Selection terms to be analyses
+# I stopped here
 
 # Boolean count per terms
 boolean_counts_terms<-df_count_terms[,2:4]>0

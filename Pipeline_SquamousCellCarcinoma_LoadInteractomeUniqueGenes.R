@@ -246,7 +246,7 @@ net_stage_all_correlation_network$Gene1<-genes_id_vector_stage_Gene1
 net_stage_all_correlation_network$Gene2<-genes_id_vector_stage_Gene2
 #######################################################################################################
 # Load interactome
-genes_in_interactome<-unique(genes_Stage_ALL[genes_Stage_ALL$gene_id %in% intersect(genes_Stage_ALL$gene_id,c(interactome_all_stage$Gene1,interactome_all_stage$Gene2)),])
+genes_in_interactome<-unique(genes_Stage_ALL[genes_Stage_ALL$gene_id %in% intersect(genes_Stage_ALL$gene_id,c(interactome_all_stage$Gene1,interactome_all_stage$Gene2,net_stage_all_correlation_network$Gene1,net_stage_all_correlation_network$Gene2)),])
 
 # Set rownames as gene_ids
 rownames(genes_in_interactome)<-genes_in_interactome$gene_id
@@ -256,6 +256,8 @@ interactome_all_stage$Gene1<-genes_in_interactome[interactome_all_stage$Gene1,"S
 interactome_all_stage$Gene2<-genes_in_interactome[interactome_all_stage$Gene2,"SYMBOL"]
 
 
+net_stage_all_correlation_network$Gene1<-genes_in_interactome[net_stage_all_correlation_network$Gene1,"SYMBOL"]
+net_stage_all_correlation_network$Gene2<-genes_in_interactome[net_stage_all_correlation_network$Gene2,"SYMBOL"]
 
 
 

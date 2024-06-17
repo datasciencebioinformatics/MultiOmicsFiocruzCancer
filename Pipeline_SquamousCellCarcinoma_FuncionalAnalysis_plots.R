@@ -122,6 +122,9 @@ rownames(genes_in_interactome)<-genes_in_interactome$gene_id
 interactome_all_stage$Gene1<-genes_in_interactome[interactome_all_stage$Gene1,"SYMBOL"]
 interactome_all_stage$Gene2<-genes_in_interactome[interactome_all_stage$Gene2,"SYMBOL"]
 
+coexpression_all_stage$Gene1<-genes_in_interactome[coexpression_all_stage$Gene1,"SYMBOL"]
+coexpression_all_stage$Gene2<-genes_in_interactome[coexpression_all_stage$Gene2,"SYMBOL"]
+
 # gene annotation
 interactome_annotation<-data.frame(gene_id=rownames(interactome_all_stage),gene=rownames(interactome_all_stage),log2change=rownames(interactome_all_stage),Category=0,Pvalue=0,FDR=0,ENTREZID=0,Symbol=interactome_all_stage$Gene1,Description=0,genecards_Category=0,UniProt_ID=0,GIFtS=0,GC_id=0,GeneCards_Summary=0,Stage=interactome_all_stage$Stage,Layer="Interactome",CluterProfiler=interactome_all_stage$Gene2 )
 ######################################################################################################################

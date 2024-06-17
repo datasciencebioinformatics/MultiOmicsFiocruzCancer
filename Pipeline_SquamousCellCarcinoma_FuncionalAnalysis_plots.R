@@ -123,20 +123,12 @@ df_all_annotation_per_stage<-df_all_annotation
 
 # interactome_annotation
 interactome_annotation_stage<-interactome_annotation
-
-# interactome_annotation_stage
-selected_interactome<-c(paste(interactome_annotation_stage$Description,interactome_annotation_stage$SYMBOL,sep="-"),
-paste(interactome_annotation_stage$SYMBOL,interactome_annotation_stage$Description,sep="-"))
 ######################################################################################################################
-# Se
+
 # A table for the count of go terms
 table_Stage_I   <-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage I","CluterProfiler"])
 table_Stage_II  <-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage II","CluterProfiler"])
 table_Stage_III <-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage III","CluterProfiler"])
-
-#table_Stage_I<-table_Stage_I[which(table_Stage_I>1)]
-#table_Stage_II<-table_Stage_II[which(table_Stage_II>1)]
-#table_Stage_II<-table_Stage_III[which(table_Stage_III>1)]
 
 stage_I_anotation<-df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage I"),]
 stage_II_anotation<-df_all_annotation_per_stage[which(df_all_annotation_per_stage$Stage=="Stage II"),]
@@ -203,10 +195,19 @@ genes_stage_III<-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$
 paste(terms_stage_III, collapse=", ")
 paste(genes_stage_III, collapse=", ")
 ######################################################################################################################
+table_Stage_I<-table_Stage_I[which(table_Stage_I>1)]
+table_Stage_II<-table_Stage_II[which(table_Stage_II>1)]
+table_Stage_II<-table_Stage_III[which(table_Stage_III>1)]
 
+# Select top 10 terms
+selection_all<-unique(c(names(tail(sort(table_Stage_I),n=10)),names(tail(sort(table_Stage_II),n=10)),names(tail(sort(table_Stage_III),n=10))))
 
+# Filter out table
+selection_all<-selection_all[selection_all!="-"]
+
+# Concatenate table
 df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$CluterProfiler %in% selection_all),],
-interactome_annotation_stage)
+interactome_annotation_stage,coexpression_annotation)
 ####################################################################################################################
 # All stages
 graph_all_stages <- graph_from_data_frame(d=unique(df_all_annotation_selected_pathways[,c("Symbol","CluterProfiler")]), vertices=unique(c(df_all_annotation_selected_pathways$Symbol,df_all_annotation_selected_pathways$CluterProfiler)), directed=F)  
@@ -238,16 +239,10 @@ E(graph_all_stages)$color                                                       
 
 # Set ronames
 E(graph_all_stages)[which(df_all_eges$names %in% selected_interactome)]$color                     <- "lightgrey"
-
-# Vertice colours of genes
-#V(graph_all_stages)$labels                                                                        <- ""                                                                                                                                                                                   <-"circle"
+                                                                 <- ""                                                                                                                                                                                   <-"circle"
 
 
-terms_stage_III<-names(which(!boolean_counts_terms[,c("Stage_I")] & !boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")]))
-genes_stage_III<-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$CluterProfiler %in% names(which(!boolean_counts_terms[,c("Stage_I")] & !boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),"Symbol"])
 
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% terms_stage_III)]$labels    <- terms_stage_III
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% genes_stage_III)]$labels     <- genes_stage_III
 
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge.png",sep=""), width = 30, height = 30, res=600, units = "cm")

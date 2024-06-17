@@ -14,9 +14,9 @@ file_genes_Stage_I   <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_un
 file_genes_Stage_II   <-  paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_II.tsv",sep="")
 file_genes_Stage_III   <- paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_unique_stage_III.tsv",sep="")
 
-file_genes_Stage_I     <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_I",".tsv",sep="")
-file_genes_Stage_II    <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_II",".tsv",sep="")
-file_genes_Stage_III   <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_III",".tsv",sep="")
+#file_genes_Stage_I     <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_I",".tsv",sep="")
+#file_genes_Stage_II    <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_II",".tsv",sep="")
+#file_genes_Stage_III   <-   paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_III",".tsv",sep="")
 
 # Gene table - genes from each stage are sabe in tables
 genes_Stage_I       <-read.table(file = file_genes_Stage_I, sep = '\t', header = TRUE,fill=TRUE)         
@@ -34,22 +34,18 @@ sample_stage_I  <-colDta_tumor[colDta_tumor$stages=="Stage I","patient_id"]     
 sample_stage_II <-colDta_tumor[colDta_tumor$stages=="Stage II","patient_id"]                                                                 #
 sample_stage_III<-colDta_tumor[colDta_tumor$stages=="Stage III","patient_id"]                                                                #
 #######################################################################################################################################
-df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,tumor_samples]))
-df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,tumor_samples]))
-df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,tumor_samples]))
-
-df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,tumor_samples]))
-df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,tumor_samples]))
-df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,tumor_samples]))
+df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,sample_stage_I]))
+df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,sample_stage_II]))
+df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,sample_stage_III]))
 #######################################################################################################################################
 # Filter by low variability
 # Incosistency of low-variability genes.
 # Set threshold
 upper_weight_th = threshold_cor
 
-net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "spearman", use = "complete.obs")
-net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "spearman", use = "complete.obs")
-net_stage_III   <- cor(t(df_correlation_net_stage_III), method = "spearman", use = "complete.obs")
+net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "pearson", use = "complete.obs")
+net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "pearson", use = "complete.obs")
+net_stage_III   <- cor(t(df_correlation_net_stage_III), method = "pearson", use = "complete.obs")
 
 net_stage_I[lower.tri(net_stage_I)] <- 0
 net_stage_II[lower.tri(net_stage_II)] <- 0
@@ -63,9 +59,10 @@ net_stage_I_correlation_network<-melt(net_stage_I)
 net_stage_II_correlation_network<-melt(net_stage_II)
 net_stage_III_correlation_network<-melt(net_stage_III)
 
-net_stage_I_correlation_network<-na.omit(net_stage_I_correlation_network[net_stage_I_correlation_network$value>=upper_weight_th,])
-net_stage_II_correlation_network<-na.omit(net_stage_II_correlation_network[net_stage_II_correlation_network$value>=upper_weight_th,])
-net_stage_III_correlation_network<-na.omit(net_stage_III_correlation_network[net_stage_III_correlation_network$value>=upper_weight_th,])
+
+net_stage_I_correlation_network<-na.omit(net_stage_I_correlation_network[abs(net_stage_I_correlation_network$value)>=0.75,])
+net_stage_II_correlation_network<-na.omit(net_stage_II_correlation_network[abs(net_stage_II_correlation_network$value)>=0.75,])
+net_stage_III_correlation_network<-na.omit(net_stage_III_correlation_network[abs(net_stage_III_correlation_network$value)>=0.75,])
 
 
 # using subset function

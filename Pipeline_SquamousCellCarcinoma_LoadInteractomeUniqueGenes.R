@@ -30,6 +30,18 @@ file_genes_Stage_III  <-  paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_un
 genes_Stage_I       <-read.table(file = file_genes_Stage_I, sep = '\t', header = TRUE,fill=TRUE)         
 genes_Stage_II      <-read.table(file = file_genes_Stage_II, sep = '\t', header = TRUE,fill=TRUE)
 genes_Stage_III     <-read.table(file = file_genes_Stage_III, sep = '\t', header = TRUE,fill=TRUE)   
+
+########################################################################################################################################
+# Select only tumor metadata
+colDta_tumor<-colData[colData$tissue_type=="Tumor",]
+
+# Select only tumor samples id's
+tumor_samples<-colDta_tumor$patient_id
+
+# Select samples of each stage stored in colData                                                                                             #
+sample_stage_I  <-colDta_tumor[colDta_tumor$stages=="Stage I","patient_id"]                                                                  #
+sample_stage_II <-colDta_tumor[colDta_tumor$stages=="Stage II","patient_id"]                                                                 #
+sample_stage_III<-colDta_tumor[colDta_tumor$stages=="Stage III","patient_id"]                                                                #
 ########################################################################################################################################
 # Store genes stage I, II and III
 # Vectors to store gene ids from each stage
@@ -141,19 +153,50 @@ if (dim(interactome_stage_III)[1]==0)
   # Add edge to be removed
   interactome_stage_III<-data.frame(Gene1="REMOVE",Gene2="REMOVE")
 }
-# If there is not interaction
-if (dim(interactome_stage_all)[1]==0)
-{
-  # Add edge to be removed
-  interactome_stage_all<-data.frame(Gene1="REMOVE",Gene2="REMOVE")
-}
 
 interactome_stage_I$Stage<-"Stage I"
 interactome_stage_II$Stage<-"Stage II"
 interactome_stage_III$Stage<-"Stage III"
-interactome_stage_all$Stage<-"Stages all"
 #######################################################################################################
 interactome_all_stage<-rbind(interactome_stage_I,interactome_stage_II,interactome_stage_III)
 
 # Remove edge
 interactome_all_stage<-interactome_all_stage[interactome_all_stage$Gene1!="REMOVE",]
+#######################################################################################################
+df_correlation_net_stage_I<-data.frame(na.omit(unstranded_data_filter[genes_Stage_I$gene,sample_stage_I]))
+df_correlation_net_stage_II<-data.frame(na.omit(unstranded_data_filter[genes_Stage_II$gene,sample_stage_II]))
+df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_Stage_III$gene,sample_stage_III]))
+#######################################################################################################################################
+# Filter by low variability
+# Incosistency of low-variability genes.
+# Set threshold
+upper_weight_th = 0.75
+
+net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "pearson", use = "complete.obs")
+net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "pearson", use = "complete.obs")
+net_stage_III   <- cor(t(df_correlation_net_stage_III), method = "pearson", use = "complete.obs")
+
+net_stage_I[lower.tri(net_stage_I)] <- 0
+net_stage_II[lower.tri(net_stage_II)] <- 0
+net_stage_III[lower.tri(net_stage_III)] <- 0
+
+diag(net_stage_I)<-0
+diag(net_stage_II)<-0
+diag(net_stage_III)<-0
+
+net_stage_I_correlation_network<-melt(net_stage_I)
+net_stage_II_correlation_network<-melt(net_stage_II)
+net_stage_III_correlation_network<-melt(net_stage_III)
+
+
+net_stage_I_correlation_network<-na.omit(net_stage_I_correlation_network[abs(net_stage_I_correlation_network$value)>=0.75,])
+net_stage_II_correlation_network<-na.omit(net_stage_II_correlation_network[abs(net_stage_II_correlation_network$value)>=0.75,])
+net_stage_III_correlation_network<-na.omit(net_stage_III_correlation_network[abs(net_stage_III_correlation_network$value)>=0.75,])
+
+net_stage_I_correlation_network$Stage<-"Stage I"
+net_stage_II_correlation_network$Stage<-"Stage II"
+net_stage_III_correlation_network$Stage<-"Stage III"
+#######################################################################################################
+coexpression_all_stage<-rbind(net_stage_I_correlation_network,net_stage_II_correlation_network,net_stage_III_correlation_network)
+coexpression_all_stage<-rbind(net_stage_II_correlation_network,net_stage_III_correlation_network)
+#######################################################################################################

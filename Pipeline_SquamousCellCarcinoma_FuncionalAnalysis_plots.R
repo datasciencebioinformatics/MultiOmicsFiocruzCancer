@@ -116,6 +116,9 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 interactome_annotation<-data.frame(gene_id=rownames(interactome_all_stage),gene=rownames(interactome_all_stage),log2change=rownames(interactome_all_stage),Category=0,Pvalue=0,FDR=0,ENTREZID=0,Symbol=interactome_all_stage$Gene1,Description=0,genecards_Category=0,UniProt_ID=0,GIFtS=0,GC_id=0,GeneCards_Summary=0,Stage=interactome_all_stage$Stage,Layer="Interactome",CluterProfiler=interactome_all_stage$Gene2 )
 coexpression_annotation<-data.frame(gene_id=rownames(net_stage_all_correlation_network),gene=rownames(net_stage_all_correlation_network),log2change=rownames(net_stage_all_correlation_network),Category=0,Pvalue=0,FDR=0,ENTREZID=0,Symbol=net_stage_all_correlation_network$Gene1,Description=0,genecards_Category=0,UniProt_ID=0,GIFtS=0,GC_id=0,GeneCards_Summary=0,Stage=net_stage_all_correlation_network$Stage,Layer="Coexpression",CluterProfiler=net_stage_all_correlation_network$Gene2 )
 ######################################################################################################################
+selected_interactome<-paste(interactome_all_stage$Gene1,interactome_all_stage$Gene2, sep="-")
+selected_coexpression<-paste(net_stage_all_correlation_network$Gene1,net_stage_all_correlation_network$Gene2, sep="-")
+
 # Next,  ten most abundant annotation terms in number of genes per stage additionally inspected.
 ######################################################################################################################
 # Store annotation of stages
@@ -235,11 +238,12 @@ V(graph_all_stages)$size                                                        
 V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$size        <- 7
 
 # Vertice colours of genes
-E(graph_all_stages)$color                                                                         <- "black"
+E(graph_all_stages)$color                                                                         <- "lightgrey"
 
 # Set ronames
-E(graph_all_stages)[which(df_all_eges$names %in% selected_interactome)]$color                     <- "lightgrey"
-                                                                 <- ""                                                                                                                                                                                   <-"circle"
+E(graph_all_stages)[which(df_all_eges$names %in% selected_interactome)]$color                     <- "black"
+E(graph_all_stages)[which(df_all_eges$names %in% selected_coexpression)]$color                    <- "darkblue"
+                                                                 
 
 
 
@@ -249,7 +253,7 @@ png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge.png",sep=""), width 
 	#plot(graph_all_stages, layout=layout_nicely, vertex.label=NA) # Stage I
 	#plot(graph_all_stages, layout=  layout_with_kk, vertex.label=NA) # Stage II
 	#plot(graph_all_stages, layout=   layout_nicely, vertex.label=V(graph_all_stages)$labels) # Stage II
-	plot(graph_all_stages, layout=   layout_nicely,vertex.label=NA ) # Stage II
+	plot(graph_all_stages, layout=   layout_nicely,vertex.label=NA, edge.colour=NA  ) # Stage II
 dev.off()
 
 lou <- cluster_optimal(graph_all_stages)

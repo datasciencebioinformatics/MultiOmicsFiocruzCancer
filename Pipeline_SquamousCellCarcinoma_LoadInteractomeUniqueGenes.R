@@ -170,7 +170,7 @@ df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_St
 # Filter by low variability
 # Incosistency of low-variability genes.
 # Set threshold
-upper_weight_th = 0.85
+upper_weight_th = 0.75
 
 net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "pearson", use = "complete.obs")
 net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "pearson", use = "complete.obs")
@@ -221,29 +221,31 @@ colnames(net_stage_II_correlation_network)<-c("Gene1","Gene2","Correlation","Sta
 colnames(net_stage_III_correlation_network)<-c("Gene1","Gene2","Correlation","Stage")
 #######################################################################################################
 net_stage_all_correlation_network<-rbind(net_stage_I_correlation_network,net_stage_II_correlation_network,net_stage_III_correlation_network)
-#######################################################################################################
-# Remove edge
 net_stage_all_correlation_network<-net_stage_all_correlation_network[net_stage_all_correlation_network$Gene1!="REMOVE",]
 #######################################################################################################
-# Store genes stage I, II and III
-# Vectors to store gene ids from each stage
-genes_id_vector_stage_Gene1<-c()
-genes_id_vector_stage_Gene2<-c()
+# selected edges
+selected_edges<-c()
 
-# For each gene in stage I
-for (gene_id in net_stage_all_correlation_network$Gene1)
-{
-  # Store gene id in the vector
-  genes_id_vector_stage_Gene1<-c(genes_id_vector_stage_Gene1,strsplit(gene_id, split = "\\.")[[1]][1])
+# for each edge, translate the id
+for (edge_i in rownames(net_stage_all_correlation_network))
+{  
+  gene1_SYMOBL<-strsplit(net_stage_all_correlation_network[edge_i,"Gene1"], split = "\\.")[[1]][1]
+  gene2_SYMOBL<-strsplit(net_stage_all_correlation_network[edge_i,"Gene2"], split = "\\.")[[1]][1]  
+
+  gene1_SYMOBL<-EnsemblToUniprotKBconversionList_data[EnsemblToUniprotKBconversionList_data$ENSG == gene1_SYMOBL,"SYMBOL"][[1]]
+  gene2_SYMOBL<-EnsemblToUniprotKBconversionList_data[EnsemblToUniprotKBconversionList_data$ENSG == gene2_SYMOBL,"SYMBOL"][[1]]
+
+  net_stage_all_correlation_network[edge_i,"Gene1"]<-gene1_SYMOBL
+  net_stage_all_correlation_network[edge_i,"Gene2"]<-gene2_SYMOBL
+
+  # If gene1_SYMOBL and gene2_SYMOBL
+  if(gene1_SYMOBL!=gene2_SYMOBL)
+  {
+    # Selected edges
+    selected_edges<-c(selected_edges,edge_i)  
+  }
 }
-# For each gene in stage I
-for (gene_id in net_stage_all_correlation_network$Gene2)
-{
-  # Store gene id in the vector
-  genes_id_vector_stage_Gene2<-c(genes_id_vector_stage_Gene2,strsplit(gene_id, split = "\\.")[[1]][1])
-}
-net_stage_all_correlation_network$Gene1<-genes_id_vector_stage_Gene1
-net_stage_all_correlation_network$Gene2<-genes_id_vector_stage_Gene2
+net_stage_all_correlation_network<-unique(net_stage_all_correlation_network[selected_edges,])
 #######################################################################################################
 # Load interactome
 genes_in_interactome<-unique(genes_Stage_ALL[genes_Stage_ALL$gene_id %in% intersect(genes_Stage_ALL$gene_id,c(interactome_all_stage$Gene1,interactome_all_stage$Gene2,net_stage_all_correlation_network$Gene1,net_stage_all_correlation_network$Gene2)),])
@@ -254,16 +256,7 @@ rownames(genes_in_interactome)<-genes_in_interactome$gene_id
 # Set gene symbols
 interactome_all_stage$Gene1<-genes_in_interactome[interactome_all_stage$Gene1,"SYMBOL"]
 interactome_all_stage$Gene2<-genes_in_interactome[interactome_all_stage$Gene2,"SYMBOL"]
-
-
-net_stage_all_correlation_network$Gene1<-genes_in_interactome[net_stage_all_correlation_network$Gene1,"SYMBOL"]
-net_stage_all_correlation_network$Gene2<-genes_in_interactome[net_stage_all_correlation_network$Gene2,"SYMBOL"]
-
-
-
-
-
-
+#######################################################################################################
 
 
 

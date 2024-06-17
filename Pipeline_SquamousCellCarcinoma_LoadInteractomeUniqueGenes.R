@@ -170,7 +170,7 @@ df_correlation_net_stage_III<-data.frame(na.omit(unstranded_data_filter[genes_St
 # Filter by low variability
 # Incosistency of low-variability genes.
 # Set threshold
-upper_weight_th = 0.75
+upper_weight_th = 0.85
 
 net_stage_I   <- cor(t(df_correlation_net_stage_I), method = "pearson", use = "complete.obs")
 net_stage_II   <- cor(t(df_correlation_net_stage_II), method = "pearson", use = "complete.obs")
@@ -189,14 +189,81 @@ net_stage_II_correlation_network<-melt(net_stage_II)
 net_stage_III_correlation_network<-melt(net_stage_III)
 
 
-net_stage_I_correlation_network<-na.omit(net_stage_I_correlation_network[abs(net_stage_I_correlation_network$value)>=0.75,])
-net_stage_II_correlation_network<-na.omit(net_stage_II_correlation_network[abs(net_stage_II_correlation_network$value)>=0.75,])
-net_stage_III_correlation_network<-na.omit(net_stage_III_correlation_network[abs(net_stage_III_correlation_network$value)>=0.75,])
+net_stage_I_correlation_network<-na.omit(net_stage_I_correlation_network[abs(net_stage_I_correlation_network$value)>=upper_weight_th,])
+net_stage_II_correlation_network<-na.omit(net_stage_II_correlation_network[abs(net_stage_II_correlation_network$value)>=upper_weight_th,])
+net_stage_III_correlation_network<-na.omit(net_stage_III_correlation_network[abs(net_stage_III_correlation_network$value)>=upper_weight_th,])
+
+# If there is not interaction
+if (dim(net_stage_I_correlation_network)[1]==0)
+{
+  # Add edge to be removed
+  net_stage_I_correlation_network<-data.frame(Gene1="REMOVE",Gene2="REMOVE",cor=0)
+}
+# If there is not interaction
+if (dim(net_stage_II_correlation_network)[1]==0)
+{
+  # Add edge to be removed
+  net_stage_II_correlation_network<-data.frame(Gene1="REMOVE",Gene2="REMOVE",cor=0)
+}
+# If there is not interaction
+if (dim(net_stage_III_correlation_network)[1]==0)
+{
+  # Add edge to be removed
+  net_stage_III_correlation_network<-data.frame(Gene1="REMOVE",Gene2="REMOVE",cor=0)
+}
 
 net_stage_I_correlation_network$Stage<-"Stage I"
 net_stage_II_correlation_network$Stage<-"Stage II"
 net_stage_III_correlation_network$Stage<-"Stage III"
+
+colnames(net_stage_I_correlation_network)<-c("Gene1","Gene2","Correlation","Stage")
+colnames(net_stage_II_correlation_network)<-c("Gene1","Gene2","Correlation","Stage")
+colnames(net_stage_III_correlation_network)<-c("Gene1","Gene2","Correlation","Stage")
 #######################################################################################################
-coexpression_all_stage<-rbind(net_stage_I_correlation_network,net_stage_II_correlation_network,net_stage_III_correlation_network)
-coexpression_all_stage<-rbind(net_stage_II_correlation_network,net_stage_III_correlation_network)
+net_stage_all_correlation_network<-rbind(net_stage_I_correlation_network,net_stage_II_correlation_network,net_stage_III_correlation_network)
 #######################################################################################################
+# Remove edge
+net_stage_all_correlation_network<-net_stage_all_correlation_network[net_stage_all_correlation_network$Gene1!="REMOVE",]
+#######################################################################################################
+# Store genes stage I, II and III
+# Vectors to store gene ids from each stage
+genes_id_vector_stage_Gene1<-c()
+genes_id_vector_stage_Gene2<-c()
+
+# For each gene in stage I
+for (gene_id in net_stage_all_correlation_network$Gene1)
+{
+  # Store gene id in the vector
+  genes_id_vector_stage_Gene1<-c(genes_id_vector_stage_Gene1,strsplit(gene_id, split = "\\.")[[1]][1])
+}
+# For each gene in stage I
+for (gene_id in net_stage_all_correlation_network$Gene2)
+{
+  # Store gene id in the vector
+  genes_id_vector_stage_Gene2<-c(genes_id_vector_stage_Gene2,strsplit(gene_id, split = "\\.")[[1]][1])
+}
+net_stage_all_correlation_network$Gene1<-genes_id_vector_stage_Gene1
+net_stage_all_correlation_network$Gene2<-genes_id_vector_stage_Gene2
+#######################################################################################################
+# Load interactome
+genes_in_interactome<-unique(genes_Stage_ALL[genes_Stage_ALL$gene_id %in% intersect(genes_Stage_ALL$gene_id,c(interactome_all_stage$Gene1,interactome_all_stage$Gene2)),])
+
+# Set rownames as gene_ids
+rownames(genes_in_interactome)<-genes_in_interactome$gene_id
+
+# Set gene symbols
+interactome_all_stage$Gene1<-genes_in_interactome[interactome_all_stage$Gene1,"SYMBOL"]
+interactome_all_stage$Gene2<-genes_in_interactome[interactome_all_stage$Gene2,"SYMBOL"]
+
+
+
+
+
+
+
+
+
+
+
+
+

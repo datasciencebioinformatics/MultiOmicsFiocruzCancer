@@ -112,21 +112,9 @@ for (annotation in rownames(annotation_stages_all))
 # Load interactome
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadInteractomeUniqueGenes.R")
 
-# Load interactome
-genes_in_interactome<-unique(genes_Stage_ALL[genes_Stage_ALL$gene_id %in% intersect(genes_Stage_ALL$gene_id,c(interactome_all_stage$Gene1,interactome_all_stage$Gene2)),])
-
-# Set rownames as gene_ids
-rownames(genes_in_interactome)<-genes_in_interactome$gene_id
-
-# Set gene symbols
-interactome_all_stage$Gene1<-genes_in_interactome[interactome_all_stage$Gene1,"SYMBOL"]
-interactome_all_stage$Gene2<-genes_in_interactome[interactome_all_stage$Gene2,"SYMBOL"]
-
-coexpression_all_stage$Gene1<-genes_in_interactome[coexpression_all_stage$Gene1,"SYMBOL"]
-coexpression_all_stage$Gene2<-genes_in_interactome[coexpression_all_stage$Gene2,"SYMBOL"]
-
 # gene annotation
 interactome_annotation<-data.frame(gene_id=rownames(interactome_all_stage),gene=rownames(interactome_all_stage),log2change=rownames(interactome_all_stage),Category=0,Pvalue=0,FDR=0,ENTREZID=0,Symbol=interactome_all_stage$Gene1,Description=0,genecards_Category=0,UniProt_ID=0,GIFtS=0,GC_id=0,GeneCards_Summary=0,Stage=interactome_all_stage$Stage,Layer="Interactome",CluterProfiler=interactome_all_stage$Gene2 )
+coexpression_annotation<-data.frame(gene_id=rownames(net_stage_all_correlation_network),gene=rownames(net_stage_all_correlation_network),log2change=rownames(net_stage_all_correlation_network),Category=0,Pvalue=0,FDR=0,ENTREZID=0,Symbol=net_stage_all_correlation_network$Gene1,Description=0,genecards_Category=0,UniProt_ID=0,GIFtS=0,GC_id=0,GeneCards_Summary=0,Stage=net_stage_all_correlation_network$Stage,Layer="Coexpression",CluterProfiler=net_stage_all_correlation_network$Gene2 )
 ######################################################################################################################
 # Next,  ten most abundant annotation terms in number of genes per stage additionally inspected.
 ######################################################################################################################

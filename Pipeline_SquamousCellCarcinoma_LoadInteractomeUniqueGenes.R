@@ -257,8 +257,3 @@ rownames(genes_in_interactome)<-genes_in_interactome$gene_id
 interactome_all_stage$Gene1<-genes_in_interactome[interactome_all_stage$Gene1,"SYMBOL"]
 interactome_all_stage$Gene2<-genes_in_interactome[interactome_all_stage$Gene2,"SYMBOL"]
 #######################################################################################################
-
-
-
-
-

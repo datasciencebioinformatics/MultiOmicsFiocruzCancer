@@ -246,6 +246,8 @@ for (edge_i in rownames(net_stage_all_correlation_network))
   }
 }
 net_stage_all_correlation_network<-na.omit(unique(net_stage_all_correlation_network[selected_edges,]))
+
+net_stage_all_correlation_network$Gene1 %in% 
 #######################################################################################################
 # Load interactome
 genes_in_interactome<-unique(genes_Stage_ALL[genes_Stage_ALL$gene_id %in% intersect(genes_Stage_ALL$gene_id,c(interactome_all_stage$Gene1,interactome_all_stage$Gene2,net_stage_all_correlation_network$Gene1,net_stage_all_correlation_network$Gene2)),])

@@ -232,8 +232,8 @@ for (edge_i in rownames(net_stage_all_correlation_network))
   gene1_SYMOBL<-strsplit(net_stage_all_correlation_network[edge_i,"Gene1"], split = "\\.")[[1]][1]
   gene2_SYMOBL<-strsplit(net_stage_all_correlation_network[edge_i,"Gene2"], split = "\\.")[[1]][1]  
 
-  gene1_SYMOBL<-EnsemblToUniprotKBconversionList_data[EnsemblToUniprotKBconversionList_data$ENSG == gene1_SYMOBL,"SYMBOL"][[1]]
-  gene2_SYMOBL<-EnsemblToUniprotKBconversionList_data[EnsemblToUniprotKBconversionList_data$ENSG == gene2_SYMOBL,"SYMBOL"][[1]]
+  #gene1_SYMOBL<-EnsemblToUniprotKBconversionList_data[EnsemblToUniprotKBconversionList_data$ENSG == gene1_SYMOBL,"SYMBOL"][[1]]
+  #gene2_SYMOBL<-EnsemblToUniprotKBconversionList_data[EnsemblToUniprotKBconversionList_data$ENSG == gene2_SYMOBL,"SYMBOL"][[1]]
 
   net_stage_all_correlation_network[edge_i,"Gene1"]<-gene1_SYMOBL
   net_stage_all_correlation_network[edge_i,"Gene2"]<-gene2_SYMOBL
@@ -246,6 +246,16 @@ for (edge_i in rownames(net_stage_all_correlation_network))
   }
 }
 net_stage_all_correlation_network<-na.omit(unique(net_stage_all_correlation_network[selected_edges,]))
+
+# Load interactome
+genes_in_coexpression<-unique(genes_Stage_ALL[genes_Stage_ALL$gene_id %in% intersect(genes_Stage_ALL$gene_id,c(net_stage_all_correlation_network$Gene1,net_stage_all_correlation_network$Gene2)),])
+
+# Set rownames as gene_ids
+rownames(genes_in_coexpression)<-genes_in_coexpression$gene_id
+
+# Set gene symbols
+net_stage_all_correlation_network$Gene1<-genes_in_coexpression[net_stage_all_correlation_network$Gene1,"SYMBOL"]
+net_stage_all_correlation_network$Gene2<-genes_in_coexpression[net_stage_all_correlation_network$Gene2,"SYMBOL"]
 #######################################################################################################
 # Load interactome
 genes_in_interactome<-unique(genes_Stage_ALL[genes_Stage_ALL$gene_id %in% intersect(genes_Stage_ALL$gene_id,c(interactome_all_stage$Gene1,interactome_all_stage$Gene2,net_stage_all_correlation_network$Gene1,net_stage_all_correlation_network$Gene2)),])

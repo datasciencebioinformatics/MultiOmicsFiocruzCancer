@@ -200,7 +200,7 @@ paste(genes_stage_III, collapse=", ")
 ######################################################################################################################
 table_Stage_I<-table_Stage_I[which(table_Stage_I>1)]
 table_Stage_II<-table_Stage_II[which(table_Stage_II>1)]
-table_Stage_II<-table_Stage_III[which(table_Stage_III>1)]
+table_Stage_III<-table_Stage_III[which(table_Stage_III>1)]
 
 # Select top 10 terms
 selection_all<-unique(c(names(tail(sort(table_Stage_I),n=10)),names(tail(sort(table_Stage_II),n=10)),names(tail(sort(table_Stage_III),n=10))))
@@ -224,6 +224,15 @@ df_all_eges$names<-paste(df_all_eges$X1,df_all_eges$X2,sep="-")
 # Vertice colours of genes
 V(graph_all_stages)$color                                                                                                  <- "black"
 V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways$CluterProfiler)]$color       <- "black"
+
+stage_I   <-names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_I$SYMBOL)])
+stage_II  <-names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_II$SYMBOL)])
+stage_III <-names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_III$SYMBOL)])
+
+names(V(graph_all_stages)) %in% c(stage_I,stage_II,stage_III)
+length(names(V(graph_all_stages)) %in% c(stage_I,stage_II,stage_III))
+names(V(graph_all_stages))[!names(V(graph_all_stages)) %in% c(stage_I,stage_II,stage_III)]
+
 
 V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_I$SYMBOL)]$color       <- "#E69F00"
 V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_II$SYMBOL)]$color      <- "#009E73"

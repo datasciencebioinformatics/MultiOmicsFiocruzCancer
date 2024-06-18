@@ -203,7 +203,7 @@ table_Stage_II<-table_Stage_II[which(table_Stage_II>1)]
 table_Stage_III<-table_Stage_III[which(table_Stage_III>1)]
 
 # Select top 10 terms
-selection_all<-unique(c(names(tail(sort(table_Stage_I),n=10)),names(tail(sort(table_Stage_II),n=10)),names(tail(sort(table_Stage_III),n=10))))
+selection_all<-unique(c(names(tail(sort(table_Stage_I),n=5)),names(tail(sort(table_Stage_II),n=5)),names(tail(sort(table_Stage_III),n=5))))
 
 # Filter out table
 selection_all<-selection_all[selection_all!="-"]
@@ -211,6 +211,30 @@ selection_all<-selection_all[selection_all!="-"]
 # Concatenate table
 df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$CluterProfiler %in% selection_all),],
 interactome_annotation_stage,coexpression_annotation)
+####################################################################################################################
+# Store information for each gene
+df_count_terms_selected<-df_count_terms[selection_all,]
+
+# Genes for each stage
+df_count_terms_selected$Genes_Stage_I<-""
+df_count_terms_selected$Genes_Stage_II<-""
+df_count_terms_selected$Genes_Stage_III<-""
+
+
+# for each term, take the annotation about the genes
+for (term in rownames(df_count_terms_selected))
+{
+	# df_all_annotation_stage
+	df_all_annotation_stage_I  <-df_all_annotation[df_all_annotation$Stage=="Stage I",]
+	df_all_annotation_stage_II <-df_all_annotation[df_all_annotation$Stage=="Stage II",]
+	df_all_annotation_stage_III<-df_all_annotation[df_all_annotation$Stage=="Stage III",]
+
+	df_count_terms_selected[term,"Genes_Stage_I"]<-paste(df_all_annotation_stage_I[df_all_annotation_stage_I$CluterProfiler==term,"Symbol"],collapse=", ")
+	df_count_terms_selected[term,"Genes_Stage_II"]<-paste(df_all_annotation_stage_II[df_all_annotation_stage_II$CluterProfiler==term,"Symbol"],collapse=", ")
+	df_count_terms_selected[term,"Genes_Stage_III"]<-paste(df_all_annotation_stage_III[df_all_annotation_stage_III$CluterProfiler==term,"Symbol"],collapse=", ")
+}
+# Save file 
+write.xlsx(x=df_count_terms_selected,file=paste(output_dir,"selected_pathways",".xlsx",sep=""), sheet="five most abundant per stage", append=TRUE)
 ####################################################################################################################
 # All stages
 graph_all_stages <- graph_from_data_frame(d=unique(df_all_annotation_selected_pathways[,c("Symbol","CluterProfiler")]), vertices=unique(c(df_all_annotation_selected_pathways$Symbol,df_all_annotation_selected_pathways$CluterProfiler)), directed=F)  
@@ -241,10 +265,12 @@ V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_III$SYMBOL)]
 # Vertice colours of genes
 V(graph_all_stages)$shape                                                                                                                                                                                      <-"circle"
 V(graph_all_stages)[which(names(V(graph_all_stages)) %in%  df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$shape              <- "square"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in%  df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])]$shape      <- "square"
 
 # Set size of the node according to the dregree
-V(graph_all_stages)$size                                                                                                                                                                               <- 5
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$size        <- 7
+V(graph_all_stages)$size                                                                                                                                                                                       <- 5
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])]$size        <- 7
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$size                <- 7
 
 # Vertice colours of genes
 E(graph_all_stages)$color                                                                         <- "lightgrey"
@@ -252,21 +278,24 @@ E(graph_all_stages)$color                                                       
 # Set ronames
 E(graph_all_stages)[which(df_all_eges$names %in% selected_interactome)]$color                     <- "black"
 E(graph_all_stages)[which(df_all_eges$names %in% selected_coexpression)]$color                    <- "darkblue"
-                                                                 
 
+# Set size of the node according to the dregree
+V(graph_all_stages)$label                                                                                                                                                                                      <- ""
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])]$label        <- names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])])
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$label                <- names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])])
 
-
+                                                                
 
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge.png",sep=""), width = 30, height = 30, res=600, units = "cm")
 	#plot(graph_all_stages, layout=layout_nicely, vertex.label=NA) # Stage I
 	#plot(graph_all_stages, layout=  layout_with_kk, vertex.label=NA) # Stage II
 	#plot(graph_all_stages, layout=   layout_nicely, vertex.label=V(graph_all_stages)$labels) # Stage II
-	plot(graph_all_stages, layout=   layout_nicely,vertex.label=NA, edge.colour=NA  ) # Stage II
+	plot(graph_all_stages, layout=   layout_nicely,vertex.label=V(graph_all_stages)$label, edge.colour=NA ) # Stage II
 dev.off()
 
-lou <- cluster_optimal(graph_all_stages)
-plot(lou, graph_all_stages, vertex.label = NA, vertex.size=5, edge.arrow.size = .2)
+
+
 
 
 

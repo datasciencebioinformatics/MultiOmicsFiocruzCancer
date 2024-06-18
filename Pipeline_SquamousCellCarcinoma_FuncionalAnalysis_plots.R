@@ -316,4 +316,4 @@ png(filename=paste(output_folder,"legend.png",sep=""), width = 5, height = 5, re
 plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
 legend("topleft", legend =c('GO', 'KEGG', 'REACTOME','Gene'), pch=16, pt.cex=3, cex=1.5, bty='n',col = c('#ff6347', '#ffd700', '#7f7f7f', '#0072b2'))
 mtext("Legend", at=0.2, cex=2)
-
+###########################################################################

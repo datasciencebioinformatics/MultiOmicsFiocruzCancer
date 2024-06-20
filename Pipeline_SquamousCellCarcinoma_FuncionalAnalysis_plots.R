@@ -235,6 +235,7 @@ for (term in rownames(df_count_terms_selected))
 }
 # Save file 
 write.xlsx(x=df_count_terms_selected,file=paste(output_dir,"selected_pathways",".xlsx",sep=""), sheet="five most abundant per stage", append=TRUE)
+
 ####################################################################################################################
 # All stages
 graph_all_stages <- graph_from_data_frame(d=unique(df_all_annotation_selected_pathways[,c("Symbol","CluterProfiler")]), vertices=unique(c(df_all_annotation_selected_pathways$Symbol,df_all_annotation_selected_pathways$CluterProfiler)), directed=F)  
@@ -317,10 +318,3 @@ plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
 legend("topleft", legend =c('GO', 'KEGG', 'REACTOME','Gene'), pch=16, pt.cex=3, cex=1.5, bty='n',col = c('#ff6347', '#ffd700', '#7f7f7f', '#0072b2'))
 mtext("Legend", at=0.2, cex=2)
 ###########################################################################
-df_all_annotation
-
-# For each terms
-for (term in selection_all)
-{
-	print(term)
-}

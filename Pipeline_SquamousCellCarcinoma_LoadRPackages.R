@@ -32,6 +32,7 @@ library(RColorBrewer)
 library("clusterProfiler")
 library(ReactomePA)
 library(stringr)
+library("ggpubr")
 
 # Function to expand.grid.unique without redundancy
 expand.grid.unique <- function(x, y, include.equals=FALSE)

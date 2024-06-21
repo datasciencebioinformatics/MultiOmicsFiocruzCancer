@@ -134,14 +134,14 @@ dev.off()
 log2change_tumor_control_paired$Gene_id<-""
 
 # For each gene, add gene_id
-for (gene_row in rownames(log2change_tumor_control))
+for (gene_row in rownames(log2change_tumor_control_paired))
 {	      
   # Store gene id in the vector
   # Simply trim the gene id before the "." to save it in the ENSEML format
   rownames_id<-strsplit(gene_row, split = "\\.")[[1]][1]  
   
   # Addd gene id
-  log2change_tumor_control[gene_row,"Gene_id"]<-rownames_id    
+  log2change_tumor_control_paired[gene_row,"Gene_id"]<-rownames_id    
 }
 # Formart output tables
 ids_all_tumor_sample      <-bitr(log2change_tumor_control_paired$Gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
@@ -158,10 +158,6 @@ colnames(log2change_tumor_control_paired)<-c("gene_id","gene","log2fc_tumor","Ca
 # Select collumns
 log2change_tumor_control_paired<-log2change_tumor_control_paired[,c("gene_id","gene","log2fc_tumor","tumor.p.value","FDR","ENSEMBL","ENTREZID","SYMBOL")]
 ############################################################################################################################################################################
-ids_stage_I
-ids_stage_II
-ids_stage_III
-
 # Log2foldchange (Stage-Normal)
 genes_unique_Stage_I   # Log2foldchange (Stage-Normal)
 genes_unique_Stage_II  # Log2foldchange (Stage-Normal)

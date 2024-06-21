@@ -62,30 +62,35 @@ samples_Normal  <-colData[colData$tumor_normal=="Solid Tissue Normal","patient_i
 # Plot with 15208 genes.
 # Log2foldchange
 LOG_CONSTANT=0.001
-log2change=rowMeans(log(unstranded_rpkm[,paired_sample_df$tumor]+LOG_CONSTANT,2))/rowMeans(log(unstranded_rpkm[,paired_sample_df$normal]+LOG_CONSTANT,2))
-log2change=log( (rowMeans(unstranded_rpkm[,paired_sample_df$tumor]+LOG_CONSTANT)/rowMeans(unstranded_rpkm[,paired_sample_df$normal]+LOG_CONSTANT)),2)	
+log2change_paired=log( (rowMeans(unstranded_rpkm[,paired_sample_df$tumor]+LOG_CONSTANT)/rowMeans(unstranded_rpkm[,paired_sample_df$normal]+LOG_CONSTANT)),2)	
 log2change=log( (rowMeans(unstranded_rpkm[,samples_Tumor]+LOG_CONSTANT)/rowMeans(unstranded_rpkm[,samples_Normal]+LOG_CONSTANT)),2)	
 
 # log2change data
 log2change_tumor_control=na.omit(data.frame(gene=names(log2change),log2change=log2change))
+log2change_tumor_control_paired=na.omit(data.frame(gene=names(log2change_paired),log2change=log2change_paired))
 
 # First, the log2foldchane tumor/normal samples is used
 log2change_tumor_control$Category<-"insignificant"
+log2change_tumor_control_paired$Category<-"insignificant"
 
 # First, the log2foldchane tumor/normal samples is used
 log2change_tumor_control$Pvalue<-1
+log2change_tumor_control_paired$Pvalue<-1
 
 # For each genes in the tabe
 for (gene in log2change_tumor_control$gene)
 {
 	# Take p-value
 	log2change_tumor_control[gene,"Pvalue"]<-t.test(x=as.numeric(unstranded_rpkm[gene,samples_Tumor]), y=as.numeric(unstranded_rpkm[gene,samples_Normal]), paired = FALSE, alternative = "two.sided")$p.value	
+	log2change_tumor_control_paired[gene,"Pvalue"]<-t.test(x=as.numeric(unstranded_rpkm[gene,paired_sample_df$tumor]), y=as.numeric(unstranded_rpkm[gene,paired_sample_df$normal]), paired = FALSE, alternative = "two.sided")$p.value	
 }
 # FRD 
 log2change_tumor_control$FDR<-p.adjust(log2change_tumor_control$Pvalue, method="fdr")
+log2change_tumor_control_paired$FDR<-p.adjust(log2change_tumor_control_paired$Pvalue, method="fdr")
 
 # Categorize genes if log2foldchange >= threshold_tumor
 log2change_tumor_control[intersect(which(log2change_tumor_control$FDR<=threshold_FDR), which(log2change_tumor_control$log2change>=threshold_tumor)),"Category"]<-paste("Tumor genes", sep="")
+log2change_tumor_control_paired[intersect(which(log2change_tumor_control_paired$FDR<=threshold_FDR), which(log2change_tumor_control_paired$log2change>=threshold_tumor)),"Category"]<-paste("Tumor genes", sep="")
 #######################################################################################################################################
 # Create volcano plot
 p1 <- ggplot(log2change_tumor_control, aes(log2change, -log(FDR,10))) +  geom_point(size = 2/5) +  theme_bw()

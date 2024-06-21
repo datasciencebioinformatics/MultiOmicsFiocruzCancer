@@ -163,6 +163,13 @@ genes_unique_Stage_I   # Log2foldchange (Stage-Normal)
 genes_unique_Stage_II  # Log2foldchange (Stage-Normal)
 genes_unique_Stage_III # Log2foldchange (Stage-Normal)
 
+# Add gene id to genes_unique_Stage_I
+# Stopped here
+genes_unique_Stage_I$Gene_id<-
+genes_unique_Stage_II$Gene_id<-
+genes_unique_Stage_III$Gene_id<-
+
+
 # Log2foldchange (Stage-Normal)
 colnames(genes_unique_Stage_I)   <-c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")
 colnames(genes_unique_Stage_II)  <-c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")

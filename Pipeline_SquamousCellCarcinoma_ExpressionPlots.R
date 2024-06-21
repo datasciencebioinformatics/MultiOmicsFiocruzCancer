@@ -163,17 +163,15 @@ genes_unique_Stage_I   # Log2foldchange (Stage-Normal)
 genes_unique_Stage_II  # Log2foldchange (Stage-Normal)
 genes_unique_Stage_III # Log2foldchange (Stage-Normal)
 
-# Add gene id to genes_unique_Stage_I
-# Stopped here
-genes_unique_Stage_I$Gene_id<-
-genes_unique_Stage_II$Gene_id<-
-genes_unique_Stage_III$Gene_id<-
-
+# Log2foldchange (Stage-Normal)
+colnames(genes_unique_Stage_I)   <-c("gene","log2fc_stage","Category","stage.p.value","FDR","ENSEMBL")
+colnames(genes_unique_Stage_II)  <-c("gene","log2fc_stage","Category","stage.p.value","FDR","ENSEMBL")
+colnames(genes_unique_Stage_III) <-c("gene","log2fc_stage","Category","stage.p.value","FDR","ENSEMBL")
 
 # Log2foldchange (Stage-Normal)
-colnames(genes_unique_Stage_I)   <-c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")
-colnames(genes_unique_Stage_II)  <-c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")
-colnames(genes_unique_Stage_III) <-c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")
+genes_unique_Stage_I   <-genes_unique_Stage_I[,c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")]
+genes_unique_Stage_II  <-genes_unique_Stage_II[,c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")]
+genes_unique_Stage_III <-genes_unique_Stage_III[,c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")]
 
 genes_unique_Stage_I<-merge(genes_unique_Stage_I,log2change_tumor_control_paired,by="ENSEMBL")
 genes_unique_Stage_II<-merge(genes_unique_Stage_II,log2change_tumor_control_paired,by="ENSEMBL")
@@ -187,6 +185,9 @@ colnames(genes_unique_Stage_I)<-c("ENSEMBL","gene","log2fc_stage","pvalue_stage"
 colnames(genes_unique_Stage_II)<-c("ENSEMBL","gene","log2fc_stage","pvalue_stage","FDR_stage","gene_id","gene_y","log2fc_tumor","pvalue_tumor","FDR_tumor","ENTREZID","SYMBOL")
 colnames(genes_unique_Stage_III)<-c("ENSEMBL","gene","log2fc_stage","pvalue_stage","FDR_stage","gene_id","gene_y","log2fc_tumor","pvalue_tumor","FDR_tumor","ENTREZID","SYMBOL")
 
-colnames(genes_unique_Stage_I)<-genes_unique_Stage_I[c("ENTREZID","SYMBOL","ENSEMBL","gene","log2fc_stage","pvalue_stage","FDR_stage","log2fc_tumor","pvalue_tumor","FDR_tumor"),]
-colnames(genes_unique_Stage_II)<-genes_unique_Stage_II[c("ENTREZID","SYMBOL","ENSEMBL","gene","log2fc_stage","pvalue_stage","FDR_stage","log2fc_tumor","pvalue_tumor","FDR_tumor"),]
-colnames(genes_unique_Stage_III)<-genes_unique_Stage_II[c("ENTREZID","SYMBOL","ENSEMBL","gene","log2fc_stage","pvalue_stage","FDR_stage","log2fc_tumor","pvalue_tumor","FDR_tumor"),]
+genes_unique_Stage_I<-genes_unique_Stage_I[,c("ENSEMBL","ENTREZID","SYMBOL","gene","log2fc_stage","pvalue_stage","FDR_stage","log2fc_tumor","pvalue_tumor","FDR_tumor")]
+genes_unique_Stage_II<-genes_unique_Stage_II[,c("ENSEMBL","ENTREZID","SYMBOL","gene","log2fc_stage","pvalue_stage","FDR_stage","log2fc_tumor","pvalue_tumor","FDR_tumor")]
+genes_unique_Stage_III<-genes_unique_Stage_II[,c("ENSEMBL","ENTREZID","SYMBOL","gene","log2fc_stage","pvalue_stage","FDR_stage","log2fc_tumor","pvalue_tumor","FDR_tumor")]
+############################################################################################################################################################################
+# I stopped here, continuity is to create a single table to combine stages I, II and III in the same table, for the same gene.
+# Challenge here is to specigy if the genes is from stage I, II or III

@@ -254,7 +254,7 @@ for (term in rownames(df_count_terms_selected))
 write.xlsx(x=df_count_terms_selected,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected terms", append=TRUE)
 ####################################################################################################################
 # Concatenate table
-df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage,
+df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$CluterProfiler %in% selection_all),],
 interactome_annotation_stage,coexpression_annotation)
 ####################################################################################################################
 

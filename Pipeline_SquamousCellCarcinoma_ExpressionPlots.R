@@ -131,7 +131,7 @@ png(filename=paste(output_folder,"Plot_p_stage_selected_unpaired.png",sep=""), w
 dev.off()
 ############################################################################################################################################################################
 # Log2foldchange (Tumor-Normal)
-log2change_tumor_control$Gene_id<-""
+log2change_tumor_control_paired$Gene_id<-""
 
 # For each gene, add gene_id
 for (gene_row in rownames(log2change_tumor_control))
@@ -144,19 +144,19 @@ for (gene_row in rownames(log2change_tumor_control))
   log2change_tumor_control[gene_row,"Gene_id"]<-rownames_id    
 }
 # Formart output tables
-ids_all_tumor_sample      <-bitr(log2change_tumor_control$Gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
+ids_all_tumor_sample      <-bitr(log2change_tumor_control_paired$Gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
 
 # Duplicate field Gene_id
 ids_all_tumor_sample$Gene_id<-ids_all_tumor_sample$ENSEMBL
 
 # log2change_tumor_control
-log2change_tumor_control<-merge(log2change_tumor_control,ids_all_tumor_sample,by="Gene_id", all = TRUE)
+log2change_tumor_control_paired<-merge(log2change_tumor_control_paired,ids_all_tumor_sample,by="Gene_id", all = TRUE)
 
 # Rename collumns
-colnames(log2change_tumor_control)<-c("gene_id","gene","log2fc_tumor","Category","tumor.p.value","FDR","ENSEMBL","ENTREZID","SYMBOL")
+colnames(log2change_tumor_control_paired)<-c("gene_id","gene","log2fc_tumor","Category","tumor.p.value","FDR","ENSEMBL","ENTREZID","SYMBOL")
 
 # Select collumns
-log2change_tumor_control<-log2change_tumor_control[,c("gene_id","gene","log2fc_tumor","tumor.p.value","FDR","ENSEMBL","ENTREZID","SYMBOL")]
+log2change_tumor_control_paired<-log2change_tumor_control_paired[,c("gene_id","gene","log2fc_tumor","tumor.p.value","FDR","ENSEMBL","ENTREZID","SYMBOL")]
 ############################################################################################################################################################################
 ids_stage_I
 ids_stage_II
@@ -172,9 +172,9 @@ colnames(genes_unique_Stage_I)   <-c("gene","log2fc_stage","stage.p.value","FDR"
 colnames(genes_unique_Stage_II)  <-c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")
 colnames(genes_unique_Stage_III) <-c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")
 
-genes_unique_Stage_I<-merge(genes_unique_Stage_I,log2change_tumor_control,by="ENSEMBL")
-genes_unique_Stage_II<-merge(genes_unique_Stage_II,log2change_tumor_control,by="ENSEMBL")
-genes_unique_Stage_III<-merge(genes_unique_Stage_III,log2change_tumor_control,by="ENSEMBL")
+genes_unique_Stage_I<-merge(genes_unique_Stage_I,log2change_tumor_control_paired,by="ENSEMBL")
+genes_unique_Stage_II<-merge(genes_unique_Stage_II,log2change_tumor_control_paired,by="ENSEMBL")
+genes_unique_Stage_III<-merge(genes_unique_Stage_III,log2change_tumor_control_paired,by="ENSEMBL")
 
 genes_unique_Stage_I<-genes_unique_Stage_I %>% distinct()
 genes_unique_Stage_II<-genes_unique_Stage_II %>% distinct()

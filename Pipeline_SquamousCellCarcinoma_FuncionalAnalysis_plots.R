@@ -226,7 +226,7 @@ for (term in rownames(df_count_terms_selected))
 write.xlsx(x=df_count_terms_selected,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="all pathways", append=TRUE)
 ####################################################################################################################
 # Select top 10 terms
-selection_all<-unique(c(names(tail(sort(table_Stage_I),n=10)),names(tail(sort(table_Stage_II),n=10)),names(tail(sort(table_Stage_III),n=10))))
+selection_all<-unique(c(names(tail(sort(table_Stage_I),n=30)),names(tail(sort(table_Stage_II),n=30)),names(tail(sort(table_Stage_III),n=30))))
 ####################################################################################################################
 # Store information for each gene
 df_count_terms_selected<-df_count_terms[selection_all,]

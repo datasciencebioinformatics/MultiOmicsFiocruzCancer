@@ -151,6 +151,12 @@ ids_all_tumor_sample$Gene_id<-ids_all_tumor_sample$ENSEMBL
 
 # log2change_tumor_control
 log2change_tumor_control<-merge(log2change_tumor_control,ids_all_tumor_sample,by="Gene_id", all = TRUE)
+
+# Rename collumns
+colnames(log2change_tumor_control)<-c("gene_id","gene","log2fc_tumor","Category","tumor.p.value","FDR","ENSEMBL","ENTREZID","SYMBOL")
+
+# Select collumns
+log2change_tumor_control<-log2change_tumor_control[,c("gene_id","gene","log2fc_tumor","tumor.p.value","FDR","ENSEMBL","ENTREZID","SYMBOL")]
 ############################################################################################################################################################################
 ids_stage_I
 ids_stage_II
@@ -162,7 +168,22 @@ genes_unique_Stage_II  # Log2foldchange (Stage-Normal)
 genes_unique_Stage_III # Log2foldchange (Stage-Normal)
 
 # Log2foldchange (Stage-Normal)
-colnames(genes_unique_Stage_I)   <-c("gene","log2fc_stage","Category","p.value","FDR","gene_id")
-colnames(genes_unique_Stage_II)  <-c("gene","log2fc_stage","Category","p.value","FDR","gene_id")
-colnames(genes_unique_Stage_III) <-c("gene","log2fc_stage","Category","p.value","FDR","gene_id")
+colnames(genes_unique_Stage_I)   <-c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")
+colnames(genes_unique_Stage_II)  <-c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")
+colnames(genes_unique_Stage_III) <-c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")
 
+genes_unique_Stage_I<-merge(genes_unique_Stage_I,log2change_tumor_control,by="ENSEMBL")
+genes_unique_Stage_II<-merge(genes_unique_Stage_II,log2change_tumor_control,by="ENSEMBL")
+genes_unique_Stage_III<-merge(genes_unique_Stage_III,log2change_tumor_control,by="ENSEMBL")
+
+genes_unique_Stage_I<-genes_unique_Stage_I %>% distinct()
+genes_unique_Stage_II<-genes_unique_Stage_II %>% distinct()
+genes_unique_Stage_III<-genes_unique_Stage_III %>% distinct()
+
+colnames(genes_unique_Stage_I)<-c("ENSEMBL","gene","log2fc_stage","pvalue_stage","FDR_stage","gene_id","gene_y","log2fc_tumor","pvalue_tumor","FDR_tumor","ENTREZID","SYMBOL")
+colnames(genes_unique_Stage_II)<-c("ENSEMBL","gene","log2fc_stage","pvalue_stage","FDR_stage","gene_id","gene_y","log2fc_tumor","pvalue_tumor","FDR_tumor","ENTREZID","SYMBOL")
+colnames(genes_unique_Stage_III)<-c("ENSEMBL","gene","log2fc_stage","pvalue_stage","FDR_stage","gene_id","gene_y","log2fc_tumor","pvalue_tumor","FDR_tumor","ENTREZID","SYMBOL")
+
+colnames(genes_unique_Stage_I)<-genes_unique_Stage_I[c("ENTREZID","SYMBOL","ENSEMBL","gene","log2fc_stage","pvalue_stage","FDR_stage","log2fc_tumor","pvalue_tumor","FDR_tumor"),]
+colnames(genes_unique_Stage_II)<-genes_unique_Stage_II[c("ENTREZID","SYMBOL","ENSEMBL","gene","log2fc_stage","pvalue_stage","FDR_stage","log2fc_tumor","pvalue_tumor","FDR_tumor"),]
+colnames(genes_unique_Stage_III)<-genes_unique_Stage_II[c("ENTREZID","SYMBOL","ENSEMBL","gene","log2fc_stage","pvalue_stage","FDR_stage","log2fc_tumor","pvalue_tumor","FDR_tumor"),]

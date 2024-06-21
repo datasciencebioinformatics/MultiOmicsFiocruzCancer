@@ -121,11 +121,3 @@ dev.off()
 png(filename=paste(output_folder,"Plot_p_stage_I_unpaired.png",sep=""), width = 30, height = 30, res=600, units = "cm")
   grid.arrange(p_stage_I_unpaired,p_stage_II_unpaired,p_stage_III_unpaired)
 dev.off()
-
-
-
-
-
-
-
-

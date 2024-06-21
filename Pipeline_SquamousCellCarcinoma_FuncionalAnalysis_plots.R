@@ -127,7 +127,6 @@ df_all_annotation_per_stage<-df_all_annotation
 # interactome_annotation
 interactome_annotation_stage<-interactome_annotation
 ######################################################################################################################
-
 # A table for the count of go terms
 table_Stage_I   <-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage I","CluterProfiler"])
 table_Stage_II  <-table(df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage II","CluterProfiler"])
@@ -198,22 +197,12 @@ genes_stage_III<-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$
 paste(terms_stage_III, collapse=", ")
 paste(genes_stage_III, collapse=", ")
 ######################################################################################################################
-table_Stage_I<-table_Stage_I[which(table_Stage_I>1)]
-table_Stage_II<-table_Stage_II[which(table_Stage_II>1)]
-table_Stage_III<-table_Stage_III[which(table_Stage_III>1)]
-
-# Select top 10 terms
-selection_all<-unique(c(names(tail(sort(table_Stage_I),n=5)),names(tail(sort(table_Stage_II),n=5)),names(tail(sort(table_Stage_III),n=5))))
-
-# Filter out table
-selection_all<-selection_all[selection_all!="-"]
-
-# Concatenate table
-df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$CluterProfiler %in% selection_all),],
-interactome_annotation_stage,coexpression_annotation)
+#table_Stage_I<-table_Stage_I[which(table_Stage_I>1)]
+#table_Stage_II<-table_Stage_II[which(table_Stage_II>1)]
+#table_Stage_III<-table_Stage_III[which(table_Stage_III>1)]
 ####################################################################################################################
 # Store information for each gene
-df_count_terms_selected<-df_count_terms[selection_all,]
+df_count_terms_selected<-df_count_terms
 
 # Genes for each stage
 df_count_terms_selected$Genes_Stage_I<-""
@@ -234,9 +223,41 @@ for (term in rownames(df_count_terms_selected))
 	df_count_terms_selected[term,"Genes_Stage_III"]<-paste(df_all_annotation_stage_III[df_all_annotation_stage_III$CluterProfiler==term,"Symbol"],collapse=", ")
 }
 # Save file 
-write.xlsx(x=df_count_terms_selected,file=paste(output_dir,"selected_pathways",".xlsx",sep=""), sheet="five most abundant per stage", append=TRUE)
-
+write.xlsx(x=df_count_terms_selected,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="all pathways", append=TRUE)
 ####################################################################################################################
+# Select top 10 terms
+selection_all<-unique(c(names(tail(sort(table_Stage_I),n=10)),names(tail(sort(table_Stage_II),n=10)),names(tail(sort(table_Stage_III),n=10))))
+####################################################################################################################
+# Store information for each gene
+df_count_terms_selected<-df_count_terms[selection_all,]
+
+
+# Genes for each stage
+df_count_terms_selected$Genes_Stage_I<-""
+df_count_terms_selected$Genes_Stage_II<-""
+df_count_terms_selected$Genes_Stage_III<-""
+
+
+# for each term, take the annotation about the genes
+for (term in rownames(df_count_terms_selected))
+{
+	# df_all_annotation_stage
+	df_all_annotation_stage_I  <-df_all_annotation[df_all_annotation$Stage=="Stage I",]
+	df_all_annotation_stage_II <-df_all_annotation[df_all_annotation$Stage=="Stage II",]
+	df_all_annotation_stage_III<-df_all_annotation[df_all_annotation$Stage=="Stage III",]
+
+	df_count_terms_selected[term,"Genes_Stage_I"]<-paste(df_all_annotation_stage_I[df_all_annotation_stage_I$CluterProfiler==term,"Symbol"],collapse=", ")
+	df_count_terms_selected[term,"Genes_Stage_II"]<-paste(df_all_annotation_stage_II[df_all_annotation_stage_II$CluterProfiler==term,"Symbol"],collapse=", ")
+	df_count_terms_selected[term,"Genes_Stage_III"]<-paste(df_all_annotation_stage_III[df_all_annotation_stage_III$CluterProfiler==term,"Symbol"],collapse=", ")
+}
+# Save file 
+write.xlsx(x=df_count_terms_selected,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected terms", append=TRUE)
+####################################################################################################################
+# Concatenate table
+df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage,
+interactome_annotation_stage,coexpression_annotation)
+####################################################################################################################
+
 # All stages
 graph_all_stages <- graph_from_data_frame(d=unique(df_all_annotation_selected_pathways[,c("Symbol","CluterProfiler")]), vertices=unique(c(df_all_annotation_selected_pathways$Symbol,df_all_annotation_selected_pathways$CluterProfiler)), directed=F)  
 

@@ -31,6 +31,15 @@ genes_stage_III<-gsub(" ", "", unique(unique(strsplit(x=paste(unique(df_count_te
 genes_stage_I<-genes_stage_I[genes_stage_I!=""]
 genes_stage_II<-genes_stage_II[genes_stage_II!=""]
 genes_stage_III<-genes_stage_III[genes_stage_III!=""]
+
+# ids_stage_I - all ENSEMBL anotated using bitr
+ids_stage_I      <-bitr(genes_unique_Stage_I$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
+ids_stage_II     <-bitr(genes_unique_Stage_II$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
+ids_stage_III    <-bitr(genes_unique_Stage_III$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
+
+genes_stage_I   <- ids_stage_I$SYMBOL
+genes_stage_II  <- ids_stage_II$SYMBOL
+genes_stage_III <- ids_stage_III$SYMBOL
 ############################################################################################################################################################################
 # Samples
 unstranded_data_samples<-melt(t(unstranded_data_filter[,sample_stage_all_samples$patient_id]))
@@ -39,7 +48,6 @@ unstranded_data_samples_unapaired<-melt(t(unstranded_data_filter[,colDta_tumor$p
 # colnames(unstranded_data_samples)
 colnames(unstranded_data_samples)<-c("patient_id","gene_id","RPKM")
 colnames(unstranded_data_samples_unapaired)<-c("patient_id","gene_id","RPKM")
-
 
 # unstranded_data_samples with sample_stage_all_samples
 unstranded_data_samples<-merge(unstranded_data_samples,sample_stage_all_samples,by="patient_id")
@@ -113,11 +121,12 @@ p_stage_III_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$SYMBO
 p_stage_III_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% stage_III_selected_genes,], aes(x=stages, y=RPKM)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 3, scales="free")+ theme_bw()  + stat_compare_means(comparisons = my_comparisons, method="t.test") + ggtitle("Stage III genes. Tumor samples")
 ############################################################################################################################################################################
 # FindClusters_resolution
-png(filename=paste(output_folder,"Plot_p_stage_I_paired.png",sep=""), width = 30, height = 30, res=600, units = "cm")
+png(filename=paste(output_folder,"Plot_p_stage_selected_paired.png",sep=""), width = 30, height = 30, res=600, units = "cm")
   grid.arrange(p_stage_I_paired,p_stage_II_paired,p_stage_III_paired)
 dev.off()
 
 # FindClusters_resolution
-png(filename=paste(output_folder,"Plot_p_stage_I_unpaired.png",sep=""), width = 30, height = 30, res=600, units = "cm")
+png(filename=paste(output_folder,"Plot_p_stage_selected_unpaired.png",sep=""), width = 30, height = 30, res=600, units = "cm")
   grid.arrange(p_stage_I_unpaired,p_stage_II_unpaired,p_stage_III_unpaired)
 dev.off()
+############################################################################################################################################################################

@@ -130,3 +130,39 @@ png(filename=paste(output_folder,"Plot_p_stage_selected_unpaired.png",sep=""), w
   grid.arrange(p_stage_I_unpaired,p_stage_II_unpaired,p_stage_III_unpaired)
 dev.off()
 ############################################################################################################################################################################
+# Log2foldchange (Tumor-Normal)
+log2change_tumor_control$Gene_id<-""
+
+# For each gene, add gene_id
+for (gene_row in rownames(log2change_tumor_control))
+{	      
+  # Store gene id in the vector
+  # Simply trim the gene id before the "." to save it in the ENSEML format
+  rownames_id<-strsplit(gene_row, split = "\\.")[[1]][1]  
+  
+  # Addd gene id
+  log2change_tumor_control[gene_row,"Gene_id"]<-rownames_id    
+}
+# Formart output tables
+ids_all_tumor_sample      <-bitr(log2change_tumor_control$Gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
+
+# Duplicate field Gene_id
+ids_all_tumor_sample$Gene_id<-ids_all_tumor_sample$ENSEMBL
+
+# log2change_tumor_control
+log2change_tumor_control<-merge(log2change_tumor_control,ids_all_tumor_sample,by="Gene_id", all = TRUE)
+############################################################################################################################################################################
+ids_stage_I
+ids_stage_II
+ids_stage_III
+
+# Log2foldchange (Stage-Normal)
+genes_unique_Stage_I   # Log2foldchange (Stage-Normal)
+genes_unique_Stage_II  # Log2foldchange (Stage-Normal)
+genes_unique_Stage_III # Log2foldchange (Stage-Normal)
+
+# Log2foldchange (Stage-Normal)
+colnames(genes_unique_Stage_I)   <-c("gene","log2fc_stage","Category","p.value","FDR","gene_id")
+colnames(genes_unique_Stage_II)  <-c("gene","log2fc_stage","Category","p.value","FDR","gene_id")
+colnames(genes_unique_Stage_III) <-c("gene","log2fc_stage","Category","p.value","FDR","gene_id")
+

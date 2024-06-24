@@ -45,33 +45,24 @@ unstranded_data_samples_unapaired<-merge(unstranded_data_samples_unapaired,sampl
 colnames(unstranded_data_samples)<-c("patient_id","gene_id","RPKM","tissue_type","stages")
 colnames(unstranded_data_samples_unapaired)<-c("patient_id","gene_id","RPKM","tissue_type","stages")
 
-# genes_ids
-df_id_conversion<-data.frame(Gene=c(),Gene_id=c())
+# Create ENSEMBL
+unstranded_data_samples$ENSEMBL<-""
+unstranded_data_samples_unapaired$ENSEMBL<-""  
 
 # For each gene, add gene_id
-for (gene_row in rownames(unstranded_data_filter))
+for (gene_row in rownames(unstranded_data_samples))
 {	      
     # Store gene id in the vector
     # Simply trim the gene id before the "." to save it in the ENSEML format
-    rownames_id<-strsplit(gene_row, split = "\\.")[[1]][1]  
-    df_id_conversion<-rbind(df_id_conversion,data.frame(Gene_id=gene_row,Gene=rownames_id))
+    unstranded_data_samples[gene_row,"gene_id"]<-strsplit(unstranded_data_samples[gene_row,"ENSEMBL"], split = "\\.")[[1]][1]  
 }
-# Set rownames
-rownames(df_id_conversion)<-df_id_conversion$Gene_id
-
-# Selected ids
-selected_ids<-df_id_conversion[df_id_conversion$Gene %in% c(genes_unique_Stage_I$gene_id,genes_unique_Stage_II$gene_id,genes_unique_Stage_III$gene_id),]
-
-# Take only selected entries
-unstranded_data_samples<-unstranded_data_samples[which(unstranded_data_samples$gene_id %in% selected_ids$Gene_id),]
-unstranded_data_samples_unapaired<-unstranded_data_samples_unapaired[which(unstranded_data_samples_unapaired$gene_id %in% selected_ids$Gene_id),]
-
-# Set colnames
-colnames(df_id_conversion)[1]<-c("gene_id")
-
-# unstranded_data_samples
-unstranded_data_samples<-merge(unstranded_data_samples,df_id_conversion,by="gene_id")
-unstranded_data_samples_unapaired<-merge(unstranded_data_samples_unapaired,df_id_conversion,by="gene_id")
+# For each gene, add gene_id
+for (gene_row in rownames(unstranded_data_samples_unapaired))
+{	      
+    # Store gene id in the vector
+    # Simply trim the gene id before the "." to save it in the ENSEML format
+    unstranded_data_samples_unapaired[gene_row,"gene_id"]<-strsplit(unstranded_data_samples_unapaired[gene_row,"ENSEMBL"], split = "\\.")[[1]][1]  
+}  
 ############################################################################################################################################################################
 my_comparisons <- list( c("Stage I", "Stage II"), c("Stage I", "Stage III"), c("Stage II", "Stage III") )
 ############################################################################################################################################################################

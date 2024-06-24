@@ -238,8 +238,8 @@ genes_unique_stages_filtered<-unique(genes_unique_stages_complete[,c("ENSEMBL", 
 genes_unique_stages_stage_specific<-unique(genes_unique_stages_filtered[c(which(genes_unique_stages_filtered$Stage_I.sig=="stage-specific"),which(genes_unique_stages_filtered$Stage_II.sig=="stage-specific"),which(genes_unique_stages_filtered$Stage_III.sig=="stage-specific")),])
 ############################################################################################################################################################################
 # log2fchange_results
-write.xlsx(x=genes_unique_stages_filtered, sheet="tumor genes",file=paste(output_dir,"log2fchange_results.xlsx",sep=""))
-write.xlsx(x=genes_unique_stages_stage_specific, sheet="stage-specific genes",file=paste(output_dir,"log2fchange_results.xlsx",sep=""),append = TRUE)
+write.xlsx(x=na.omit(genes_unique_stages_filtered), sheet="tumor genes",file=paste(output_dir,"log2fchange_results.xlsx",sep=""))
+write.xlsx(x=na.omit(genes_unique_stages_stage_specific), sheet="stage-specific genes",file=paste(output_dir,"log2fchange_results.xlsx",sep=""),append = TRUE)
 ############################################################################################################################################################################
 
 

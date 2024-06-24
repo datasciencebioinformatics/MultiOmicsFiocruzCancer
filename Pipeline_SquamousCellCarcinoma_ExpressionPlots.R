@@ -206,19 +206,16 @@ for (gene_row in rownames(genes_unique_Stage_III))
   genes_unique_Stage_III[gene_row,"ENSEMBL"]<-rownames_id    
 }
 # For each gene, add gene_id
-for (gene_row in rownames(log2change_tumor_control_paired))
+for (gene_row in rownames(log2change_tumor_control_selected))
 {	      
   # Store gene id in the vector
   # Simply trim the gene id before the "." to save it in the ENSEML format
   rownames_id<-strsplit(gene_row, split = "\\.")[[1]][1]  
   
   # Addd gene id
-  log2change_tumor_control_paired[gene_row,"ENSEMBL"]<-rownames_id    
+  log2change_tumor_control_selected[gene_row,"ENSEMBL"]<-rownames_id    
 }
 ############################################################################################################################################################################
-# Table with the paired
-# log2change_tumor_control_paired<-log2change_tumor_control
-
 # Log2foldchange (Stage-Normal)
 colnames(genes_unique_Stage_I)   <-c("gene","Stage_I-normal.log2fc","Stage_I.sig","Stage_I-normal.pvalue","Stage_I-normal.FDR","ENSEMBL")
 colnames(genes_unique_Stage_II)  <-c("gene","Stage_II-normal.log2fc","Stage_II.sig","Stage_II-normal.pvalue","Stage_II-normal.FDR","ENSEMBL")
@@ -238,6 +235,12 @@ log2change_tumor_control_paired <-merge(log2change_tumor_control_paired,ids_gene
 
 # genes_unique_stages
 genes_unique_stages_filtered<-genes_unique_stages_filtered[,c("ENSEMBL","gene","ENTREZID","SYMBOL","Stage_I.sig","Stage_I-normal.log2fc","Stage_I-normal.pvalue","Stage_I-normal.FDR","Stage_II.sig","Stage_II-normal.log2fc","Stage_II-normal.pvalue","Stage_II-normal.FDR","Stage_III.sig","Stage_III-normal.log2fc","Stage_III-normal.pvalue","Stage_III-normal.FDR")]
+
+# Merge tables
+genes_unique_stages_filtered<-merge(log2change_tumor_control_selected,genes_unique_stages_filtered,by="ENSEMBL")
+
+# Select collumns
+genes_unique_stages_filtered<-genes_unique_stages_filtered[,c()]
 ############################################################################################################################################################################
 # log2fchange_results
 write.xlsx(x=genes_unique_stages_filtered, sheet="stage vs. normal",file=paste(output_dir,"log2fchange_results.xlsx",sep=""))

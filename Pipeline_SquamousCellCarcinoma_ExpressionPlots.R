@@ -143,27 +143,105 @@ ids_all_tumor_sample$Gene_id<-ids_all_tumor_sample$ENSEMBL
 
 # log2change_tumor_control
 log2change_tumor_control_table<-merge(log2change_tumor_control_table,ids_all_tumor_sample,by="Gene_id", all = TRUE)
-
-# Rename collumns
-colnames(log2change_tumor_control_table)<-c("gene_id","gene","tumor-normal.log2fc","Criteria","tumor-normal.pvalue","tumor-normal.FDR","ENSEMBL","ENTREZID","SYMBOL")
 ############################################################################################################################################################################
 # Log2foldchange (Stage-Normal)
-genes_unique_Stage_I   # Log2foldchange (Stage-Normal)
-genes_unique_Stage_II  # Log2foldchange (Stage-Normal)
-genes_unique_Stage_III # Log2foldchange (Stage-Normal)
+genes_unique_Stage_I     <-list_stage_specific_genes[["sample_stage_I"]]
+genes_unique_Stage_II    <-list_stage_specific_genes[["sample_stage_II"]]
+genes_unique_Stage_III   <-list_stage_specific_genes[["sample_stage_III"]]
+
+genes_unique_Stage_I$ENSEMBL  <-""
+genes_unique_Stage_II$ENSEMBL <-""
+genes_unique_Stage_III$ENSEMBL<-""
+
+genes_unique_Stage_I_category<-genes_unique_Stage_I$Category
+genes_unique_Stage_II_category<-genes_unique_Stage_II$Category
+genes_unique_Stage_III_category<-genes_unique_Stage_III$Category
+
+genes_unique_Stage_I_category[which(genes_unique_Stage_I_category=="Per stage genes")]<-"stage-specific"
+genes_unique_Stage_II_category[which(genes_unique_Stage_II_category=="Per stage genes")]<-"stage-specific"
+genes_unique_Stage_III_category[which(genes_unique_Stage_III_category=="Per stage genes")]<-"stage-specific"
+
+genes_unique_Stage_I_category[which(genes_unique_Stage_I_category=="insignificant")]<-"tumor-genes"
+genes_unique_Stage_II_category[which(genes_unique_Stage_II_category=="insignificant")]<-"tumor-genes"
+genes_unique_Stage_III_category[which(genes_unique_Stage_III_category=="insignificant")]<-"tumor-genes"
+
+genes_unique_Stage_I$Category<-genes_unique_Stage_I_category
+genes_unique_Stage_II$Category<-genes_unique_Stage_II_category
+genes_unique_Stage_III$Category<-genes_unique_Stage_III_category
+
+# Set colnames
+colnames(log2change_tumor_control_paired)<-c("gene","tumor-normal.log2fc","Category","tumor-normal.pvalue","tumor-normal.FDR")
+
+# Select collumns
+log2change_tumor_control_selected<-log2change_tumor_control_paired[,c("gene","tumor-normal.log2fc","tumor-normal.pvalue","tumor-normal.FDR")]
+############################################################################################################################################################################
+# For each gene, add gene_id
+for (gene_row in rownames(genes_unique_Stage_I))
+{	      
+  # Store gene id in the vector
+  # Simply trim the gene id before the "." to save it in the ENSEML format
+  rownames_id<-strsplit(gene_row, split = "\\.")[[1]][1]  
+  
+  # Addd gene id
+  genes_unique_Stage_I[gene_row,"ENSEMBL"]<-rownames_id    
+}
+# For each gene, add gene_id
+for (gene_row in rownames(genes_unique_Stage_II))
+{	      
+  # Store gene id in the vector
+  # Simply trim the gene id before the "." to save it in the ENSEML format
+  rownames_id<-strsplit(gene_row, split = "\\.")[[1]][1]  
+  
+  # Addd gene id
+  genes_unique_Stage_II[gene_row,"ENSEMBL"]<-rownames_id    
+}
+# For each gene, add gene_id
+for (gene_row in rownames(genes_unique_Stage_III))
+{	      
+  # Store gene id in the vector
+  # Simply trim the gene id before the "." to save it in the ENSEML format
+  rownames_id<-strsplit(gene_row, split = "\\.")[[1]][1]  
+  
+  # Addd gene id
+  genes_unique_Stage_III[gene_row,"ENSEMBL"]<-rownames_id    
+}
+# For each gene, add gene_id
+for (gene_row in rownames(log2change_tumor_control_paired))
+{	      
+  # Store gene id in the vector
+  # Simply trim the gene id before the "." to save it in the ENSEML format
+  rownames_id<-strsplit(gene_row, split = "\\.")[[1]][1]  
+  
+  # Addd gene id
+  log2change_tumor_control_paired[gene_row,"ENSEMBL"]<-rownames_id    
+}
+############################################################################################################################################################################
+# Table with the paired
+# log2change_tumor_control_paired<-log2change_tumor_control
 
 # Log2foldchange (Stage-Normal)
-colnames(genes_unique_Stage_I)   <-c("gene","Stage_I-normal.log2fc","Criteria","Stage_I-normal.pvalue","Stage_I-normal.FDR","ENSEMBL")
-colnames(genes_unique_Stage_II)  <-c("gene","Stage_II-normal.log2fc","Criteria","Stage_II-normal.pvalue","Stage_II-normal.FDR","ENSEMBL")
-colnames(genes_unique_Stage_III) <-c("gene","Stage_III-normal.log2fc","Criteria","Stage_III-normal.pvalue","Stage_III-normal.FDR","ENSEMBL")
+colnames(genes_unique_Stage_I)   <-c("gene","Stage_I-normal.log2fc","Stage_I.sig","Stage_I-normal.pvalue","Stage_I-normal.FDR","ENSEMBL")
+colnames(genes_unique_Stage_II)  <-c("gene","Stage_II-normal.log2fc","Stage_II.sig","Stage_II-normal.pvalue","Stage_II-normal.FDR","ENSEMBL")
+colnames(genes_unique_Stage_III) <-c("gene","Stage_III-normal.log2fc","Stage_III.sig","Stage_III-normal.pvalue","Stage_III-normal.FDR","ENSEMBL")
 
-genes_unique_Stage_I  <-merge(genes_unique_Stage_I,log2change_tumor_control_table,by="ENSEMBL")
-genes_unique_Stage_II <-merge(genes_unique_Stage_II,log2change_tumor_control_table,by="ENSEMBL")
-genes_unique_Stage_III<-merge(genes_unique_Stage_III,log2change_tumor_control_table,by="ENSEMBL")
+# genes_unique_stages
+genes_unique_stages  <-merge(merge(genes_unique_Stage_I,genes_unique_Stage_II,by="gene"),genes_unique_Stage_III,by="gene")
 
-genes_unique_Stage_I<-genes_unique_Stage_I %>% distinct()
-genes_unique_Stage_II<-genes_unique_Stage_II %>% distinct()
-genes_unique_Stage_III<-genes_unique_Stage_III %>% distinct()
+# Convert all symbols
+ids_genes_unique_stages      <-bitr(genes_unique_stages$ENSEMBL, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL","ENSEMBL"), OrgDb="org.Hs.eg.db")
+
+# genes_unique_stages
+genes_unique_stages_filtered  <-merge(genes_unique_stages,ids_genes_unique_stages,by="ENSEMBL")
+
+# genes_unique_stages
+log2change_tumor_control_paired <-merge(log2change_tumor_control_paired,ids_genes_unique_stages,by="ENSEMBL")
+
+# genes_unique_stages
+genes_unique_stages_filtered<-genes_unique_stages_filtered[,c("ENSEMBL","gene","ENTREZID","SYMBOL","Stage_I.sig","Stage_I-normal.log2fc","Stage_I-normal.pvalue","Stage_I-normal.FDR","Stage_II.sig","Stage_II-normal.log2fc","Stage_II-normal.pvalue","Stage_II-normal.FDR","Stage_III.sig","Stage_III-normal.log2fc","Stage_III-normal.pvalue","Stage_III-normal.FDR")]
+############################################################################################################################################################################
+# log2fchange_results
+write.xlsx(x=genes_unique_stages_filtered, sheet="stage vs. normal",file=paste(output_dir,"log2fchange_results.xlsx",sep=""))
+write.xlsx(x=log2change_tumor_control_paired, sheet="paired tumor vs. normal",file=paste(output_dir,"log2fchange_results.xlsx",sep=""),append = TRUE)
 ############################################################################################################################################################################
 # I stopped here, continuity is to create a single table to combine stages I, II and III in the same table, for the same gene.
 # Challenge here is to specigy if the genes is from stage I, II or III

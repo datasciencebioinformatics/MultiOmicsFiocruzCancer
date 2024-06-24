@@ -86,37 +86,6 @@ unstranded_data_samples_unapaired$ENSEMBL<-unstranded_data_samples_unapaired$Gen
 # Merge symbols
 unstranded_data_samples<-merge(unstranded_data_samples,ids_translation,by="ENSEMBL")
 unstranded_data_samples_unapaired<-merge(unstranded_data_samples_unapaired,ids_translation,by="ENSEMBL")
-###############################################################################################################
-# Stage I
-stage_I_selected_genes<-c("KPNA4","DHX36","CXADR")
-
-# Stage II
-stage_II_selected_genes<-c("QTRT1","MYBBP1A","THY1")
-
-# Stage III
-stage_III_selected_genes<-c("BRMS1","CPSF1","IDH1")
-###############################################################################################################
-# change box plot line colors by groups
-p_stage_I_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$SYMBOL %in% stage_I_selected_genes,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 3, scales="free")+ theme_bw() + ggtitle("Stage I genes. Paired samples")
-p_stage_I_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% stage_I_selected_genes,], aes(x=stages, y=RPKM)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 3, scales="free")+ theme_bw()  + stat_compare_means(comparisons = my_comparisons, method="t.test") + ggtitle("Stage I genes. Tumor samples")
-
-# change box plot line colors by groups
-p_stage_II_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$SYMBOL %in% stage_II_selected_genes,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 3, scales="free")+ theme_bw() + ggtitle("Stage II genes. Paired samples")
-p_stage_II_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% stage_II_selected_genes,], aes(x=stages, y=RPKM)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 3, scales="free")+ theme_bw()  + stat_compare_means(comparisons = my_comparisons, method="t.test") + ggtitle("Stage II genes. Tumor samples")
-
-# change box plot line colors by groups
-p_stage_III_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$SYMBOL %in% stage_III_selected_genes,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 3, scales="free")+ theme_bw() + ggtitle("Stage III genes. Paired samples")
-p_stage_III_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% stage_III_selected_genes,], aes(x=stages, y=RPKM)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 3, scales="free")+ theme_bw()  + stat_compare_means(comparisons = my_comparisons, method="t.test") + ggtitle("Stage III genes. Tumor samples")
-############################################################################################################################################################################
-# FindClusters_resolution
-png(filename=paste(output_folder,"Plot_p_stage_selected_paired.png",sep=""), width = 30, height = 30, res=600, units = "cm")
-  grid.arrange(p_stage_I_paired,p_stage_II_paired,p_stage_III_paired)
-dev.off()
-
-# FindClusters_resolution
-png(filename=paste(output_folder,"Plot_p_stage_selected_unpaired.png",sep=""), width = 30, height = 30, res=600, units = "cm")
-  grid.arrange(p_stage_I_unpaired,p_stage_II_unpaired,p_stage_III_unpaired)
-dev.off()
 ############################################################################################################################################################################
 # Log2foldchange (Tumor-Normal)
 log2change_tumor_control_table<-log2change_tumor_control
@@ -243,3 +212,122 @@ write.xlsx(x=na.omit(genes_unique_stages_stage_specific), sheet="stage-specific 
 ############################################################################################################################################################################
 
 
+
+
+
+
+###############################################################################################################
+# A panel for each 30 genes per stage
+# Stage I
+stage_I_selected_genes<-genes_stage_I[1:23]
+
+# Stage II
+stage_II_selected_genes_A<-genes_stage_II[1:32]
+stage_II_selected_genes_B<-genes_stage_II[33:62]
+
+# Stage III
+stage_III_selected_genes_A<-genes_stage_III[1:30]
+stage_III_selected_genes_B<-genes_stage_III[31:60]
+stage_III_selected_genes_C<-genes_stage_III[61:90]
+stage_III_selected_genes_D<-genes_stage_III[91:120]
+stage_III_selected_genes_E<-genes_stage_III[121:148]
+###############################################################################################################
+# change box plot line colors by groups
+p_stage_I_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$SYMBOL %in% stage_I_selected_genes,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage I genes. Paired samples")
+p_stage_I_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% stage_I_selected_genes,], aes(x=stages, y=RPKM)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage I genes. Tumor samples") #  + stat_compare_means(comparisons = my_comparisons, method="t.test") 
+
+# change box plot line colors by groups
+p_stage_II_paired_A<-ggplot(unstranded_data_samples[unstranded_data_samples$SYMBOL %in% stage_II_selected_genes_A,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage II genes. Paired samples. Part 1...")
+p_stage_II_unpaired_A<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% stage_II_selected_genes_A,], aes(x=stages, y=RPKM)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage II genes. Paired samples. Part 1...") #  + stat_compare_means(comparisons = my_comparisons, method="t.test") 
+
+# change box plot line colors by groups
+p_stage_II_paired_B<-ggplot(unstranded_data_samples[unstranded_data_samples$SYMBOL %in% stage_II_selected_genes_B,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage II genes. Paired samples. Part 2...")
+p_stage_II_unpaired_B<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% stage_II_selected_genes_B,], aes(x=stages, y=RPKM)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage II genes. Paired samples. Part 2...") #  + stat_compare_means(comparisons = my_comparisons, method="t.test") 
+
+
+# change box plot line colors by groups
+p_stage_III_paired_A<-ggplot(unstranded_data_samples[unstranded_data_samples$SYMBOL %in% stage_III_selected_genes_A,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage II genes. Paired samples. Part 1...")
+p_stage_III_unpaired_A<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% stage_III_selected_genes_A,], aes(x=stages, y=RPKM)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage II genes. Paired samples. Part 1...") #  + stat_compare_means(comparisons = my_comparisons, method="t.test") 
+
+# change box plot line colors by groups
+p_stage_III_paired_B<-ggplot(unstranded_data_samples[unstranded_data_samples$SYMBOL %in% stage_III_selected_genes_B,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage II genes. Paired samples. Part 2...")
+p_stage_III_unpaired_B<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% stage_III_selected_genes_B,], aes(x=stages, y=RPKM)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage II genes. Paired samples. Part 2...") #  + stat_compare_means(comparisons = my_comparisons, method="t.test") 
+
+
+# change box plot line colors by groups
+p_stage_III_paired_C<-ggplot(unstranded_data_samples[unstranded_data_samples$SYMBOL %in% stage_III_selected_genes_C,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage II genes. Paired samples. Part 3...")
+p_stage_III_unpaired_C<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% stage_III_selected_genes_C,], aes(x=stages, y=RPKM)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage II genes. Paired samples. Part 3...") #  + stat_compare_means(comparisons = my_comparisons, method="t.test") 
+
+# change box plot line colors by groups
+p_stage_III_paired_D<-ggplot(unstranded_data_samples[unstranded_data_samples$SYMBOL %in% stage_III_selected_genes_D,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage II genes. Paired samples. Part 4...")
+p_stage_III_unpaired_D<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% stage_III_selected_genes_D,], aes(x=stages, y=RPKM)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage II genes. Paired samples. Part 4...") #  + stat_compare_means(comparisons = my_comparisons, method="t.test") 
+
+# change box plot line colors by groups
+p_stage_III_paired_E<-ggplot(unstranded_data_samples[unstranded_data_samples$SYMBOL %in% stage_III_selected_genes_E,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage II genes. Paired samples. Part 5...")
+p_stage_III_unpaired_E<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% stage_III_selected_genes_E,], aes(x=stages, y=RPKM)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage II genes. Paired samples. Part 5...") #  + stat_compare_means(comparisons = my_comparisons, method="t.test") 
+############################################################################################################################################################################
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_I_paired.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_I_paired + theme(legend.position="bottom")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_II_paired_A.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_II_paired_A + theme(legend.position="bottom")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_II_paired_B.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_II_paired_B + theme(legend.position="bottom")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_III_paired_A.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_III_paired_A + theme(legend.position="bottom")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_III_paired_B.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_III_paired_B + theme(legend.position="bottom")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_III_paired_C.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_III_paired_C + theme(legend.position="bottom")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_III_paired_D.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_III_paired_D + theme(legend.position="bottom")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_III_paired_E.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_III_paired_E + theme(legend.position="bottom")
+dev.off()
+############################################################################################################################################################################
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_I_unpaired.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_I_unpaired + theme(legend.position="bottom")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_II_unpaired_A.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_II_unpaired_A + theme(legend.position="bottom")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_II_unpaired_B.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_II_unpaired_B + theme(legend.position="bottom")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_III_unpaired_A.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_III_unpaired_A + theme(legend.position="bottom")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_III_unpaired_B.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_III_unpaired_B + theme(legend.position="bottom")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_III_unpaired_C.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_III_unpaired_C + theme(legend.position="bottom")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_III_unpaired_D.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_III_unpaired_D + theme(legend.position="bottom")
+dev.off()
+# FindClusters_resolution
+png(filename=paste(output_folder,"p_stage_III_unpaired_E.png",sep=""), width = 25, height = 35, res=600, units = "cm")
+  p_stage_III_unpaired_E + theme(legend.position="bottom")
+dev.off()

@@ -209,14 +209,14 @@ stage_I_selected_genes<-ids_stage_I$ENSEMBL[1:23]
 
 # Stage II
 stage_II_selected_genes_A<-ids_stage_II$ENSEMBL[1:32]
-stage_II_selected_genes_B<-ids_stage_II$ENSEMBL[33:62]
+stage_II_selected_genes_B<-ids_stage_II$ENSEMBL[33:58]
 
 # Stage III
 stage_III_selected_genes_A<-ids_stage_III$ENSEMBL[1:30]
 stage_III_selected_genes_B<-ids_stage_III$ENSEMBL[31:60]
 stage_III_selected_genes_C<-ids_stage_III$ENSEMBL[61:90]
 stage_III_selected_genes_D<-ids_stage_III$ENSEMBL[91:120]
-stage_III_selected_genes_E<-ids_stage_III$ENSEMBL[121:148]
+stage_III_selected_genes_E<-ids_stage_III$ENSEMBL[121:155]
 ###############################################################################################################
 # change box plot line colors by groups
 p_stage_I_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$ENSEMBL %in% stage_I_selected_genes,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Stage I genes. Paired samples")

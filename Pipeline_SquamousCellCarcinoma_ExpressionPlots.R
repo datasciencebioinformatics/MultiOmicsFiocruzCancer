@@ -24,22 +24,10 @@ sample_stage_III_normal  <-samples_normal[samples_normal$stages=="Stage III",c("
 # Select samples                                                                                                                                                          #
 sample_stage_all_samples<-rbind(sample_stage_I_tumor,sample_stage_I_normal,sample_stage_II_tumor,sample_stage_II_normal,sample_stage_III_tumor,sample_stage_III_normal)   #
 ############################################################################################################################################################################
-# Take genes per each stage
-genes_stage_I<-gsub(" ", "", unique(unique(strsplit(x=paste(unique(df_count_terms_selected$Genes_Stage_I),collapse=","),split=",",fixed=T))[[1]]))
-genes_stage_II<-gsub(" ", "", unique(unique(strsplit(x=paste(unique(df_count_terms_selected$Genes_Stage_II),collapse=","),split=",",fixed=T))[[1]]))
-genes_stage_III<-gsub(" ", "", unique(unique(strsplit(x=paste(unique(df_count_terms_selected$Genes_Stage_III),collapse=","),split=",",fixed=T))[[1]]))
-genes_stage_I<-genes_stage_I[genes_stage_I!=""]
-genes_stage_II<-genes_stage_II[genes_stage_II!=""]
-genes_stage_III<-genes_stage_III[genes_stage_III!=""]
-
 # ids_stage_I - all ENSEMBL anotated using bitr
 ids_stage_I      <-bitr(genes_unique_Stage_I$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
 ids_stage_II     <-bitr(genes_unique_Stage_II$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
 ids_stage_III    <-bitr(genes_unique_Stage_III$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
-
-genes_stage_I   <- ids_stage_I$SYMBOL
-genes_stage_II  <- ids_stage_II$SYMBOL
-genes_stage_III <- ids_stage_III$SYMBOL
 ############################################################################################################################################################################
 # Samples
 unstranded_data_samples<-melt(t(unstranded_data_filter[,sample_stage_all_samples$patient_id]))
@@ -88,7 +76,7 @@ unstranded_data_samples_unapaired<-merge(unstranded_data_samples_unapaired,df_id
 my_comparisons <- list( c("Stage I", "Stage II"), c("Stage I", "Stage III"), c("Stage II", "Stage III") )
 ############################################################################################################################################################################
 # ids_stage_I - all ENSEMBL anotated using bitr
-ids_translation      <-bitr(unstranded_data_samples$Gene, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL","ENSEMBL"), OrgDb="org.Hs.eg.db")
+ids_translation               <-bitr(unstranded_data_samples$Gene, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL","ENSEMBL"), OrgDb="org.Hs.eg.db")
 ids_translation_unpaired      <-bitr(unstranded_data_samples_unapaired$Gene, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL","ENSEMBL"), OrgDb="org.Hs.eg.db")
 
 # unstranded_data_samples$Gene
@@ -138,29 +126,26 @@ log2change_tumor_control$Gene_id<-""
 # log2change_tumor_control_paired<-log2change_tumor_control
 
 # For each gene, add gene_id
-for (gene_row in rownames(log2change_tumor_control))
+for (gene_row in rownames(log2change_tumor_control_table))
 {	      
   # Store gene id in the vector
   # Simply trim the gene id before the "." to save it in the ENSEML format
   rownames_id<-strsplit(gene_row, split = "\\.")[[1]][1]  
   
   # Addd gene id
-  log2change_tumor_control[gene_row,"Gene_id"]<-rownames_id    
+  log2change_tumor_control_table[gene_row,"Gene_id"]<-rownames_id    
 }
 # Formart output tables
-ids_all_tumor_sample      <-bitr(log2change_tumor_control$Gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
+ids_all_tumor_sample      <-bitr(log2change_tumor_control_table$Gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
 
 # Duplicate field Gene_id
 ids_all_tumor_sample$Gene_id<-ids_all_tumor_sample$ENSEMBL
 
 # log2change_tumor_control
-log2change_tumor_control<-merge(log2change_tumor_control,ids_all_tumor_sample,by="Gene_id", all = TRUE)
+log2change_tumor_control_table<-merge(log2change_tumor_control_table,ids_all_tumor_sample,by="Gene_id", all = TRUE)
 
 # Rename collumns
-colnames(log2change_tumor_control)<-c("gene_id","gene","tumor-normal.log2fc","Category","tumor-normal.pvalue","tumor-normal.pvalue.FDR","ENSEMBL","ENTREZID","SYMBOL")
-
-# Select collumns
-log2change_tumor_control<-log2change_tumor_control[,c("gene_id","gene","tumor-normal.log2fc","tumor-normal.pvalue","tumor-normal.pvalue.FDR","ENSEMBL","ENTREZID","SYMBOL")]
+colnames(log2change_tumor_control_table)<-c("gene_id","gene","tumor-normal.log2fc","Criteria","tumor-normal.pvalue","tumor-normal.FDR","ENSEMBL","ENTREZID","SYMBOL")
 ############################################################################################################################################################################
 # Log2foldchange (Stage-Normal)
 genes_unique_Stage_I   # Log2foldchange (Stage-Normal)
@@ -168,30 +153,17 @@ genes_unique_Stage_II  # Log2foldchange (Stage-Normal)
 genes_unique_Stage_III # Log2foldchange (Stage-Normal)
 
 # Log2foldchange (Stage-Normal)
-colnames(genes_unique_Stage_I)   <-c("gene","log2fc_stage","Category","stage.p.value","FDR","ENSEMBL")
-colnames(genes_unique_Stage_II)  <-c("gene","log2fc_stage","Category","stage.p.value","FDR","ENSEMBL")
-colnames(genes_unique_Stage_III) <-c("gene","log2fc_stage","Category","stage.p.value","FDR","ENSEMBL")
+colnames(genes_unique_Stage_I)   <-c("gene","Stage_I-normal.log2fc","Criteria","Stage_I-normal.pvalue","Stage_I-normal.FDR","ENSEMBL")
+colnames(genes_unique_Stage_II)  <-c("gene","Stage_II-normal.log2fc","Criteria","Stage_II-normal.pvalue","Stage_II-normal.FDR","ENSEMBL")
+colnames(genes_unique_Stage_III) <-c("gene","Stage_III-normal.log2fc","Criteria","Stage_III-normal.pvalue","Stage_III-normal.FDR","ENSEMBL")
 
-# Log2foldchange (Stage-Normal)
-genes_unique_Stage_I   <-genes_unique_Stage_I[,c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")]
-genes_unique_Stage_II  <-genes_unique_Stage_II[,c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")]
-genes_unique_Stage_III <-genes_unique_Stage_III[,c("gene","log2fc_stage","stage.p.value","FDR","ENSEMBL")]
-
-genes_unique_Stage_I<-merge(genes_unique_Stage_I,log2change_tumor_control_paired,by="ENSEMBL")
-genes_unique_Stage_II<-merge(genes_unique_Stage_II,log2change_tumor_control_paired,by="ENSEMBL")
-genes_unique_Stage_III<-merge(genes_unique_Stage_III,log2change_tumor_control_paired,by="ENSEMBL")
+genes_unique_Stage_I  <-merge(genes_unique_Stage_I,log2change_tumor_control_table,by="ENSEMBL")
+genes_unique_Stage_II <-merge(genes_unique_Stage_II,log2change_tumor_control_table,by="ENSEMBL")
+genes_unique_Stage_III<-merge(genes_unique_Stage_III,log2change_tumor_control_table,by="ENSEMBL")
 
 genes_unique_Stage_I<-genes_unique_Stage_I %>% distinct()
 genes_unique_Stage_II<-genes_unique_Stage_II %>% distinct()
 genes_unique_Stage_III<-genes_unique_Stage_III %>% distinct()
-
-colnames(genes_unique_Stage_I)<-c("ENSEMBL","gene","log2fc_stage","pvalue_stage","FDR_stage","gene_id","gene_y","log2fc_tumor","pvalue_tumor","FDR_tumor","ENTREZID","SYMBOL")
-colnames(genes_unique_Stage_II)<-c("ENSEMBL","gene","log2fc_stage","pvalue_stage","FDR_stage","gene_id","gene_y","log2fc_tumor","pvalue_tumor","FDR_tumor","ENTREZID","SYMBOL")
-colnames(genes_unique_Stage_III)<-c("ENSEMBL","gene","log2fc_stage","pvalue_stage","FDR_stage","gene_id","gene_y","log2fc_tumor","pvalue_tumor","FDR_tumor","ENTREZID","SYMBOL")
-
-genes_unique_Stage_I<-genes_unique_Stage_I[,c("ENSEMBL","ENTREZID","SYMBOL","gene","log2fc_stage","pvalue_stage","FDR_stage","log2fc_tumor","pvalue_tumor","FDR_tumor")]
-genes_unique_Stage_II<-genes_unique_Stage_II[,c("ENSEMBL","ENTREZID","SYMBOL","gene","log2fc_stage","pvalue_stage","FDR_stage","log2fc_tumor","pvalue_tumor","FDR_tumor")]
-genes_unique_Stage_III<-genes_unique_Stage_II[,c("ENSEMBL","ENTREZID","SYMBOL","gene","log2fc_stage","pvalue_stage","FDR_stage","log2fc_tumor","pvalue_tumor","FDR_tumor")]
 ############################################################################################################################################################################
 # I stopped here, continuity is to create a single table to combine stages I, II and III in the same table, for the same gene.
 # Challenge here is to specigy if the genes is from stage I, II or III

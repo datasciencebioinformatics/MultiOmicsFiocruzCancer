@@ -1,8 +1,8 @@
 ##################################################################################################################################################
 # Remove empty line
-genes_stage_I<-genes_stage_I[genes_stage_I!=""]
-genes_stage_II<-genes_stage_II[genes_stage_II!=""]
-genes_stage_III<-genes_stage_III[genes_stage_III!=""]
+genes_stage_I<-annotation_stage_I$Symbol
+genes_stage_II<-annotation_stage_II$Symbol
+genes_stage_III<-annotation_stage_III$Symbol
 
 # Select only tumor metadata
 colDta_tumor<-colData[colData$tissue_type=="Tumor",]
@@ -131,32 +131,36 @@ png(filename=paste(output_folder,"Plot_p_stage_selected_unpaired.png",sep=""), w
 dev.off()
 ############################################################################################################################################################################
 # Log2foldchange (Tumor-Normal)
-log2change_tumor_control_paired$Gene_id<-""
+log2change_tumor_control_table<-log2change_tumor_control
+log2change_tumor_control$Gene_id<-""
+
+# Table with the paired
+# log2change_tumor_control_paired<-log2change_tumor_control
 
 # For each gene, add gene_id
-for (gene_row in rownames(log2change_tumor_control_paired))
+for (gene_row in rownames(log2change_tumor_control))
 {	      
   # Store gene id in the vector
   # Simply trim the gene id before the "." to save it in the ENSEML format
   rownames_id<-strsplit(gene_row, split = "\\.")[[1]][1]  
   
   # Addd gene id
-  log2change_tumor_control_paired[gene_row,"Gene_id"]<-rownames_id    
+  log2change_tumor_control[gene_row,"Gene_id"]<-rownames_id    
 }
 # Formart output tables
-ids_all_tumor_sample      <-bitr(log2change_tumor_control_paired$Gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
+ids_all_tumor_sample      <-bitr(log2change_tumor_control$Gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
 
 # Duplicate field Gene_id
 ids_all_tumor_sample$Gene_id<-ids_all_tumor_sample$ENSEMBL
 
 # log2change_tumor_control
-log2change_tumor_control_paired<-merge(log2change_tumor_control_paired,ids_all_tumor_sample,by="Gene_id", all = TRUE)
+log2change_tumor_control<-merge(log2change_tumor_control,ids_all_tumor_sample,by="Gene_id", all = TRUE)
 
 # Rename collumns
-colnames(log2change_tumor_control_paired)<-c("gene_id","gene","log2fc_tumor","Category","tumor.p.value","FDR","ENSEMBL","ENTREZID","SYMBOL")
+colnames(log2change_tumor_control)<-c("gene_id","gene","tumor-normal.log2fc","Category","tumor-normal.pvalue","tumor-normal.pvalue.FDR","ENSEMBL","ENTREZID","SYMBOL")
 
 # Select collumns
-log2change_tumor_control_paired<-log2change_tumor_control_paired[,c("gene_id","gene","log2fc_tumor","tumor.p.value","FDR","ENSEMBL","ENTREZID","SYMBOL")]
+log2change_tumor_control<-log2change_tumor_control[,c("gene_id","gene","tumor-normal.log2fc","tumor-normal.pvalue","tumor-normal.pvalue.FDR","ENSEMBL","ENTREZID","SYMBOL")]
 ############################################################################################################################################################################
 # Log2foldchange (Stage-Normal)
 genes_unique_Stage_I   # Log2foldchange (Stage-Normal)

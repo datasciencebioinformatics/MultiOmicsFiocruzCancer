@@ -24,12 +24,11 @@ unique_stage_III=intersect(setdiff(selected_genes_Stage_III_data$gene, c(selecte
 stages_I_II_III<-ggVennDiagram(list(Stage_I=selected_genes_Stage_I_data$gene,Stage_II=selected_genes_Stage_II_data$gene,Stage_III=selected_genes_Stage_III_data$gene), label_alpha = 0.9,set_color = c("grey50","grey50","grey50")) + scale_fill_gradient(low = "white", high = "white") + theme_bw() + ggtitle("Stages I, II and III")+ guides(fill="none")
 #####################################################################################################################################################################################
 # Tanspose RPKM table                                                                                                                                                               #
-transporse_RPKM_table<-data.frame(t(unstranded_data_filter))                                                                                                                        #
+transporse_RPKM_table<-data.frame(t(unstranded_data_filter[,c(paired_sample_df$normal,paired_sample_df$tumor)]))                                                                                                                        #
                                                                                                                                                                                     #
 # Calculate prcomp for stage                                                                                                                                                        #
 pca_res_tumor_normal   <- prcomp(transporse_RPKM_table, scale. = TRUE)                                                                                                              #
                                                                                                                                                                                     #
 # Plot PCA tumor versus normal                                                                                                                                                      #
-plot_res_tumor_normal <- autoplot(pca_res_tumor_normal, data = colData, colour = 'tumor_normal')+ theme_bw()                                                                        #
+plot_res_tumor_normal <- autoplot(pca_res_tumor_normal, data = colData[rownames(transporse_RPKM_table),], colour = 'tumor_normal')+ theme_bw()                                                                        #
 #####################################################################################################################################################################################
-

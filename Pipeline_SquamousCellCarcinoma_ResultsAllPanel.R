@@ -32,3 +32,7 @@ pca_res_tumor_normal   <- prcomp(transporse_RPKM_table, scale. = TRUE)          
 # Plot PCA tumor versus normal                                                                                                                                                      #
 plot_res_tumor_normal <- autoplot(pca_res_tumor_normal, data = colData[rownames(transporse_RPKM_table),], colour = 'tumor_normal')+ theme_bw()                                                                        #
 #####################################################################################################################################################################################
+# FindClusters_resolution
+png(filename=paste(output_dir,"plot_res_tumor_normal.png",sep=""), width = 14, height = 14, res=600, units = "cm")
+  plot_res_tumor_normal
+dev.off()

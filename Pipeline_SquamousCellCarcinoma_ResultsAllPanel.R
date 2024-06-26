@@ -21,7 +21,13 @@ unique_stage_II =intersect(setdiff(selected_genes_Stage_II_data$gene, c(selected
 unique_stage_III=intersect(setdiff(selected_genes_Stage_III_data$gene, c(selected_genes_Stage_I_data$gene,selected_genes_Stage_II_data$gene)),selected_genes_Stage_III_data$gene)   #
 #####################################################################################################################################################################################
 # Veen diagram
-stages_I_II_III<-ggVennDiagram(list(Stage_I=selected_genes_Stage_I_data$gene,Stage_II=selected_genes_Stage_II_data$gene,Stage_III=selected_genes_Stage_III_data$gene), label_alpha = 0.9,set_color = c("grey50","grey50","grey50")) + scale_fill_gradient(low = "white", high = "white") + theme_bw() + ggtitle("Stages I, II and III")+ guides(fill="none")
+stages_I_II_III<-ggVennDiagram(list(Stage_I=selected_genes_Stage_I_data$gene,Stage_II=selected_genes_Stage_II_data$gene,Stage_III=selected_genes_Stage_III_data$gene), label_alpha = 0.9,set_color = c("grey50","grey50","grey50")) + scale_fill_gradient(low = "white", high = "white") + theme_bw() + ggtitle("Stage-specific genes")+ guides(fill="none")  + theme(panel.border = element_blank(), axis.text = element_blank(), panel.grid = element_blank(), axis.ticks = element_blank(), plot.background = element_rect(fill = "white"),  panel.background = element_rect(fill = "white"), axis.text.x=element_blank(),axis.ticks.x=element_blank(),axis.text.y=element_blank())
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"plot_res_tumor_normal.png",sep=""), width = 10, height = 10, res=600, units = "cm")
+  stages_I_II_III
+dev.off()
+
 #####################################################################################################################################################################################
 # Tanspose RPKM table                                                                                                                                                               #
 transporse_RPKM_table<-data.frame(t(unstranded_data_filter[,c(paired_sample_df$normal,paired_sample_df$tumor)]))                                                                                                                        #

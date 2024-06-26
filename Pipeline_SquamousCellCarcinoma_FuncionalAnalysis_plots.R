@@ -163,39 +163,6 @@ write.xlsx(x=df_count_terms,file=paste(output_dir,"unique_genes_annotation_count
 
 # Boolean count per terms
 boolean_counts_terms<-df_count_terms[,2:4]>0
-###########################################################################################################################
-# Question 1: terms in all stages
-paste(names(which(boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),collapse=", ")
-# Answer : Reactome:Asparagine N-linked glycosylation, Reactome:Cell surface interactions at the vascular wall, Reactome:Neutrophil degranulation, Reactome:SARS-CoV Infections
-# Genes in these terms
-paste(unique(df_all_annotation_per_stage[df_all_annotation_per_stage$CluterProfiler %in% names(which(boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),"Symbol"]), collapse=", ")
-# "LTF, OLFM4, NPL, GRB7, TKFC, CXADR, COPB2, MOGS, RPN2, ANO1, ADAM8, ANO9, SRC, HSPA1A, ARF5, CAPN1, DERA, FUT8, AP2S1, MTA3, RPS5, SEH1L, TMED2, PSMC6, PSMD7, RPS16, AKT2, PTGES3, QPCT, EPCAM, SRD5A3, IDH1, SLC16A3, CCT8, CDA, B4GALT3, PSMC2, BRMS1"
-######################################################################################################################
-# Question 2: terms in Stage I only
-paste(names(which(boolean_counts_terms[,c("Stage_I")] & !boolean_counts_terms[,c("Stage_II")] & !boolean_counts_terms[,c("Stage_III")])),collapse=", ")
-# Answer : GO:cytoplasmic stress granule, GO:specific granule lumen, GO:tertiary granule lumen
-paste(unique(df_all_annotation_per_stage[df_all_annotation_per_stage$CluterProfiler %in% names(which(boolean_counts_terms[,c("Stage_I")] & !boolean_counts_terms[,c("Stage_II")] & !boolean_counts_terms[,c("Stage_III")])),"Symbol"]), collapse=", ")
-# LTF, OLFM4, GRB7, DHX36
-######################################################################################################################
-# Question 3: terms in Stage II only
-paste(names(which(!boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c("Stage_II")] & !boolean_counts_terms[,c("Stage_III")])),collapse=", ")
-# Answer : there is not
-######################################################################################################################
-# Question 4: terms in Stages II and III
-paste(names(which(!boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),collapse=", ")
-# Answer : Reactome:Mitotic G1 phase and G1/S transition, Reactome:Neddylation, Reactome:Cellular response to chemical stress, Reactome:Translation, Reactome:Intracellular signaling by second messengers, Reactome:PIP3 activates AKT signaling
-paste(unique(df_all_annotation_per_stage[df_all_annotation_per_stage$CluterProfiler %in% names(which(!boolean_counts_terms[,c("Stage_I")] & boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),"Symbol"]), collapse=", ")
-# HIF1A, MRPL19, RPN2, AARS2, RPLP1, PRKCI, SRC, MTA3, RPS5, PSMC6, PSMA7, HM13, PSMD7, RPS16, AKT2, RHEB, COX6A1, MRPL18, ORC2, COX7A2L, RNF2, CDKN2C, MRPS7, UBE2M, RPA1, IDH1, SRP9, ELOC, MRPL17, PSMD4, PSMC2, NUDT2, COPS6, E2F6, TRMT112, MRPL48, RPS6KB2, GADD45GIP1, MRPS23, MRPS16, MRPL40, AKT1S1
-######################################################################################################################
-# Question 5: terms in Stages III only
-paste(names(which(!boolean_counts_terms[,c("Stage_I")] & !boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),collapse=", ")
-# Answer : Reactome:PCP/CE pathway, Reactome:PTEN Regulation, Reactome:TCF dependent signaling in response to WNT, GO:ribosome, KEGG:Amyotrophic lateral sclerosis, KEGG:Huntington disease, Reactome:HIV Infection, Reactome:Signaling by WNT, KEGG:Pathways of neurodegeneration - multiple diseases, GO:mitochondrial matrix, GO:mitochondrial protein-containing complex, KEGG:Alzheimer disease, GO:mitochondrial inner membrane
-terms_stage_III<-names(which(!boolean_counts_terms[,c("Stage_I")] & !boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")]))
-genes_stage_III<-unique(df_all_annotation_per_stage[df_all_annotation_per_stage$CluterProfiler %in% names(which(!boolean_counts_terms[,c("Stage_I")] & !boolean_counts_terms[,c("Stage_II")] & boolean_counts_terms[,c("Stage_III")])),"Symbol"])
-# Reactome:PCP/CE pathway, Reactome:PTEN Regulation, Reactome:TCF dependent signaling in response to WNT, GO:ribosome, KEGG:Amyotrophic lateral sclerosis, KEGG:Huntington disease, Reactome:HIV Infection, Reactome:Signaling by WNT, KEGG:Pathways of neurodegeneration - multiple diseases, GO:mitochondrial matrix, GO:mitochondrial protein-containing complex, KEGG:Alzheimer disease, GO:mitochondrial inner membrane
-# DVL2, PSMB1, VTA1, CAPN1, AP2S1, MTA3, RPS5, SEH1L, PSMC6, TIMM9, PSMA7, PSMD7, RPS16, AKT2, RHEB, NDUFS8, COX6A1, MRPL18, COX7A2L, BCL9, PLA2G4A, RNF2, CLTA, MRPS7, NXT1, ELOC, SUPV3L1, MALSU1, MRPL17, PSMD4, PSMC2, MAIP1, ABCE1, NUDT2, PHB1, MRPL48, GADD45GIP1, MRPS23, MRPS16, GLRX5, NELFA, MRPL40, HSPA14, SLC39A10, TIMM23
-paste(terms_stage_III, collapse=", ")
-paste(genes_stage_III, collapse=", ")
 ######################################################################################################################
 #table_Stage_I<-table_Stage_I[which(table_Stage_I>1)]
 #table_Stage_II<-table_Stage_II[which(table_Stage_II>1)]
@@ -226,7 +193,7 @@ for (term in rownames(df_count_terms_selected))
 write.xlsx(x=df_count_terms_selected,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="all pathways", append=TRUE)
 ####################################################################################################################
 # Select top 10 terms
-selection_all<-unique(c(names(tail(sort(table_Stage_I),n=30)),names(tail(sort(table_Stage_II),n=30)),names(tail(sort(table_Stage_III),n=30))))
+selection_all<-unique(c(names(tail(sort(table_Stage_I),n=10)),names(tail(sort(table_Stage_II),n=10)),names(tail(sort(table_Stage_III),n=10))))
 ####################################################################################################################
 # Store information for each gene
 df_count_terms_selected<-df_count_terms[selection_all,]
@@ -251,7 +218,7 @@ for (term in rownames(df_count_terms_selected))
 	df_count_terms_selected[term,"Genes_Stage_III"]<-paste(df_all_annotation_stage_III[df_all_annotation_stage_III$CluterProfiler==term,"Symbol"],collapse=", ")
 }
 # Save file 
-write.xlsx(x=df_count_terms_selected,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected terms", append=TRUE)
+write.xlsx(x=na.omit(df_count_terms_selected),file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected terms", append=TRUE)
 ####################################################################################################################
 # Concatenate table
 df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$CluterProfiler %in% selection_all),],

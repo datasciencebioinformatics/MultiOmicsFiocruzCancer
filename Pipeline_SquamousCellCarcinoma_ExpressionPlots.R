@@ -168,14 +168,14 @@ colnames(genes_unique_Stage_I)   <-c("gene","Stage_I-normal.log2fc","Stage_I.sig
 colnames(genes_unique_Stage_II)  <-c("gene","Stage_II-normal.log2fc","Stage_II.sig","Stage_II-normal.pvalue","Stage_II-normal.FDR","ENSEMBL")
 colnames(genes_unique_Stage_III) <-c("gene","Stage_III-normal.log2fc","Stage_III.sig","Stage_III-normal.pvalue","Stage_III-normal.FDR","ENSEMBL")
 
-# genes_unique_stages
-genes_unique_stages  <-merge(merge(genes_unique_Stage_I,genes_unique_Stage_II,by="gene"),genes_unique_Stage_III,by="gene")
+# Genes unique stage
+genes_unique_stages<-merge(merge(genes_unique_Stage_I,genes_unique_Stage_II, by="ENSEMBL"),by="ENSEMBL",genes_unique_Stage_III)
 
 # Convert all symbols
-ids_genes_unique_stages      <-bitr(genes_unique_stages$ENSEMBL, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL","ENSEMBL"), OrgDb="org.Hs.eg.db")
+ids_genes_unique_stages      <-bitr(genes_unique_stages$ENSEMBL, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL","ENSEMBL"), OrgDb="org.Hs.eg.db", drop = FALSE)
 
 # genes_unique_stages
-genes_unique_stages_filtered  <-merge(genes_unique_stages,ids_genes_unique_stages,by="ENSEMBL")
+genes_unique_stages_filtered  <-merge(genes_unique_stages,ids_genes_unique_stages,by="ENSEMBL", all = FALSE)
 
 # genes_unique_stages
 #log2change_tumor_control_paired <-merge(log2change_tumor_control_paired,ids_genes_unique_stages,by="ENSEMBL")
@@ -184,10 +184,13 @@ genes_unique_stages_filtered  <-merge(genes_unique_stages,ids_genes_unique_stage
 genes_unique_stages_filtered<-genes_unique_stages_filtered[,c("ENSEMBL","gene","ENTREZID","SYMBOL","Stage_I.sig","Stage_I-normal.log2fc","Stage_I-normal.pvalue","Stage_I-normal.FDR","Stage_II.sig","Stage_II-normal.log2fc","Stage_II-normal.pvalue","Stage_II-normal.FDR","Stage_III.sig","Stage_III-normal.log2fc","Stage_III-normal.pvalue","Stage_III-normal.FDR")]
 
 # Merge tables
-genes_unique_stages_complete<-merge(log2change_tumor_control_selected,genes_unique_stages_filtered,by="ENSEMBL")
+genes_unique_stages_complete<-merge(log2change_tumor_control_selected,genes_unique_stages_filtered,by="ENSEMBL", all = FALSE)
 
 # Select collumns
-genes_unique_stages_filtered<-unique(genes_unique_stages_complete[,c("ENSEMBL", "ENTREZID", "SYMBOL" , "tumor-normal.log2fc","tumor-normal.pvalue" , "tumor-normal.FDR", "Stage_I.sig","Stage_I-normal.log2fc", "Stage_I-normal.pvalue", "Stage_I-normal.FDR", "Stage_II.sig", "Stage_II-normal.log2fc", "Stage_II-normal.pvalue", "Stage_II-normal.FDR", "Stage_III.sig", "Stage_III-normal.log2fc", "Stage_III-normal.pvalue", "Stage_III-normal.FDR")])
+genes_unique_stages_filtered<-unique(genes_unique_stages_complete[,c("ENSEMBL", "ENTREZID", "SYMBOL", "gene.x", "tumor-normal.log2fc","tumor-normal.pvalue" , "tumor-normal.FDR", "Stage_I.sig","Stage_I-normal.log2fc", "Stage_I-normal.pvalue", "Stage_I-normal.FDR", "Stage_II.sig", "Stage_II-normal.log2fc", "Stage_II-normal.pvalue", "Stage_II-normal.FDR", "Stage_III.sig", "Stage_III-normal.log2fc", "Stage_III-normal.pvalue", "Stage_III-normal.FDR")])
+
+# Rename collumns
+colnames(genes_unique_stages_filtered)[4]<-"gene"
 
 # Select stage-spefific
 genes_unique_stages_stage_specific<-unique(genes_unique_stages_filtered[c(which(genes_unique_stages_filtered$Stage_I.sig=="stage-specific"),which(genes_unique_stages_filtered$Stage_II.sig=="stage-specific"),which(genes_unique_stages_filtered$Stage_III.sig=="stage-specific")),])

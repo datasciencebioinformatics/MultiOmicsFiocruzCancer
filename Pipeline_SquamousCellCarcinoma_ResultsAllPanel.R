@@ -22,9 +22,10 @@ unique_stage_III=intersect(setdiff(selected_genes_Stage_III_data$gene, c(selecte
 #####################################################################################################################################################################################
 # Veen diagram
 stages_I_II_III<-ggVennDiagram(list(Stage_I=selected_genes_Stage_I_data$gene,Stage_II=selected_genes_Stage_II_data$gene,Stage_III=selected_genes_Stage_III_data$gene), label_alpha = 0.9,set_color = c("grey50","grey50","grey50")) + scale_fill_gradient(low = "white", high = "white") + theme_bw() + ggtitle("Stage-specific genes")+ guides(fill="none")  + theme(panel.border = element_blank(), axis.text = element_blank(), panel.grid = element_blank(), axis.ticks = element_blank(), plot.background = element_rect(fill = "white"),  panel.background = element_rect(fill = "white"), axis.text.x=element_blank(),axis.ticks.x=element_blank(),axis.text.y=element_blank())
+stages_I_II_III<-ggVennDiagram(list("Stage I"=selected_genes_Stage_I_data$gene,"Stage II"=selected_genes_Stage_II_data$gene,"Stage III"=selected_genes_Stage_III_data$gene), label_alpha = 0.9,set_color = c("grey50","grey50","grey50")) + scale_fill_gradient(low = "white", high = "white") + theme_bw() + ggtitle("A")+ guides(fill="none")  + theme(panel.border = element_blank(), axis.text = element_blank(), panel.grid = element_blank(), axis.ticks = element_blank(), plot.background = element_rect(fill = "white"),  panel.background = element_rect(fill = "white"), axis.text.x=element_blank(),axis.ticks.x=element_blank(),axis.text.y=element_blank())+labs( x ="", y = "")
 
 # FindClusters_resolution
-png(filename=paste(output_dir,"plot_res_tumor_normal.png",sep=""), width = 10, height = 10, res=600, units = "cm")
+png(filename=paste(output_dir,"plot_ggVennDiagram_tumor_normal.png",sep=""), width = 16, height = 16, res=600, units = "cm")
   stages_I_II_III
 dev.off()
 
@@ -36,10 +37,16 @@ transporse_RPKM_table<-data.frame(t(unstranded_data_filter[,c(paired_sample_df$n
 pca_res_tumor_normal   <- prcomp(transporse_RPKM_table, scale. = TRUE)                                                                                                              #
                                                                                                                                                                                     #
 # Plot PCA tumor versus normal                                                                                                                                                      #
-plot_res_tumor_normal <- autoplot(pca_res_tumor_normal, data = colData[rownames(transporse_RPKM_table),], colour = 'tumor_normal')+ theme_bw()                                                                        #
+plot_res_tumor_normal <- autoplot(pca_res_tumor_normal, data = colData[rownames(transporse_RPKM_table),], colour = 'tumor_normal')+ theme_bw()  + theme(legend.position="bottom") + ggtitle("B")                                                                      #
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"plot_res_tumor_normal.png",sep=""), width = 16, height = 16, res=600, units = "cm")
+  plot_res_tumor_normal
+dev.off()
+
 #####################################################################################################################################################################################
 # FindClusters_resolution
-png(filename=paste(output_dir,"plot_res_tumor_normal.png",sep=""), width = 14, height = 14, res=600, units = "cm")
-  plot_res_tumor_normal
+png(filename=paste(output_dir,"plot_res_tumor_normal.png",sep=""), width = 20, height = 20, res=600, units = "cm")
+  grid.arrange(plot_res_tumor_normal)
 dev.off()
 #####################################################################################################################################################################################

@@ -50,3 +50,26 @@ png(filename=paste(output_dir,"plot_res_tumor_normal.png",sep=""), width = 20, h
   grid.arrange(plot_res_tumor_normal)
 dev.off()
 #####################################################################################################################################################################################
+# ENSG00000120217 CD274/PD-L1
+# ENSG00000171094 CD246/ALK 
+# ENSG00000157764	BRAF
+# ENSG00000133703 KRAS
+# ENSG00000146648 EGFR
+# ENSG00000047936	ROS1 
+# ENSG00000141510	TP53
+# ENSG00000121879	PIK3CA
+# ENSG00000143924	EML4
+
+# Tumor genes
+# c("ENSG00000120217", "ENSG00000171094","ENSG00000157764", "ENSG00000133703", "ENSG00000146648", "ENSG00000047936", "ENSG00000141510", "ENSG00000121879", "ENSG00000143924")
+
+# Stats of tumor genes
+genes_unique_stages_filtered[which(genes_unique_stages_filtered$ENSEMBL %in% c("ENSG00000120217", "ENSG00000171094","ENSG00000157764", "ENSG00000133703", "ENSG00000146648", "ENSG00000047936", "ENSG00000141510", "ENSG00000121879", "ENSG00000143924")),]
+
+# change box plot line colors by groups
+p_stage_tumor_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$ENSEMBL %in% c("ENSG00000133703", "ENSG00000141510", "ENSG00000146648", "ENSG00000143924"),], aes(x=tissue_type, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw()
+
+# FindClusters_resolution
+png(filename=paste(output_dir,"plot_res_tumor_normal.png",sep=""), width = 16, height = 10, res=600, units = "cm")
+  p_stage_tumor_paired
+dev.off()

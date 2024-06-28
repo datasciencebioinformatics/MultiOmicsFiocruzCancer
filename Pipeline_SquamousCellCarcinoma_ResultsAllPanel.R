@@ -65,4 +65,3 @@ p_stage_tumor_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$ENS
 png(filename=paste(output_dir,"plot_res_tumor_normal.png",sep=""), width = 16, height = 24, res=600, units = "cm")
   p_stage_tumor_paired
 dev.off()
-

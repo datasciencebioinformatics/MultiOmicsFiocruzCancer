@@ -205,37 +205,99 @@ write.xlsx(x=na.omit(genes_unique_stages_stage_specific), sheet="stage-specific 
 
 
 
-
-
-###############################################################################################################
-# A panel for each 30 genes per stage
-# Stage I
-stage_I_selected_genes<-c("ENSG00000184432", "ENSG00000174953", "ENSG00000166133","ENSG00000186432")
-stage_II_selected_genes<-c("ENSG00000205937", "ENSG00000124383", "ENSG00000108883", "ENSG00000147140")
-stage_III_selected_genes<-c("ENSG00000197713", "ENSG00000144580", "ENSG00000182512", "ENSG00000149923")
-###############################################################################################################
-# change box plot line colors by groups
-p_stage_I_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$ENSEMBL %in% stage_I_selected_genes,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage I")
-p_stage_I_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples$ENSEMBL %in% stage_I_selected_genes,], aes(x=stages, y=RPKM)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage I")
-
-# change box plot line colors by groups
-p_stage_II_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$ENSEMBL %in% stage_II_selected_genes,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage II")
-p_stage_II_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples$ENSEMBL %in% stage_II_selected_genes,], aes(x=stages, y=RPKM)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage II")
-
-# change box plot line colors by groups
-p_stage_III_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$ENSEMBL %in% stage_III_selected_genes,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage III")
-p_stage_III_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$ENSEMBL %in% stage_III_selected_genes,], aes(x=stages, y=RPKM)) +   geom_boxplot()+ facet_wrap(~SYMBOL, ncol = 4, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage III")
 ############################################################################################################################################################################
-# FindClusters_resolution
-png(filename=paste(output_folder,"p_stage_I_paired.png",sep=""), width = 25, height = 15, res=600, units = "cm")
-  p_stage_I_paired + theme(legend.position="bottom")
-dev.off()
-# FindClusters_resolution
-png(filename=paste(output_folder,"p_stage_II_paired.png",sep=""), width = 25, height = 15, res=600, units = "cm")
-  p_stage_II_paired + theme(legend.position="bottom")
-dev.off()
-# FindClusters_resolution
-png(filename=paste(output_folder,"p_stage_III_paired.png",sep=""), width = 25, height = 15, res=600, units = "cm")
-  p_stage_III_paired + theme(legend.position="bottom")
-dev.off()
+# Create sample vector 
+my_vector <- annotation_stage_I$gene_i
+  
+# Define the number of elements you want in each chunk 
+chunk_size <- 9
+  
+# Initialize an empty list to store chunks 
+chunks <- list() 
+  
+# Iterate over the vector and extract subsets for each chunk 
+for (i in seq(1, length(my_vector), by = chunk_size)) { 
+	# Determine the end index for the current chunk 
+	end_index <- min(i + chunk_size - 1, length(my_vector)) 
 
+	# Extract subset for the current chunk 
+	chunk <- my_vector[i:end_index] 
+	
+	print(chunk)
+
+	# change box plot line colors by groups
+	p_stage_I_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 3,ncol = 3, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage I")
+		# FindClusters_resolution
+		png(filename=paste(output_folder,paste("p_stage_I_paired_",i,".png",sep=""),sep=""), width = 24, height = 32, res=600, units = "cm")
+	print(p_stage_I_paired + theme(legend.position="bottom"))
+	dev.off()
+}
+############################################################################################################################################################################
+
+
+
+
+
+
+
+
+############################################################################################################################################################################
+# Create sample vector 
+my_vector <- annotation_stage_II$gene_i
+  
+# Define the number of elements you want in each chunk 
+chunk_size <- 9
+  
+# Initialize an empty list to store chunks 
+chunks <- list() 
+  
+# Iterate over the vector and extract subsets for each chunk 
+for (i in seq(1, length(my_vector), by = chunk_size)) { 
+	# Determine the end index for the current chunk 
+	end_index <- min(i + chunk_size - 1, length(my_vector)) 
+
+	# Extract subset for the current chunk 
+	chunk <- my_vector[i:end_index] 
+	
+	print(chunk)
+
+	# change box plot line colors by groups
+	p_stage_I_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 3,ncol = 3, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage II")
+		# FindClusters_resolution
+		png(filename=paste(output_folder,paste("p_stage_II_paired_",i,".png",sep=""),sep=""), width = 24, height = 32, res=600, units = "cm")
+	print(p_stage_I_paired + theme(legend.position="bottom"))
+	dev.off()
+}
+############################################################################################################################################################################
+
+
+
+
+############################################################################################################################################################################
+# Create sample vector 
+my_vector <- annotation_stage_III$gene_i
+  
+# Define the number of elements you want in each chunk 
+chunk_size <- 9
+  
+# Initialize an empty list to store chunks 
+chunks <- list() 
+  
+# Iterate over the vector and extract subsets for each chunk 
+for (i in seq(1, length(my_vector), by = chunk_size)) { 
+	# Determine the end index for the current chunk 
+	end_index <- min(i + chunk_size - 1, length(my_vector)) 
+
+	# Extract subset for the current chunk 
+	chunk <- my_vector[i:end_index] 
+	
+	print(chunk)
+
+	# change box plot line colors by groups
+	p_stage_I_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 3,ncol = 3, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage III")
+		# FindClusters_resolution
+		png(filename=paste(output_folder,paste("p_stage_III_paired_",i,".png",sep=""),sep=""), width = 24, height = 32, res=600, units = "cm")
+	print(p_stage_I_paired + theme(legend.position="bottom"))
+	dev.off()
+}
+############################################################################################################################################################################

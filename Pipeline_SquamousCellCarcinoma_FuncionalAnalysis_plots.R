@@ -190,6 +190,10 @@ for (selected_term in rownames(df_count_terms_selected))
 	}		
 }
 ####################################################################################################################
+write.xlsx(x=df_count_terms_selected_GO,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="GO terms", append=TRUE)
+write.xlsx(x=df_count_terms_selected_KEGG,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="KEGG terms", append=TRUE)
+write.xlsx(x=df_count_terms_selected_Reactome,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="Reactome terms", append=TRUE)
+####################################################################################################################
 # Remove empty line
 # Select top 10 terms                                                                                                                                                            #
 selection_GO       <-unique(c(names(tail(sort(table_GO_Stage_I),n=10)),names(tail(sort(table_GO_Stage_II),n=10)),names(tail(sort(table_GO_Stage_III),n=10))))                    #
@@ -201,7 +205,6 @@ matrix_count_terms_selected_GO        <-df_count_terms_selected_GO[selection_GO,
 matrix_count_terms_selected_KEGG      <-df_count_terms_selected_KEGG[selection_KEGG,]
 matrix_count_terms_selected_Reactome  <-df_count_terms_selected_Reactome[selection_Reactome,]
 
-
 go_order  <-hcluster(matrix_count_terms_selected_GO[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$labels[hcluster(matrix_count_terms_selected_GO[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$order]
 kegg_order<-hcluster(matrix_count_terms_selected_KEGG[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$labels[hcluster(matrix_count_terms_selected_KEGG[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$order]
 reactome_order<-hcluster(matrix_count_terms_selected_Reactome[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$labels[hcluster(matrix_count_terms_selected_Reactome[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$order]
@@ -209,5 +212,10 @@ reactome_order<-hcluster(matrix_count_terms_selected_Reactome[,c("Stage_I_norm",
 matrix_count_terms_selected_GO  <-matrix_count_terms_selected_GO[go_order,]
 matrix_count_terms_selected_KEGG<-matrix_count_terms_selected_KEGG[kegg_order,]
 matrix_count_terms_selected_Reactome<-matrix_count_terms_selected_Reactome[reactome_order,]
-
+####################################################################################################################
+# Save file 
+write.xlsx(x=matrix_count_terms_selected_GO,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected GO", append=TRUE)
+write.xlsx(x=matrix_count_terms_selected_KEGG,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected KEGG", append=TRUE)
+write.xlsx(x=matrix_count_terms_selected_Reactome,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected Reactome", append=TRUE)
+####################################################################################################################
 

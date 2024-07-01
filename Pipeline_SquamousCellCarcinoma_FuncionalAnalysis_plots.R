@@ -148,19 +148,13 @@ for (term in rownames(df_count_terms_selected))
 # Save file 
 write.xlsx(x=df_count_terms_selected,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="all pathways", append=TRUE)
 ####################################################################################################################
+# To do : 1st July 2024
+# Split into "GO", "Reactome" and "KEGG" based of the string of the term name containts these words
+df_count_terms_selected
+###################################################################################################################
 # Select top 10 terms
 selection_all<-unique(c(names(tail(sort(table_Stage_I),n=10)),names(tail(sort(table_Stage_II),n=10)),names(tail(sort(table_Stage_III),n=10))))
 ####################################################################################################################
-# Ten most abundat annotation terms from each stage were selected and combined without repetition. For each term, average expression was calculated per stage from the stage-specic genes.
-df_all_annotation_GO           <-df_all_annotation[df_all_annotation$Layer=="GO",]
-df_all_annotation_Reactome     <-df_all_annotation[df_all_annotation$Layer=="Reactome",]
-df_all_annotation_KEGG         <-df_all_annotation[df_all_annotation$Layer=="KEGG",]
-
-selection_all<-unique(c(names(tail(sort(table_Stage_I),n=10)),names(tail(sort(table_Stage_II),n=10)),names(tail(sort(table_Stage_III),n=10))))
-
-####################################################################################################################
-
-
 # Store information for each gene
 df_count_terms_selected<-df_count_terms[selection_all,]
 

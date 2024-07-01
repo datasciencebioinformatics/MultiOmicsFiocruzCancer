@@ -35,6 +35,7 @@ for (annotation in rownames(annotation_stages_all))
 	# All genes of stage
 	all_CluterProfiler<-strsplit(x=CluterProfiler,",",fixed=T)[[1]]
 	all_GeneCards<-strsplit(x=GeneCards,",",fixed=T)[[1]]
+	print(all_CluterProfiler)
 	
 	# For all genes
 	for (CluterProfiler_index in all_CluterProfiler)
@@ -149,8 +150,65 @@ for (term in rownames(df_count_terms_selected))
 write.xlsx(x=df_count_terms_selected,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="all pathways", append=TRUE)
 ####################################################################################################################
 # To do : 1st July 2024
+# For each of the term, take the stage-specific genes associated to it per stage.
+
+
+
+
+
+
+####################################################################################################################
+# Here I will split the count by category  GO, Reactome, KEGG
+# To do : 1st July 2024
 # Split into "GO", "Reactome" and "KEGG" based of the string of the term name containts these words
-df_count_terms_selected
+df_count_terms_selected_GO       <- data.frame(Term=c(),Stage_I=c(),Stage_II=c(),Stage_III=c(),Genes_Stage_I=c(), Genes_Stage_II=c(), Genes_Stage_III=c())
+df_count_terms_selected_Reactome <- data.frame(Term=c(),Stage_I=c(),Stage_II=c(),Stage_III=c(),Genes_Stage_I=c(), Genes_Stage_II=c(), Genes_Stage_III=c())
+df_count_terms_selected_KEGG     <- data.frame(Term=c(),Stage_I=c(),Stage_II=c(),Stage_III=c(),Genes_Stage_I=c(), Genes_Stage_II=c(), Genes_Stage_III=c())
+
+# For each row of the the counts tanble, check if belong to "GO", "Reactome" and "KEGG"
+for (selected_term in rownames(df_count_terms_selected))
+{
+	# If contains the word GO
+	if(grepl("GO:", selected_term, fixed = TRUE))
+	{	
+		# Add to the data.frame of GO
+		df_count_terms_selected_GO<-rbind(df_count_terms_selected_GO, df_count_terms_selected[selected_term,])
+	}
+	# If contains the word GO
+	if(grepl("KEGG:", selected_term, fixed = TRUE))
+	{	
+		# Add to the data.frame of GO
+		df_count_terms_selected_KEGG<-rbind(df_count_terms_selected_KEGG, df_count_terms_selected[selected_term,])
+	}	
+	# If contains the word GO
+	if(grepl("Reactome:", selected_term, fixed = TRUE))
+	{	
+		# Add to the data.frame of GO
+		df_count_terms_selected_Reactome<-rbind(df_count_terms_selected_Reactome, df_count_terms_selected[selected_term,])
+	}		
+}
+####################################################################################################################
+
+
+####################################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ###################################################################################################################
 # Select top 10 terms
 selection_all<-unique(c(names(tail(sort(table_Stage_I),n=10)),names(tail(sort(table_Stage_II),n=10)),names(tail(sort(table_Stage_III),n=10))))

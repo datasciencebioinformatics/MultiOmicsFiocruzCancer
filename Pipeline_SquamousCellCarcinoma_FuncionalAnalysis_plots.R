@@ -94,17 +94,6 @@ for (annotation in rownames(annotation_stages_all))
 		df_all_annotation<-rbind(df_all_annotation,gene_annotation)
 	}		
 }
-
-
-
-
-
-
-
-
-
-
-
 ######################################################################################################################
 # The ten most abundant annotation terms in number of genes were selected for further inspection (see Figure Annotaton): Reactome:Intracellular signaling by second messengers (14), Reactome:PIP3 activates AKT signaling (14), Reactome:Regulation of expression of SLITs and ROBOs  (14), Reactome:Signaling by ROBO receptors (15), GO:mitochondrial matrix (16), GO:mitochondrial protein-containing complex (16), KEGG:Alzheimer disease (16), Reactome:Translation  (16), GO:mitochondrial inner membrane (17), Reactome:SARS-CoV Infections (18)
 ######################################################################################################################
@@ -195,6 +184,19 @@ write.xlsx(x=df_count_terms_selected,file=paste(output_dir,"unique_genes_annotat
 # Select top 10 terms
 selection_all<-unique(c(names(tail(sort(table_Stage_I),n=10)),names(tail(sort(table_Stage_II),n=10)),names(tail(sort(table_Stage_III),n=10))))
 ####################################################################################################################
+# Ten most abundat annotation terms from each stage were selected and combined without repetition. For each term, average expression was calculated per stage from the stage-specic genes.
+
+
+
+
+
+
+
+
+
+
+
+
 # Store information for each gene
 df_count_terms_selected<-df_count_terms[selection_all,]
 

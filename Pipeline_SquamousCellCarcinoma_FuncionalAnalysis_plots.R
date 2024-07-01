@@ -155,8 +155,6 @@ write.xlsx(x=df_count_terms_selected,file=paste(output_dir,"unique_genes_annotat
 
 
 
-
-
 ####################################################################################################################
 # Here I will split the count by category  GO, Reactome, KEGG
 # To do : 1st July 2024

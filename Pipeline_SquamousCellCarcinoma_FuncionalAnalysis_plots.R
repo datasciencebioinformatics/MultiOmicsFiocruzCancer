@@ -213,20 +213,14 @@ matrix_count_terms_selected_GO  <-matrix_count_terms_selected_GO[go_order,]
 matrix_count_terms_selected_KEGG<-matrix_count_terms_selected_KEGG[kegg_order,]
 matrix_count_terms_selected_Reactome<-matrix_count_terms_selected_Reactome[reactome_order,]
 ####################################################################################################################
+matrix_count_terms_selected_GO$Letter<-paste("GO",1:length(go_order),sep="")
+matrix_count_terms_selected_KEGG$Letter<-paste("KEGG",1:length(kegg_order),sep="")
+matrix_count_terms_selected_Reactome$Letter<-paste("Reactome",1:length(reactome_order),sep="")
+
 # Save file 
 write.xlsx(x=matrix_count_terms_selected_GO,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected GO", append=TRUE)
 write.xlsx(x=matrix_count_terms_selected_KEGG,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected KEGG", append=TRUE)
 write.xlsx(x=matrix_count_terms_selected_Reactome,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected Reactome", append=TRUE)
-####################################################################################################################
-
-
-
-
-
-
-
-
-
 ####################################################################################################################
 # Concatenate table
 df_all_annotation_selected_pathways<-rbind(df_all_annotation[which(df_all_annotation$CluterProfiler %in% go_order),],

@@ -229,7 +229,7 @@ write.xlsx(x=matrix_count_terms_selected_Reactome,file=paste(output_dir,"unique_
 
 ####################################################################################################################
 # Concatenate table
-df_all_annotation_selected_pathways<-rbind(df_all_annotation[which(df_all_annotation$CluterProfiler),],
+df_all_annotation_selected_pathways<-rbind(df_all_annotation[which(df_all_annotation$CluterProfiler %in% go_order),],
 interactome_annotation_stage,coexpression_annotation)
 ####################################################################################################################
 # All stages
@@ -280,8 +280,6 @@ E(graph_all_stages)[which(df_all_eges$names %in% selected_coexpression)]$color  
 V(graph_all_stages)$label                                                                                                                                                                                      <- ""
 V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])]$label        <- names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])])
 V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$label                <- names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])])
-
-selection_GO
 
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge.png",sep=""), width = 30, height = 30, res=600, units = "cm")

@@ -1,12 +1,16 @@
+######################################################################################################################
 # Specify sheet by its name
+# Read the table with manual and automatic annotation
 annotation_stages_all <- data.frame(read_excel("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/unique_genes_annotation_clusterProfiler_Genecards.xlsx"))
 ######################################################################################################################
 # Specify sheet by its name
+# split annotation per stage
 annotation_stage_I <- data.frame(read_excel("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/unique_genes_annotation.xlsx", sheet = "Stage I"))
 annotation_stage_II <- data.frame(read_excel("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/unique_genes_annotation.xlsx", sheet = "Stage II"))
 annotation_stage_III <- data.frame(read_excel("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/unique_genes_annotation.xlsx", sheet = "Stage III"))
 ######################################################################################################################
 # A data.frame to store all results
+# Save results per annotation term, below only annotation of clusterProfiler
 df_all_annotation<-data.frame(gene_id=c(),gene=c(),log2change=c(),Category=c(),Pvalue=c(),FDR=c(),ENTREZID=c(),Symbol=c(),Description=c(),genecards_Category=c(),UniProt_ID=c(),GIFtS=c(),GC_id=c(),GeneCards_Summary=c(),Stage=c(),Layer=c(),CluterProfiler=c() )
 
 # For each annotation
@@ -66,7 +70,7 @@ for (annotation in rownames(annotation_stages_all))
 # The ten most abundant annotation terms in number of genes were selected for further inspection (see Figure Annotaton): Reactome:Intracellular signaling by second messengers (14), Reactome:PIP3 activates AKT signaling (14), Reactome:Regulation of expression of SLITs and ROBOs  (14), Reactome:Signaling by ROBO receptors (15), GO:mitochondrial matrix (16), GO:mitochondrial protein-containing complex (16), KEGG:Alzheimer disease (16), Reactome:Translation  (16), GO:mitochondrial inner membrane (17), Reactome:SARS-CoV Infections (18)
 ######################################################################################################################
 # The ten most abundant annotation terms in number of genes were selected for further inspection (see Figure Annotaton): Reactome:Intracellular signaling by second messengers (14), Reactome:PIP3 activates AKT signaling (14), Reactome:Regulation of expression of SLITs and ROBOs  (14), Reactome:Signaling by ROBO receptors (15), GO:mitochondrial matrix (16), GO:mitochondrial protein-containing complex (16), KEGG:Alzheimer disease (16), Reactome:Translation  (16), GO:mitochondrial inner membrane (17), Reactome:SARS-CoV Infections (18)
-# Load interactome
+# Load interactome from file
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadInteractomeUniqueGenes.R")
 
 # gene annotation
@@ -151,9 +155,9 @@ write.xlsx(x=df_count_terms_selected,file=paste(output_dir,"unique_genes_annotat
 ####################################################################################################################
 # To do : 1st July 2024
 # For each of the term, take the stage-specific genes associated to it per stage.
-
-
-
+df_count_terms_selected$Stage_I_norm   <- df_count_terms_selected$Stage_I/dim(annotation_stage_I)[1]*100
+df_count_terms_selected$Stage_II_norm  <- df_count_terms_selected$Stage_II/dim(annotation_stage_II)[1]*100     
+df_count_terms_selected$Stage_III_norm <- df_count_terms_selected$Stage_III/dim(annotation_stage_III)[1]*100
 
 ####################################################################################################################
 # Here I will split the count by category  GO, Reactome, KEGG
@@ -186,139 +190,24 @@ for (selected_term in rownames(df_count_terms_selected))
 	}		
 }
 ####################################################################################################################
+# Remove empty line
+# Select top 10 terms                                                                                                                                                            #
+selection_GO       <-unique(c(names(tail(sort(table_GO_Stage_I),n=10)),names(tail(sort(table_GO_Stage_II),n=10)),names(tail(sort(table_GO_Stage_III),n=10))))                    #
+selection_Reactome <-unique(c(names(tail(sort(table_Reactome_Stage_I),n=10)),names(tail(sort(table_Reactome_Stage_II),n=10)),names(tail(sort(table_Reactome_Stage_III),n=10))))  #
+selection_KEGG     <-unique(c(names(tail(sort(table_KEGG_Stage_I),n=10)),names(tail(sort(table_KEGG_Stage_II),n=10)),names(tail(sort(table_KEGG_Stage_III),n=10))))              #
 
-
-####################################################################################################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-###################################################################################################################
-# Select top 10 terms
-selection_all<-unique(c(names(tail(sort(table_Stage_I),n=10)),names(tail(sort(table_Stage_II),n=10)),names(tail(sort(table_Stage_III),n=10))))
-####################################################################################################################
 # Store information for each gene
-df_count_terms_selected<-df_count_terms[selection_all,]
+matrix_count_terms_selected_GO        <-df_count_terms_selected_GO[selection_GO,]
+matrix_count_terms_selected_KEGG      <-df_count_terms_selected_KEGG[selection_KEGG,]
+matrix_count_terms_selected_Reactome  <-df_count_terms_selected_Reactome[selection_Reactome,]
 
 
-# Genes for each stage
-df_count_terms_selected$Genes_Stage_I<-""
-df_count_terms_selected$Genes_Stage_II<-""
-df_count_terms_selected$Genes_Stage_III<-""
+go_order  <-hcluster(matrix_count_terms_selected_GO[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$labels[hcluster(matrix_count_terms_selected_GO[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$order]
+kegg_order<-hcluster(matrix_count_terms_selected_KEGG[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$labels[hcluster(matrix_count_terms_selected_KEGG[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$order]
+reactome_order<-hcluster(matrix_count_terms_selected_Reactome[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$labels[hcluster(matrix_count_terms_selected_Reactome[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$order]
+
+matrix_count_terms_selected_GO  <-matrix_count_terms_selected_GO[go_order,]
+matrix_count_terms_selected_KEGG<-matrix_count_terms_selected_KEGG[kegg_order,]
+matrix_count_terms_selected_Reactome<-matrix_count_terms_selected_Reactome[reactome_order,]
 
 
-# for each term, take the annotation about the genes
-for (term in rownames(df_count_terms_selected))
-{
-	# df_all_annotation_stage
-	df_all_annotation_stage_I  <-df_all_annotation[df_all_annotation$Stage=="Stage I",]
-	df_all_annotation_stage_II <-df_all_annotation[df_all_annotation$Stage=="Stage II",]
-	df_all_annotation_stage_III<-df_all_annotation[df_all_annotation$Stage=="Stage III",]
-
-	df_count_terms_selected[term,"Genes_Stage_I"]<-paste(df_all_annotation_stage_I[df_all_annotation_stage_I$CluterProfiler==term,"Symbol"],collapse=", ")
-	df_count_terms_selected[term,"Genes_Stage_II"]<-paste(df_all_annotation_stage_II[df_all_annotation_stage_II$CluterProfiler==term,"Symbol"],collapse=", ")
-	df_count_terms_selected[term,"Genes_Stage_III"]<-paste(df_all_annotation_stage_III[df_all_annotation_stage_III$CluterProfiler==term,"Symbol"],collapse=", ")
-}
-# Save file 
-write.xlsx(x=na.omit(df_count_terms_selected),file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected terms", append=TRUE)
-####################################################################################################################
-# Concatenate table
-df_all_annotation_selected_pathways<-rbind(df_all_annotation_per_stage[which(df_all_annotation_per_stage$CluterProfiler %in% selection_all),],
-interactome_annotation_stage,coexpression_annotation)
-####################################################################################################################
-
-# All stages
-graph_all_stages <- graph_from_data_frame(d=unique(df_all_annotation_selected_pathways[,c("Symbol","CluterProfiler")]), vertices=unique(c(df_all_annotation_selected_pathways$Symbol,df_all_annotation_selected_pathways$CluterProfiler)), directed=F)  
-
-# df_all_eges
-df_all_eges<-data.frame(get.edgelist(graph_all_stages))
-
-# Set ronames
-df_all_eges$names<-paste(df_all_eges$X1,df_all_eges$X2,sep="-")
-####################################################################################################################
-# Vertice colours of genes
-V(graph_all_stages)$color                                                                                                  <- "black"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways$CluterProfiler)]$color       <- "black"
-
-stage_I   <-names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_I$SYMBOL)])
-stage_II  <-names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_II$SYMBOL)])
-stage_III <-names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_III$SYMBOL)])
-
-names(V(graph_all_stages)) %in% c(stage_I,stage_II,stage_III)
-length(names(V(graph_all_stages)) %in% c(stage_I,stage_II,stage_III))
-names(V(graph_all_stages))[!names(V(graph_all_stages)) %in% c(stage_I,stage_II,stage_III)]
-
-
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_I$SYMBOL)]$color       <- "#E69F00"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_II$SYMBOL)]$color      <- "#009E73"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_III$SYMBOL)]$color     <- "#D81B60"
-
-# Vertice colours of genes
-V(graph_all_stages)$shape                                                                                                                                                                                      <-"circle"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in%  df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$shape              <- "square"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in%  df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])]$shape      <- "square"
-
-# Set size of the node according to the dregree
-V(graph_all_stages)$size                                                                                                                                                                                       <- 5
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])]$size        <- 7
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$size                <- 7
-
-# Vertice colours of genes
-E(graph_all_stages)$color                                                                         <- "lightgrey"
-
-# Set ronames
-E(graph_all_stages)[which(df_all_eges$names %in% selected_interactome)]$color                     <- "black"
-E(graph_all_stages)[which(df_all_eges$names %in% selected_coexpression)]$color                    <- "darkblue"
-
-# Set size of the node according to the dregree
-V(graph_all_stages)$label                                                                                                                                                                                      <- ""
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])]$label        <- names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])])
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$label                <- names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])])
-
-                                                                
-
-# FindClusters_resolution
-png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge.png",sep=""), width = 30, height = 30, res=600, units = "cm")
-	#plot(graph_all_stages, layout=layout_nicely, vertex.label=NA) # Stage I
-	#plot(graph_all_stages, layout=  layout_with_kk, vertex.label=NA) # Stage II
-	#plot(graph_all_stages, layout=   layout_nicely, vertex.label=V(graph_all_stages)$labels) # Stage II
-	plot(graph_all_stages, layout=   layout_nicely,vertex.label=V(graph_all_stages)$label, edge.colour=NA ) # Stage II
-dev.off()
-
-
-
-
-
-
-###########################################################################3
-# FindClusters_resolution
-png(filename=paste(output_folder,"Plot_Stage_label.png",sep=""), width = 30, height = 30, res=600, units = "cm")
-	#plot(graph_all_stages, layout=layout_nicely) # Stage I
-	#plot(graph_all_stages, layout=  layout_with_kk) # Stage II
-	plot(graph_all_stages, layout=   layout_nicely) # Stage II
-dev.off()
-
-
-# Save file 
-write.xlsx(x=df_all_annotation_selected_pathways,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="ten most abundant per stage", append=TRUE)
-
-# Set legend
-png(filename=paste(output_folder,"legend.png",sep=""), width = 5, height = 5, res=600, units = "cm")
-plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
-legend("topleft", legend =c('GO', 'KEGG', 'REACTOME','Gene'), pch=16, pt.cex=3, cex=1.5, bty='n',col = c('#ff6347', '#ffd700', '#7f7f7f', '#0072b2'))
-mtext("Legend", at=0.2, cex=2)
-###########################################################################

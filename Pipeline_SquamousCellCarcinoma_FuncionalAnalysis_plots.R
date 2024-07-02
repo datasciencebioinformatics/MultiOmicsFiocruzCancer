@@ -291,79 +291,113 @@ matrix_count_terms_selected_Reactome<-matrix_count_terms_selected_all[reactome_o
 write.xlsx(x=matrix_count_terms_selected_GO,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected GO", append=TRUE)
 write.xlsx(x=matrix_count_terms_selected_KEGG,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected KEGG", append=TRUE)
 write.xlsx(x=matrix_count_terms_selected_Reactome,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected Reactome", append=TRUE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ####################################################################################################################
 # Concatenate table
-df_all_annotation_selected_pathways<-df_all_annotation[which(df_all_annotation$CluterProfiler %in% kegg_order),]
+df_all_annotation_selected_KEGG      <-df_all_annotation[which(df_all_annotation$CluterProfiler %in% kegg_order),]
+df_all_annotation_selected_GO        <-df_all_annotation[which(df_all_annotation$CluterProfiler %in% go_order),]
+df_all_annotation_selected_Reactome  <-df_all_annotation[which(df_all_annotation$CluterProfiler %in% reactome_order),]
 ####################################################################################################################
 # All stages
-graph_all_stages <- graph_from_data_frame(d=unique(df_all_annotation_selected_pathways[,c("Symbol","CluterProfiler")]), vertices=unique(c(df_all_annotation_selected_pathways$Symbol,df_all_annotation_selected_pathways$CluterProfiler)), directed=F)  
+graph_all_stages_KEGG       <- graph_from_data_frame(d=unique(df_all_annotation_selected_KEGG[,c("Symbol","CluterProfiler")]), vertices=unique(c(df_all_annotation_selected_KEGG$Symbol,df_all_annotation_selected_KEGG$CluterProfiler)), directed=F)  
+graph_all_stages_GO         <- graph_from_data_frame(d=unique(df_all_annotation_selected_GO[,c("Symbol","CluterProfiler")]), vertices=unique(c(df_all_annotation_selected_GO$Symbol,df_all_annotation_selected_GO$CluterProfiler)), directed=F)  
+graph_all_stages_Reactome   <- graph_from_data_frame(d=unique(df_all_annotation_selected_Reactome[,c("Symbol","CluterProfiler")]), vertices=unique(c(df_all_annotation_selected_Reactome$Symbol,df_all_annotation_selected_Reactome$CluterProfiler)), directed=F)  
 
-# df_all_eges
-df_all_eges<-data.frame(get.edgelist(graph_all_stages))
+# df_all_eges_KEGG
+df_all_eges_KEGG<-data.frame(get.edgelist(graph_all_stages_KEGG))
+df_all_eges_GO<-data.frame(get.edgelist(graph_all_stages_GO))
+df_all_eges_Reactome<-data.frame(get.edgelist(graph_all_stages_Reactome))
 
 # Set ronames
-df_all_eges$names<-paste(df_all_eges$X1,df_all_eges$X2,sep="-")
+df_all_eges_KEGG$names    <-paste(df_all_eges_KEGG$X1,df_all_eges_KEGG$X2,sep="-")
+df_all_eges_GO$names      <-paste(df_all_eges_GO$X1,df_all_eges_GO$X2,sep="-")
+df_all_eges_Reactome$names<-paste(df_all_eges_Reactome$X1,df_all_eges_KEGG$X2,sep="-")
 ####################################################################################################################
 # Vertice colours of genes
-V(graph_all_stages)$color                                                                                                  <- "grey"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways$CluterProfiler)]$color       <- "grey"
+V(graph_all_stages_KEGG)$color                                                                                 <- "grey"
+V(graph_all_stages_GO)$color                                                                                   <- "grey"
+V(graph_all_stages_Reactome)$color                                                                             <- "grey"
 
-stage_I   <-names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_I$SYMBOL)])
-stage_II  <-names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_II$SYMBOL)])
-stage_III <-names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_III$SYMBOL)])
+V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% df_all_annotation_selected_KEGG$CluterProfiler)]$color             <- "grey"
+V(graph_all_stages_GO)[which(names(V(graph_all_stages_GO)) %in% df_all_annotation_selected_GO$CluterProfiler)]$color                   <- "grey"
+V(graph_all_stages_Reactome)[which(names(V(graph_all_stages_Reactome)) %in% df_all_annotation_selected_Reactome$CluterProfiler)]$color  <- "grey"
 
-names(V(graph_all_stages)) %in% c(stage_I,stage_II,stage_III)
-length(names(V(graph_all_stages)) %in% c(stage_I,stage_II,stage_III))
-names(V(graph_all_stages))[!names(V(graph_all_stages)) %in% c(stage_I,stage_II,stage_III)]
+stage_I_KEGG   <-names(V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_I$SYMBOL)])
+stage_II_KEGG  <-names(V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_II$SYMBOL)])
+stage_III_KEGG <-names(V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_III$SYMBOL)])
+
+stage_I_GO   <-names(V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_I$SYMBOL)])
+stage_II_GO  <-names(V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_II$SYMBOL)])
+stage_III_GO <-names(V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_III$SYMBOL)])
+
+stage_I_Reactome   <-names(V(graph_all_stages_Reactome)[which(names(V(graph_all_stages_Reactome)) %in% ids_stage_I$SYMBOL)])
+stage_II_Reactome  <-names(V(graph_all_stages_Reactome)[which(names(V(graph_all_stages_Reactome)) %in% ids_stage_II$SYMBOL)])
+stage_III_Reactome <-names(V(graph_all_stages_Reactome)[which(names(V(graph_all_stages_Reactome)) %in% ids_stage_III$SYMBOL)])
+
+names(V(graph_all_stages_KEGG)) %in% c(stage_I,stage_II,stage_III)
+length(names(V(graph_all_stages_KEGG)) %in% c(stage_I,stage_II,stage_III))
+names(V(graph_all_stages_KEGG))[!names(V(graph_all_stages_KEGG)) %in% c(stage_I,stage_II,stage_III)]
 
 
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_I$SYMBOL)]$color       <- "#619CFF"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_II$SYMBOL)]$color      <- "#009E73"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_III$SYMBOL)]$color     <- "#D81B60"
+V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_I$SYMBOL)]$color       <- "#619CFF"
+V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_II$SYMBOL)]$color      <- "#009E73"
+V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_III$SYMBOL)]$color     <- "#D81B60"
 
 # Vertice colours of genes
-V(graph_all_stages)$shape                                                                                                                                                                                      <-"circle"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in%  df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$shape              <- "square"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in%  df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])]$shape      <- "square"
+V(graph_all_stages_KEGG)$shape                                                                                                                                                                                      <-"circle"
+V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in%  df_all_annotation_selected_KEGG[df_all_annotation_selected_KEGG$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$shape              <- "square"
+V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in%  df_all_annotation_selected_KEGG[df_all_annotation_selected_KEGG$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])]$shape      <- "square"
 
 # Set size of the node according to the dregree
-V(graph_all_stages)$size                                                                                                                                                                                       <- 12
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])]$size        <- 15
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$size                <- 15
+V(graph_all_stages_KEGG)$size                                                                                                                                                                                       <- 12
+V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% df_all_annotation_selected_KEGG[df_all_annotation_selected_KEGG$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])]$size        <- 15
+V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% df_all_annotation_selected_KEGG[df_all_annotation_selected_KEGG$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$size                <- 15
 
 # Vertice colours of genes
-E(graph_all_stages)$color                                                                         <- "lightgrey"
+E(graph_all_stages_KEGG)$color                                                                         <- "lightgrey"
 
 # Set ronames
-E(graph_all_stages)[which(df_all_eges$names %in% selected_interactome)]$color                     <- "black"
-E(graph_all_stages)[which(df_all_eges$names %in% selected_coexpression)]$color                    <- "darkblue"
+E(graph_all_stages_KEGG)[which(df_all_eges_KEGG$names %in% selected_interactome)]$color                     <- "black"
+E(graph_all_stages_KEGG)[which(df_all_eges_KEGG$names %in% selected_coexpression)]$color                    <- "darkblue"
 
 # Set size of the node according to the dregree
-V(graph_all_stages)$label                                                                                                                                                                                      <- ""
-V(graph_all_stages)[names(V(graph_all_stages)) %in% rownames(id_symbol_conversion)]$label <- id_symbol_conversion[rownames(id_symbol_conversion) %in% names(V(graph_all_stages)),"id"]
-V(graph_all_stages)[names(V(graph_all_stages)) %in% rownames(matrix_count_terms_selected_all)]$label <- matrix_count_terms_selected_all[rownames(matrix_count_terms_selected_all) %in% names(V(graph_all_stages)),"Letter"]
-V(graph_all_stages)[names(V(graph_all_stages)) %in% rownames(matrix_count_terms_selected_all)]$label.cex <- 0.70
-
+V(graph_all_stages_KEGG)$label                                                                                                                                                                                      <- ""
+V(graph_all_stages_KEGG)[names(V(graph_all_stages_KEGG)) %in% rownames(id_symbol_conversion)]$label <- id_symbol_conversion[rownames(id_symbol_conversion) %in% names(V(graph_all_stages_KEGG)),"id"]
+V(graph_all_stages_KEGG)[names(V(graph_all_stages_KEGG)) %in% rownames(matrix_count_terms_selected_all)]$label <- matrix_count_terms_selected_all[rownames(matrix_count_terms_selected_all) %in% names(V(graph_all_stages_KEGG)),"Letter"]
+V(graph_all_stages_KEGG)[names(V(graph_all_stages_KEGG)) %in% rownames(matrix_count_terms_selected_all)]$label.cex <- 0.70
+###########################################################################
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge_KEGG.png",sep=""), width = 30, height = 30, res=600, units = "cm")
-	plot(graph_all_stages, layout=   layout_with_dh,vertex.label=V(graph_all_stages)$label, vertex.label.color="black" ) # Stage II
-	plot(graph_all_stages, layout=   layout_with_fr,vertex.label=V(graph_all_stages)$label, vertex.label.color="black" ) # Stage II
+	plot(graph_all_stages_KEGG, layout=   layout_with_dh,vertex.label=V(graph_all_stages_KEGG)$label, vertex.label.color="black" ) # Stage II
+	plot(graph_all_stages_KEGG, layout=   layout_with_fr,vertex.label=V(graph_all_stages_KEGG)$label, vertex.label.color="black" ) # Stage II
 dev.off()
-#tkplot(graph_all_stages, layout=   layout_nicely,vertex.label=V(graph_all_stages)$label, vertex.label.color="black")
-#tkplot(graph_all_stages)
-
-
+#tkplot(graph_all_stages_KEGG, layout=   layout_nicely,vertex.label=V(graph_all_stages_KEGG)$label, vertex.label.color="black")
+#tkplot(graph_all_stages_KEGG)
 ###########################################################################
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_Stage_label.png",sep=""), width = 30, height = 30, res=600, units = "cm")
-	#plot(graph_all_stages, layout=layout_nicely) # Stage I
-	#plot(graph_all_stages, layout=  layout_with_kk) # Stage II
-	plot(graph_all_stages, layout=   layout_nicely) # Stage II
+	#plot(graph_all_stages_KEGG, layout=layout_nicely) # Stage I
+	#plot(graph_all_stages_KEGG, layout=  layout_with_kk) # Stage II
+	plot(graph_all_stages_KEGG, layout=   layout_nicely) # Stage II
 dev.off()
 
 
 # Save file 
-write.xlsx(x=df_all_annotation_selected_pathways,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="ten most abundant per stage", append=TRUE)
+write.xlsx(x=df_all_annotation_selected_KEGG,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="ten most abundant per stage", append=TRUE)
 
 # Set legend
 png(filename=paste(output_folder,"legend.png",sep=""), width = 5, height = 5, res=600, units = "cm")

@@ -194,7 +194,25 @@ write.xlsx(x=df_count_terms_selected_GO,file=paste(output_dir,"unique_genes_anno
 write.xlsx(x=df_count_terms_selected_KEGG,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="KEGG terms", append=TRUE)
 write.xlsx(x=df_count_terms_selected_Reactome,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="Reactome terms", append=TRUE)
 ####################################################################################################################
+# A table for the count of go terms
+df_all_annotation_per_stage_I     <-df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage I",]
+df_all_annotation_per_stage_II    <-df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage II",]
+df_all_annotation_per_stage_III   <-df_all_annotation_per_stage[df_all_annotation_per_stage$Stage=="Stage III",]
+
+table_GO_Stage_I   <- table(df_all_annotation_per_stage_I[df_all_annotation_per_stage_I$CluterProfiler %in% rownames(df_count_terms_selected_GO),"CluterProfiler"])
+table_GO_Stage_II  <- table(df_all_annotation_per_stage_II[df_all_annotation_per_stage_II$CluterProfiler %in% rownames(df_count_terms_selected_GO),"CluterProfiler"])
+table_GO_Stage_III <- table(df_all_annotation_per_stage_III[df_all_annotation_per_stage_III$CluterProfiler %in% rownames(df_count_terms_selected_GO),"CluterProfiler"])
+
+table_KEGG_Stage_I   <- table(df_all_annotation_per_stage_I[df_all_annotation_per_stage_I$CluterProfiler %in% rownames(df_count_terms_selected_KEGG),"CluterProfiler"])
+table_KEGG_Stage_II  <- table(df_all_annotation_per_stage_II[df_all_annotation_per_stage_II$CluterProfiler %in% rownames(df_count_terms_selected_KEGG),"CluterProfiler"])
+table_KEGG_Stage_III <- table(df_all_annotation_per_stage_III[df_all_annotation_per_stage_III$CluterProfiler %in% rownames(df_count_terms_selected_KEGG),"CluterProfiler"])
+
+table_Reactome_Stage_I   <- table(df_all_annotation_per_stage_I[df_all_annotation_per_stage_I$CluterProfiler %in% rownames(df_count_terms_selected_Reactome),"CluterProfiler"])
+table_Reactome_Stage_II  <- table(df_all_annotation_per_stage_II[df_all_annotation_per_stage_II$CluterProfiler %in% rownames(df_count_terms_selected_Reactome),"CluterProfiler"])
+table_Reactome_Stage_III <- table(df_all_annotation_per_stage_III[df_all_annotation_per_stage_III$CluterProfiler %in% rownames(df_count_terms_selected_Reactome),"CluterProfiler"])
+####################################################################################################################
 # Remove empty line
+library("amap")
 # Select top 10 terms                                                                                                                                                            #
 selection_GO       <-unique(c(names(tail(sort(table_GO_Stage_I),n=10)),names(tail(sort(table_GO_Stage_II),n=10)),names(tail(sort(table_GO_Stage_III),n=10))))                    #
 selection_Reactome <-unique(c(names(tail(sort(table_Reactome_Stage_I),n=10)),names(tail(sort(table_Reactome_Stage_II),n=10)),names(tail(sort(table_Reactome_Stage_III),n=10))))  #
@@ -212,38 +230,13 @@ reactome_order<-hcluster(matrix_count_terms_selected_Reactome[,c("Stage_I_norm",
 matrix_count_terms_selected_GO  <-matrix_count_terms_selected_GO[go_order,]
 matrix_count_terms_selected_KEGG<-matrix_count_terms_selected_KEGG[kegg_order,]
 matrix_count_terms_selected_Reactome<-matrix_count_terms_selected_Reactome[reactome_order,]
-####################################################################################################################
-matrix_count_terms_selected_GO$Letter<-paste("GO",1:length(go_order),sep="")
-matrix_count_terms_selected_KEGG$Letter<-paste("KEGG",1:length(kegg_order),sep="")
-matrix_count_terms_selected_Reactome$Letter<-paste("Reactome",1:length(reactome_order),sep="")
-####################################################################################################################
-# Take all the genes all together and number them
-all_genes_lists<-c(c(matrix_count_terms_selected_GO$Genes_Stage_I, matrix_count_terms_selected_GO$Genes_Stage_II, matrix_count_terms_selected_GO$Genes_Stage_III),
-c(matrix_count_terms_selected_KEGG$Genes_Stage_I, matrix_count_terms_selected_KEGG$Genes_Stage_II, matrix_count_terms_selected_KEGG$Genes_Stage_III),
-c(matrix_count_terms_selected_Reactome$Genes_Stage_I, matrix_count_terms_selected_Reactome$Genes_Stage_II, matrix_count_terms_selected_Reactome$Genes_Stage_III))
 
-# Filter out empty lists
-all_genes_lists<-all_genes_lists[all_genes_lists !=""]
+# merge table
+matrix_count_terms_selected_all<-rbind(matrix_count_terms_selected_GO, matrix_count_terms_selected_KEGG, matrix_count_terms_selected_Reactome)
 
-# Take all ids
-id_symbol_conversion<-data.frame(Symbol=unique(unlist(strsplit(x=all_genes_lists,split=", ",fixed=T))),id=0)
-
-# Take all ids in order
-id_symbol_conversion$id<-1:dim(id_symbol_conversion)[1]
-
-# Take id_symbol_conversion
-id_symbol_conversion$Letter<-paste(id_symbol_conversion$Symbol,"(",id_symbol_conversion$id,")",sep="")
-
-# Set rownames
-rownames(id_symbol_conversion)<-id_symbol_conversion$Symbol
-
-# matrix_count_terms_selected
-matrix_count_terms_selected_all<-rbind(matrix_count_terms_selected_GO,matrix_count_terms_selected_KEGG,matrix_count_terms_selected_Reactome)
-
-# Set str
-matrix_count_terms_selected_all$Genes_Stage_str_I   <- ""
-matrix_count_terms_selected_all$Genes_Stage_str_II  <- ""
-matrix_count_terms_selected_all$Genes_Stage_str_III <- ""
+matrix_count_terms_selected_all$Genes_Stage_str_I   <-""
+matrix_count_terms_selected_all$Genes_Stage_str_II  <-""
+matrix_count_terms_selected_all$Genes_Stage_str_III <-""
 
 # For each of the terms, replace the string by the id-symbol 
 for (term in rownames(matrix_count_terms_selected_all))

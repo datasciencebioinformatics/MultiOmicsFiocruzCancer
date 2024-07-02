@@ -232,6 +232,10 @@ matrix_count_terms_selected_KEGG<-matrix_count_terms_selected_KEGG[kegg_order,]
 matrix_count_terms_selected_Reactome<-matrix_count_terms_selected_Reactome[reactome_order,]
 
 ####################################################################################################################
+matrix_count_terms_selected_GO$Letter<-paste("GO",1:length(go_order),sep="")
+matrix_count_terms_selected_KEGG$Letter<-paste("KEGG",1:length(kegg_order),sep="")
+matrix_count_terms_selected_Reactome$Letter<-paste("Reactome",1:length(reactome_order),sep="")
+
 # Take all the genes all together and number them
 all_genes_lists<-c(c(matrix_count_terms_selected_GO$Genes_Stage_I, matrix_count_terms_selected_GO$Genes_Stage_II, matrix_count_terms_selected_GO$Genes_Stage_III),
 c(matrix_count_terms_selected_KEGG$Genes_Stage_I, matrix_count_terms_selected_KEGG$Genes_Stage_II, matrix_count_terms_selected_KEGG$Genes_Stage_III),
@@ -346,10 +350,8 @@ png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge_KEGG.png",sep=""), w
 	#plot(graph_all_stages, layout=   layout_nicely, vertex.label=V(graph_all_stages)$labels) # Stage II
 	plot(graph_all_stages, layout=   layout_nicely,vertex.label=V(graph_all_stages)$label, vertex.label.color="black" ) # Stage II
 dev.off()
-
-tkplot(graph_all_stages, layout=   layout_nicely,vertex.label=V(graph_all_stages)$label, vertex.label.color="black")
-
-tkplot(graph_all_stages)
+#tkplot(graph_all_stages, layout=   layout_nicely,vertex.label=V(graph_all_stages)$label, vertex.label.color="black")
+#tkplot(graph_all_stages)
 
 
 ###########################################################################

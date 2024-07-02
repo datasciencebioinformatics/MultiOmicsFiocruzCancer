@@ -292,10 +292,75 @@ write.xlsx(x=matrix_count_terms_selected_GO,file=paste(output_dir,"unique_genes_
 write.xlsx(x=matrix_count_terms_selected_KEGG,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected KEGG", append=TRUE)
 write.xlsx(x=matrix_count_terms_selected_Reactome,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected Reactome", append=TRUE)
 ####################################################################################################################
+stage_GO_I   <-rownames(matrix_count_terms_selected_GO[matrix_count_terms_selected_GO$Stage_I>0,])
+stage_GO_II  <-rownames(matrix_count_terms_selected_GO[matrix_count_terms_selected_GO$Stage_II>0,])
+stage_GO_III <-rownames(matrix_count_terms_selected_GO[matrix_count_terms_selected_GO$Stage_III>0,])
+
+stage_KEGG_I   <-rownames(matrix_count_terms_selected_KEGG[matrix_count_terms_selected_KEGG$Stage_I>0,])
+stage_KEGG_II  <-rownames(matrix_count_terms_selected_KEGG[matrix_count_terms_selected_KEGG$Stage_II>0,])
+stage_KEGG_III <-rownames(matrix_count_terms_selected_KEGG[matrix_count_terms_selected_KEGG$Stage_III>0,])
+
+stage_Reactome_I   <-rownames(matrix_count_terms_selected_Reactome[matrix_count_terms_selected_Reactome$Stage_I>0,])
+stage_Reactome_II  <-rownames(matrix_count_terms_selected_Reactome[matrix_count_terms_selected_Reactome$Stage_II>0,])
+stage_Reactome_III <-rownames(matrix_count_terms_selected_Reactome[matrix_count_terms_selected_Reactome$Stage_III>0,])
+
+stage_I_unique_GO   <-setdiff(stage_GO_I,c(stage_GO_II,stage_GO_III))
+stage_II_unique_GO  <-setdiff(stage_GO_II,c(stage_GO_I,stage_GO_III))
+stage_III_unique_GO <-setdiff(stage_GO_III,c(stage_GO_I,stage_GO_II))
+
+stage_I_unique_KEGG   <-setdiff(stage_KEGG_I,c(stage_KEGG_II,stage_KEGG_III))
+stage_II_unique_KEGG  <-setdiff(stage_KEGG_II,c(stage_KEGG_I,stage_KEGG_III))
+stage_III_unique_KEGG <-setdiff(stage_KEGG_III,c(stage_KEGG_I,stage_KEGG_II))
+
+stage_I_unique_Reactome   <-setdiff(stage_Reactome_I,c(stage_Reactome_II,stage_Reactome_III))
+stage_II_unique_Reactome  <-setdiff(stage_Reactome_II,c(stage_Reactome_I,stage_Reactome_III))
+stage_III_unique_Reactome <-setdiff(stage_Reactome_III,c(stage_Reactome_I,stage_Reactome_II))
+
+matrix_count_terms_selected_GO_only_stages_I  <-matrix_count_terms_selected_GO[stage_I_unique_GO,c("Letter","Genes_Stage_str_I")]
+matrix_count_terms_selected_GO_only_stages_II <-matrix_count_terms_selected_GO[stage_II_unique_GO,c("Letter","Genes_Stage_str_II")]
+matrix_count_terms_selected_GO_only_stages_III<- matrix_count_terms_selected_GO[stage_III_unique_GO,c("Letter","Genes_Stage_str_III")]
+
+matrix_count_terms_selected_KEGG_only_stages_I  <-matrix_count_terms_selected_KEGG[stage_I_unique_KEGG,c("Letter","Genes_Stage_str_I")]
+matrix_count_terms_selected_KEGG_only_stages_II <-matrix_count_terms_selected_KEGG[stage_II_unique_KEGG,c("Letter","Genes_Stage_str_II")]
+matrix_count_terms_selected_KEGG_only_stages_III<- matrix_count_terms_selected_KEGG[stage_III_unique_KEGG,c("Letter","Genes_Stage_str_III")]
+
+matrix_count_terms_selected_Reactome_only_stages_I  <-matrix_count_terms_selected_Reactome[stage_I_unique_Reactome,c("Letter","Genes_Stage_str_I")]
+matrix_count_terms_selected_Reactome_only_stages_II <-matrix_count_terms_selected_Reactome[stage_II_unique_Reactome,c("Letter","Genes_Stage_str_II")]
+matrix_count_terms_selected_Reactome_only_stages_III<- matrix_count_terms_selected_Reactome[stage_III_unique_Reactome,c("Letter","Genes_Stage_str_III")]
+
+colnames(matrix_count_terms_selected_GO_only_stages_I)<-c("Letter","Genes_Stage_str")
+colnames(matrix_count_terms_selected_GO_only_stages_II)<-c("Letter","Genes_Stage_str")
+colnames(matrix_count_terms_selected_GO_only_stages_III)<-c("Letter","Genes_Stage_str")
+
+colnames(matrix_count_terms_selected_KEGG_only_stages_I)<-c("Letter","Genes_Stage_str")
+colnames(matrix_count_terms_selected_KEGG_only_stages_II)<-c("Letter","Genes_Stage_str")
+colnames(matrix_count_terms_selected_KEGG_only_stages_III)<-c("Letter","Genes_Stage_str")
+
+colnames(matrix_count_terms_selected_Reactome_only_stages_I)<-c("Letter","Genes_Stage_str")
+colnames(matrix_count_terms_selected_Reactome_only_stages_II)<-c("Letter","Genes_Stage_str")
+colnames(matrix_count_terms_selected_Reactome_only_stages_III)<-c("Letter","Genes_Stage_str")
+
+matrix_count_terms_selected_GO_only_stages_I$Stage <-"Stage I"
+matrix_count_terms_selected_GO_only_stages_II$Stage<-"Stage II"
+matrix_count_terms_selected_GO_only_stages_III$Stage<-"Stage III"
+
+matrix_count_terms_selected_KEGG_only_stages_I$Stage <-"Stage I"
+matrix_count_terms_selected_KEGG_only_stages_II$Stage<-"Stage II"
+matrix_count_terms_selected_KEGG_only_stages_III$Stage<-"Stage III"
+
+matrix_count_terms_selected_Reactome_only_stages_I$Stage <-"Stage I"
+matrix_count_terms_selected_Reactome_only_stages_II$Stage<-"Stage II"
+matrix_count_terms_selected_Reactome_only_stages_III$Stage<-"Stage III"
 
 
+matrix_count_terms_selected_GO_selected_stages<-rbind(matrix_count_terms_selected_GO_only_stages_I,matrix_count_terms_selected_GO_only_stages_II,matrix_count_terms_selected_GO_only_stages_III)
+matrix_count_terms_selected_KEGG_selected_stages<-rbind(matrix_count_terms_selected_KEGG_only_stages_I,matrix_count_terms_selected_KEGG_only_stages_II,matrix_count_terms_selected_KEGG_only_stages_III)
+matrix_count_terms_selected_Reactome_selected_stages<-rbind(matrix_count_terms_selected_Reactome_only_stages_I,matrix_count_terms_selected_Reactome_only_stages_II,matrix_count_terms_selected_Reactome_only_stages_III)
 
 
+write.xlsx(x=matrix_count_terms_selected_GO_selected_stages,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="GO stage-wise", append=FALSE)
+write.xlsx(x=matrix_count_terms_selected_KEGG_selected_stages,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="KEGG stage-wise", append=TRUE)
+write.xlsx(x=matrix_count_terms_selected_Reactome_selected_stages,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="Reactome stage-wise", append=TRUE)
 
 
 
@@ -360,17 +425,17 @@ names(V(graph_all_stages_KEGG))[!names(V(graph_all_stages_KEGG)) %in% c(stage_I,
 names(V(graph_all_stages_GO))[!names(V(graph_all_stages_GO)) %in% c(stage_I,stage_II,stage_III)]
 names(V(graph_all_stages_Reactome))[!names(V(graph_all_stages_Reactome)) %in% c(stage_I,stage_II,stage_III)]
 
-V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_I$SYMBOL)]$color       <- "#619CFF"
-V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_II$SYMBOL)]$color      <- "#009E73"
-V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_III$SYMBOL)]$color     <- "#D81B60"
+V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_I$SYMBOL)]$color       <- "#e8f2a1"
+V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_II$SYMBOL)]$color      <- "#729fcf"
+V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_III$SYMBOL)]$color     <- "#ffaa95"
 
-V(graph_all_stages_GO)[which(names(V(graph_all_stages_GO)) %in% ids_stage_I$SYMBOL)]$color       <- "#619CFF"
-V(graph_all_stages_GO)[which(names(V(graph_all_stages_GO)) %in% ids_stage_II$SYMBOL)]$color      <- "#009E73"
-V(graph_all_stages_GO)[which(names(V(graph_all_stages_GO)) %in% ids_stage_III$SYMBOL)]$color     <- "#D81B60"
+V(graph_all_stages_GO)[which(names(V(graph_all_stages_GO)) %in% ids_stage_I$SYMBOL)]$color       <- "#e8f2a1"
+V(graph_all_stages_GO)[which(names(V(graph_all_stages_GO)) %in% ids_stage_II$SYMBOL)]$color      <- "#729fcf"
+V(graph_all_stages_GO)[which(names(V(graph_all_stages_GO)) %in% ids_stage_III$SYMBOL)]$color     <- "#ffaa95"
 
-V(graph_all_stages_Reactome)[which(names(V(graph_all_stages_Reactome)) %in% ids_stage_I$SYMBOL)]$color       <- "#619CFF"
-V(graph_all_stages_Reactome)[which(names(V(graph_all_stages_Reactome)) %in% ids_stage_II$SYMBOL)]$color      <- "#009E73"
-V(graph_all_stages_Reactome)[which(names(V(graph_all_stages_Reactome)) %in% ids_stage_III$SYMBOL)]$color     <- "#D81B60"
+V(graph_all_stages_Reactome)[which(names(V(graph_all_stages_Reactome)) %in% ids_stage_I$SYMBOL)]$color       <- "#e8f2a1"
+V(graph_all_stages_Reactome)[which(names(V(graph_all_stages_Reactome)) %in% ids_stage_II$SYMBOL)]$color      <- "#729fcf"
+V(graph_all_stages_Reactome)[which(names(V(graph_all_stages_Reactome)) %in% ids_stage_III$SYMBOL)]$color     <- "#ffaa95"
 
 # Vertice colours of genes
 V(graph_all_stages_KEGG)$shape                                                                                                                                                                            <-"circle"

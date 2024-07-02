@@ -216,15 +216,66 @@ matrix_count_terms_selected_Reactome<-matrix_count_terms_selected_Reactome[react
 matrix_count_terms_selected_GO$Letter<-paste("GO",1:length(go_order),sep="")
 matrix_count_terms_selected_KEGG$Letter<-paste("KEGG",1:length(kegg_order),sep="")
 matrix_count_terms_selected_Reactome$Letter<-paste("Reactome",1:length(reactome_order),sep="")
+####################################################################################################################
+# Take all the genes all together and number them
+all_genes_lists<-c(c(matrix_count_terms_selected_GO$Genes_Stage_I, matrix_count_terms_selected_GO$Genes_Stage_II, matrix_count_terms_selected_GO$Genes_Stage_III),
+c(matrix_count_terms_selected_KEGG$Genes_Stage_I, matrix_count_terms_selected_KEGG$Genes_Stage_II, matrix_count_terms_selected_KEGG$Genes_Stage_III),
+c(matrix_count_terms_selected_Reactome$Genes_Stage_I, matrix_count_terms_selected_Reactome$Genes_Stage_II, matrix_count_terms_selected_Reactome$Genes_Stage_III))
 
+# Filter out empty lists
+all_genes_lists<-all_genes_lists[all_genes_lists !=""]
+
+# Take all ids
+id_symbol_conversion<-data.frame(Symbol=unique(unlist(strsplit(x=all_genes_lists,split=", ",fixed=T))),id=0)
+
+# Take all ids in order
+id_symbol_conversion$id<-1:dim(id_symbol_conversion)[1]
+
+# Take id_symbol_conversion
+id_symbol_conversion$Letter<-paste(id_symbol_conversion$Symbol,"(",id_symbol_conversion$id,")",sep="")
+
+# Set rownames
+rownames(id_symbol_conversion)<-id_symbol_conversion$Symbol
+
+# matrix_count_terms_selected
+matrix_count_terms_selected_all<-rbind(matrix_count_terms_selected_GO,matrix_count_terms_selected_KEGG,matrix_count_terms_selected_Reactome)
+
+# Set str
+matrix_count_terms_selected_all$Genes_Stage_str_I   <- ""
+matrix_count_terms_selected_all$Genes_Stage_str_II  <- ""
+matrix_count_terms_selected_all$Genes_Stage_str_III <- ""
+
+# For each of the terms, replace the string by the id-symbol 
+for (term in rownames(matrix_count_terms_selected_all))
+{
+	# Take the genes of this term
+	Genes_Stage_str_I   <-matrix_count_terms_selected_all[term,"Genes_Stage_I"]
+	Genes_Stage_str_II  <-matrix_count_terms_selected_all[term,"Genes_Stage_II"]
+	Genes_Stage_str_III <-matrix_count_terms_selected_all[term,"Genes_Stage_III"]
+	
+	# for each line of the conversion data.frame
+	for (gene_symbols in rownames(id_symbol_conversion))
+	{		
+		Genes_Stage_str_I<-gsub(gene_symbols, id_symbol_conversion[gene_symbols,"Letter"], Genes_Stage_str_I)
+		Genes_Stage_str_II<-gsub(gene_symbols, id_symbol_conversion[gene_symbols,"Letter"], Genes_Stage_str_II)
+		Genes_Stage_str_III<-gsub(gene_symbols, id_symbol_conversion[gene_symbols,"Letter"], Genes_Stage_str_III)
+	}	
+	matrix_count_terms_selected_all[term,"Genes_Stage_str_I"]<-Genes_Stage_str_I
+	matrix_count_terms_selected_all[term,"Genes_Stage_str_II"]<-Genes_Stage_str_II
+	matrix_count_terms_selected_all[term,"Genes_Stage_str_III"]<-Genes_Stage_str_III	
+}
+matrix_count_terms_selected_GO<-matrix_count_terms_selected_all[go_order,]
+matrix_count_terms_selected_KEGG<-matrix_count_terms_selected_all[kegg_order,]
+matrix_count_terms_selected_Reactome<-matrix_count_terms_selected_all[reactome_order,]
+####################################################################################################################
+####################################################################################################################
 # Save file 
 write.xlsx(x=matrix_count_terms_selected_GO,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected GO", append=TRUE)
 write.xlsx(x=matrix_count_terms_selected_KEGG,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected KEGG", append=TRUE)
 write.xlsx(x=matrix_count_terms_selected_Reactome,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected Reactome", append=TRUE)
 ####################################################################################################################
 # Concatenate table
-df_all_annotation_selected_pathways<-rbind(df_all_annotation[which(df_all_annotation$CluterProfiler %in% go_order),],
-interactome_annotation_stage,coexpression_annotation)
+df_all_annotation_selected_pathways<-df_all_annotation[which(df_all_annotation$CluterProfiler %in% kegg_order),]
 ####################################################################################################################
 # All stages
 graph_all_stages <- graph_from_data_frame(d=unique(df_all_annotation_selected_pathways[,c("Symbol","CluterProfiler")]), vertices=unique(c(df_all_annotation_selected_pathways$Symbol,df_all_annotation_selected_pathways$CluterProfiler)), directed=F)  
@@ -236,8 +287,8 @@ df_all_eges<-data.frame(get.edgelist(graph_all_stages))
 df_all_eges$names<-paste(df_all_eges$X1,df_all_eges$X2,sep="-")
 ####################################################################################################################
 # Vertice colours of genes
-V(graph_all_stages)$color                                                                                                  <- "black"
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways$CluterProfiler)]$color       <- "black"
+V(graph_all_stages)$color                                                                                                  <- "grey"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways$CluterProfiler)]$color       <- "grey"
 
 stage_I   <-names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_I$SYMBOL)])
 stage_II  <-names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_II$SYMBOL)])
@@ -258,9 +309,9 @@ V(graph_all_stages)[which(names(V(graph_all_stages)) %in%  df_all_annotation_sel
 V(graph_all_stages)[which(names(V(graph_all_stages)) %in%  df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])]$shape      <- "square"
 
 # Set size of the node according to the dregree
-V(graph_all_stages)$size                                                                                                                                                                                       <- 5
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])]$size        <- 7
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$size                <- 7
+V(graph_all_stages)$size                                                                                                                                                                                       <- 12
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])]$size        <- 15
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$size                <- 15
 
 # Vertice colours of genes
 E(graph_all_stages)$color                                                                         <- "lightgrey"
@@ -269,23 +320,22 @@ E(graph_all_stages)$color                                                       
 E(graph_all_stages)[which(df_all_eges$names %in% selected_interactome)]$color                     <- "black"
 E(graph_all_stages)[which(df_all_eges$names %in% selected_coexpression)]$color                    <- "darkblue"
 
-
 # Set size of the node according to the dregree
 V(graph_all_stages)$label                                                                                                                                                                                      <- ""
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])]$label        <- names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("Ontology","Disease","Pathway"),"CluterProfiler"])])
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$label                <- names(V(graph_all_stages)[which(names(V(graph_all_stages)) %in% df_all_annotation_selected_pathways[df_all_annotation_selected_pathways$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])])
+V(graph_all_stages)[names(V(graph_all_stages)) %in% rownames(id_symbol_conversion)]$label <- id_symbol_conversion[rownames(id_symbol_conversion) %in% names(V(graph_all_stages)),"id"]
+V(graph_all_stages)[names(V(graph_all_stages)) %in% rownames(matrix_count_terms_selected_all)]$label <- matrix_count_terms_selected_all[rownames(matrix_count_terms_selected_all) %in% names(V(graph_all_stages)),"Letter"]
 
 # FindClusters_resolution
-png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge.png",sep=""), width = 30, height = 30, res=600, units = "cm")
+png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge_KEGG.png",sep=""), width = 30, height = 30, res=600, units = "cm")
 	#plot(graph_all_stages, layout=layout_nicely, vertex.label=NA) # Stage I
 	#plot(graph_all_stages, layout=  layout_with_kk, vertex.label=NA) # Stage II
 	#plot(graph_all_stages, layout=   layout_nicely, vertex.label=V(graph_all_stages)$labels) # Stage II
-	plot(graph_all_stages, layout=   layout_nicely,vertex.label=V(graph_all_stages)$label, edge.colour=NA ) # Stage II
+	plot(graph_all_stages, layout=   layout_nicely,vertex.label=V(graph_all_stages)$label, vertex.label.color="black" ) # Stage II
 dev.off()
 
+tkplot(graph_all_stages, layout=   layout_nicely,vertex.label=V(graph_all_stages)$label, vertex.label.color="black")
 
-
-
+tkplot(graph_all_stages)
 
 
 ###########################################################################

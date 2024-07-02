@@ -317,7 +317,7 @@ length(names(V(graph_all_stages)) %in% c(stage_I,stage_II,stage_III))
 names(V(graph_all_stages))[!names(V(graph_all_stages)) %in% c(stage_I,stage_II,stage_III)]
 
 
-V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_I$SYMBOL)]$color       <- "#E69F00"
+V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_I$SYMBOL)]$color       <- "#619CFF"
 V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_II$SYMBOL)]$color      <- "#009E73"
 V(graph_all_stages)[which(names(V(graph_all_stages)) %in% ids_stage_III$SYMBOL)]$color     <- "#D81B60"
 
@@ -342,13 +342,12 @@ E(graph_all_stages)[which(df_all_eges$names %in% selected_coexpression)]$color  
 V(graph_all_stages)$label                                                                                                                                                                                      <- ""
 V(graph_all_stages)[names(V(graph_all_stages)) %in% rownames(id_symbol_conversion)]$label <- id_symbol_conversion[rownames(id_symbol_conversion) %in% names(V(graph_all_stages)),"id"]
 V(graph_all_stages)[names(V(graph_all_stages)) %in% rownames(matrix_count_terms_selected_all)]$label <- matrix_count_terms_selected_all[rownames(matrix_count_terms_selected_all) %in% names(V(graph_all_stages)),"Letter"]
+V(graph_all_stages)[names(V(graph_all_stages)) %in% rownames(matrix_count_terms_selected_all)]$label.cex <- 0.70
 
 # FindClusters_resolution
 png(filename=paste(output_folder,"Plot_Stage_all_per_Stagge_KEGG.png",sep=""), width = 30, height = 30, res=600, units = "cm")
-	#plot(graph_all_stages, layout=layout_nicely, vertex.label=NA) # Stage I
-	#plot(graph_all_stages, layout=  layout_with_kk, vertex.label=NA) # Stage II
-	#plot(graph_all_stages, layout=   layout_nicely, vertex.label=V(graph_all_stages)$labels) # Stage II
-	plot(graph_all_stages, layout=   layout_nicely,vertex.label=V(graph_all_stages)$label, vertex.label.color="black" ) # Stage II
+	plot(graph_all_stages, layout=   layout_with_dh,vertex.label=V(graph_all_stages)$label, vertex.label.color="black" ) # Stage II
+	plot(graph_all_stages, layout=   layout_with_fr,vertex.label=V(graph_all_stages)$label, vertex.label.color="black" ) # Stage II
 dev.off()
 #tkplot(graph_all_stages, layout=   layout_nicely,vertex.label=V(graph_all_stages)$label, vertex.label.color="black")
 #tkplot(graph_all_stages)

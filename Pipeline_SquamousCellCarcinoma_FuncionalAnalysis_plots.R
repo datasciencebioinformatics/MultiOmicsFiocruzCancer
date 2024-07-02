@@ -288,10 +288,10 @@ matrix_count_terms_selected_KEGG<-matrix_count_terms_selected_all[kegg_order,]
 matrix_count_terms_selected_Reactome<-matrix_count_terms_selected_all[reactome_order,]
 ####################################################################################################################
 # Save file 
-write.xlsx(x=matrix_count_terms_selected_GO,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected GO", append=TRUE)
+write.xlsx(x=matrix_count_terms_selected_GO,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected GO", append=FALSE)
 write.xlsx(x=matrix_count_terms_selected_KEGG,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected KEGG", append=TRUE)
 write.xlsx(x=matrix_count_terms_selected_Reactome,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected Reactome", append=TRUE)
-
+####################################################################################################################
 
 
 

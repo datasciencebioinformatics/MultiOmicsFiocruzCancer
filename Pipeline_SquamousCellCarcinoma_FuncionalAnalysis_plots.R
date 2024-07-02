@@ -231,12 +231,34 @@ matrix_count_terms_selected_GO  <-matrix_count_terms_selected_GO[go_order,]
 matrix_count_terms_selected_KEGG<-matrix_count_terms_selected_KEGG[kegg_order,]
 matrix_count_terms_selected_Reactome<-matrix_count_terms_selected_Reactome[reactome_order,]
 
-# merge table
-matrix_count_terms_selected_all<-rbind(matrix_count_terms_selected_GO, matrix_count_terms_selected_KEGG, matrix_count_terms_selected_Reactome)
+####################################################################################################################
+# Take all the genes all together and number them
+all_genes_lists<-c(c(matrix_count_terms_selected_GO$Genes_Stage_I, matrix_count_terms_selected_GO$Genes_Stage_II, matrix_count_terms_selected_GO$Genes_Stage_III),
+c(matrix_count_terms_selected_KEGG$Genes_Stage_I, matrix_count_terms_selected_KEGG$Genes_Stage_II, matrix_count_terms_selected_KEGG$Genes_Stage_III),
+c(matrix_count_terms_selected_Reactome$Genes_Stage_I, matrix_count_terms_selected_Reactome$Genes_Stage_II, matrix_count_terms_selected_Reactome$Genes_Stage_III))
 
-matrix_count_terms_selected_all$Genes_Stage_str_I   <-""
-matrix_count_terms_selected_all$Genes_Stage_str_II  <-""
-matrix_count_terms_selected_all$Genes_Stage_str_III <-""
+# Filter out empty lists
+all_genes_lists<-all_genes_lists[all_genes_lists !=""]
+
+# Take all ids
+id_symbol_conversion<-data.frame(Symbol=unique(unlist(strsplit(x=all_genes_lists,split=", ",fixed=T))),id=0)
+
+# Take all ids in order
+id_symbol_conversion$id<-1:dim(id_symbol_conversion)[1]
+
+# Take id_symbol_conversion
+id_symbol_conversion$Letter<-paste(id_symbol_conversion$Symbol,"(",id_symbol_conversion$id,")",sep="")
+
+# Set rownames
+rownames(id_symbol_conversion)<-id_symbol_conversion$Symbol
+
+# matrix_count_terms_selected
+matrix_count_terms_selected_all<-rbind(matrix_count_terms_selected_GO,matrix_count_terms_selected_KEGG,matrix_count_terms_selected_Reactome)
+
+# Set str
+matrix_count_terms_selected_all$Genes_Stage_str_I   <- ""
+matrix_count_terms_selected_all$Genes_Stage_str_II  <- ""
+matrix_count_terms_selected_all$Genes_Stage_str_III <- ""
 
 # For each of the terms, replace the string by the id-symbol 
 for (term in rownames(matrix_count_terms_selected_all))
@@ -260,7 +282,6 @@ for (term in rownames(matrix_count_terms_selected_all))
 matrix_count_terms_selected_GO<-matrix_count_terms_selected_all[go_order,]
 matrix_count_terms_selected_KEGG<-matrix_count_terms_selected_all[kegg_order,]
 matrix_count_terms_selected_Reactome<-matrix_count_terms_selected_all[reactome_order,]
-####################################################################################################################
 ####################################################################################################################
 # Save file 
 write.xlsx(x=matrix_count_terms_selected_GO,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected GO", append=TRUE)

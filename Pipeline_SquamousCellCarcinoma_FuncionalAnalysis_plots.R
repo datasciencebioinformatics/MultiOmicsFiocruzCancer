@@ -521,20 +521,11 @@ dev.off()
 #tkplot(graph_all_stages_KEGG, layout=   layout_nicely,vertex.label=V(graph_all_stages_KEGG)$label, vertex.label.color="black")
 #tkplot(graph_all_stages_KEGG)
 ###########################################################################
-# FindClusters_resolution
-png(filename=paste(output_folder,"Plot_Stage_label.png",sep=""), width = 30, height = 30, res=600, units = "cm")
-	#plot(graph_all_stages_KEGG, layout=layout_nicely) # Stage I
-	#plot(graph_all_stages_KEGG, layout=  layout_with_kk) # Stage II
-	plot(graph_all_stages_KEGG, layout=   layout_nicely) # Stage II
-dev.off()
 
-
-# Save file 
-write.xlsx(x=df_all_annotation_selected_KEGG,file=paste(output_dir,"unique_genes_annotation_clusterProfiler",".xlsx",sep=""), sheet="ten most abundant per stage", append=TRUE)
 
 # Set legend
 png(filename=paste(output_folder,"legend.png",sep=""), width = 5, height = 5, res=600, units = "cm")
 plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
-legend("topleft", legend =c('GO', 'KEGG', 'REACTOME','Gene'), pch=16, pt.cex=3, cex=1.5, bty='n',col = c('#ff6347', '#ffd700', '#7f7f7f', '#0072b2'))
+legend("topleft", legend =c('Stage I', 'Stage II', 'Stage III'), pch=16, pt.cex=3, cex=1.5, bty='n',col = c('#e8f2a1', '#729fcf', '#ffaa95'))
 mtext("Legend", at=0.2, cex=2)
 ###########################################################################

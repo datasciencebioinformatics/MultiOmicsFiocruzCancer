@@ -219,9 +219,9 @@ selection_Reactome <-unique(c(names(tail(sort(table_Reactome_Stage_I),n=10)),nam
 selection_KEGG     <-unique(c(names(tail(sort(table_KEGG_Stage_I),n=10)),names(tail(sort(table_KEGG_Stage_II),n=10)),names(tail(sort(table_KEGG_Stage_III),n=10))))              #
 
 # Store information for each gene
-matrix_count_terms_selected_GO        <-df_count_terms_selected_GO[selection_GO,]
-matrix_count_terms_selected_KEGG      <-df_count_terms_selected_KEGG[selection_KEGG,]
-matrix_count_terms_selected_Reactome  <-df_count_terms_selected_Reactome[selection_Reactome,]
+matrix_count_terms_selected_GO        <-df_count_terms_selected_GO
+matrix_count_terms_selected_KEGG      <-df_count_terms_selected_KEGG
+matrix_count_terms_selected_Reactome  <-df_count_terms_selected_Reactome
 
 go_order  <-hcluster(matrix_count_terms_selected_GO[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$labels[hcluster(matrix_count_terms_selected_GO[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$order]
 kegg_order<-hcluster(matrix_count_terms_selected_KEGG[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$labels[hcluster(matrix_count_terms_selected_KEGG[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$order]
@@ -366,11 +366,20 @@ write.xlsx(x=matrix_count_terms_selected_Reactome_selected_stages,file=paste(out
 
 
 
+####################################################################################################################
+# Select top 10 terms                                                                                                                                                            #
+selection_GO       <-unique(c(names(tail(sort(table_GO_Stage_I),n=10)),names(tail(sort(table_GO_Stage_II),n=10)),names(tail(sort(table_GO_Stage_III),n=10))))                    #
+selection_Reactome <-unique(c(names(tail(sort(table_Reactome_Stage_I),n=10)),names(tail(sort(table_Reactome_Stage_II),n=10)),names(tail(sort(table_Reactome_Stage_III),n=10))))  #
+selection_KEGG     <-unique(c(names(tail(sort(table_KEGG_Stage_I),n=10)),names(tail(sort(table_KEGG_Stage_II),n=10)),names(tail(sort(table_KEGG_Stage_III),n=10))))              #
 
+# Store information for each gene
+matrix_count_terms_selected_GO        <-df_count_terms_selected_GO[selection_GO,]
+matrix_count_terms_selected_KEGG      <-df_count_terms_selected_KEGG[selection_KEGG,]
+matrix_count_terms_selected_Reactome  <-df_count_terms_selected_Reactome[selection_Reactome,]
 
-
-
-
+go_order  <-hcluster(matrix_count_terms_selected_GO[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$labels[hcluster(matrix_count_terms_selected_GO[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$order]
+kegg_order<-hcluster(matrix_count_terms_selected_KEGG[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$labels[hcluster(matrix_count_terms_selected_KEGG[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$order]
+reactome_order<-hcluster(matrix_count_terms_selected_Reactome[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$labels[hcluster(matrix_count_terms_selected_Reactome[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$order]
 ####################################################################################################################
 # Concatenate table
 df_all_annotation_selected_KEGG      <-df_all_annotation[which(df_all_annotation$CluterProfiler %in% kegg_order),]
@@ -405,9 +414,9 @@ stage_I_KEGG   <-names(V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_K
 stage_II_KEGG  <-names(V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_II$SYMBOL)])
 stage_III_KEGG <-names(V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_III$SYMBOL)])
 
-stage_I_GO   <-names(V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_I$SYMBOL)])
-stage_II_GO  <-names(V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_II$SYMBOL)])
-stage_III_GO <-names(V(graph_all_stages_KEGG)[which(names(V(graph_all_stages_KEGG)) %in% ids_stage_III$SYMBOL)])
+stage_I_GO   <-names(V(graph_all_stages_GO)[which(names(V(graph_all_stages_GO)) %in% ids_stage_I$SYMBOL)])
+stage_II_GO  <-names(V(graph_all_stages_GO)[which(names(V(graph_all_stages_GO)) %in% ids_stage_II$SYMBOL)])
+stage_III_GO <-names(V(graph_all_stages_GO)[which(names(V(graph_all_stages_GO)) %in% ids_stage_III$SYMBOL)])
 
 stage_I_Reactome   <-names(V(graph_all_stages_Reactome)[which(names(V(graph_all_stages_Reactome)) %in% ids_stage_I$SYMBOL)])
 stage_II_Reactome  <-names(V(graph_all_stages_Reactome)[which(names(V(graph_all_stages_Reactome)) %in% ids_stage_II$SYMBOL)])
@@ -464,9 +473,9 @@ V(graph_all_stages_GO)[which(names(V(graph_all_stages_GO)) %in% df_all_annotatio
 V(graph_all_stages_Reactome)[which(names(V(graph_all_stages_Reactome)) %in% df_all_annotation_selected_Reactome[df_all_annotation_selected_Reactome$Layer %in% c("GO","KEGG","Reactome"),"CluterProfiler"])]$size        <- 15
 
 # Vertice colours of genes
-E(graph_all_stages_KEGG)$color                                                                   <- "lightgrey"
-E(graph_all_stages_GO)$color                                                                     <- "lightgrey"
-E(graph_all_stages_Reactome)$color                                                               <- "lightgrey"
+E(graph_all_stages_KEGG)$color                                                                   <- "black"
+E(graph_all_stages_GO)$color                                                                     <- "black"
+E(graph_all_stages_Reactome)$color                                                               <- "black"
 
 # Set ronames
 E(graph_all_stages_KEGG)[which(df_all_eges_KEGG$names %in% selected_interactome)]$color                   <- "black"

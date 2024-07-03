@@ -32,6 +32,7 @@ library(RColorBrewer)
 library("clusterProfiler")
 library(ReactomePA)
 library(stringr)
+library("amap")
 library("ggpubr")
 
 # Function to expand.grid.unique without redundancy

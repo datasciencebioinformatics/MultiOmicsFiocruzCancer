@@ -212,29 +212,23 @@ table_Reactome_Stage_II  <- table(df_all_annotation_per_stage_II[df_all_annotati
 table_Reactome_Stage_III <- table(df_all_annotation_per_stage_III[df_all_annotation_per_stage_III$CluterProfiler %in% rownames(df_count_terms_selected_Reactome),"CluterProfiler"])
 ####################################################################################################################
 # Remove empty line
-library("amap")
-# Select top 10 terms                                                                                                                                                            #
-selection_GO       <-unique(c(names(tail(sort(table_GO_Stage_I),n=10)),names(tail(sort(table_GO_Stage_II),n=10)),names(tail(sort(table_GO_Stage_III),n=10))))                    #
-selection_Reactome <-unique(c(names(tail(sort(table_Reactome_Stage_I),n=10)),names(tail(sort(table_Reactome_Stage_II),n=10)),names(tail(sort(table_Reactome_Stage_III),n=10))))  #
-selection_KEGG     <-unique(c(names(tail(sort(table_KEGG_Stage_I),n=10)),names(tail(sort(table_KEGG_Stage_II),n=10)),names(tail(sort(table_KEGG_Stage_III),n=10))))              #
+# Select top 10 terms   
+
+unique(c(head(df_count_terms_selected_KEGG[order(df_count_terms_selected_KEGG$Stage_I),"Term"],n=10),head(df_count_terms_selected_KEGG[order(df_count_terms_selected_KEGG$Stage_II),"Term"],n=10),head(df_count_terms_selected_KEGG[order(df_count_terms_selected_KEGG$Stage_III),"Term"],n=10)))
+
+selection_GO       <-unique(c(head(df_count_terms_selected_GO[order(df_count_terms_selected_GO$Stage_I),"Term"],n=10),head(df_count_terms_selected_GO[order(df_count_terms_selected_GO$Stage_II),"Term"],n=10),head(df_count_terms_selected_GO[order(df_count_terms_selected_GO$Stage_III),"Term"],n=10)))
+selection_Reactome <-unique(c(head(df_count_terms_selected_Reactome[order(df_count_terms_selected_Reactome$Stage_I),"Term"],n=10),head(df_count_terms_selected_Reactome[order(df_count_terms_selected_Reactome$Stage_II),"Term"],n=10),head(df_count_terms_selected_Reactome[order(df_count_terms_selected_Reactome$Stage_III),"Term"],n=10)))
+selection_KEGG     <-unique(c(head(df_count_terms_selected_KEGG[order(df_count_terms_selected_KEGG$Stage_I),"Term"],n=10),head(df_count_terms_selected_KEGG[order(df_count_terms_selected_KEGG$Stage_II),"Term"],n=10),head(df_count_terms_selected_KEGG[order(df_count_terms_selected_KEGG$Stage_III),"Term"],n=10)))
 
 # Store information for each gene
 matrix_count_terms_selected_GO        <-df_count_terms_selected_GO
 matrix_count_terms_selected_KEGG      <-df_count_terms_selected_KEGG
 matrix_count_terms_selected_Reactome  <-df_count_terms_selected_Reactome
 
-go_order  <-hcluster(matrix_count_terms_selected_GO[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$labels[hcluster(matrix_count_terms_selected_GO[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$order]
-kegg_order<-hcluster(matrix_count_terms_selected_KEGG[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$labels[hcluster(matrix_count_terms_selected_KEGG[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$order]
-reactome_order<-hcluster(matrix_count_terms_selected_Reactome[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$labels[hcluster(matrix_count_terms_selected_Reactome[,c("Stage_I_norm","Stage_II_norm","Stage_III_norm")],link = "ave")$order]
-
-matrix_count_terms_selected_GO  <-matrix_count_terms_selected_GO[go_order,]
-matrix_count_terms_selected_KEGG<-matrix_count_terms_selected_KEGG[kegg_order,]
-matrix_count_terms_selected_Reactome<-matrix_count_terms_selected_Reactome[reactome_order,]
-
 ####################################################################################################################
-matrix_count_terms_selected_GO$Letter<-paste("GO",1:length(go_order),sep="")
-matrix_count_terms_selected_KEGG$Letter<-paste("KEGG",1:length(kegg_order),sep="")
-matrix_count_terms_selected_Reactome$Letter<-paste("Reactome",1:length(reactome_order),sep="")
+matrix_count_terms_selected_GO$Letter<-paste("GO",1:dim(df_count_terms_selected_GO)[1],sep="")
+matrix_count_terms_selected_KEGG$Letter<-paste("KEGG",1:dim(df_count_terms_selected_KEGG)[1],sep="")
+matrix_count_terms_selected_Reactome$Letter<-paste("Reactome",1:dim(df_count_terms_selected_Reactome)[1],sep="")
 
 # Take all the genes all together and number them
 all_genes_lists<-c(c(matrix_count_terms_selected_GO$Genes_Stage_I, matrix_count_terms_selected_GO$Genes_Stage_II, matrix_count_terms_selected_GO$Genes_Stage_III),
@@ -283,9 +277,9 @@ for (term in rownames(matrix_count_terms_selected_all))
 	matrix_count_terms_selected_all[term,"Genes_Stage_str_II"]<-Genes_Stage_str_II
 	matrix_count_terms_selected_all[term,"Genes_Stage_str_III"]<-Genes_Stage_str_III	
 }
-matrix_count_terms_selected_GO<-matrix_count_terms_selected_all[go_order,]
-matrix_count_terms_selected_KEGG<-matrix_count_terms_selected_all[kegg_order,]
-matrix_count_terms_selected_Reactome<-matrix_count_terms_selected_all[reactome_order,]
+matrix_count_terms_selected_GO<-matrix_count_terms_selected_all
+matrix_count_terms_selected_KEGG<-matrix_count_terms_selected_all
+matrix_count_terms_selected_Reactome<-matrix_count_terms_selected_all
 ####################################################################################################################
 # Save file 
 write.xlsx(x=matrix_count_terms_selected_GO,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="selected GO", append=FALSE)
@@ -362,6 +356,20 @@ write.xlsx(x=matrix_count_terms_selected_GO_selected_stages,file=paste(output_di
 write.xlsx(x=matrix_count_terms_selected_KEGG_selected_stages,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="KEGG stage-wise", append=TRUE)
 write.xlsx(x=matrix_count_terms_selected_Reactome_selected_stages,file=paste(output_dir,"unique_genes_annotation_count",".xlsx",sep=""), sheet="Reactome stage-wise", append=TRUE)
 
+
+
+# Select top 10 terms                                                                                                                                                            #
+selection_GO       <-unique(c(head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_I),"Term"],n=3),head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_II),"Term"],n=3),head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_III),"Term"],n=3)))
+selection_Reactome <-unique(c(head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_I),"Term"],n=3),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_II),"Term"],n=3),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_III),"Term"],n=3)))
+selection_KEGG     <-unique(c(head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_I),"Term"],n=3),head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_II),"Term"],n=3),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_KEGG$Stage_III),"Term"],n=3)))
+
+matrix_count_terms_selected_GO_selected_stages[selection_GO,]
+matrix_count_terms_selected_KEGG_selected_stages[selection_KEGG,]
+matrix_count_terms_selected_Reactome_selected_stages[selection_Reactome,]
+
+matrix_count_terms_selected_GO_selected_stages[selection_GO,]
+matrix_count_terms_selected_KEGG_selected_stages[selection_KEGG,]
+matrix_count_terms_selected_Reactome_selected_stages[selection_Reactome,]
 
 
 

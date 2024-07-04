@@ -204,7 +204,8 @@ write.xlsx(x=na.omit(genes_unique_stages_stage_specific), sheet="stage-specific 
 
 
 
-
+# Visualize: Specify the comparisons you want
+my_comparisons <- list( c("Stage I", "Stage II"), c("Stage II", "Stage III"), c("Stage I", "Stage III") )
 ############################################################################################################################################################################
 # Create sample vector 
 my_vector <- annotation_stage_I$gene_i
@@ -227,9 +228,13 @@ for (i in seq(1, length(my_vector), by = chunk_size)) {
 
 	# change box plot line colors by groups
 	p_stage_I_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 3,ncol = 3, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage I")
-		# FindClusters_resolution
-		png(filename=paste(output_folder,paste("p_stage_I_paired_",i,".png",sep=""),sep=""), width = 24, height = 32, res=600, units = "cm")
-	print(p_stage_I_paired + theme(legend.position="bottom"))
+	p_stage_I_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=stages)) +   geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 3,ncol = 3, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage I") + stat_compare_means(comparisons = my_comparisons, vjust =0.03, label.x.npc="bottom", method="t.test") + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95'))
+	# FindClusters_resolution
+	png(filename=paste(output_folder,paste("p_stage_I_paired_",i,".png",sep=""),sep=""), width = 24, height = 32, res=600, units = "cm")
+		print(p_stage_I_paired + theme(legend.position="bottom"))
+	dev.off()
+	png(filename=paste(output_folder,paste("p_stage_I_unpaired_",i,".png",sep=""),sep=""), width = 24, height = 32, res=600, units = "cm")
+		print(p_stage_I_unpaired + theme(legend.position="bottom"))
 	dev.off()
 }
 ############################################################################################################################################################################
@@ -238,9 +243,7 @@ for (i in seq(1, length(my_vector), by = chunk_size)) {
 
 
 
-
-
-
+c('#e8f2a1', '#729fcf', '#ffaa95')
 ############################################################################################################################################################################
 # Create sample vector 
 my_vector <- annotation_stage_II$gene_i
@@ -262,10 +265,16 @@ for (i in seq(1, length(my_vector), by = chunk_size)) {
 	print(chunk)
 
 	# change box plot line colors by groups
-	p_stage_I_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 3,ncol = 3, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage II")
-		# FindClusters_resolution
-		png(filename=paste(output_folder,paste("p_stage_II_paired_",i,".png",sep=""),sep=""), width = 24, height = 32, res=600, units = "cm")
-	print(p_stage_I_paired + theme(legend.position="bottom"))
+	p_stage_II_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 3,ncol = 3, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage II")
+	p_stage_II_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=stages)) +   geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 3,ncol = 3, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage II") + stat_compare_means(comparisons = my_comparisons, vjust =0.03, label.x.npc="bottom", method="t.test") + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95'))
+
+	png(filename=paste(output_folder,paste("p_stage_II_unpaired_",i,".png",sep=""),sep=""), width = 24, height = 32, res=600, units = "cm")
+		print(p_stage_II_unpaired + theme(legend.position="bottom"))
+	dev.off()		
+	
+	# FindClusters_resolution
+	png(filename=paste(output_folder,paste("p_stage_II_paired_",i,".png",sep=""),sep=""), width = 24, height = 32, res=600, units = "cm")
+		print(p_stage_II_paired + theme(legend.position="bottom"))
 	dev.off()
 }
 ############################################################################################################################################################################
@@ -294,10 +303,15 @@ for (i in seq(1, length(my_vector), by = chunk_size)) {
 	print(chunk)
 
 	# change box plot line colors by groups
-	p_stage_I_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 3,ncol = 3, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage III")
-		# FindClusters_resolution
-		png(filename=paste(output_folder,paste("p_stage_III_paired_",i,".png",sep=""),sep=""), width = 24, height = 32, res=600, units = "cm")
-	print(p_stage_I_paired + theme(legend.position="bottom"))
+	p_stage_III_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=tissue_type)) +   geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 3,ncol = 3, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage III")
+	p_stage_III_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=stages)) +   geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 3,ncol = 3, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage III") + stat_compare_means(comparisons = my_comparisons, vjust =0.03, label.x.npc="bottom", method="t.test") + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95'))
+	
+	# FindClusters_resolution
+	png(filename=paste(output_folder,paste("p_stage_III_paired_",i,".png",sep=""),sep=""), width = 24, height = 32, res=600, units = "cm")
+		print(p_stage_III_paired + theme(legend.position="bottom"))
 	dev.off()
+	png(filename=paste(output_folder,paste("p_stage_III_unpaired_",i,".png",sep=""),sep=""), width = 24, height = 32, res=600, units = "cm")
+		print(p_stage_III_unpaired + theme(legend.position="bottom"))
+	dev.off()	
 }
 ############################################################################################################################################################################

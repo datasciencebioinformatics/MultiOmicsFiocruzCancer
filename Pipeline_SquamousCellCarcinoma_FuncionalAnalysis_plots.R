@@ -512,3 +512,18 @@ plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
 legend("topleft", legend =c('Stage I', 'Stage II', 'Stage III'), pch=16, pt.cex=3, cex=1.5, bty='n',col = c('#e8f2a1', '#729fcf', '#ffaa95'))
 mtext("Legend", at=0.2, cex=2)
 ###########################################################################
+df_count_terms_selected_GO<-df_count_terms_selected_GO[selection_GO,]
+df_count_terms_selected_KEGG<-df_count_terms_selected_KEGG[selection_KEGG,]
+df_count_terms_selected_Reactome<-df_count_terms_selected_Reactome[selection_Reactome,]
+
+common_to_all_KEGG<-df_count_terms_selected_KEGG[df_count_terms_selected_KEGG$Stage_I>0 & df_count_terms_selected_KEGG$Stage_II>0 & df_count_terms_selected_KEGG$Stage_III>0,]
+
+df_count_terms_selected_KEGG[common_to_all_KEGG,]
+
+
+selection_GO       <-unique(c(head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_I),"Term"],n=3),head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_II),"Term"],n=3),head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_III),"Term"],n=3)))
+selection_Reactome <-unique(c(head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_I),"Term"],n=3),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_II),"Term"],n=3),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_III),"Term"],n=3)))
+selection_KEGG     <-unique(c(head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_I),"Term"],n=3),head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_II),"Term"],n=3),head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_III),"Term"],n=3)))
+
+
+

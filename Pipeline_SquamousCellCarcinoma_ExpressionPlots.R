@@ -37,6 +37,9 @@ unstranded_data_samples_unapaired<-melt(t(unstranded_data_filter[,tumor_samples]
 colnames(unstranded_data_samples)<-c("patient_id","gene_id","RPKM")
 colnames(unstranded_data_samples_unapaired)<-c("patient_id","gene_id","RPKM")
 
+# unstranded_data_samples with sample_stage_all_samples
+unstranded_data_samples<-merge(unstranded_data_samples,sample_stage_all_samples,by="patient_id")
+unstranded_data_samples_unapaired<-merge(unstranded_data_samples_unapaired,colData,by="patient_id")
 ############################################################################################################################################################################
 # gene_id and ENSEMBL
 unstranded_data_filter_ids<-data.frame(gene_id=c(),ENSEMBL=c())

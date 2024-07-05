@@ -295,7 +295,7 @@ for (i in seq(1, length(my_vector), by = chunk_size)) {
 	print(chunk)
 
 	# change box plot line colors by groups
-	p_stage_III_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=stages)) +  geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 5,ncol = 5, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage II") + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_summary(fun.y=mean, fun.min = min, fun.max = max ,geom="point", shape=20, size=8, color="red", fill="red")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9) + scale_color_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95'))	
+	p_stage_III_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=stages)) +  geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 5,ncol = 5, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage III") + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_summary(fun.y=mean, fun.min = min, fun.max = max ,geom="point", shape=20, size=8, color="red", fill="red")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9) + scale_color_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95'))	
 	png(filename=paste(output_folder,paste("p_stage_III_unpaired_",i,".png",sep=""),sep=""), width = 24, height = 24, res=600, units = "cm")
 		print(p_stage_III_unpaired + theme(legend.position="bottom"))
 	dev.off()

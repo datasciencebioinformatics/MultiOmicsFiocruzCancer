@@ -30,8 +30,8 @@ ids_stage_II     <-bitr(genes_unique_Stage_II$gene_id, fromType = "ENSEMBL", toT
 ids_stage_III    <-bitr(genes_unique_Stage_III$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
 ############################################################################################################################################################################
 # Samples
-unstranded_data_samples<-melt(t(unstranded_data_filter[,sample_stage_all_samples$patient_id]))
-unstranded_data_samples_unapaired<-melt(t(unstranded_data_filter[,colDta_tumor$patient_id]))
+unstranded_data_samples<-melt(t(unstranded_data_filter[,c(paired_sample_df$normal,paired_sample_df$tumor)]))
+unstranded_data_samples_unapaired<-melt(t(unstranded_data_filter[,tumor_samples]))
 
 # colnames(unstranded_data_samples)
 colnames(unstranded_data_samples)<-c("patient_id","gene_id","RPKM")

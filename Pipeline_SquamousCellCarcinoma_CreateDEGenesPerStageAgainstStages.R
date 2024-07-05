@@ -94,3 +94,4 @@ for (comparisson_index in rownames(df_table_comparisson))
 	list_per_stage_comparisson[[paste(Stage_i,Stage_ii,sep="_")]]<-log2change_Stage_i
 	####################################################################################################################		
 }
+	

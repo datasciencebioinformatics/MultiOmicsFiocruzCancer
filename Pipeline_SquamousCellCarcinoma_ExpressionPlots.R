@@ -224,7 +224,7 @@ for (i in seq(1, length(my_vector), by = chunk_size)) {
 
 	# change box plot line colors by groups
 	symnum.args<- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, Inf), symbols = c("****", "***", "**", "*", ""))
-	p_stage_I_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=stages)) +  geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 5,ncol = 5, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage I") + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_summary(fun.y=mean, fun.min = min, fun.max = max ,geom="point", shape=20, size=8, color="red", fill="red")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9) + scale_color_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_compare_means(comparisons = my_comparisons, method = "t.test", vjust = 0.5, symnum.args=symnum.args)	
+	p_stage_I_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=stages)) +  geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 5,ncol = 5, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage I") + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_summary(fun.y=mean, fun.min = min, fun.max = max ,geom="point", shape=20, size=8, color="red", fill="red")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9) + scale_color_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_compare_means(comparisons = my_comparisons, method = "t.test", vjust = 1.0, symnum.args=symnum.args)	
 		
 	png(filename=paste(output_folder,paste("p_stage_I_unpaired_",i,".png",sep=""),sep=""), width = 24, height = 36, res=600, units = "cm")
 		print(p_stage_I_unpaired + theme(legend.position="bottom"))
@@ -259,7 +259,7 @@ for (i in seq(1, length(my_vector), by = chunk_size)) {
 	print(chunk)
 
 	# change box plot line colors by groups
-	p_stage_II_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=stages)) +  geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 5,ncol = 5, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage II") + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_summary(fun.y=mean, fun.min = min, fun.max = max ,geom="point", shape=20, size=8, color="red", fill="red")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9) + scale_color_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95'))	
+	p_stage_II_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=stages)) +  geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 5,ncol = 5, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage II") + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_summary(fun.y=mean, fun.min = min, fun.max = max ,geom="point", shape=20, size=8, color="red", fill="red")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9) + scale_color_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95'))	+ stat_compare_means(comparisons = my_comparisons, method = "t.test", vjust = 1.0, symnum.args=symnum.args)	
 	png(filename=paste(output_folder,paste("p_stage_II_unpaired_",i,".png",sep=""),sep=""), width = 24, height = 24, res=600, units = "cm")
 		print(p_stage_II_unpaired + theme(legend.position="bottom"))
 	dev.off()
@@ -296,8 +296,44 @@ for (i in seq(1, length(my_vector), by = chunk_size)) {
 	print(chunk)
 
 	# change box plot line colors by groups
-	p_stage_III_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=stages)) +  geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 5,ncol = 5, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage III") + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_summary(fun.y=mean, fun.min = min, fun.max = max ,geom="point", shape=20, size=8, color="red", fill="red")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9) + scale_color_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95'))	
+	p_stage_III_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$ENSEMBL %in% chunk,], aes(x=stages, y=RPKM, fill=stages)) +  geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 5,ncol = 5, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage III") + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_summary(fun.y=mean, fun.min = min, fun.max = max ,geom="point", shape=20, size=8, color="red", fill="red")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9) + scale_color_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95'))	+ stat_compare_means(comparisons = my_comparisons, method = "t.test", vjust = 1.0, symnum.args=symnum.args)	
 	png(filename=paste(output_folder,paste("p_stage_III_unpaired_",i,".png",sep=""),sep=""), width = 24, height = 24, res=600, units = "cm")
 		print(p_stage_III_unpaired + theme(legend.position="bottom"))
 	dev.off()
 }
+############################################################################################################################################################################
+
+
+
+
+
+
+
+
+stage_I_biomarkers<-c("COPB2", "DHX36", "IGHA2", "LTF", "NPL")
+stage_II_biomarkers<-c("AARS2", "ADAMTS2", "BRAT1", "CEP170B", "COL12A1", "EFNB1", "EFTUD2", "EPHB6" , "FKBP14", "HIF1A", "MOGS", "RPN2", "FRMD8", "GOL1M4", "MTCL2", "NADSYN1", "PDCD11", "PPFIA1", "ANO9", "HNRNPAB", "HSPA1A", "QTRT1", "RNPSI")
+stage_III_biomarkers<-c("AP2S1","ARF5","CNOT3","CPSF1","DERA","DVL2","FUT8","MTA3","PSMC6","RPS5","SNRNP40","TIMM9","TMED2","VTA1","GOLM1","HSPBP1","PPP4C","PRUNE1","SF3B4","SRP9","THOC6","TIPRL","UBE2M","CISD1","CLIA","COX6A1","COX7A2L","CRIPT","EPCAM","HSPA2","MRPS7","NDUFS8","PTGES3","RNF2","SPR","GOLM1","HSPBP1","PPP4C","PRUNE1","SF3B4","SRP9","THOC6","TIPRL","UBE2M","ABCE1","B4GALT3","CCT8","ELOC","MAIP1","PHB1","PSMC2","PSMD4","RPP25L","SUPV3L1","THAP8","TMUB1","ARL6IP1","BRMS1","C11orf24","COPS6","GLRX5","KCTD5","KRT8","MRPS16","MRPS23","TRMT112","ZNF282","AKT1S1","MSRB1","NOC4L","OSTC","RPE","SIVA1","SLC39A10","THAP7")
+
+stage_specific_genes_stage_II<-stage_specific_genes[stage_specific_genes$SYMBOL %in% stage_II_biomarkers,]
+stage_specific_genes_stage_II<-head(stage_specific_genes_stage_II[order(-stage_specific_genes_stage_II$Stage_II.normal.log2fc),"SYMBOL"],n=4)
+
+stage_specific_genes_stage_III<-stage_specific_genes[stage_specific_genes$SYMBOL %in% stage_III_biomarkers,]
+stage_specific_genes_stage_III<-head(stage_specific_genes_stage_III[order(-stage_specific_genes_stage_III$Stage_III.normal.log2fc),"SYMBOL"],n=4)
+
+
+p_stage_I_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% stage_I_biomarkers,], aes(x=stages, y=RPKM, fill=stages)) +  geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 1,ncol = 5, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage I") + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_summary(fun.y=mean, fun.min = min, fun.max = max ,geom="point", shape=20, size=8, color="red", fill="red")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9) + scale_color_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_compare_means(comparisons = my_comparisons, method = "t.test", vjust = 1.0, symnum.args=symnum.args)	
+p_stage_II_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% stage_specific_genes_stage_II,], aes(x=stages, y=RPKM, fill=stages)) +  geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 5,ncol = 5, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage II") + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_summary(fun.y=mean, fun.min = min, fun.max = max ,geom="point", shape=20, size=8, color="red", fill="red")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9) + scale_color_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_compare_means(comparisons = my_comparisons, method = "t.test", vjust = 1.0, symnum.args=symnum.args)	
+p_stage_III_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% stage_specific_genes_stage_III,], aes(x=stages, y=RPKM, fill=stages)) +  geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 5,ncol = 5, scales="free")+ theme_bw() + ggtitle("Biomarkers for stage III") + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_summary(fun.y=mean, fun.min = min, fun.max = max ,geom="point", shape=20, size=8, color="red", fill="red")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9) + scale_color_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_compare_means(comparisons = my_comparisons, method = "t.test", vjust = 1.0, symnum.args=symnum.args)	
+
+
+png(filename=paste(output_folder,paste("p_stage_I_unpaired_selected.png",sep=""),sep=""), width = 24, height = 10, res=600, units = "cm")
+	print(p_stage_I_unpaired + theme(legend.position="bottom"))
+dev.off()
+
+png(filename=paste(output_folder,paste("p_stage_II_unpaired_selected.png",sep=""),sep=""), width = 24, height = 10, res=600, units = "cm")
+	print(p_stage_II_unpaired + theme(legend.position="bottom"))
+dev.off()
+
+png(filename=paste(output_folder,paste("p_stage_III_unpaired_selected.png",sep=""),sep=""), width = 24, height = 10, res=600, units = "cm")
+	print(p_stage_III_unpaired + theme(legend.position="bottom"))
+dev.off()

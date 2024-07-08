@@ -1,6 +1,8 @@
-
 Dsucssion:
+
 I would also like to discuss cancer plasticity. Whether the phenotypic difference between one stage and others can be seen in the functional annotation. It's another way to evaluate progression. That is, does some continuity have to be seen from one stage to another?
+
+Tipicamente, tem o process de fermentaçao seguido da angiogenese seguido das mrtastases
 
 
 Results

@@ -1,4 +1,10 @@
+
+Dsucssion:
+I would also like to discuss cancer plasticity. Whether the phenotypic difference between one stage and others can be seen in the functional annotation. It's another way to evaluate progression. That is, does some continuity have to be seen from one stage to another?
+
+
 Results
+
 	- Stage-specific singnatures for squamous cell lung cancer
 	- Cancer progression measured by shannon entropy
 	- Stage-wise network and funtional analysis

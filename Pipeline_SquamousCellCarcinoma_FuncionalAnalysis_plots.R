@@ -366,13 +366,25 @@ selection_KEGG     <-unique(c(head(df_count_terms_selected_KEGG[order(-df_count_
 
 stage_I_GO      <-head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_I),"Term"],n=3)
 stage_I_GO_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_I_GO,"Symbol"])
-
 stage_II_GO      <-head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_II),"Term"],n=3)
 stage_II_GO_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_II_GO,"Symbol"])
-
-
 stage_III_GO      <-head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_III),"Term"],n=3)
 stage_III_GO_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_III_GO,"Symbol"])
+
+stage_I_Reactome      <-head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_I),"Term"],n=3)
+stage_I_Reactome_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_I_Reactome,"Symbol"])
+stage_II_Reactome      <-head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_II),"Term"],n=3)
+stage_II_Reactome_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_II_Reactome,"Symbol"])
+stage_III_Reactome      <-head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_III),"Term"],n=3)
+stage_III_Reactome_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_III_Reactome,"Symbol"])
+
+stage_I_KEGG      <-head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_I),"Term"],n=3)
+stage_I_KEGG_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_I_KEGG,"Symbol"])
+stage_II_KEGG      <-head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_II),"Term"],n=3)
+stage_II_KEGG_Genes<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_II_KEGG,"Symbol"])
+stage_III_KEGG      <-head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_III),"Term"],n=3)
+stage_III_KEGG_Genes<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_III_KEGG,"Symbol"])
+
 
 
 

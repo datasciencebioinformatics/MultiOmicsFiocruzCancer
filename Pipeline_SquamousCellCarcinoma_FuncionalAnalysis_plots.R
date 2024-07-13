@@ -364,6 +364,18 @@ selection_GO       <-unique(c(head(df_count_terms_selected_GO[order(-df_count_te
 selection_Reactome <-unique(c(head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_I),"Term"],n=3),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_II),"Term"],n=3),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_III),"Term"],n=3)))
 selection_KEGG     <-unique(c(head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_I),"Term"],n=3),head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_II),"Term"],n=3),head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_III),"Term"],n=3)))
 
+stage_I_GO      <-head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_I),"Term"],n=3)
+stage_I_GO_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_I_GO,"Symbol"])
+
+stage_II_GO      <-head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_II),"Term"],n=3)
+stage_II_GO_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_II_GO,"Symbol"])
+
+
+stage_III_GO      <-head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_III),"Term"],n=3)
+stage_III_GO_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_III_GO,"Symbol"])
+
+
+
 matrix_count_terms_selected_GO_selected_stages[selection_GO,]
 matrix_count_terms_selected_KEGG_selected_stages[selection_KEGG,]
 matrix_count_terms_selected_Reactome_selected_stages[selection_Reactome,]

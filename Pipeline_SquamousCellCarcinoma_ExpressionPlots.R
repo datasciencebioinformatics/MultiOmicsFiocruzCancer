@@ -304,6 +304,8 @@ for (i in seq(1, length(my_vector), by = chunk_size)) {
 ############################################################################################################################################################################
 # Reat stage specific genes 
 stage_specific_genes <-  read.xlsx(file="/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Table3.xlsx", 2)   # read first sheet
+symnum.args<- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, Inf), symbols = c("****", "***", "**", "*", ""))
+
 
 stage_I_biomarkers<-c("COPB2", "DHX36", "IGHA2", "LTF", "NPL")
 stage_II_biomarkers<-c("AARS2", "ADAMTS2", "BRAT1", "CEP170B", "COL12A1", "EFNB1", "EFTUD2", "EPHB6" , "FKBP14", "HIF1A", "MOGS", "RPN2", "FRMD8", "GOL1M4", "MTCL2", "NADSYN1", "PDCD11", "PPFIA1", "ANO9", "HNRNPAB", "HSPA1A", "QTRT1", "RNPSI")

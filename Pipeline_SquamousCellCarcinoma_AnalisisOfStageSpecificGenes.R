@@ -1,6 +1,16 @@
 # Reat stage specific genes 
 stage_specific_genes <-  read.xlsx(file="/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Table3.xlsx", 2)   # read first sheet
 
+stage_specific_genes$stage<-""
+stage_specific_genes[rownames(stage_specific_genes) %in% unique_stage_I,"stage"]<-"Stage I"
+stage_specific_genes[rownames(stage_specific_genes) %in% unique_stage_II,"stage"]<-"Stage II"
+stage_specific_genes[rownames(stage_specific_genes) %in% unique_stage_III,"stage"]<-"Stage III"
+
+write_tsv(df_mean, paste(output_dir,"Table2.tsv",sep=""))			
+
+
+
+
 # Genes that are tumor genes (RPKM ≥ 4, tumor vs. normal samples : log2foldchange >1 and paired t-test FDR ≤ 0.05) but also stage-specific genes (RPKM ≥ 4, stage-specific vs. normal samples : log2foldchange >1 and paired t-test FDR ≤ 0.05).
 genes_stages_I   <-list_per_stage_comparisson$sample_stage_I_sample_stage_II[which(list_per_stage_comparisson$sample_stage_I_sample_stage_II$log2change>0.0 & list_per_stage_comparisson$sample_stage_I_sample_stage_III$log2change>0.0),"gene"]
 genes_stages_II  <-list_per_stage_comparisson$sample_stage_II_sample_stage_I[which(list_per_stage_comparisson$sample_stage_II_sample_stage_I$log2change>0.20 & list_per_stage_comparisson$sample_stage_II_sample_stage_III$log2change>0.20),"gene"]
@@ -104,8 +114,11 @@ for (gene in rownames(df_mean))
   df_mean[gene,"std.stageII"]<-sd(unstranded_data[gene,sample_stage_II])
   df_mean[gene,"std.stageIII"]<-sd(unstranded_data[gene,sample_stage_III])  
 }
-	write_tsv(df_mean, paste(output_dir,"Table3.tsv",sep=""))			
+df_mean$stage<-""
+df_mean[rownames(df_mean) %in% unique_stage_I,"stage"]<-"Stage I"
+df_mean[rownames(df_mean) %in% unique_stage_II,"stage"]<-"Stage II"
+df_mean[rownames(df_mean) %in% unique_stage_III,"stage"]<-"Stage III"
+
+write_tsv(df_mean, paste(output_dir,"Table3.tsv",sep=""))			
 
 
-
-stage_specific_genes

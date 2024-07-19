@@ -45,4 +45,67 @@ png(filename=paste(output_folder,paste("p_stage_biomarkers_paired.png",sep=""),s
 dev.off()
 
 
+
+
+
+
+
+
+
+
+
+
+
+#######################################################################################################################
+# Reload colData from file
+# Reload unstranded_data from file
+###########################################################################################################################
+merged_data_patient_info_file       <- "/home/felipe/Documentos/LungPortal/samples/patient.metadata.tsv"                  #
+colData_file                        <- "/home/felipe/Documentos/LungPortal/samples/colData.tsv"                           #
+###########################################################################################################################
+unstranded_data                    <-unstranded_data_filter
+merged_data_patient_info_data      <-read.table(file = merged_data_patient_info_file, sep = '\t', header = TRUE,fill=TRUE)#
+colData_data                       <-read.table(file = colData_file, sep = '\t', header = TRUE,fill=TRUE)                 #
+rownames(colData)                  <-colData$patient_id                                                                   #
+###########################################################################################################################
+#omit NA values from vector
+unstranded_data <- na.omit(unstranded_data)
+########################################################################################################################
+# A panel to analyse differential Category comparing samples of each stage against all others stages.
+########################################################################################################################
+# Only tumor samples
+colData_tumor <-colData[colData$tissue_type=="Tumor",]
+colData_normal<-colData[colData$tissue_type=="Normal",]
+
+# Vector with each stage
+stages_str<-c("stage_I","stage_II","stage_III")
+
+# Samples of each stage stored in colData                                                                                             #
+sample_stage_I  <-colData_tumor[colData_tumor$stages=="Stage I","patient_id"]                                                                     #
+sample_stage_II <-colData_tumor[colData_tumor$stages=="Stage II","patient_id"]                                                                    #
+sample_stage_III<-colData_tumor[colData_tumor$stages=="Stage III","patient_id"]                                                                   #
+sample_normal   <-colData_normal[,"patient_id"]                                                                   #
+#######################################################################################################################################
+df_table_comparisson=rbind(data.frame(Stage_i="sample_stage_I",Stage_ii="sample_normal"),
+data.frame(Stage_i="sample_stage_II",Stage_ii="sample_normal"),
+data.frame(Stage_i="sample_stage_III",Stage_ii="sample_normal"))
+####################################################################################################################
+# Take p-value
+df_mean<-data.frame(ENSEMBL=stage_specific_genes$ENSEMBL,ENTREZID=stage_specific_genes$ENTREZID,SYMBOL=stage_specific_genes$SYMBOL,
+avg.normal=rowMeans(unstranded_data[stage_specific_genes$gene,sample_normal]),
+std.normal=0,avg.stageI=rowMeans(unstranded_data[stage_specific_genes$gene,sample_stage_I]),
+std.stageI=0, avg.stageII=rowMeans(unstranded_data[stage_specific_genes$gene,sample_stage_II]), std.stageII=0, avg.stageIII=rowMeans(unstranded_data[stage_specific_genes$gene,sample_stage_III]), std.stageIII=0)
+
+# For each gene, calculate too the 
+for (gene in rownames(df_mean))
+{
+  df_mean[gene,"std.normal"]<-sd(unstranded_data[gene,sample_normal])
+  df_mean[gene,"std.stageI"]<-sd(unstranded_data[gene,sample_stage_I])
+  df_mean[gene,"std.stageII"]<-sd(unstranded_data[gene,sample_stage_II])
+  df_mean[gene,"std.stageIII"]<-sd(unstranded_data[gene,sample_stage_III])  
+}
+	write_tsv(df_mean, paste(output_dir,"Table3.tsv",sep=""))			
+
+
+
 stage_specific_genes

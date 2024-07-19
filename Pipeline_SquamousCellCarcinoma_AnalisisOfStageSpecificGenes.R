@@ -43,3 +43,6 @@ dev.off()
 png(filename=paste(output_folder,paste("p_stage_biomarkers_paired.png",sep=""),sep=""), width = 24, height = 24, res=600, units = "cm")
   print(p_stage_biomarkers_paired + theme(legend.position="bottom"))
 dev.off()
+
+
+stage_specific_genes

@@ -60,6 +60,11 @@ dev.off()
 
 
 
+#######################################################################################################################
+biomarkers<-c("AMTN" , "FABP7" , "OLFM4")
+p_stage_biomarkers_unpaired<-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% biomarkers,], aes(x=stages, y=RPKM, fill=stages)) +  geom_boxplot()+ facet_wrap(~SYMBOL, nrow = 5,ncol = 6, scales="free")+ theme_bw() + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_summary(fun.y=mean, fun.min = min, fun.max = max ,geom="point", shape=20, size=8, color="red", fill="red")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9) + scale_color_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + theme(axis.text.x = element_text(angle = 90)) 
+p_stage_biomarkers_paired<-ggplot(unstranded_data_samples[unstranded_data_samples$SYMBOL %in% biomarkers,], aes(x=stages, y=RPKM, fill=tissue_type)) + facet_wrap(~SYMBOL, nrow = 5,ncol = 6, scales="free")+ theme_bw() + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_summary(fun.y=mean, fun.min = min, fun.max = max ,geom="point", shape=20, size=8, color="red", fill="red")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9) + scale_color_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95'))+ theme(axis.text.x = element_text(angle = 90)) 
+#######################################################################################################################
 
 
 

@@ -65,7 +65,11 @@ biomarkers<-c("AMTN" , "FABP7" , "OLFM4")
 # Complete dataset
 unstranded_data_samples_complete<-rbind(unstranded_data_samples_unapaired[,c("SYMBOL","RPKM","stages","tissue_type")],unstranded_data_samples[unstranded_data_samples$tissue_type=="Normal",c("SYMBOL","RPKM","stages","tissue_type")])
 
-biomarkers_paired   <-ggplot(unstranded_data_samples_complete[unstranded_data_samples_complete$SYMBOL %in% biomarkers,], aes(x=stages, y=RPKM, fill=tissue_type)) + facet_wrap(~SYMBOL, nrow = 5,ncol = 6, scales="free")+ theme_bw() + theme(axis.text.x = element_text(angle = 90)) +geom_boxplot(outlier.shape = NA)  +   geom_point(position = position_jitterdodge(), alpha=0.3) + ylim(0, 10)
+biomarkers_AMTN   <-ggplot(unstranded_data_samples_complete[unstranded_data_samples_complete$SYMBOL %in% "AMTN",], aes(x=stages, y=RPKM, fill=tissue_type, color=tissue_type)) + facet_wrap(~stages, nrow = 5,ncol = 6, scales="free")+ theme_bw() + theme(axis.text.x = element_text(angle = 90)) +geom_boxplot(outlier.shape = NA)  +  geom_jitter(width=0.15) + ylim(0, 10) + ggtitle("AMTN")
+biomarkers_FABP7   <-ggplot(unstranded_data_samples_complete[unstranded_data_samples_complete$SYMBOL %in% "FABP7",], aes(x=stages, y=RPKM, fill=tissue_type, color=tissue_type)) + facet_wrap(~stages, nrow = 5,ncol = 6, scales="free")+ theme_bw() + theme(axis.text.x = element_text(angle = 90)) +geom_boxplot(outlier.shape = NA)  +  geom_jitter(width=0.15) + ylim(0, 10) + ggtitle("FABP7")
+biomarkers_OLFM4   <-ggplot(unstranded_data_samples_complete[unstranded_data_samples_complete$SYMBOL %in% "OLFM4",], aes(x=stages, y=RPKM, fill=tissue_type, color=tissue_type)) + facet_wrap(~stages, nrow = 5,ncol = 6, scales="free")+ theme_bw() + theme(axis.text.x = element_text(angle = 90)) +geom_boxplot(outlier.shape = NA)  +  geom_jitter(width=0.15) + ylim(0, 10) + ggtitle("OLFM4")
+
+grid.arrange(biomarkers_AMTN,biomarkers_FABP7,biomarkers_OLFM4)
 
 # p_stage_III_unpaired.png
 png(filename=paste(output_folder,paste("p_stage_biomarkers_complete.png",sep=""),sep=""), width = 36, height = 16, res=600, units = "cm")
@@ -74,18 +78,6 @@ dev.off()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-+ scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + stat_summary(fun.y=mean, fun.min = min, fun.max = max ,geom="point", shape=20, size=8, color="red", fill="red")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9) + scale_color_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95'))+ theme(axis.text.x = element_text(angle = 90)) 
 #######################################################################################################################
 
 

@@ -1,7 +1,35 @@
 library(pathview)
 
-mypathway_Apoptosis<-"08403"
-mypathway_WNT<-"04310"
+#map04012 ErbB signaling pathway			04012
+#N01579 CD80/CD86-CTLA4-PP2A signaling pathway		04660
+#map04668 TNF signaling pathway				04668
+#map04151 PI3K-Akt signaling pathway			04151
+#map04115 p53 signaling pathway				04115
+#map04010 MAPK signaling pathway			04010
+#map04630 JAK-STAT signaling pathway			04630
+#nt06507 TGFB signaling					06507
+#N00151 TNF-NFKB signaling pathway			04668
+#map04330 Notch signaling pathway			04330
+#map04340 Hedgehog signaling pathway			04340
+#map01521 EGFR tyrosine kinase inhibitor resistance	01521	
+#map04350 TGF-beta signaling pathway			04350
+#map04370 VEGF signaling pathway			04370
+
+mypathway_ErbB<-"04012"
+mypathway_CTLA4<-"04660"
+mypathway_TNF<-"04668"
+mypathway_PI3K<-"04151"
+mypathway_MAPK<-"04010"
+mypathway_JAK<-"04630"
+mypathway_TGFB<-"06507"
+mypathway_TNF<-"04668"
+mypathway_Notch<-"04330"
+mypathway_Hedgehog<-"04340"
+mypathway_EGFR<-"01521"
+mypathway_TGF<- "04350"
+mypathway_VEGF<-"04370"
+
+
 
 genes<-c(genes_unique_Stage_I$gene_id,genes_unique_Stage_II$gene_id,genes_unique_Stage_III$gene_id)
 
@@ -20,6 +48,34 @@ ids_stage_I      <-bitr(log2change_tumor_control$ENSEMBL, fromType = "ENSEMBL", 
 
 names(logFC)<-ids_stage_I[ids_stage_I$ENSEMBL %in% genes,"ENTREZID"]
 
-pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_Apoptosis)
-pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_WNT)
+
+
+mypathway_ErbB<-"04012"
+mypathway_CTLA4<-"04660"
+mypathway_TNF<-"04668"
+mypathway_PI3K<-"04151"
+mypathway_MAPK<-"04010"
+mypathway_JAK<-"04630"
+mypathway_TGFB<-"06507"
+mypathway_TNF<-"04668"
+mypathway_Notch<-"04330"
+mypathway_Hedgehog<-"04340"
+mypathway_EGFR<-"01521"
+mypathway_TGF<- "04350"
+mypathway_VEGF<-"04370"
+
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_ErbB)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_CTLA4)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_TNF)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_PI3K)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_MAPK)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_JAK)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_TGFB)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_TNF)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_Notch)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_Hedgehog)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_EGFR)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_TGF)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_VEGF)
+
 

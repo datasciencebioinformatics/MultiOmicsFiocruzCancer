@@ -42,10 +42,7 @@ for (gene_row in rownames(log2change_tumor_control))
 }
 
 logFC<-log2change_tumor_control[log2change_tumor_control$ENSEMBL %in% as.vector(genes),"log2change"]
-names(logFC)<-
-
 ids_stage_I      <-bitr(log2change_tumor_control$ENSEMBL, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
-
 names(logFC)<-ids_stage_I[ids_stage_I$ENSEMBL %in% genes,"ENTREZID"]
 
 
@@ -77,6 +74,37 @@ pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_Hedgehog)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_EGFR)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_TGF)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_VEGF)
+
+
+
+
+
+
+
+
+
+
+#######################################################################################################################################
+# Path to files of selected_genes                                                                                                             # 
+selected_genes_Stage_I_file       <-paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_I",".tsv",sep="")
+selected_genes_Stage_II_file      <-paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_II",".tsv",sep="")
+selected_genes_Stage_III_file     <-paste(output_dir,"DE_GenesPerStageMeansFromPairedUp_Stage_","sample_stage_III",".tsv",sep="")
+#######################################################################################################################################
+# Load data                                                                                                                           #
+selected_genes_Stage_I_data       <-read.table(file = selected_genes_Stage_I_file, sep = '\t', header = TRUE,fill=TRUE)                        #
+selected_genes_Stage_II_data      <-read.table(file = selected_genes_Stage_II_file, sep = '\t', header = TRUE,fill=TRUE)                       #
+selected_genes_Stage_III_data     <-read.table(file = selected_genes_Stage_III_file, sep = '\t', header = TRUE,fill=TRUE)                      #
+                                                                                                                                      #
+# Set rownames                                                                                                                        #
+rownames(selected_genes_Stage_I_data)<-selected_genes_Stage_I_data$gene                                                               #
+rownames(selected_genes_Stage_II_data)<-selected_genes_Stage_II_data$gene                                                             #
+rownames(selected_genes_Stage_III_data)<-selected_genes_Stage_III_data$gene                                                           #
+#######################################################################################################################################
+genes<-c(rownames(selected_genes_Stage_I_data),rownames(selected_genes_Stage_II_data),rownames(selected_genes_Stage_III_data))
+logFC<-log2change_tumor_control[log2change_tumor_control$ENSEMBL %in% as.vector(genes),"log2change"]
+ids_stage_I      <-bitr(log2change_tumor_control$ENSEMBL, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
+names(logFC)<-ids_stage_I[ids_stage_I$ENSEMBL %in% genes,"ENTREZID"]
+
 
 pathview(gene.data=logFC*100,species="hsa",pathway="05223")
 

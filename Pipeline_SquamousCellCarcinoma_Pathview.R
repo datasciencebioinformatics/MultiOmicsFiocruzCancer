@@ -120,7 +120,6 @@ for (gene_row in rownames(log2change_tumor_control))
 }
 logFC<-log2change_tumor_control[log2change_tumor_control$ENSEMBL %in% genes_ids_all,"log2change"]
 ids_stage_I      <-bitr(log2change_tumor_control$ENSEMBL, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
-
 names(logFC)<-ids_stage_I[ids_stage_I$ENSEMBL %in% genes_ids_all,"ENTREZID"]
 
 

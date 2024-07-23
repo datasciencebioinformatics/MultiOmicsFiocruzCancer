@@ -100,6 +100,28 @@ rownames(selected_genes_Stage_I_data)<-selected_genes_Stage_I_data$gene         
 rownames(selected_genes_Stage_II_data)<-selected_genes_Stage_II_data$gene                                                             #
 rownames(selected_genes_Stage_III_data)<-selected_genes_Stage_III_data$gene                                                           #
 #######################################################################################################################################
+selected_genes_Stage_I_data$Stage<-"Stage I"
+selected_genes_Stage_II_data$Stage<-"Stage II"
+selected_genes_Stage_III_data$Stage<-"Stage III"
+selected_genes_Stage_data<-rbind(selected_genes_Stage_I_data,selected_genes_Stage_II_data, selected_genes_Stage_III_data)
+selected_genes_Stage_data$ENSEMBL<-""
+
+# For each gene, add gene_id
+for (gene_row in rownames(selected_genes_Stage_data))
+{	
+	# Store gene id in the vector
+	# Simply trim the gene id before the "." to save it in the ENSEML format
+	selected_genes_Stage_data[gene_row,"ENSEMBL"]<-strsplit(selected_genes_Stage_data[gene_row,"gene"], split = "\\.")[[1]][1]
+}
+
+# For each gene, add gene_id
+for (gene_row in genes)
+{	
+	# Store gene id in the vector
+	# Simply trim the gene id before the "." to save it in the ENSEML format
+	genes_ids_all<-c(genes_ids_all,strsplit(gene_row, split = "\\.")[[1]][1])
+}
+
 genes<-unique(c(rownames(selected_genes_Stage_I_data),rownames(selected_genes_Stage_II_data),rownames(selected_genes_Stage_III_data)))
 genes_ids_all<-c()
 

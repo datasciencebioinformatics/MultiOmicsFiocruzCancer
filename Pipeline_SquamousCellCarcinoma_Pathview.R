@@ -78,4 +78,7 @@ pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_EGFR)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_TGF)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_VEGF)
 
+pathview(gene.data=logFC*100,species="hsa",pathway="05223")
+
+
 

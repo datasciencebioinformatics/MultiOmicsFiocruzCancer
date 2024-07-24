@@ -139,5 +139,3 @@ df_mean[rownames(df_mean) %in% unique_stage_II,"stage"]<-"Stage II"
 df_mean[rownames(df_mean) %in% unique_stage_III,"stage"]<-"Stage III"
 
 write_tsv(df_mean, paste(output_dir,"Table3.tsv",sep=""))			
-
-

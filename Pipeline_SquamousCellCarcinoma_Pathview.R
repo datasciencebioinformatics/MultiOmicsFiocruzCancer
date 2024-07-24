@@ -29,6 +29,7 @@ mypathway_Hedgehog<-"04340"
 mypathway_EGFR<-"01521"
 mypathway_TGF<- "04350"
 mypathway_VEGF<-"04370"
+mypathway_PPAR<-"03320"
 
 
 
@@ -75,7 +76,7 @@ pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_Hedgehog)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_EGFR)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_TGF)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_VEGF)
-
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_PPAR)
 
 
 

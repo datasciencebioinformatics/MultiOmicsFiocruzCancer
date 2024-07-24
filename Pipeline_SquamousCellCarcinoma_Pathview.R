@@ -14,6 +14,7 @@ library(pathview)
 #map01521 EGFR tyrosine kinase inhibitor resistance	01521	
 #map04350 TGF-beta signaling pathway			04350
 #map04370 VEGF signaling pathway			04370
+#map03320 PPAR signaling pathway			03320
 
 mypathway_ErbB<-"04012"
 mypathway_CTLA4<-"04660"

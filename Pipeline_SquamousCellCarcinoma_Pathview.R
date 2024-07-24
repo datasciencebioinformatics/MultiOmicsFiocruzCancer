@@ -15,6 +15,7 @@ library(pathview)
 #map04350 TGF-beta signaling pathway			04350
 #map04370 VEGF signaling pathway			04370
 #map03320 PPAR signaling pathway			03320
+#map04310 Wnt signaling pathway				04310
 
 mypathway_ErbB<-"04012"
 mypathway_CTLA4<-"04660"
@@ -29,7 +30,8 @@ mypathway_Hedgehog<-"04340"
 mypathway_EGFR<-"01521"
 mypathway_TGF<- "04350"
 mypathway_VEGF<-"04370"
-mypathway_PPAR<-"03320"
+mypathway_WNT<-"04310"
+mypathway_PPAR<-"04320"
 
 
 
@@ -76,7 +78,9 @@ pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_Hedgehog)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_EGFR)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_TGF)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_VEGF)
+
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_PPAR)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_WNT)
 
 
 
@@ -148,6 +152,20 @@ names(logFC)<-ids_stage_I[ids_stage_I$ENSEMBL %in% genes_ids_all,"ENTREZID"]
 
 
 pathview(gene.data=logFC*100,species="hsa",pathway="05223")
-
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_ErbB)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_CTLA4)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_TNF)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_PI3K)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_MAPK)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_JAK)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_TGFB)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_TNF)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_Notch)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_Hedgehog)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_EGFR)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_TGF)
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_VEGF)
+pathview(gene.data=logFC*100,species="hsa",pathway="03320")
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_WNT)
 
 

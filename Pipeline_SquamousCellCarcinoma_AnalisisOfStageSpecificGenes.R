@@ -154,12 +154,11 @@ write_tsv(df_mean, paste(output_dir,"Table3.tsv",sep=""))
 
 
 ####################################################################################################################
-# Take p-value
-df_mean<-data.frame(ENSEMBL=stage_specific_genes$ENSEMBL,ENTREZID=stage_specific_genes$ENTREZID,SYMBOL=stage_specific_genes$SYMBOL,
-avg.normal=rowMeans(unstranded_data[stage_specific_genes$gene,sample_normal]),
-std.normal=0,avg.stageI=rowMeans(unstranded_data[stage_specific_genes$gene,sample_stage_I]),
-std.stageI=0, avg.stageII=rowMeans(unstranded_data[stage_specific_genes$gene,sample_stage_II]), std.stageII=0, avg.stageIII=rowMeans(unstranded_data[stage_specific_genes$gene,sample_stage_III]), std.stageIII=0)
+selected_genes_Stage_I_data   <- data.frame()
+selected_genes_Stage_II_data  <-
+selected_genes_Stage_III_data <-
 
+# Take p-value
 selected_genes_Stage_I_data$avg.normal<-rowMeans(unstranded_data[selected_genes_Stage_I_data$gene,sample_normal])
 selected_genes_Stage_I_data$std.normal<-0
 selected_genes_Stage_I_data$avg.stageI<-rowMeans(unstranded_data[selected_genes_Stage_I_data$gene,sample_stage_I])
@@ -187,14 +186,14 @@ for (gene in rownames(selected_genes_Stage_I_data))
 for (gene in rownames(selected_genes_Stage_II_data))
 {
   selected_genes_Stage_II_data[gene,"std.normal"]<-sd(unstranded_data[gene,sample_normal])
-  selected_genes_Stage_II_data[gene,"std.stageI"]<-sd(unstranded_data[gene,sample_stage_II])  
+  selected_genes_Stage_II_data[gene,"std.stageII"]<-sd(unstranded_data[gene,sample_stage_II])  
 }
 
 # For each gene, calculate too the 
 for (gene in rownames(selected_genes_Stage_III_data))
 {
   selected_genes_Stage_III_data[gene,"std.normal"]<-sd(unstranded_data[gene,sample_normal])
-  selected_genes_Stage_III_data[gene,"std.stageI"]<-sd(unstranded_data[gene,sample_stage_III])  
+  selected_genes_Stage_III_data[gene,"std.stageIII"]<-sd(unstranded_data[gene,sample_stage_III])  
 }
 
 #############
@@ -225,6 +224,19 @@ for (gene_row in rownames(selected_genes_Stage_III_data))
 	selected_genes_Stage_III_data[gene_row,"gene_id"]<-strsplit(selected_genes_Stage_III_data[gene_row,"gene"], split = "\\.")[[1]][1]	
 }
 
+# ids_stage_I - all ENSEMBL anotated using bitr
+ids_stage_I       <-bitr(selected_genes_Stage_I_data$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
+ids_stage_II      <-bitr(selected_genes_Stage_II_data$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
+ids_stage_III     <-bitr(selected_genes_Stage_III_data$gene_id, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
+
+colnames(selected_genes_Stage_I_data)[10]<-"ENSEMBL"
+colnames(selected_genes_Stage_II_data)[10]<-"ENSEMBL"
+colnames(selected_genes_Stage_III_data)[10]<-"ENSEMBL"
+
+selected_genes_Stage_I_data<-merge(selected_genes_Stage_I_data,ids_stage_I,by="ENSEMBL")
+selected_genes_Stage_II_data<-merge(selected_genes_Stage_II_data,ids_stage_II,by="ENSEMBL")
+selected_genes_Stage_III_data<-merge(selected_genes_Stage_III_data,ids_stage_III,by="ENSEMBL")
+
 write_tsv(selected_genes_Stage_I_data, paste(output_dir,"all_genes_Stage_I_data.tsv",sep=""))			
 write_tsv(selected_genes_Stage_II_data, paste(output_dir,"all_genes_Stage_II_data.tsv",sep=""))	
-write_tsv(selected_genes_Stage_III_data, paste(output_dir,"all_genes_Stage_III_data.tsv",sep=""))	
+write_tsv(selected_genes_Stage_III_data, paste(output_dir,"all_genes_Stage_III_data.tsv",sep=""))		

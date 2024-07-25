@@ -1,5 +1,14 @@
-Dsucssion:
+# Pipeline
+source("/home/felipe/Documentos/scripts_Table7/Script16.R")
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_FuncionalAnalysis.R")
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_AnalisisOfStageSpecificGenes.R")
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_ExpressionPlots.R")
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_FuncionalAnalysis_plots.R")
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_ResultsAllPanel.R")
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageAgainstStages.R")
 
+
+Dsucssion:
 I would also like to discuss cancer plasticity. Whether the phenotypic difference between one stage and others can be seen in the functional annotation. It's another way to evaluate progression. That is, does some continuity have to be seen from one stage to another?
 
 Tipicamente, tem o process de fermentaçao seguido da angiogenese seguido das mrtastases

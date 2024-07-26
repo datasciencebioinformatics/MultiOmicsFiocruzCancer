@@ -252,7 +252,14 @@ selected_genes<-unique(c(table_I,table_II,table_III,table_IV,table_V))
 
 unstranded_data_samples_complete<-rbind(unstranded_data_samples_unapaired[,c("SYMBOL","RPKM","stages","tissue_type")],unstranded_data_samples[unstranded_data_samples$tissue_type=="Normal",c("SYMBOL","RPKM","stages","tissue_type")])
 biomarkers_AMTN_boxplot2   <-ggplot(unstranded_data_samples_complete[unstranded_data_samples_complete$SYMBOL %in% selected_genes,], aes(x=stages, y=RPKM, fill=tissue_type, color=tissue_type)) + facet_wrap(~SYMBOL, nrow = 6,ncol = 10, scales="free")+ theme_bw() + theme(axis.text.x = element_text(angle = 90)) +  geom_jitter(width = 0.25) 
-biomarkers_AMTN_boxplot2   <-ggplot(unstranded_data_samples_complete[unstranded_data_samples_complete$SYMBOL %in% selected_genes,], aes(x=stages, y=RPKM, fill=tissue_type, color=tissue_type)) + facet_grid(~SYMBOL, row = 6,col = 10, scales="free")+ theme_bw() + theme(axis.text.x = element_text(angle = 90)) +  geom_boxplot(outlier.shape=NA)
 
+biomarkers_AMTN_boxplot2   <-ggplot(unstranded_data_samples_unapaired[unstranded_data_samples_unapaired$SYMBOL %in% selected_genes,], aes(x=stages, y=RPKM, fill=stages, color=stages)) + facet_wrap(~SYMBOL, nrow = 6,ncol = 9, scales="free")+ theme_bw() + theme(axis.text.x = element_text(angle = 90)) +  geom_boxplot(outlier.shape=NA) +  theme(axis.title.x=element_blank(),axis.text.x=element_blank(), axis.ticks.x=element_blank()) + scale_fill_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + scale_colour_manual(values=c('#e8f2a1', '#729fcf', '#ffaa95')) + theme(legend.position="bottom")
+
+
+
+# p_stage_III_unpaired.png
+png(filename=paste(output_folder,paste("biomarkers_AMTN_boxplot2.png",sep=""),sep=""), width = 24, height = 20, res=600, units = "cm")
+  print(biomarkers_AMTN_boxplot2 + theme(legend.position="bottom"))
+dev.off()
 
 

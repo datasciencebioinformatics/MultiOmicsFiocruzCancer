@@ -385,21 +385,27 @@ stage_II_KEGG_Genes<-unique(df_all_annotation[df_all_annotation$CluterProfiler %
 stage_III_KEGG      <-head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_III),"Term"],n=3)
 stage_III_KEGG_Genes<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_III_KEGG,"Symbol"])
 
-
-
+# Select top 10 terms                                                                                                                                                            #
+selection_GO       <-unique(c(head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_I),"Term"],n=10),head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_II),"Term"],n=10),head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_III),"Term"],n=10)))
+selection_Reactome <-unique(c(head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_I),"Term"],n=10),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_II),"Term"],n=10),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_III),"Term"],n=10)))
+selection_KEGG     <-unique(c(head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_I),"Term"],n=10),head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_II),"Term"],n=10),head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_III),"Term"],n=10)))
 
 matrix_count_terms_selected_GO_selected_stages[selection_GO,]
 matrix_count_terms_selected_KEGG_selected_stages[selection_KEGG,]
 matrix_count_terms_selected_Reactome_selected_stages[selection_Reactome,]
 ####################################################################################################################
-selection_GO       <-unique(c(head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_I),"Term"],n=10),head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_II),"Term"],n=10),head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_III),"Term"],n=10)))
-selection_Reactome <-unique(c(head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_I),"Term"],n=10),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_II),"Term"],n=10),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_III),"Term"],n=10)))
-selection_KEGG     <-unique(c(head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_I),"Term"],n=10),head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_II),"Term"],n=10),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_KEGG$Stage_III),"Term"],n=10)))
+selection_GO       <-unique(c(head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_I),"Term"],n=3),head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_II),"Term"],n=3),head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_III),"Term"],n=3)))
+selection_Reactome <-unique(c(head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_I),"Term"],n=3),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_II),"Term"],n=3),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_III),"Term"],n=3)))
+selection_KEGG     <-unique(c(head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_I),"Term"],n=3),head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_II),"Term"],n=3),head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_III),"Term"],n=3)))
 
 # Store information for each gene
 matrix_count_terms_selected_GO        <-df_count_terms_selected_GO[selection_GO,]
 matrix_count_terms_selected_KEGG      <-df_count_terms_selected_KEGG[selection_KEGG,]
 matrix_count_terms_selected_Reactome  <-df_count_terms_selected_Reactome[selection_Reactome,]
+
+write.xlsx(x=matrix_count_terms_selected_GO,file=paste(output_dir,"matrix_count_terms_selected_GO",".xlsx",sep=""), sheet="GO stage-wise", append=FALSE)
+write.xlsx(x=matrix_count_terms_selected_KEGG,file=paste(output_dir,"matrix_count_terms_selected_KEGG",".xlsx",sep=""), sheet="KEGG stage-wise", append=FALSE)
+write.xlsx(x=matrix_count_terms_selected_Reactome,file=paste(output_dir,"matrix_count_terms_selected_Reactome",".xlsx",sep=""), sheet="Reactome stage-wise", append=FALSE)
 ####################################################################################################################
 # Concatenate table
 df_all_annotation_selected_KEGG      <-df_all_annotation[which(df_all_annotation$CluterProfiler %in% selection_KEGG),]

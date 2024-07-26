@@ -154,10 +154,6 @@ write_tsv(df_mean, paste(output_dir,"Table3.tsv",sep=""))
 
 
 ####################################################################################################################
-selected_genes_Stage_I_data   <- data.frame()
-selected_genes_Stage_II_data  <-
-selected_genes_Stage_III_data <-
-
 # Take p-value
 selected_genes_Stage_I_data$avg.normal<-rowMeans(unstranded_data[selected_genes_Stage_I_data$gene,sample_normal])
 selected_genes_Stage_I_data$std.normal<-0
@@ -255,6 +251,8 @@ table_V<-c("MAGEA6","KRT31","KRT75","KRT16","FOXE1","CRCT1","PITX1","KRT15","TP6
 selected_genes<-unique(c(table_I,table_II,table_III,table_IV,table_V))
 
 unstranded_data_samples_complete<-rbind(unstranded_data_samples_unapaired[,c("SYMBOL","RPKM","stages","tissue_type")],unstranded_data_samples[unstranded_data_samples$tissue_type=="Normal",c("SYMBOL","RPKM","stages","tissue_type")])
+biomarkers_AMTN_boxplot2   <-ggplot(unstranded_data_samples_complete[unstranded_data_samples_complete$SYMBOL %in% selected_genes,], aes(x=stages, y=RPKM, fill=tissue_type, color=tissue_type)) + facet_wrap(~SYMBOL, nrow = 6,ncol = 10, scales="free")+ theme_bw() + theme(axis.text.x = element_text(angle = 90)) +  geom_jitter(width = 0.25) 
+biomarkers_AMTN_boxplot2   <-ggplot(unstranded_data_samples_complete[unstranded_data_samples_complete$SYMBOL %in% selected_genes,], aes(x=stages, y=RPKM, fill=tissue_type, color=tissue_type)) + facet_grid(~SYMBOL, row = 6,col = 10, scales="free")+ theme_bw() + theme(axis.text.x = element_text(angle = 90)) +  geom_boxplot(outlier.shape=NA)
 
-biomarkers_AMTN_boxplot2   <-ggplot(unstranded_data_samples_complete[unstranded_data_samples_complete$SYMBOL %in% selected_genes,], aes(x=stages, y=RPKM, fill=tissue_type, color=tissue_type)) + facet_wrap(~SYMBOL, nrow = 5,ncol = 6, scales="free")+ theme_bw() + theme(axis.text.x = element_text(angle = 90)) +  geom_jitter(width = 0.25) 
+
 

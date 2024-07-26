@@ -65,7 +65,7 @@ biomarkers<-c("AMTN" , "FABP7" , "OLFM4")
 # Complete dataset
 unstranded_data_samples_complete<-rbind(unstranded_data_samples_unapaired[,c("SYMBOL","RPKM","stages","tissue_type")],unstranded_data_samples[unstranded_data_samples$tissue_type=="Normal",c("SYMBOL","RPKM","stages","tissue_type")])
 
-biomarkers_AMTN_boxplot2   <-ggplot(unstranded_data_samples_complete[unstranded_data_samples_complete$SYMBOL %in% biomarkers,], aes(x=stages, y=RPKM, fill=tissue_type, color=tissue_type)) + facet_wrap(~SYMBOL, nrow = 5,ncol = 6, scales="free")+ theme_bw() + theme(axis.text.x = element_text(angle = 90)) +  geom_jitter(width = 0.25) 
+biomarkers_AMTN_boxplot2   <-ggplot(unstranded_data_samples_complete[unstranded_data_samples_complete$SYMBOL %in% selected_genes,], aes(x=stages, y=RPKM, fill=tissue_type, color=tissue_type)) + facet_wrap(~SYMBOL, nrow = 5,ncol = 6, scales="free")+ theme_bw() + theme(axis.text.x = element_text(angle = 90)) +  geom_jitter(width = 0.25) 
 biomarkers_AMTN_errobar2   <-ggplot(unstranded_data_samples_complete[unstranded_data_samples_complete$SYMBOL %in% biomarkers,], aes(x=stages, y=RPKM, fill=tissue_type, color=tissue_type)) + facet_wrap(~SYMBOL, nrow = 5,ncol = 6, scales="free")+ theme_bw() + theme(axis.text.x = element_text(angle = 90)) +  stat_boxplot(geom ='errorbar', width = 0.5) 
 
 
@@ -240,3 +240,21 @@ selected_genes_Stage_III_data<-merge(selected_genes_Stage_III_data,ids_stage_III
 write_tsv(selected_genes_Stage_I_data, paste(output_dir,"all_genes_Stage_I_data.tsv",sep=""))			
 write_tsv(selected_genes_Stage_II_data, paste(output_dir,"all_genes_Stage_II_data.tsv",sep=""))	
 write_tsv(selected_genes_Stage_III_data, paste(output_dir,"all_genes_Stage_III_data.tsv",sep=""))		
+
+
+
+
+
+
+####################################################################################################################
+table_I<-c("KRT14", "KRT16", "NTS", "SPRR1B", "GPX2", "SPRR1B", "AKR1B10", "GPX2", "AKR1B10", "KRT13", "SPRR2A", "KRT13", "AKR1B10", "KRT6B", "S100A7")
+table_II<-c("GRB7", "SRCv", "RNPS1v", "HOOK2", "EFTUD2","PRKCI","DVL2","HAUS1","RNF2","PHB1","ELOC","PSMC6","THAP7","SEH1L")
+table_III<-c("GRB7", "SRCv", "RNPS1v", "HOOK2", "EFTUD2","PRKCI","DVL2","HAUS1","RNF2","PHB1","ELOC","PSMC6","THAP7","SEH1L")
+table_IV<-c("CDK8","KRT1","NEDD1","GMCL1","GOLT1B","BEX2","PRMT6","RBBP7","SCNM1","TP53","CEP131","CLK2","EHMT2","FOXK2","PNKP","PRMT5","USP21")
+table_V<-c("MAGEA6","KRT31","KRT75","KRT16","FOXE1","CRCT1","PITX1","KRT15","TP63","TFAP2A","NUF2","FOXM1","ANLN","BUB1B","CEP55","PLK1")
+selected_genes<-unique(c(table_I,table_II,table_III,table_IV,table_V))
+
+unstranded_data_samples_complete<-rbind(unstranded_data_samples_unapaired[,c("SYMBOL","RPKM","stages","tissue_type")],unstranded_data_samples[unstranded_data_samples$tissue_type=="Normal",c("SYMBOL","RPKM","stages","tissue_type")])
+
+biomarkers_AMTN_boxplot2   <-ggplot(unstranded_data_samples_complete[unstranded_data_samples_complete$SYMBOL %in% selected_genes,], aes(x=stages, y=RPKM, fill=tissue_type, color=tissue_type)) + facet_wrap(~SYMBOL, nrow = 5,ncol = 6, scales="free")+ theme_bw() + theme(axis.text.x = element_text(angle = 90)) +  geom_jitter(width = 0.25) 
+

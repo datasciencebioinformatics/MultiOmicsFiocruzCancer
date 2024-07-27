@@ -542,18 +542,57 @@ plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
 legend("topleft", legend =c('Stage I', 'Stage II', 'Stage III'), pch=16, pt.cex=3, cex=1.5, bty='n',col = c('#e8f2a1', '#729fcf', '#ffaa95'))
 mtext("Legend", at=0.2, cex=2)
 ###########################################################################
+# Figure 3
 df_count_terms_selected_GO<-df_count_terms_selected_GO[selection_GO,]
 df_count_terms_selected_KEGG<-df_count_terms_selected_KEGG[selection_KEGG,]
 df_count_terms_selected_Reactome<-df_count_terms_selected_Reactome[selection_Reactome,]
 
 common_to_all_KEGG<-df_count_terms_selected_KEGG[df_count_terms_selected_KEGG$Stage_I>0 & df_count_terms_selected_KEGG$Stage_II>0 & df_count_terms_selected_KEGG$Stage_III>0,]
 
-df_count_terms_selected_KEGG[common_to_all_KEGG,]
-
 
 selection_GO       <-unique(c(head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_I),"Term"],n=3),head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_II),"Term"],n=3),head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_III),"Term"],n=3)))
 selection_Reactome <-unique(c(head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_I),"Term"],n=3),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_II),"Term"],n=3),head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_III),"Term"],n=3)))
 selection_KEGG     <-unique(c(head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_I),"Term"],n=3),head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_II),"Term"],n=3),head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_III),"Term"],n=3)))
+
+terms_go_stage_I<-head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_I),"Term"],n=3)
+terms_kegg_stage_I<-head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_I),"Term"],n=3)
+terms_reactome_stage_I<-head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_I),"Term"],n=3)
+
+terms_go_stage_II<-head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_II),"Term"],n=3)
+terms_kegg_stage_II<-head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_II),"Term"],n=3)
+terms_reactome_stage_II<-head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_II),"Term"],n=3)
+
+terms_go_stage_III<-head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_III),"Term"],n=3)
+terms_kegg_stage_III<-head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_III),"Term"],n=3)
+terms_reactome_stage_III<-head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_III),"Term"],n=3)
+
+genes_go_stage_I<-head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_I),"Genes_Stage_I"],n=3)
+genes_kegg_stage_I<-head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_I),"Genes_Stage_I"],n=3)
+genes_reactome_stage_I<-head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_I),"Genes_Stage_I"],n=3)
+
+genes_go_stage_II<-head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_II),"Genes_Stage_II"],n=3)
+genes_kegg_stage_II<-head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_II),"Genes_Stage_II"],n=3)
+genes_reactome_stage_II<-head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_II),"Genes_Stage_II"],n=3)
+
+genes_go_stage_III<-head(df_count_terms_selected_GO[order(-df_count_terms_selected_GO$Stage_III),"Genes_Stage_III"],n=3)
+genes_kegg_stage_III<-head(df_count_terms_selected_KEGG[order(-df_count_terms_selected_KEGG$Stage_III),"Genes_Stage_III"],n=3)
+genes_reactome_stage_III<-head(df_count_terms_selected_Reactome[order(-df_count_terms_selected_Reactome$Stage_III),"Genes_Stage_III"],n=3)
+
+stage_I_genes<-c(trimws(unique(unlist(strsplit(genes_go_stage_I,",",fixed=T))), which = c("both", "left", "right"), whitespace = "[ \t\r\n]"),
+trimws(unique(unlist(strsplit(genes_kegg_stage_I,",",fixed=T))), which = c("both", "left", "right"), whitespace = "[ \t\r\n]"),
+trimws(unique(unlist(strsplit(genes_reactome_stage_I,",",fixed=T))), which = c("both", "left", "right"), whitespace = "[ \t\r\n]"))
+
+stage_II_genes<-c(trimws(unique(unlist(strsplit(genes_go_stage_II,",",fixed=T))), which = c("both", "left", "right"), whitespace = "[ \t\r\n]"),
+trimws(unique(unlist(strsplit(genes_kegg_stage_II,",",fixed=T))), which = c("both", "left", "right"), whitespace = "[ \t\r\n]"),
+trimws(unique(unlist(strsplit(genes_reactome_stage_II,",",fixed=T))), which = c("both", "left", "right"), whitespace = "[ \t\r\n]"))
+
+stage_III_genes<-c(trimws(unique(unlist(strsplit(genes_go_stage_III,",",fixed=T))), which = c("both", "left", "right"), whitespace = "[ \t\r\n]"),
+trimws(unique(unlist(strsplit(genes_kegg_stage_III,",",fixed=T))), which = c("both", "left", "right"), whitespace = "[ \t\r\n]"),
+trimws(unique(unlist(strsplit(genes_reactome_stage_III,",",fixed=T))), which = c("both", "left", "right"), whitespace = "[ \t\r\n]"))
+
+
+
+
 
 
 

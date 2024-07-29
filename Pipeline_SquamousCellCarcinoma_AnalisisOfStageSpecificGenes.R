@@ -238,15 +238,47 @@ write_tsv(selected_genes_Stage_II_data, paste(output_dir,"all_genes_Stage_II_dat
 write_tsv(selected_genes_Stage_III_data, paste(output_dir,"all_genes_Stage_III_data.tsv",sep=""))		
 
 selected_genes_Stage_I_data_bck<-selected_genes_Stage_I_data[selected_genes_Stage_I_data$avg.normal<2,]
-selected_genes_Stage_I_data_bck<- selected_genes_Stage_I_data_bck[(selected_genes_Stage_I_data_bck$avg.stageI/selected_genes_Stage_I_data_bck$avg.stageI)>100,]
+selected_genes_Stage_I_data_bck$lfc<-(selected_genes_Stage_I_data_bck$avg.stageI/selected_genes_Stage_I_data_bck$avg.normal)
+selected_genes_Stage_I_data_bck<- selected_genes_Stage_I_data_bck[selected_genes_Stage_I_data_bck$lfc>100,]
 
 selected_genes_Stage_II_data_bck<-selected_genes_Stage_II_data[selected_genes_Stage_II_data$avg.normal<2,]
-selected_genes_Stage_II_data_bck<- selected_genes_Stage_II_data_bck[(selected_genes_Stage_II_data_bck$avg.stageII/selected_genes_Stage_II_data_bck$avg.normal)>100,]
+selected_genes_Stage_II_data_bck$lfc<-(selected_genes_Stage_II_data_bck$avg.stageII/selected_genes_Stage_II_data_bck$avg.normal)
+selected_genes_Stage_II_data_bck<- selected_genes_Stage_II_data_bck[selected_genes_Stage_II_data_bck$lfc>100,]
 
 selected_genes_Stage_III_data_bck<-selected_genes_Stage_III_data[selected_genes_Stage_III_data$avg.normal<2,]
-selected_genes_Stage_III_data_bck<- selected_genes_Stage_III_data_bck[(selected_genes_Stage_III_data_bck$avg.stageIII/selected_genes_Stage_III_data_bck$avg.normal)>100,]
+selected_genes_Stage_III_data_bck$lfc<-(selected_genes_Stage_III_data_bck$avg.stageIII/selected_genes_Stage_III_data_bck$avg.normal)
+selected_genes_Stage_III_data_bck<- selected_genes_Stage_III_data_bck[selected_genes_Stage_III_data_bck$lfc>100,]
 
+unique_stage_I  =intersect(setdiff(selected_genes_Stage_I_data_bck$SYMBOL, c(selected_genes_Stage_II_data_bck$SYMBOL,selected_genes_Stage_III_data_bck$SYMBOL)),selected_genes_Stage_I_data_bck$SYMBOL)
+unique_stage_II  =intersect(setdiff(selected_genes_Stage_II_data_bck$SYMBOL, c(selected_genes_Stage_I_data_bck$SYMBOL,selected_genes_Stage_III_data_bck$SYMBOL)),selected_genes_Stage_II_data_bck$SYMBOL)
+unique_stage_III  =intersect(setdiff(selected_genes_Stage_III_data_bck$SYMBOL, c(selected_genes_Stage_I_data_bck$SYMBOL,selected_genes_Stage_II_data_bck$SYMBOL)),selected_genes_Stage_III_data_bck$SYMBOL)
 
+selected_genes_Stage_I_data_bck <-selected_genes_Stage_I_data_bck[selected_genes_Stage_I_data_bck$SYMBOL %in% unique_stage_I,]
+selected_genes_Stage_II_data_bck<-selected_genes_Stage_II_data_bck[selected_genes_Stage_II_data_bck$SYMBOL %in% unique_stage_II,]
+selected_genes_Stage_III_data_bck<-selected_genes_Stage_III_data_bck[selected_genes_Stage_III_data_bck$SYMBOL %in% unique_stage_III,]
+	
+df_stage_I<-data.frame(SYMBOL=selected_genes_Stage_I_data_bck$SYMBOL,
+avg.normal=selected_genes_Stage_I_data_bck$avg.normal,
+std.normal=selected_genes_Stage_I_data_bck$std.normal,
+avg.stageI=selected_genes_Stage_I_data_bck$avg.stageI,
+std.stageI=selected_genes_Stage_I_data_bck$std.stageI,
+FC=selected_genes_Stage_I_data_bck$lfc,stage="Stage I")
+
+df_stage_II<-data.frame(SYMBOL=selected_genes_Stage_II_data_bck$SYMBOL,
+avg.normal=selected_genes_Stage_II_data_bck$avg.normal,
+std.normal=selected_genes_Stage_II_data_bck$std.normal,
+avg.stageI=selected_genes_Stage_II_data_bck$avg.stageII,
+std.stageI=selected_genes_Stage_II_data_bck$std.stageII,
+FC=selected_genes_Stage_II_data_bck$lfc,stage="Stage II")
+
+df_stage_III<-data.frame(SYMBOL=selected_genes_Stage_III_data_bck$SYMBOL,
+avg.normal=selected_genes_Stage_III_data_bck$avg.normal,
+std.normal=selected_genes_Stage_III_data_bck$std.normal,
+avg.stageI=selected_genes_Stage_III_data_bck$avg.stageIII,
+std.stageI=selected_genes_Stage_III_data_bck$std.stageIII,
+FC=selected_genes_Stage_III_data_bck$lfc,stage="Stage III")
+
+rbind(df_stage_I,df_stage_II,df_stage_III)
 
 
 ####################################################################################################################
@@ -255,8 +287,11 @@ table_II<-c("GRB7", "SRCv", "RNPS1v", "HOOK2", "EFTUD2","PRKCI","DVL2","HAUS1","
 table_III<-c("GRB7", "SRCv", "RNPS1v", "HOOK2", "EFTUD2","PRKCI","DVL2","HAUS1","RNF2","PHB1","ELOC","PSMC6","THAP7","SEH1L")
 table_IV<-c("CDK8","KRT1","NEDD1","GMCL1","GOLT1B","BEX2","PRMT6","RBBP7","SCNM1","TP53","CEP131","CLK2","EHMT2","FOXK2","PNKP","PRMT5","USP21")
 table_V<-c("MAGEA6","KRT31","KRT75","KRT16","FOXE1","CRCT1","PITX1","KRT15","TP63","TFAP2A","NUF2","FOXM1","ANLN","BUB1B","CEP55","PLK1")
+
 selected_genes<-unique(c(table_I,table_II,table_III,table_IV,table_V))
+
 selected_genes<-unique(c(table_I))
+
 
 # Control samples df
 df_control_samples<-unstranded_data_samples[unstranded_data_samples$tissue_type=="Normal",c("SYMBOL","RPKM","stages","tissue_type")]

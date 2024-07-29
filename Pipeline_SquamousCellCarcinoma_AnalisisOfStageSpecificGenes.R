@@ -304,7 +304,7 @@ biomarkers_AMTN_boxplot2   <-ggplot(unstranded_data_samples_complete[unstranded_
 
 
 # p_stage_III_unpaired.png
-png(filename=paste(output_folder,paste("biomarkers_AMTN_boxplot2.png",sep=""),sep=""), width = 16, height = 10, res=600, units = "cm")
+png(filename=paste(output_folder,paste("Figure2.png",sep=""),sep=""), width = 16, height = 10, res=600, units = "cm")
   print(biomarkers_AMTN_boxplot2 + theme(legend.position="bottom"))
 dev.off()
 

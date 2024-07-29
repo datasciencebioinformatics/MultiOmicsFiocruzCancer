@@ -172,21 +172,21 @@ selected_genes_Stage_III_data$std.stageIII<-0
 
 
 # For each gene, calculate too the 
-for (gene in rownames(selected_genes_Stage_I_data))
+for (gene in selected_genes_Stage_I_data$gene)
 {
   selected_genes_Stage_I_data[gene,"std.normal"]<-sd(unstranded_data[gene,sample_normal])
   selected_genes_Stage_I_data[gene,"std.stageI"]<-sd(unstranded_data[gene,sample_stage_I])  
 }
 
 # For each gene, calculate too the 
-for (gene in rownames(selected_genes_Stage_II_data))
+for (gene in selected_genes_Stage_II_data$gene)
 {
   selected_genes_Stage_II_data[gene,"std.normal"]<-sd(unstranded_data[gene,sample_normal])
   selected_genes_Stage_II_data[gene,"std.stageII"]<-sd(unstranded_data[gene,sample_stage_II])  
 }
 
 # For each gene, calculate too the 
-for (gene in rownames(selected_genes_Stage_III_data))
+for (gene in selected_genes_Stage_III_data$gene)
 {
   selected_genes_Stage_III_data[gene,"std.normal"]<-sd(unstranded_data[gene,sample_normal])
   selected_genes_Stage_III_data[gene,"std.stageIII"]<-sd(unstranded_data[gene,sample_stage_III])  

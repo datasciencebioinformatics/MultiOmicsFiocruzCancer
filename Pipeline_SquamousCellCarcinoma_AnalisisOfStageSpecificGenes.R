@@ -172,21 +172,21 @@ selected_genes_Stage_III_data$std.stageIII<-0
 
 
 # For each gene, calculate too the 
-for (gene in selected_genes_Stage_I_data$gene)
+for (gene in rownames(selected_genes_Stage_I_data))
 {
   selected_genes_Stage_I_data[gene,"std.normal"]<-sd(unstranded_data[gene,sample_normal])
   selected_genes_Stage_I_data[gene,"std.stageI"]<-sd(unstranded_data[gene,sample_stage_I])  
 }
 
 # For each gene, calculate too the 
-for (gene in selected_genes_Stage_II_data$gene)
+for (gene in rownames(selected_genes_Stage_II_data))
 {
   selected_genes_Stage_II_data[gene,"std.normal"]<-sd(unstranded_data[gene,sample_normal])
   selected_genes_Stage_II_data[gene,"std.stageII"]<-sd(unstranded_data[gene,sample_stage_II])  
 }
 
 # For each gene, calculate too the 
-for (gene in selected_genes_Stage_III_data$gene)
+for (gene in rownames(selected_genes_Stage_III_data))
 {
   selected_genes_Stage_III_data[gene,"std.normal"]<-sd(unstranded_data[gene,sample_normal])
   selected_genes_Stage_III_data[gene,"std.stageIII"]<-sd(unstranded_data[gene,sample_stage_III])  
@@ -237,7 +237,14 @@ write_tsv(selected_genes_Stage_I_data, paste(output_dir,"all_genes_Stage_I_data.
 write_tsv(selected_genes_Stage_II_data, paste(output_dir,"all_genes_Stage_II_data.tsv",sep=""))	
 write_tsv(selected_genes_Stage_III_data, paste(output_dir,"all_genes_Stage_III_data.tsv",sep=""))		
 
+selected_genes_Stage_I_data_bck<-selected_genes_Stage_I_data[selected_genes_Stage_I_data$avg.normal<2,]
+selected_genes_Stage_I_data_bck<- selected_genes_Stage_I_data_bck[(selected_genes_Stage_I_data_bck$avg.stageI/selected_genes_Stage_I_data_bck$avg.stageI)>100,]
 
+selected_genes_Stage_II_data_bck<-selected_genes_Stage_II_data[selected_genes_Stage_II_data$avg.normal<2,]
+selected_genes_Stage_II_data_bck<- selected_genes_Stage_II_data_bck[(selected_genes_Stage_II_data_bck$avg.stageII/selected_genes_Stage_II_data_bck$avg.normal)>100,]
+
+selected_genes_Stage_III_data_bck<-selected_genes_Stage_III_data[selected_genes_Stage_III_data$avg.normal<2,]
+selected_genes_Stage_III_data_bck<- selected_genes_Stage_III_data_bck[(selected_genes_Stage_III_data_bck$avg.stageIII/selected_genes_Stage_III_data_bck$avg.normal)>100,]
 
 
 
@@ -267,3 +274,10 @@ png(filename=paste(output_folder,paste("biomarkers_AMTN_boxplot2.png",sep=""),se
 dev.off()
 
 
+
+
+
+
+
+####################################################################################################################
+selected_genes_Stage_I_data

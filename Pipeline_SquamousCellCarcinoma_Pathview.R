@@ -38,7 +38,7 @@ mypathway_PPAR<-"04320"
 genes<-c(genes_unique_Stage_I$gene_id,genes_unique_Stage_II$gene_id,genes_unique_Stage_III$gene_id)
 
 # For each gene, add gene_id
-for (gene_row in rownames(log2change_tumor_control))
+for (gene_row in rownames(c))
 {	
 	# Store gene id in the vector
 	# Simply trim the gene id before the "." to save it in the ENSEML format
@@ -48,7 +48,6 @@ for (gene_row in rownames(log2change_tumor_control))
 logFC<-log2change_tumor_control[log2change_tumor_control$ENSEMBL %in% as.vector(genes),"log2change"]
 ids_stage_I      <-bitr(log2change_tumor_control$ENSEMBL, fromType = "ENSEMBL", toType = c("ENTREZID","SYMBOL"), OrgDb="org.Hs.eg.db")
 names(logFC)<-ids_stage_I[ids_stage_I$ENSEMBL %in% genes,"ENTREZID"]
-
 
 
 mypathway_ErbB<-"04012"
@@ -78,23 +77,15 @@ pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_Hedgehog)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_EGFR)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_TGF)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_VEGF)
-
-
-# WNT signalling pathway is enriched with the stage-specific genes
-# Choosen because it is abundant in numeber of stage-specfici genes).
-# Kegg pathway gene shows genes DVL1, FRP, BAMBI biomarkers acting in this patwhay;.
-
+# Reactome WNT signalling pathway is enriched with the stage-specific genes for stage III.
+# Choosen because it is abundant in numeber of stage-specfic genes (13 genes): DVL2, DVL2, PSMB1, AP2S1, PSMC6, PSMA7, PSMD7, AKT2, BCL9, CLTA, PSMD4, PSMD4, PSMC2
+# Kegg pathway gene shows genes DVL1, FRP, BAMBI biomarkers acting in this patwhay.
+# FRP appears repressing the activation of Wnt to Frizzled-LRP5/6
 # ids_stage_I[ids_stage_I$ENSEMBL =="ENSG00000107404",] # DVL1
 # ids_stage_I[ids_stage_I$ENSEMBL =="ENSG00000104332",] # FRP
 # ids_stage_I[ids_stage_I$ENSEMBL =="ENSG00000095739",] # BAMBI
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_WNT)
-
-
-
-
-
-
-
+pathview(gene.data=logFC*100,species="hsa",pathway="03320")
 
 
 #######################################################################################################################################
@@ -173,6 +164,8 @@ pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_EGFR)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_TGF)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_VEGF)
 pathview(gene.data=logFC*100,species="hsa",pathway="03320")
-pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_WNT)
 
+
+logFC_1<-logFC[ids_stage_I[ids_stage_I$SYMBOL %in% c("DVL2","PHB1","ELOC", "PSMC6","SEH1L"),"ENTREZID"]]*100
+pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_WNT)
 

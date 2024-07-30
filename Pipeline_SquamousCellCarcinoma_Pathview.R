@@ -79,7 +79,14 @@ pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_EGFR)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_TGF)
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_VEGF)
 
-pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_PPAR)
+
+# WNT signalling pathway is enriched with the stage-specific genes
+# Choosen because it is abundant in numeber of stage-specfici genes).
+# Kegg pathway gene shows genes DVL1, FRP, BAMBI biomarkers acting in this patwhay;.
+
+# ids_stage_I[ids_stage_I$ENSEMBL =="ENSG00000107404",] # DVL1
+# ids_stage_I[ids_stage_I$ENSEMBL =="ENSG00000104332",] # FRP
+# ids_stage_I[ids_stage_I$ENSEMBL =="ENSG00000095739",] # BAMBI
 pathview(gene.data=logFC*100,species="hsa",pathway=mypathway_WNT)
 
 

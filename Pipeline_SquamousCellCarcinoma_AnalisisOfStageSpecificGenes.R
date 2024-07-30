@@ -284,9 +284,8 @@ rbind(df_stage_I,df_stage_II,df_stage_III)
 ####################################################################################################################
 table_I<-c("KRT14", "KRT16", "NTS", "SPRR1B", "GPX2", "SPRR1B", "AKR1B10", "GPX2", "AKR1B10", "KRT13", "SPRR2A", "KRT13", "AKR1B10", "KRT6B", "S100A7")
 table_II<-c("GRB7", "SRCv", "RNPS1v", "HOOK2", "EFTUD2","PRKCI","DVL2","HAUS1","RNF2","PHB1","ELOC","PSMC6","THAP7","SEH1L")
-table_III<-c("GRB7", "SRCv", "RNPS1v", "HOOK2", "EFTUD2","PRKCI","DVL2","HAUS1","RNF2","PHB1","ELOC","PSMC6","THAP7","SEH1L")
-table_IV<-c("CDK8","KRT1","NEDD1","GMCL1","GOLT1B","BEX2","PRMT6","RBBP7","SCNM1","TP53","CEP131","CLK2","EHMT2","FOXK2","PNKP","PRMT5","USP21")
-table_V<-c("MAGEA6","KRT31","KRT75","KRT16","FOXE1","CRCT1","PITX1","KRT15","TP63","TFAP2A","NUF2","FOXM1","ANLN","BUB1B","CEP55","PLK1")
+table_III<-c("CDK8","KRT1","NEDD1","GMCL1","GOLT1B","BEX2","PRMT6","RBBP7","SCNM1","TP53","CEP131","CLK2","EHMT2","FOXK2","PNKP","PRMT5","USP21")
+table_IV<-c("MAGEA6","KRT31","KRT75","KRT16","FOXE1","CRCT1","PITX1","KRT15","TP63","TFAP2A","NUF2","FOXM1","ANLN","BUB1B","CEP55","PLK1")
 
 selected_genes<-unique(c(table_I,table_II,table_III,table_IV,table_V))
 
@@ -315,4 +314,30 @@ dev.off()
 
 
 ####################################################################################################################
-selected_genes_Stage_I_data
+stage_I_GO_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_I_GO,"Symbol"])
+stage_II_GO_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_II_GO,"Symbol"])
+stage_III_GO_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_III_GO,"Symbol"])
+
+stage_I_Reactome_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_I_Reactome,"Symbol"])
+stage_II_Reactome_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_II_Reactome,"Symbol"])
+stage_III_Reactome_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_III_Reactome,"Symbol"])
+
+stage_I_KEGG_GENES<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_I_KEGG,"Symbol"])
+stage_II_KEGG_Genes<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_II_KEGG,"Symbol"])
+stage_III_KEGG_Genes<-unique(df_all_annotation[df_all_annotation$CluterProfiler %in% stage_III_KEGG,"Symbol"])
+####################################################################################################################
+table_I[table_I %in% c(stage_I_GO_GENES,stage_I_Reactome_GENES,stage_I_KEGG_GENES)]
+table_I[table_I %in% c(stage_II_GO_GENES,stage_II_Reactome_GENES,stage_II_KEGG_Genes)]
+table_I[table_I %in% c(stage_III_GO_GENES,stage_III_Reactome_GENES,stage_III_KEGG_Genes)]
+
+table_II[table_II %in% c(stage_I_GO_GENES,stage_I_Reactome_GENES,stage_I_KEGG_GENES)]
+table_II[table_II %in% c(stage_II_GO_GENES,stage_II_Reactome_GENES,stage_II_KEGG_Genes)]
+table_II[table_II %in% c(stage_III_GO_GENES,stage_III_Reactome_GENES,stage_III_KEGG_Genes)]
+
+table_III[table_III %in% c(stage_I_GO_GENES,stage_I_Reactome_GENES,stage_I_KEGG_GENES)]
+table_III[table_III %in% c(stage_II_GO_GENES,stage_II_Reactome_GENES,stage_II_KEGG_Genes)]
+table_III[table_III %in% c(stage_III_GO_GENES,stage_III_Reactome_GENES,stage_III_KEGG_Genes)]
+
+table_IV[table_IV %in% c(stage_I_GO_GENES,stage_I_Reactome_GENES,stage_I_KEGG_GENES)]
+table_IV[table_IV %in% c(stage_II_GO_GENES,stage_II_Reactome_GENES,stage_II_KEGG_Genes)]
+table_IV[table_IV %in% c(stage_III_GO_GENES,stage_III_Reactome_GENES,stage_III_KEGG_Genes)]

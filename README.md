@@ -46,3 +46,24 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 
 ## A R scripts to assess Shannon Entropy
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateShannonEntropyFromPairedUp.R")
+
+## A R scripts to Funcional Analysis
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_FuncionalAnalysis.R")
+
+## A R scripts to Funcional Analysis plots
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_FuncionalAnalysis_plots.R")
+
+## A R scripts to Analisis Of Stage Specific Genes 
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_AnalisisOfStageSpecificGenes.R")
+
+## A R scripts to Analisis Of Stage Specific Genes
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_AnalyseExpressionData.R")
+
+## A R scripts to Squamous Cell Carcinoma AssessNetwork
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_AssessNetwork.R")
+
+## A R scripts to Squamous Cell Carcinoma AssessNetwork
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_ResultsAllPanel.R")
+
+
+

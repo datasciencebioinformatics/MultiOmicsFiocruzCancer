@@ -83,6 +83,13 @@ gene_name.txt
 /home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateTableFromFilesMeanOfDiffRPKM.sh
 
 # Pipeline
+## Parameters 
+threshold_FDR<-0.05
+threshold_tumor<-1.0
+threshold_rpkm<-4
+threshold_stage<-0.0
+output_dir<-"/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/output_dir/"
+
 # An R script to load all packages
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadRPackages.R")
 
@@ -98,14 +105,14 @@ source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_Squamou
 ## A R script to load all data
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_LoadAllTables.R")
 
+## A R scripts to filter the table with RPKM threshold
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_Filters_V2.R")
+
 ## A R scripts to process paired samples
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateMetadataPairedSamplesRPKM.R")
 
-## A R scripts to calculate up-regulated genes from paired samples
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CalculateUregulatedfPairedSamplesRPKM.R")
-
 ## A R scripts to DE per stage
-source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageMeansFromPairedUp.R")
+source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_CreateDEGenesPerStageMeansFromPairedV3.R")
 
 ## A R scripts to create veen driagam
 source("/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/Pipeline_SquamousCellCarcinoma_VeenDiagramsFromPairedUp.R")

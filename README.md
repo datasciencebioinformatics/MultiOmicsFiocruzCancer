@@ -85,7 +85,7 @@ gene_name.txt
 # Pipeline
 ## Parameters 
 threshold_FDR<-0.05
-threshold_tumor<-1.0
+threshold_tumor<-0.0
 threshold_rpkm<-4
 threshold_stage<-0.0
 output_dir<-"/home/felipe/Documentos/Fiocruz/MultiOmicsFiocruzCancer/output_dir/"

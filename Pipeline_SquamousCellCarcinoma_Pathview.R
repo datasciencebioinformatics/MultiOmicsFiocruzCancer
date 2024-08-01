@@ -38,7 +38,7 @@ mypathway_PPAR<-"04320"
 genes<-c(genes_unique_Stage_I$gene_id,genes_unique_Stage_II$gene_id,genes_unique_Stage_III$gene_id)
 
 # For each gene, add gene_id
-for (gene_row in rownames(c))
+for (gene_row in rownames(log2change_tumor_control))
 {	
 	# Store gene id in the vector
 	# Simply trim the gene id before the "." to save it in the ENSEML format

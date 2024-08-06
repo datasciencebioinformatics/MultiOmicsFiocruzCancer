@@ -62,7 +62,7 @@ dev.off()
 
 #######################################################################################################################
 biomarkers<-c("AMTN" , "FABP7" , "OLFM4")
-g
+
 # Complete dataset
 unstranded_data_samples_complete<-rbind(unstranded_data_samples_unapaired[,c("SYMBOL","RPKM","stages","tissue_type")],unstranded_data_samples[unstranded_data_samples$tissue_type=="Normal",c("SYMBOL","RPKM","stages","tissue_type")])
 
@@ -288,7 +288,7 @@ table_II<-c("GRB7", "SRCv", "RNPS1v", "HOOK2", "EFTUD2","PRKCI","DVL2","HAUS1","
 table_III<-c("CDK8","KRT1","NEDD1","GMCL1","GOLT1B","BEX2","PRMT6","RBBP7","SCNM1","TP53","CEP131","CLK2","EHMT2","FOXK2","PNKP","PRMT5","USP21")
 table_IV<-c("MAGEA6","KRT31","KRT75","KRT16","FOXE1","CRCT1","PITX1","KRT15","TP63","TFAP2A","NUF2","FOXM1","ANLN","BUB1B","CEP55","PLK1")
 
-selected_genes<-unique(c(table_I,table_II,table_III,table_IV,table_V))
+selected_genes<-unique(c(table_I,table_II,table_III,table_IV))
 
 selected_genes<-unique(c(table_I))
 
@@ -299,7 +299,6 @@ df_control_samples$stages<-"Control"
 df_control_samples$stages= factor(df_control_samples$stages, levels=c("Stage I","Stage II","Stage III","Control"))
 
 unstranded_data_samples_complete<-rbind(unstranded_data_samples_unapaired[,c("SYMBOL","RPKM","stages","tissue_type")],df_control_samples)
-
 biomarkers_AMTN_boxplot2   <-ggplot(unstranded_data_samples_complete[unstranded_data_samples_complete$SYMBOL %in% selected_genes,], aes(x=stages, y=RPKM, fill=stages, color=stages)) + facet_wrap(~SYMBOL, nrow = 3,ncol = 5, scales="free")+ theme_bw() + theme(axis.text.x = element_text(angle = 90)) +  geom_boxplot(outlier.shape=NA) +  theme(axis.title.x=element_blank(),axis.text.x=element_blank(), axis.ticks.x=element_blank()) + scale_fill_manual(values=c('black','#e8f2a1', '#729fcf', '#ffaa95')) + scale_colour_manual(values=c('black','#e8f2a1', '#729fcf', '#ffaa95')) + theme(legend.position="bottom")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9)
 
 
@@ -342,3 +341,36 @@ table_III[table_III %in% c(stage_III_GO_GENES,stage_III_Reactome_GENES,stage_III
 table_IV[table_IV %in% c(stage_I_GO_GENES,stage_I_Reactome_GENES,stage_I_KEGG_GENES)]
 table_IV[table_IV %in% c(stage_II_GO_GENES,stage_II_Reactome_GENES,stage_II_KEGG_Genes)]
 table_IV[table_IV %in% c(stage_III_GO_GENES,stage_III_Reactome_GENES,stage_III_KEGG_Genes)]
+
+
+
+
+
+
+
+
+
+
+
+
+
+####################################################################################################################
+biomarkers<-c("PDCD11" )
+unstranded_data_samples_complete<-rbind(unstranded_data_samples_unapaired[,c("SYMBOL","RPKM","stages","tissue_type")],df_control_samples)
+biomarkers_AMTN_boxplot2   <-ggplot(unstranded_data_samples_complete[unstranded_data_samples_complete$SYMBOL %in% biomarkers,], aes(x=stages, y=RPKM, fill=stages, color=stages)) + theme_bw() + theme(axis.text.x = element_text(angle = 90)) +  geom_boxplot(outlier.shape=NA) +  theme(axis.title.x=element_blank(),axis.text.x=element_blank(), axis.ticks.x=element_blank()) + scale_fill_manual(values=c('black','#e8f2a1', '#729fcf', '#ffaa95')) + scale_colour_manual(values=c('black','#e8f2a1', '#729fcf', '#ffaa95')) + theme(legend.position="bottom")+ geom_jitter(aes(colour = stages), size=0.4, alpha=0.9) + ggtile("PDCD11")
+
+# p_stage_III_unpaired.png
+png(filename=paste(output_folder,paste("p_stage_biomarkers_pdcd11.png",sep=""),sep=""), width = 12, height = 12, res=600, units = "cm")
+  print(biomarkers_AMTN_boxplot2 + theme(legend.position="bottom"))
+dev.off()
+
+# p_stage_III_unpaired.png
+png(filename=paste(output_folder,paste("p_stage_biomarkers_paired.png",sep=""),sep=""), width = 24, height = 24, res=600, units = "cm")
+  print(p_stage_biomarkers_paired + theme(legend.position="bottom"))
+dev.off()
+
+
+
+####################################################################################################################
+biomarkers<-c("ENSG00000148843")
+

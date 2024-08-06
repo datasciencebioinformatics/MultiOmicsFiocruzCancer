@@ -62,6 +62,7 @@ dev.off()
 
 #######################################################################################################################
 biomarkers<-c("AMTN" , "FABP7" , "OLFM4")
+g
 # Complete dataset
 unstranded_data_samples_complete<-rbind(unstranded_data_samples_unapaired[,c("SYMBOL","RPKM","stages","tissue_type")],unstranded_data_samples[unstranded_data_samples$tissue_type=="Normal",c("SYMBOL","RPKM","stages","tissue_type")])
 
